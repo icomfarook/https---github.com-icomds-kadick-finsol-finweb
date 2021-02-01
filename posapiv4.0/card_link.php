@@ -509,7 +509,7 @@
 									$data['bankCode'] = $accBankCode;
 									$data['requestId'] = $sanef_request_id;
 									$data['accountNumber'] = $accountNo;
-									$data['cardNumber'] = $cardNumber;
+									$data['cardSerialNumber'] = $cardNumber;
 									$data['otp'] = $otp;
 									$data['location'] = $location;
 									$data['signature'] = $local_signature;
