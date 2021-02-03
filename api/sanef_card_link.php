@@ -1,6 +1,6 @@
 <?php
 error_log("inside sanef_card_link.php");
-$error_path = "Y";
+$error_path = "N";
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 	error_log("inside post request method");
 	$data = json_decode(file_get_contents("php://input"));
@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 		&& isset($data->localGovtId) && !empty($data->localGovtId) && isset($data->agentCode) && !empty($data->agentCode) 
 		&& isset($data->bankCode) && !empty($data->bankCode) && isset($data->requestId) && !empty($data->requestId)
 		&& isset($data->accountNumber) && !empty($data->accountNumber) && isset($data->location) && !empty($data->location)
-		&& isset($data->cardNumber) && !empty($data->cardNumber) && isset($data->otp) && !empty($data->otp)
+		&& isset($data->cardSerialNumber) && !empty($data->cardSerialNumber) && isset($data->otp) && !empty($data->otp)
 		&& isset($data->key1) && !empty($data->key1) && isset($data->signature) && !empty($data->signature) 
 		&& isset($data->superAgentCode) && !empty($data->superAgentCode) && isset($data->userId) && !empty($data->userId)
 	) {
