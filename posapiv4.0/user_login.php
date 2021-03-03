@@ -38,22 +38,22 @@
 						$signature = $data -> signature;
 						$key1 = stripcslashes ($data -> key1);
 						$key2 = stripcslashes ($data -> key2);
-						error_log("before setting timezone");
-						error_log("data->key1 = ".$data -> key1.", data->key2 = ".$data -> key2);
+						//error_log("before setting timezone");
+						//error_log("data->key1 = ".$data -> key1.", data->key2 = ".$data -> key2);
 						error_log("key1 = ".$key1.", key2 = ".$key2);
 						date_default_timezone_set('Africa/Lagos');
 						$nday = date('z')+1;
 						$nyear = date('Y');
-						error_log( "nday = ".$nday);
-						error_log( "nyear = ".$nyear);
+						//error_log( "nday = ".$nday);
+						//error_log( "nyear = ".$nyear);
 						$nth_day_prime = get_prime($nday);
 						$nth_year_day_prime = get_prime($nday+$nyear);
-						error_log("nth_day_prime =".$nth_day_prime);
-						error_log("nth_year_day_prime = ".$nth_year_day_prime);
+						//error_log("nth_day_prime =".$nth_day_prime);
+						//error_log("nth_year_day_prime = ".$nth_year_day_prime);
 						$local_signature = $nday + $nth_day_prime;
 						$server_signature = $nth_year_day_prime + $nday + $nyear;
-						error_log("local_signature = ".$local_signature);
-						error_log("server_signature = ".$server_signature);
+						//error_log("local_signature = ".$local_signature);
+						//error_log("server_signature = ".$server_signature);
 						if ( $local_signature != $signature ) {
 							$response["statusCode"] = 650;
 							$response["result"] = "Error";
@@ -73,7 +73,7 @@
 						error_log("before calling Security::decrypt");
 						$key1_result = AesCipher::decrypt($skeya, $key1);
 						error_log("after calling Security::decrypt");
-						error_log("key1_result = ".$key1_result);
+						//error_log("key1_result = ".$key1_result);
 						$tilda_found = strpos($key1_result, '~');
 						if ( $tilda_found == false ) {
 							$response["statusCode"] = 660;
@@ -88,10 +88,10 @@
 						$uname = $key1_array[1];
 						$token = $key1_array[2];
 						$ltime = $key1_array[3];
-						error_log ("uname = ".$uname.", passwd = ".$password.", token = ".$token);
+						//error_log ("uname = ".$uname.", passwd = ".$password.", token = ".$token);
 						
 						$key2_result = AesCipher::decrypt($skeyb, $key2);
-						error_log("key2_result = ".$key2_result);
+						//error_log("key2_result = ".$key2_result);
 						$tilda_found = strpos($key2_result, '~');
 						if ( $tilda_found == false ) {
 							$response["statusCode"] = 670;
@@ -300,7 +300,8 @@
 																		$available_balance = $row['available_balance'];
 																																		
 																		//Get POS Configuration
-																		$user_pos_config_query = "select a.terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, c.terminal_model from user_pos a, terminal_inventory b, terminal_vendor c where a.terminal_id = b.terminal_id and b.vendor_id = c.terminal_vendor_id and a.user_id = ".$user_id;
+																		//$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model from user_pos a, terminal_inventory b, terminal_vendor c where a.terminal_id = b.terminal_id and b.vendor_id = c.terminal_vendor_id and a.user_id = ".$user_id;
+																		$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model from user_pos a left join terminal_inventory b on a.terminal_id = b.terminal_id left join terminal_vendor c on b.vendor_id = c.terminal_vendor_id where a.user_id = ".$user_id;
 																		error_log("user_pos_config_query = ".$user_pos_config_query);
 																		$user_pos_config_result = mysqli_query($con, $user_pos_config_query);
 																		$user_pos_config_ready = "N";
