@@ -38,7 +38,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<div class='row'>
-		<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30)) {?>
+		<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30) || $profileId == 50 ) {?>
 			<input type='button' style='float: right;margin-right: 2%;' class='btn btn-primary' value='<?php echo BANK_ACCOUNT_CREATE_HEADING1; ?>' id='Create' href='#' data-toggle='modal' data-target='#AddBankAccountDialogue'/>
 		<?php } ?>
 		<?php   if($profileId == 51) { ?>
@@ -63,12 +63,12 @@
       						<th><?php echo BANK_ACCOUNT_MAIN_TABLE_BANK_ACCOUNT; ?></th>
 							<th><?php echo BANK_ACCOUNT_MAIN_TABLE_BANK_ACCOUNT_BRANCH; ?></th>
 							<th><?php echo BANK_ACCOUNT_MAIN_TABLE_BANK_MASTER_NAME; ?></th>
-							<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30)) {?>
+							<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30))  {?>
 							<th>View</th>
 							<th><?php echo BANK_ACCOUNT_MAIN_TABLE_EDIT; ?></th>
 							<th>Approve | Reject</th>
 							<?php } ?>
-							<?php  if($profileId == 51) { ?>
+							<?php  if($profileId == 51 || $profileId == 50) { ?>
 							<th>View</th>
 							<?php } ?>
 						</tr>
@@ -90,7 +90,7 @@
 							<button  class='icoimg'><img style='height:22px;width:22px' ng-click="apprejId($index,x.id,'Reject')" src='../common/images/error.png' /></button></a></td>
 							<td ng-if = "x.status!='E'">-</td>
 								<?php } ?>
-								<?php  if($profileId == 51) { ?>
+								<?php  if($profileId == 51 || $profileId == 50) { ?>
 							<td><a id={{x.id}} class='editcountry' ng-click='view($index,x.id)' data-toggle='modal' data-target='#LinkaccountDialogue'>
 							<button  class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
 								<?php } ?>

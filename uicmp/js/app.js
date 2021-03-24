@@ -142,6 +142,18 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/chafinancialreport.php",
 		controller: "chafnReportCtrl"
     })
+    .when("/compay", {
+		templateUrl : "../core/cmppaytrans.php",
+		controller: "cmpPayoutCtrl"
+	})
+	.when("/ptyacc", {
+		templateUrl : "../core/pbankaccount.php",
+		controller: "pBankCtrl"
+	})
+	.when("/paybank", {
+		templateUrl : "../core/cmppoutbnk.php",
+		controller: "cmpPoutBankCtrl"
+	})
 });
 
 

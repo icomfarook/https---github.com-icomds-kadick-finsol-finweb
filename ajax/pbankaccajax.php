@@ -129,7 +129,17 @@
 					$reaccno = $data->reaccno;			
 					$bankaddress = $data->bankaddress;	
 					$bankbranch = $data->bankbranch;	
+					
 					$party_bank_account_id = generate_seq_num (1700,$con);
+					$selectquery = "SELECT party_code from party_bank_account  WHERE party_code = '$partyCode'";
+					error_log($selectquery);
+					$selectresult = mysqli_query($con,$selectquery);
+					$count = mysqli_num_rows($selectresult);
+					error_log("cnt".$count);
+				    if ($count > 2 ){
+						echo "User Has exceeds their Limits";
+					}
+					else {
 					$query =  "INSERT INTO  party_bank_account (party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active, create_user, create_time, status)
 														VALUES ($party_bank_account_id,'$partyType', '$partyCode','$bankmaster', '$accno','$accname','$bankaddress','$bankbranch','$active', $userId,now(),'E')";
 					//error_log($query);
@@ -142,7 +152,7 @@
 						echo "Link Account [$accname] Inserted Successfully";
 					}
 	               }
-	   
+				}
 			if($action == "view") {
 				$id = $data->id;	
 				$query = "SELECT party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active,IF(status='R','Rejected',IF(status='S','Suspended',IF(status='I','In-Progress',IF(status='O','Open','')))))) as status,create_user,create_time FROM party_bank_account WHERE party_bank_account_id = ".$id;
@@ -160,12 +170,16 @@
 					exit();
 				}
 			}
-		if($action == "check") {
+		
+	}
+
+	      if($profileId == 50) {
+			if($action == "list") {
 				$partyType = $_SESSION['party_type'];
 				$profileId = $_SESSION['profile_id'];
 				$partyCode = $_SESSION['party_code'];
 				$agent_name	=   $_SESSION['party_name'];
-				$query = "SELECT count(*) as Count from party_bank_account  WHERE party_code = '$partyCode'";
+				$query = "SELECT a.party_bank_account_id, a.party_code, concat(a.account_no,' - ',a.account_name) as account, a.bank_branch, b.name FROM party_bank_account a, bank_master b WHERE a.bank_master_id = b.bank_master_id and a.party_code = '$partyCode'";
 				error_log($query);
 				$result =  mysqli_query($con,$query);
 				if (!$result) {
@@ -174,12 +188,48 @@
 				}
 				$data = array();
 				while ($row = mysqli_fetch_array($result)) {
-					$data[] = array("partyCode"=>$partyCode,"count"=>$row['Count']);           
+					$data[] = array("id"=>$row['party_bank_account_id'],"partyCode"=>$row['party_code'],"account"=>$row['account'],"branch"=>$row['bank_branch'],"name"=>$row['name']);           
 				}
 				echo json_encode($data);
-		}
-	}
-	if($action == "view") {
+				}
+				if($action == "create") {
+					$partyType = $_SESSION['party_type'];
+					$partyCode = $_SESSION['party_code'];
+					$active = $data->active;
+					$bankmaster = $data->bankmaster;
+					$accname = $data->accname;
+					$accno = $data->accno;
+					$reaccno = $data->reaccno;			
+					$bankaddress = $data->bankaddress;	
+					$bankbranch = $data->bankbranch;	
+					$party_bank_account_id = generate_seq_num (1700,$con);
+					
+					$selectquery = "SELECT party_code from party_bank_account  WHERE party_code = '$partyCode'";
+					error_log($selectquery);
+					$selectresult = mysqli_query($con,$selectquery);
+					$count = mysqli_num_rows($selectresult);
+					error_log("cnt".$count);
+				    if ($count > 2 ){
+						echo "User Has exceeds their Limits";
+					}
+					 else {
+					$query =  "INSERT INTO  party_bank_account (party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active, create_user, create_time, status)
+														VALUES ($party_bank_account_id,'$partyType', '$partyCode','$bankmaster', '$accno','$accname','$bankaddress','$bankbranch','$active', $userId,now(),'E')";
+					//error_log($query);
+					$result = mysqli_query($con,$query);
+					  if (!$result) {
+						echo "Error: %s\n". mysqli_error($con);
+						exit();
+					  }
+					    else {
+						echo "Link Account [$accname] Inserted Successfully";
+					    }
+	               }
+				}
+			
+		
+	       }
+		    if($action == "view") {
 				$id = $data->id;	
 				$query = "SELECT party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active,IF(status='E','Entered',IF(status='A','Approved',IF(status='R','Rejected',IF(status='S','Suspended',IF(status='I','In-Progress',IF(status='O','Open','')))))) as status,create_user,create_time FROM party_bank_account WHERE party_bank_account_id = ".$id;
 				error_log($query);

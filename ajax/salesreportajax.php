@@ -8,7 +8,10 @@
 	$startDate	=  $data->startDate;
 	$endDate	=  $data->endDate;
 	$partycode 	= $data->partycode;
-	$reportFor 	= $data->reportFor;	
+	$reportFor 	= $data->reportFor;
+	$championCode 	= $data->championCode;
+	$Terminal 	= $data->Terminal;	
+	$state 	= $data->state;	
 	$creteria 	= $data->creteria;
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));	
@@ -17,7 +20,7 @@
 	if($action == "getreport") {
 	
 		if($profileid == 1 || $profileid == 10 || $profileid == 20 || $profileid == 21 || $profileid == 22 || $profileid == 23 || $profileid == 24 || $profileid == 25 || $profileid == 26 ) {
-			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d,user_pos e WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id";
 		}
 		if($profileid  == 50) {
 			if($reportFor == 'ALL'){
@@ -51,6 +54,26 @@
 		if($creteria == "BO") {
 			$query .= " and a.fin_service_order_no = $orderNo order by a.fin_service_order_no";
 		}
+		if($creteria == "C") { 
+			if($championCode == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+		}
+		if($creteria == "S") { 
+			if($state == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+		}
+		if($creteria == "T") { 
+			$query .= " and e.terminal_id = '$Terminal'";
+		}
+	
 		
 		error_log("sales report query = ".$query);
 		$result =  mysqli_query($con,$query);

@@ -367,7 +367,7 @@
 							<div class='clearfix'></div>
 							<div class='clearfix'></div>
 							<div class='row appcont' style='padding:0px'>
-							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
 							<label>Gender <span class='spanre'>*</span><span ng-show="applicationEntryForm.gender.$touched ||applicationEntryForm.gender.$dirty && applicationEntryForm.gender.$invalid">
 								<span class = 'err'   ng-show="applicationEntryForm.gender.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 								<select ng-model="gender"  ng-disabled='isInputDisabled' class='form-control' name = 'gender' id='gender' required >											
@@ -378,12 +378,13 @@
 								</select>
 							</div>
 							
-							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
 								<label>Date of Birth<span class='spanre'>*</span><span ng-show="applicationEntryForm.dob.$touched ||applicationEntryForm.dob.$dirty && applicationEntryForm.dob.$invalid">
 								<span class = 'err'   ng-show="applicationEntryForm.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<input  ng-model="dob" ng-disabled='isInputDisabled' type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
 						</div>
-							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
+						
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
 								<label> Business Type
 								<span ng-show="applicationEntryForm.BusinessType.$dirty && applicationEntryForm.BusinessType.$invalid">
 								<span class = 'err' ng-show="applicationEntryForm.BusinessType.$error.required"><?php echo REQUIRED;?></span></span></label>
@@ -402,8 +403,17 @@
 									<option value='10'>Others</option>
 								</select>											
 							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12 form_col12_element'>
+						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="applicationEntryForm.active.$touched ||applicationEntryForm.active.$dirty && applicationEntryForm.active.$invalid">
+								<span class = 'err' ng-show="applicationEntryForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
+									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
+									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
+									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
+								</select>
+						</div>	
 							</div>
-													
+									
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element '>
 								<label>Address1 :<span class='spanre'>*</span><span ng-show="editINFOForm.address1.$dirty && editINFOForm.address1.$invalid">
 									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>

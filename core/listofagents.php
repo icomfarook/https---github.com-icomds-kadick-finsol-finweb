@@ -69,7 +69,7 @@
 			
 			<div class="box-content no-padding">	
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
-				<form name='infoViewForm' method='POST'>	
+				<form name='infoViewForm'  action="listofagentexcel.php" method='POST'>	
 					<div class='row appcont'>									
 					  <?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 23 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30 || $profileId == 50){?>
 						 <div class='row appcont'>
@@ -94,11 +94,11 @@
 									
 									</select>
 									
-									<select ng-show="rpartytype =='C'" ng-disabled='isInputDisabled' ng-model='championCode' id='championCode' class='form-control' name='championCode' required >
+									<select ng-show="rpartytype =='C'" ng-disabled='isInputDisabled' ng-model='championCode' id='championCode' class='form-control' name='championCode'  >
 										<option value=''>--Select Champion--</option>
 										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>					
 									</select>	
-										</ng-container>
+										
 								<?php } ?>
 																		
 						</div>
@@ -148,6 +148,7 @@
 							<div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<button type="button" class="btn btn-primary"  ng-click='query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
 								<button type="button" class="btn btn-primary"   id="Refresh"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_REFRESH; ?></button>
+								<button type="submit" class="btn btn-primary"   id="excel" ng-hide='isHideexcel;'>Excel</button>
 							</div>
 						</div>		
 																	
@@ -161,8 +162,6 @@
 									<th>Parent Type</th>
 									<th>State</th>
 									<th>Local Government</th>
-									<th>Active</th>
-									<th>Block Status</th>
 									<th>View</th>
 									
 								</tr>
@@ -176,8 +175,6 @@
 									<td>{{ x.parent_type }}</td>
 									<td>{{ x.state }}</td>
 									<td>{{ x.local_govt }}</td>
-									<td>{{ x.active }}</td>
-									<td>{{x.block_status}}</td>
 									<td><a id='{{x.agent_code}}' class='ApplicationViewDialogue' ng-click='view($index,x.agent_code)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
 								</tr>

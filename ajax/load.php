@@ -1084,5 +1084,23 @@ echo json_encode($data);
 		echo json_encode($data);
 
 	}
+	else if ($for == 'terminal'){
+		if ($action == 'active'){
+			$query = "select user_id,status,terminal_id from user_pos where status='B'";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("user_id"=>$row['user_id'],"status"=>$row['status'],"terminal_id"=>$row['terminal_id']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+
 
  ?>

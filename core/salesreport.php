@@ -77,7 +77,29 @@
 									</span>	<span class = 'err' ng-show=" creteria=='BO'&& trReportForm.orderNo.$invalid && trReportForm.orderNo.$error.required"><?php echo REQUIRED;?>.</span></label>
 								<input ng-disabled="isOrderNoDi" ng-model="orderNo" numbers-only id='orderNo' maxlength='10'  name='orderNo' required class='form-control'/>
 							</div>
-							
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><input value='C' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>
+								<label>Champion</label>
+								<select ng-init = 'championCode="ALL"'  ng-model='championCode' ng-disabled="ischampionCode" class='form-control' name='championCode' required>
+									<option value='ALL'>--ALL--</option>
+										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>		
+								</select>
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><input value='S' ng-click='clickra(creteria)' type='radio' name='creteria' ng-model='creteria' /></label>
+								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
+									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
+								</select>
+								<label>State
+								<span ng-show="infoViewForm.partyType.$dirty && infoViewForm.partyType.$invalid">
+								<span class = 'err' ng-show="infoViewForm.partyType.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select  ng-model="state" ng-change='statechange(this.state)' ng-init="state='ALL'" ng-disabled="isstate" class='form-control' name = 'state' id='state' required>											
+									<option value='ALL'>ALL</option>
+									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
+								</select>
+							</div>
+							</div>
+							<div class='row appcont' style='margin-top:0%'>
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							
 						    	<label><?php echo TRANSACTION_REPORT_MAIN_START_DATE; ?></label>
@@ -89,7 +111,16 @@
 								<span class = 'err' ng-show="dateerr">{{dateerr}}</span>
 								<input  datetime="yyyy-MM-dd"  ng-blur='checkdate(startDate,endDate)'  ng-disabled="isEndDateDi"  ng-model="endDate" type='date' id='endDate' name='endDate' required class='form-control'/>
 							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><input value='T' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;
+								<label>Terminal ID</label>
+								<select  ng-model='Terminal' ng-disabled="Terminal_id" id='selUser' class='form-control' name='Terminal' required>
+									<option value=''>--Select--</option>
+										<option ng-repeat="terminal in terminalid"  value="{{terminal.terminal_id}}">{{terminal.terminal_id}}</option>		
+								</select>
+							</div>
 						</div>	
+						
 						<div class='row appcont' style='text-align:center'>
 							<div style='text-align: -webkit-center;' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<button type="button" class="btn btn-primary" ng-disabled="isQueryDi"  ng-click='query()' ng-hide='isHide'  id="Query"><?php echo TRANSACTION_REPORT_MAIN_QUERY_BUTTON; ?></button>
@@ -281,6 +312,16 @@ $(document).ready(function() {
 	});
 	  $('.modal-content').on('hidden', function() {
     clear()
+  });
+  $("#selUser").select2();
+
+  // Read selected option
+  $('#but_read').click(function(){
+    var username = $('#selUser option:selected').text();
+    var userid = $('#selUser').val();
+
+    $('#result').html("id : " + userid + ", name : " + username);
+
   });
 	$("#Refresh").click(function() {
 		window.location.reload();

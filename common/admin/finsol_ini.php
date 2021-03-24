@@ -50,6 +50,12 @@ define ("FINAPI_SERVER_TIER_AC1_URL","http://localhost:8989/finweb/api/t1accstat
 define ("FINAPI_SERVER_TIER_AC1_CREATE_URL","http://localhost:8989/finweb/api/createt1accpost.php");
 define ("FINAPI_SERVER_FLEXI_API_URL","http://localhost:8989/flexiapi/ws.api/flexisale");
 define ("FINAPI_SERVER_NAME_ENQUIRY_URL","http://localhost:8989/finweb/api/nnenquiry.php");
+
+//define ("FINAPI_SERVER_CASHOUT_PHONE_URL","http://localhost:8989/finweb/api/cashoutphonepost.php");
+define ("FINAPI_SERVER_CASHOUT_PHONE_URL","http://localhost:8080/finsol/fwbank.api/ptpaybyphone");
+//define ("FINAPI_SERVER_CASHOUT_PHONE_TSQ_URL","http://localhost:8989/finweb/api/cashoutphonetsqpost.php");
+define ("FINAPI_SERVER_CASHOUT_PHONE_TSQ_URL","http://localhost:8080/finsol/fwbank.api/pttsq");
+
 define ("BPAPI_SERVER_PRODUCT_FORM_VALIDATE_URL","http://localhost:8989/finweb/api/bpvalidate.php");
 define ("BPAPI_SERVER_PAYMENT_CONFIRM_URL","http://localhost:8989/finweb/api/bpconfirm.php");
 define ("BPAPI_SERVER_PAYMENT_RECEIPT_URL","http://localhost:8989/finweb/api/bpreceipt.php");
@@ -61,6 +67,7 @@ define ("SANEFAPI_SERVER_CARD_CARD_LINK","http://localhost:8989/finweb/api/sanef
 define ("SANEFAPI_SERVER_CREATE_AGENT","http://localhost:8989/finweb/api/sanef_create_agent.php");
 define ("SANEFAPI_SERVER_UPDATE_AGENT","http://localhost:8989/finweb/api/sanef_update_agent.php");
 define ("SANEFAPI_SERVER_DETAIL_AGENT","http://localhost:8989/finweb/api/sanef_detail_agent.php");
+
 
 //Local PHP Stub Responser
 //define ("FINAPI_SERVER_CASHIN_URL","http://localhost/finweb/api/cashinpost.php");
@@ -177,6 +184,9 @@ define ("SANEF_CURL_TIMEOUT",100);
 
 define ("NIBSS_CURL_CONNECTION_TIMEOUT",70);
 define ("NIBSS_CURL_TIMEOUT",70);
+
+define ("PAYATTITUDE_CURL_CONNECTION_TIMEOUT",100);
+define ("PAYATTITUDE_CURL_TIMEOUT",100);
 
 define ("FLEXI_OPERATOR_CURL_CONNECTION_TIMEOUT",50);
 define ("FLEXI_OPERATOR_CURL_TIMEOUT",50);

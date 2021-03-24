@@ -144,8 +144,12 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 					</a>
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!comviw">View</a></li>
-							<li><a class="ajax-link" href="#!comlis"><?php echo INDEX_PAYOUT_LIST; ?></a></li>
+						<li><a class="ajax-link" href="#!comlis"><?php echo INDEX_PAYOUT_LIST; ?></a></li>
 						<li><a class="ajax-link" href="#!comjco"><?php echo INDEX_JOURNAL_COMMISSION; ?></a></li>
+						<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
+						<li><a class="ajax-link" href="#!compay"><?php echo INDEX_PAYOUT; ?></a></li>
+						<li><a class="ajax-link" href="#!paybank">Payout Bank</a></li>
+
 						
 					</ul>
 				</li>

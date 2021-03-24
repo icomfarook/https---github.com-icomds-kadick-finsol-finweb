@@ -1,3 +1,445 @@
+app.controller('cmpPoutBankCtrl', function ($scope, $http) {
+$scope.reset = function () {
+$scope.paycomamt = "";
+$scope.bankaccount = "";
+$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
+
+}
+$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
+$scope.isPayout = true;
+$scope.isHideResetS = true;
+$scope.isResDiv = true;
+$scope.isUpForm = false;
+$scope.isButtonDiv = false;
+
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+   type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.cal= function () {
+$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
+}
+$scope.calculate = function (productId, partnerId, txtType, partnerId) {
+//$scope.bankname =  $('#partner option:selected').attr('lab');
+$scope.fianceServieOrdeForm = false;
+$scope.isMainDiv = true;
+$http({
+url: '../ajax/payoutbnkajax.php',
+method: "POST",
+data: {
+paycomamt: $scope.paycomamt ,
+procharge: $scope.procharge ,
+totalpaycom: $scope.totalpaycom ,
+curbalance: $scope.curbalance ,
+action: 'calculate'
+},
+}).then(function successCallback(response) {
+$scope.fianceServieOrdeForm = false;
+$scope.isMainDiv = false;
+var split2 =response.data.split("#");
+var serconfig =split2[1];
+var split3 =split2[0].split("|");
+var split4 =split2[1].split(",");
+   var j=0;
+var check = split3[0];
+if(check >= 0) {
+$scope.payDisable = false;
+$scope.payRefresh = false;
+$scope.isHide = true;
+$scope.amscharge = split3[2];
+$scope.parcharge = split3[3];
+$scope.othcharge = split3[4];
+$scope.serconf = serconfig;
+$scope.sedeco = split3[1];
+$scope.procharge =  parseFloat(parseFloat(split3[4]) +  parseFloat(split3[3]) +  parseFloat(split3[2])).toFixed(2) ;
+$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
+$("#tableres").html(respotable);
+}
+else {
+alert("Error in getting charges..Contact Kadick");
+$scope.payDisable = true;
+$scope.payRefresh = true;
+}
+});
+}
+$scope.payout= function () {
+var curbalance =  parseInt($scope.curbalance) ;
+var totalpaycom =  parseInt($scope.totalpaycom) ;
+if(curbalance >totalpaycom) {
+$http({
+method: 'post',
+url: '../ajax/payoutbnkajax.php',
+data: {
+partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+creteria: $scope.creteria,
+curbalance: $scope.curbalance,
+paycomamt: $scope.paycomamt,
+procharge: $scope.procharge,
+totalpaycom: $scope.totalpaycom,
+action: 'payout',
+bankaccount: $scope.bankaccount
+},
+}).then(function successCallback(response) {
+$scope.ispayRequestForm = true;
+$scope.isResDiv = false;
+$scope.isUpForm = true;
+$scope.isButtonDiv = true;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+});
+}
+else {
+alert("Amount Should be valid");
+}
+}
+$scope.query = function () {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: {  for: 'partybank', "partyCode": $scope.partyCode, "action": "active" },
+
+}).then(function successCallback(response) {
+$scope.partybanks = response.data;
+//window.location.reload();
+});
+$scope.curbalance = "";
+$http({
+method: 'post',
+url: '../ajax/payoutbnkajax.php',
+data: {
+partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+$scope.isPayout = false;
+$scope.isHideResetS = false;
+$scope.curbalance = response.data[0].curbal;
+});
+}
+});
+
+
+app.controller('pBankCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/pbankaccajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.banklist = response.data;
+$scope.pbcid = response.data.id;
+
+});
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:'bankmasters',action:'active'
+},
+}).then(function successCallback(response) {
+$scope.bankmasterss = response.data;
+});
+
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+   type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/pbankaccajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.active = response.data[0].active;
+$scope.id = response.data[0].id;
+$scope.partyType = response.data[0].ptype;
+$scope.partyCode = response.data[0].pcode;
+$scope.bankmaster = response.data[0].bankmaster;
+$scope.accno = response.data[0].accno;
+$scope.reaccno = response.data[0].accno;
+$scope.accname = response.data[0].accname;
+$scope.bankaddress = response.data[0].bankaddress;
+$scope.bankbranch = response.data[0].bankbranch;
+$scope.statuss = response.data[0].status;
+$scope.statussother = response.data[0].status;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.apprejId = function (index,id, flag) {
+$scope.flag = flag;
+$scope.id = id;
+
+}
+$scope.approve = function (id,flag) {
+$http({
+method: 'post',
+url: '../ajax/pbankaccajax.php',
+data: { id: id, flag: flag, action: 'approveReject' },
+}).then(function successCallback(response) {
+$("#approvePBankForm").html("<h3 style='text-align:center'>" + response.data + "</h3>");
+$scope.isHide = true;
+$scope.isHideOk = false;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/pbankaccajax.php',
+data: { id:id, action: 'view' },
+}).then(function successCallback(response) {
+
+// alert(id);
+
+$scope.id = response.data[0].id;
+$scope.PartyType = response.data[0].PartyType;
+$scope.PartyCode = response.data[0].PartyCode;
+$scope.bankmasterid = response.data[0].bankmasterid;
+$scope.accno = response.data[0].accno;
+$scope.accname = response.data[0].accname;
+$scope.bankaddress = response.data[0].bankaddress;
+$scope.bankbranch = response.data[0].bankbranch;
+$scope.Active = response.data[0].Active;
+$scope.Status = response.data[0].Status;
+$scope.createuser = response.data[0].createuser;
+$scope.createtime = response.data[0].createtime;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/pbankaccajax.php',
+data: {
+active: $scope.active,
+partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+bankmaster: $scope.bankmaster,
+accname: $scope.accname,
+accno: $scope.accno,
+reaccno: $scope.reaccno,
+bankaddress: $scope.bankaddress,
+bankbranch: $scope.bankbranch,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isLoader = false;
+  $scope.isMainLoader = false;
+$scope.isHide = true;
+$scope.isHideOk = false;
+$("#PBankAccountCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.refresh = function () {
+window.location.reload();
+}
+});
+
+app.controller('cmpPayoutCtrl', function ($scope, $http) {
+$scope.reset = function () {
+$scope.paycomamt = "";
+//$scope.curbalance = false;
+$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
+
+}
+$scope.isGoDisabled = true;
+//$scope.isHideGo = true;
+$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
+$scope.isPayout = true;
+$scope.isHideResetS = true;
+$scope.isResDiv = true;
+$scope.isUpForm = false;
+$scope.isButtonDiv = false;
+
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,   type: type},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.cal= function () {
+$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
+}
+$scope.payout= function () {
+var curbalance =  parseInt($scope.curbalance) ;
+var totalpaycom =  parseInt($scope.totalpaycom) ;
+if(curbalance >totalpaycom) {
+$http({
+method: 'post',
+url: '../ajax/paytransferajax.php',
+data: {
+partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+creteria: $scope.creteria,
+curbalance: $scope.curbalance,
+paycomamt: $scope.paycomamt,
+procharge: $scope.procharge,
+totalpaycom: $scope.totalpaycom,
+action: 'payout',
+bankaccount: $scope.bankaccount
+},
+}).then(function successCallback(response) {
+$scope.ispayRequestForm = true;
+$scope.isResDiv = false;
+$scope.isUpForm = true;
+$scope.isButtonDiv = true;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+});
+}
+else {
+alert("Amount Should be valid");
+}
+}
+$scope.query = function () {
+if($scope.paycomamt != ""){
+$scope.isGoDisabled = false;
+}
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: {  for: 'bank', "partyCode": $scope.partyCode, "action": "active" },
+
+}).then(function successCallback(response) {
+$scope.partybanks = response.data;
+//window.location.reload();
+});
+$scope.curbalance = "";
+$http({
+method: 'post',
+url: '../ajax/paytransferajax.php',
+data: {
+partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+$scope.isPayout = false;
+$scope.isHideResetS = false;
+$scope.curbalance = response.data[0].curbal;
+});
+}
+});
+
 app.controller('chafnReportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.tablerow = true;

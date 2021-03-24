@@ -4,6 +4,8 @@
 	require('../common/sessioncheck.php');
 	$action		=  $data->action;
 	$type	=  $data->type;
+	$state	=  $data->state;
+	$championCode	=  $data->championCode;
 	$status	=  $data->status;
 	$orderNo	=  $data->orderNo;
 	$startDate	=  $data->startDate;
@@ -26,18 +28,31 @@
 		}
 		if($type == 'ALL') {
 			if($status == "ALL") { 
+			    if($state == "ALL") {
+			        if($championCode == "ALL") { 
+				  
 				$query .= " and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			}else{
+				$query .= " and b.parent_code = '$championCode' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-			else{ 
-				$query .= " and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+				}else{
+					$query .= " and c.state_id = '$state' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-		}
+				}
+			}
+			
 		else {
-			if($status == "ALL") {
-				$query .= " and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			if($status == "ALL") { 
+			    if($state == "ALL") {
+			        if($championCode == "ALL") { 
+				  
+				$query .= " and  date(c.create_time) >= '$startDate' and  c.service_feature_code = '$type' and date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			}else{
+				$query .= " and b.parent_code = '$championCode' and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-			else{ 
-				$query .= " and c.service_feature_code = '$type' and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+				}else{
+					$query .= " and c.state_id = '$state' and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			    }
 			}
 		}
 		
