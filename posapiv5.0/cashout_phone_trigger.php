@@ -253,16 +253,16 @@
 													if($statusCode == 0) {
 														error_log("inside statusCode == 0");
 														$fin_service_order_no = generate_seq_num(1500, $con);
-														$update_query = "UPDATE fin_request SET status = 'S', order_no = ".$fin_service_order_no.", update_time = now() WHERE fin_request_id = $fin_request_id ";
+														$update_query = "UPDATE fin_request SET status = 'S', order_no = ".$fin_service_order_no.", approver_comments = '".$api_response['description']."', rrn = '".$api_response['orderId']."', auth_code = '".$api_response['transactionTime']."', comments = '".$api_response['status']."', account_no = '".$api_response['statusDescription']."', update_time = now() WHERE fin_request_id = $fin_request_id ";
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);
 
 														if($fin_service_order_no > 0) {
 															$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 															if ( $txType == "F" ) {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge)";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."')";
 															}else {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge)";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."')";
 															}
 															error_log("fin_service_order_query = ".$fin_service_order_query);
 															$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
@@ -409,7 +409,7 @@
 													else {
 														error_log("inside statusCode != 0");
 														$approver_comments = "PT: ".$api_response['status']." - ".$api_response['statusDescritpion']." @ ".$api_response['transactionTime'];
-														$update_query = "UPDATE fin_request SET status = 'E', rrn = '".$api_response['orderId']."', approver_comments = '$approver_comments', update_time = now() WHERE fin_request_id = $fin_request_id ";
+														$update_query = "UPDATE fin_request SET status = 'E', rrn = '".$api_response['orderId']."', approver_comments = '$approver_comments', auth_code = '".$api_response['transactionTime']."', comments = '".$api_response['status']."', account_no = '".$api_response['statusDescription']."', update_time = now() WHERE fin_request_id = $fin_request_id ";
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);
 

@@ -2609,8 +2609,8 @@ $scope.Terminal_id = true;
 }
 if(clickra == "T") {
 $scope.isOrderNoDi = true;
-$scope.isStartDateDi = true;
-$scope.isEndDateDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
 $scope.orderno = true;
 $scope.isOrderTypeDi = true;
 $scope.startDate = new Date();
@@ -2899,6 +2899,7 @@ $scope.partner = "";
 
 }
 });
+
 
 app.controller('evdstatreportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();

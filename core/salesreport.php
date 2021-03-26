@@ -326,7 +326,9 @@ $(document).ready(function() {
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});	
-	/*  /* window.alert = function() {}; alert = function() {}; */ 
-	
+	$("#Reset").click(function() {
+		$('#selUser').select2('destroy');
+		$('#selUser').val('').select2();
+	});	
 });
 </script>

@@ -14,6 +14,8 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$endDate	=  $_POST['endDate'];
 	$creteria 	= $_POST['creteria'];
 	$Terminal 	= $_POST['Terminal'];
+	$championCode 	= $_POST['championCode'];
+	$state 	= $_POST['state'];
 	$profileid = $_SESSION['profile_id'];
 
 	$startDate = date("Y-m-d", strtotime($startDate));
@@ -32,27 +34,43 @@ $msg = "Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d,user_pos e WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id";
+			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount,  a.date_time as date_time, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d,user_pos e WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id";
 		}
 		if($profileid  == 51) {
-			$query = "SELECT a.fin_service_order_no, concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount,  IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference,a.date_time,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and a.user_id = b.user_id ";
+			$query = "SELECT a.fin_service_order_no, concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.request_amount, a.total_amount,a.date_time,  IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and a.user_id = b.user_id ";
 		}
 		if($profileid  == 52) {
-			$query = "SELECT a.fin_service_order_no, concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference, a.date_time,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and b.sub_agent = 'Y' and a.user_id = b.user_id ";
+			$query = "SELECT a.fin_service_order_no, concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.request_amount, a.total_amount, a.date_time, IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,''))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,ifNULL(a.agent_charge,'-') as agent_charge,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(c.service_charge,'-') as service_charge FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and b.sub_agent = 'Y' and a.user_id = b.user_id ";
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
 			$query .= " and a.fin_service_order_no = $orderNo order by a.fin_service_order_no";
 		}
+		if($creteria == "C") { 
+			if($championCode == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+		}
+		if($creteria == "S") { 
+			if($state == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+		}
 		if($creteria == "T") { 
-			$query .= " and e.terminal_id = '$Terminal'";
+			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc";
 		}
 	
 			
@@ -63,7 +81,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type","Agent","Request Amount","Total Amount", "Reference", "Date Time","Agent Charge","Ams Charge","Total Charge");
+		$heading = array("Order No","Order Type","Request Amount","Total Amount", "Date Time","Reference","Agent","Agent Charge","Ams Charge","Total Charge");
 		$headcount = 10;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						

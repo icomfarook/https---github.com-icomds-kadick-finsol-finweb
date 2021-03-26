@@ -71,7 +71,7 @@
 			}
 		}
 		if($creteria == "T") { 
-			$query .= " and e.terminal_id = '$Terminal'";
+			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc";
 		}
 	
 		
