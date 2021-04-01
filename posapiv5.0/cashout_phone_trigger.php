@@ -186,9 +186,10 @@
 						if ($agent_info_wallet_status == 0 ) {
 							$fin_trans_log_id = generate_seq_num(1600, $con);
 							$fin_request_id = generate_seq_num(2800, $con);
+							$fin_service_order_no = generate_seq_num(1500, $con);
 							unset($data->key1);
 							$requestData = array();
-							$requestData['description'] = "Kadick Cash-Out# ".$fin_request_id;
+							$requestData['description'] = "Kadick Cash-Out# ".$fin_service_order_no;
 							$requestData['totalAmount'] = $totalAmount;
 							$requestData['requestAmount'] = $requestAmount;
 							$requestData['mobile'] = $mobileNo;
@@ -200,7 +201,7 @@
 							$requestData['userId'] = $userId;
 							$url = FINAPI_SERVER_CASHOUT_PHONE_URL;
 							$tsec = time();
-							$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
+							$raw_data1 = FINAPI_FWBANK_SERVER_APP_PASSWORD.FINWEB_FWBANK_SERVER_SHORT_NAME."|".FINAPI_FWBANK_SERVER_APP_USERNAME.FINWEB_FWBANK_SERVER_SHORT_NAME."|".$tsec;
 							error_log("raw_data1 = ".$raw_data1);
 							$key1 = base64_encode($raw_data1);
 							$requestData['key1'] = $key1;
@@ -217,9 +218,9 @@
 										$senderName = mysqli_real_escape_string($con, $senderName);
 										if ( $txType == "F" ) {
 											$newAmsCharge = $amsCharge + $agentCharge;
-											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now())";
+											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no)";
 										}else {
-											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now())";
+											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no)";
 										}
 										error_log("fin_request_query = ".$fin_request_query);
 										$fin_request_result = mysqli_query($con, $fin_request_query);
@@ -252,7 +253,7 @@
 
 													if($statusCode == 0) {
 														error_log("inside statusCode == 0");
-														$fin_service_order_no = generate_seq_num(1500, $con);
+														
 														$update_query = "UPDATE fin_request SET status = 'S', order_no = ".$fin_service_order_no.", approver_comments = '".$api_response['description']."', rrn = '".$api_response['orderId']."', auth_code = '".$api_response['transactionTime']."', comments = '".$api_response['status']."', account_no = '".$api_response['statusDescription']."', update_time = now() WHERE fin_request_id = $fin_request_id ";
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);

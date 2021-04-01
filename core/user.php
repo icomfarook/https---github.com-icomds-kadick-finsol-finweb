@@ -103,6 +103,9 @@
 							<td ng-if="x.posaccess === 'N'"><a id={{x.id}} class='icoimg' ng-click='posaccess($index,x.id)'  data-toggle='modal' data-target='#posaccess'>
 								<button class='icoimg'><img class='icoimg' style='height:12px;width:12px' src='../common/images/error.png'/></button></a>
 							</td>
+							<td ng-if="x.posaccess === 'B'"><a id={{x.id}} class='icoimg' ng-click='posaccess($index,x.id)'  data-toggle='modal' data-target='#posaccess' >
+								<button class='icoimg'><img class='icoimg' style='height:15px;width:15px' src='../common/images/password.png'/></button></a>
+							</td>
 						</tr>
 						</tbody>
 						
@@ -482,7 +485,11 @@
 									</label>
 									<input class="form-check-input" type="radio" ng-model = 'posaccess' required name="posaccess" id="posaccessnoradio" value="N"  />
 									<label class="form-check-label" for="posaccessnradio">
-									<?php echo USER_USER_POS_ACCESS_NO; ?>										
+									<?php echo USER_USER_POS_ACCESS_NO; ?>
+
+									<input class="form-check-input" type="radio" ng-model = 'posaccess' required name="posaccess" id="posaccessnoradio" value="B"  />
+									<label class="form-check-label" for="posaccessnradio">
+									Both
 									</th>
 								</tr>
 								

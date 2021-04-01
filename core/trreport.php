@@ -9,7 +9,11 @@
 		include('../common/admin/haus_finsol_label_ini.php');
 	}
 ?>
-
+<style>
+.table > thead > tr > th, .table > tbody > tr > th, .table > tfoot > tr > th, .table > thead > tr > td, .table > tbody > tr > td, .table > tfoot > tr > td {
+    border-bottom: 1px solid #bbb !important;
+}
+</style>
 <div ng-controller='trReportCtrl'>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
@@ -135,7 +139,7 @@
 									<td>{{ x.rrn }}</td>
 									<td>{{ x.status }}</td>
 									<td>{{ x.dtime }}</td>									
-									<td><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
+									<td><a class='trReportDialogue' ng-click='view(x.id,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 										<a href="#">|&nbsp;&nbsp; </a>
 										<a class='trReportDialogue' ng-click='viewcomm(x.no)' data-toggle='modal' data-target='#trReportCommDialogue'>
@@ -261,6 +265,14 @@
 								<tr>
 									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_BANK; ?>  {{bank}}</td>
 									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER; ?>  {{partner}}</td>
+								</tr>
+								<tr>
+									<td><?php echo "Create Time : "; ?>  {{ctime}}</td>
+									<td><?php echo "Update Time : "; ?>  {{utime}}</td>
+								</tr>
+								<tr>
+									<td colspan='2'><?php echo "RRN : "; ?>  {{rrn}}</td>
+									
 								</tr>
 								<tr>
 									<td colspan='2'><?php echo FIN_SERVI_TRANSACTION_REPORT_COMMENT; ?> {{fincomment}}</td>

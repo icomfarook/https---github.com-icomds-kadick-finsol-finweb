@@ -1468,6 +1468,7 @@ window.location.reload();
 });
 
 
+
 app.controller('trReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -1589,6 +1590,10 @@ $scope.bank = response.data[0].bank;
 $scope.partner = response.data[0].partner;
 $scope.sender_name = response.data[0].sender_name;
 $scope.appcmt = response.data[0].appcmt;
+$scope.rrn = response.data[0].rrn;
+$scope.ctime = response.data[0].ctime;
+$scope.utime = response.data[0].utime;
+
 
 }, function errorCallback(response) {
 // console.log(response);
@@ -2516,7 +2521,37 @@ statushead +
 "<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}else if(response.data[0].code =='MP0'){
+}
+else if(response.data[0].code =='COP'){
+if(response.data[0].sts=='TRIGGERED'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +
+statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
+"<tr><td class='name'>Description</td><td class='result'>" + response.data[0].appcmt + "</td></tr>" +
+"<tr><td class='name'>Phone Pay Status</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Phone Pay Description</td><td class='result'>" + response.data[0].phdes + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
+"<tr><td class='name'>Transaction Id</td><td class='result'>" + response.data[0].rrn + "</td></tr>" +
+"<tr><td class='name'>Name</td><td class='result'>" + response.data[0].name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+}
+
+
+else if(response.data[0].code =='MP0'){
 function formatDate(d)
         {
           var date = new Date(d);
