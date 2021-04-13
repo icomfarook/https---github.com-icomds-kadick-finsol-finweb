@@ -145,6 +145,17 @@
 							<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 						</ul>
 					</li>
+					
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-globe"></i>
+							<span class="hidden-xs">Group Account</span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
+							<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+						</ul>
+					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>

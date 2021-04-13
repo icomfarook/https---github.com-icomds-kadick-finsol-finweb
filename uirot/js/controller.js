@@ -1,3 +1,642 @@
+app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
+
+ $scope.isHideOk = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'Groupagents' }
+}).then(function successCallback(response) {
+$scope.Groupagents = response.data;
+//window.location.reload();
+});
+$scope.query = function () {
+$scope.tablerow = false;
+$http({
+method: 'post',
+url: '../ajax/upgradeajax.php',
+data: {
+
+agentCode: $scope.agentCode,
+
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+ $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.upgrade = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (index, agent_code) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/upgradeajax.php',
+data: { agent_code: agent_code, action: 'view' },
+}).then(function successCallback(response) {
+
+// alert(id);
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.agent_code = response.data[0].agent_code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.agent_name = response.data[0].agent_name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+$scope.bvn = response.data[0].bvn;
+$scope.group_id = response.data[0].group_id;
+$scope.group_type = response.data[0].group_type;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (agent_code) {
+
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/upgradeajax.php',
+data: {
+agent_code: $scope.agent_code,
+
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$("#upgradeBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function(){
+window.location.reload();
+}
+$scope.reset = function () {
+$scope.tablerow = true;
+
+}
+});
+
+app.controller('CreChildCtrl', function ($scope, $http, $filter) {
+$scope.transferbtn = true;
+   $scope.isGoDisbled = true;
+ $scope.isHideOk = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'childagents' }
+}).then(function successCallback(response) {
+$scope.childagents = response.data;
+//window.location.reload();
+});
+$scope.query = function () {
+$scope.tablerow = false;
+$http({
+method: 'post',
+url: '../ajax/crechildajax.php',
+data: {
+
+agentCode: $scope.agentCode,
+
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+ $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.upgrade = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (index, agent_code) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/crechildajax.php',
+data: { agent_code: agent_code, action: 'view' },
+}).then(function successCallback(response) {
+
+// alert(id);
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.agent_code = response.data[0].agent_code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.agent_name = response.data[0].agent_name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+$scope.bvn = response.data[0].bvn;
+$scope.group_id = response.data[0].group_id;
+$scope.group_type = response.data[0].group_type;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.reset = function () {
+$scope.tablerow = true;
+
+}
+$scope.checkuservalid = function () {
+   var user = $scope.userName.length();
+   if(user >= 9) {
+    $scope.isGoDisbled = false;
+   }
+   else {
+    $scope.isGoDisbled = true;
+   }
+  }
+
+   $scope.chkuser = function () {
+   $scope.userNameDisabled = false;
+   $scope.disabledContactMobile = true;
+   $scope.disabledcname = true;
+   $scope.isLoader = true;
+   $scope.isSelectDisabled = true;
+   $scope.isSelectDisabledType = true;
+   $scope.isHideGo = false;
+
+   $http({
+    method: 'post',
+    url: '../ajax/crechildajax.php',
+    data: {
+     id: $scope.id,
+     action: 'userchk',
+     userName:$scope.userName
+    },
+   }).then(function successCallback(response) {
+    if(response.data <= 0) {
+     $scope.isInputDisabled = false;
+     $scope.userNameDisabled = true;
+     $scope.isHideGo = true;
+     $scope.transferbtn = false;
+     $scope.msguser = "User Name is Available";
+    }
+    else{
+     $scope.isInputDisabled = true;
+     $scope.msguser = "User Name is Already Taken";
+     $scope.userNameDisabled = false;
+     $scope.isHideGo = false;
+     $scope.transferbtn = true;
+    }
+    $scope.isLoader = false;
+
+
+   }, function errorCallback(response) {
+    // console.log(response);
+   });
+  }
+$scope.update = function (agent_code) {
+  $scope.transferbtn = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/crechildajax.php',
+data: {
+agent_code: $scope.agent_code,
+cmobile: $scope.cmobile,
+cname: $scope.cname,
+userName :$scope.userName,
+
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.transferbtn = false;
+$scope.ispayRequestForm = true;
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.isResDiv = false;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+//alert($scope.msg);
+//alert($scope.userName);
+//$("#upgradeBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function(){
+window.location.reload();
+}
+});
+
+
+app.controller('GroupListCtrl', function ($scope, $http, $filter) {
+
+ $scope.isHideOk = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'childagents' }
+}).then(function successCallback(response) {
+$scope.childagents = response.data;
+//window.location.reload();
+});
+$scope.query = function () {
+$scope.tablerow = false;
+$http({
+method: 'post',
+url: '../ajax/grouplistajax.php',
+data: {
+
+agentCode: $scope.agentCode,
+
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+ $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.upgrade = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.reset = function () {
+$scope.tablerow = true;
+
+}
+
+$scope.view = function (index, agent_code) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/grouplistajax.php',
+data: { agent_code: agent_code, action: 'view' },
+}).then(function successCallback(response) {
+
+// alert(id);
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.agent_code = response.data[0].agent_code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.agent_name = response.data[0].agent_name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+$scope.bvn = response.data[0].bvn;
+$scope.group_id = response.data[0].group_id;
+$scope.group_type = response.data[0].group_type;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function(){
+window.location.reload();
+}
+});
+
+
+
+app.controller('TransFundCtrl', function ($scope, $http) {
+   $scope.isPayout = true;
+   $scope.CispayRequestForm = true;
+    $scope.isHideResetS = true;
+$scope.isResDiv = true;
+$scope.isUpForm = false;
+$scope.isButtonDiv = false;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+params: { action: 'active',for: 'childagents' }
+}).then(function successCallback(response) {
+$scope.childagents = response.data;
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+params: { action: 'active',for: 'childagent' }
+}).then(function successCallback(response) {
+$scope.childagent = response.data;
+});
+$scope.root = function(application_id){
+$scope.childagentCode = "";
+var splitagent = $scope.agentCode.split(",");
+var application_id = splitagent[0];
+var agent_code = splitagent[1];
+$http({
+url: '../ajax/load.php',
+method: "POST",
+params: { for: 'rootchild', "id": application_id, "action": "active" }
+}).then(function successCallback(response) {
+$scope.childagent = response.data;
+});
+
+$scope.CispayRequestForm = true;
+$http({
+method: 'post',
+url: '../ajax/transfundajax.php',
+data: {
+creteria: $scope.creteria,
+agentCode:agent_code,
+childagentCode: $scope.childagentCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+$scope.isPayout = false;
+$scope.isHideResetS = false;
+$scope.parentwallet = response.data[0].parentwallet;
+$scope.availablebalance = response.data[0].availablebalance;
+});
+}
+
+
+$scope.partyload = function(group_id){
+var splitagent = $scope.childagentCode.split(",");
+var group_id = splitagent[0];
+var agentCode = splitagent[1];
+$http({
+url: '../ajax/load.php',
+method: "POST",
+params: { for: 'rootparent', "id": group_id, "action": "active" }
+}).then(function successCallback(response) {
+$scope.rootparent = response.data;
+$scope.agent_code = response.data[0].agent_code;
+$scope.parentagentCode = response.data[0].parentagentCode;
+});
+$http({
+method: 'post',
+url: '../ajax/transfundajax.php',
+data: {
+creteria: $scope.creteria,
+agentCode:agentCode,
+childagentCode:$scope.childagentCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+$scope.isPayout = false;
+$scope.isHideResetS = false;
+$scope.parentwallet = response.data[0].parentwallet;
+});
+}
+
+
+$scope.payout= function () {
+$scope.CispayRequestForm = false;
+if($scope.parentwallet || $scope.availablebalance > $scope.transamnt) {
+if($scope.creteria == "P"){
+var splitagent = $scope.agentCode.split(",");
+var application_id = splitagent[0];
+var agentCode = splitagent[1];
+}
+if($scope.creteria == "C"){
+var splitchildagent = $scope.childagentCode.split(",");
+var application_id = splitchildagent[0];
+var childagentCode = splitchildagent[1];
+}
+$http({
+method: 'post',
+url: '../ajax/transfundajax.php',
+data: {
+agentCode: agentCode,
+childagentCode: childagentCode,
+parentwallet: $scope.parentwallet,
+creteria: $scope.creteria,
+parentchildagentCode:$scope.parentchildagentCode,
+agent_code:$scope.agent_code,
+transamnt: $scope.transamnt,
+action: 'payout',
+},
+}).then(function successCallback(response) {
+$scope.ispayRequestForm = true;
+$scope.CispayRequestForm = true;
+$scope.isResDiv = false;
+$scope.isUpForm = true;
+$scope.isButtonDiv = true;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+});
+}
+else {
+alert("Transaction Amount is Greater than Available Balanace");
+}
+}
+$scope.oncheck = function() {
+  if($scope.creteria == "C"){
+$scope.parentwallet = "";
+$scope.transamnt = "";
+$scope.childagentCode = "";
+$scope.agentCode = "";
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+params: { action: 'active',for: 'childagent' }
+}).then(function successCallback(response) {
+$scope.childagent = response.data;
+});
+
+}
+if($scope.creteria == "P"){
+$scope.parentwallet = "";
+$scope.transamnt = "";
+$scope.childagentCode = "";
+$scope.agentCode =  "";
+}
+}
+});
+
+
+app.controller('TransStatusCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+$("#tbody").empty();
+$scope.tablerow = true;
+$scope.status = "ALL";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+}
+
+
+$scope.query = function () {
+$scope.tablerow = false;
+
+$http({
+method: 'post',
+url: '../ajax/transstatusajax.php',
+data: {
+action: 'query',
+status: $scope.status,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.transferstatus = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/transstatusajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.sender_partner_code = response.data[0].sender_partner_code;
+$scope.sender_partner_type = response.data[0].sender_partner_type;
+$scope.sender_wallet_type = response.data[0].sender_wallet_type;
+$scope.receiver_partner_code = response.data[0].receiver_partner_code;
+$scope.receiver_partner_type = response.data[0].receiver_partner_type;
+$scope.receiver_wallet_type = response.data[0].receiver_wallet_type;
+$scope.transfer_amount = response.data[0].transfer_amount;
+$scope.status = response.data[0].status;
+$scope.create_user = response.data[0].create_user;
+$scope.create_time = response.data[0].create_time;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
 app.controller('AccServiceBankCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -3516,6 +4155,7 @@ $scope.print = function () {
 	}
 });
 
+
 app.controller('posmenuCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -3564,6 +4204,12 @@ $scope.expdate = new Date(response.data[0].expDate);
 $scope.code = response.data[0].code;
 $scope.servfea = response.data[0].service_feature_id;
 $scope.servfeaold = response.data[0].service_feature_id;
+if(response.data[0].startDate==null){
+$scope.startdate="";
+}
+if(response.data[0].expDate==null){
+$scope.expdate="";
+}
 //$scope.menu = response.data[0].menu;
 //alert( response.data[0].menu);
 }, function errorCallback(response) {
@@ -4794,6 +5440,9 @@ $scope.minimumBalance = response.data[0].mlimit;
 $scope.partycatype = response.data[0].sstype;
 $scope.palogin = response.data[0].palogin;
 $scope.code = response.data[0].code;
+$scope.agent_code = response.data[0].agent_code;
+$scope.group_type = response.data[0].group_type;
+$scope.loginname = response.data[0].loginname;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -4994,6 +5643,7 @@ $scope.isMainLoader = false;
 });
 }
 });
+
 
 
 app.controller('payReqCtrl', function ($scope, $http) {
@@ -8993,12 +9643,12 @@ console.log(response);
 $scope.refresh = function () {
 window.location.reload();
 }
-$scope.control = function (index, userid) {
+$scope.control = function (index, userid, name) {
 //alert(userid);
 $http({
 method: 'post',
 url: '../ajax/posaccajax.php',
-data: { userid: userid, action: 'controledit' },
+data: { userid: userid,name: name, action: 'controledit' },
 }).then(function successCallback(response) {
 $scope.userid = response.data[0].userid;
 $('#ctrl1').prop('checked', response.data[0].ctrl1 == 'Y');
@@ -9017,6 +9667,7 @@ $scope.ctrl5 = response.data[0].ctrl5;
 $scope.ctrl6 = response.data[0].ctrl6;
 $scope.ctrl7 = response.data[0].ctrl7;
 $scope.ctrl8 = response.data[0].ctrl8;
+$scope.name = response.data[0].name;
 //alert(response.data[0].ctrl1);
 }, function errorCallback(response) {
 // console.log(response);
@@ -10474,6 +11125,11 @@ $scope.view = function (index, id) {
    $scope.svalue = response.data[0].svalue;
    $scope.evalue = response.data[0].evalue;
    $scope.name = response.data[0].name;
+   $scope.partner_charge_factor = response.data[0].partner_charge_factor;
+   $scope.partner_charge_value = response.data[0].partner_charge_value;
+   $scope.other_charge_factor = response.data[0].other_charge_factor;
+   $scope.other_charge_value = response.data[0].other_charge_value;
+   $scope.active = response.data[0].active;
     }, function errorCallback(response) {
    // console.log(response);
   });

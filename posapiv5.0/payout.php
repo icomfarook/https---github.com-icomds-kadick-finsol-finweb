@@ -303,7 +303,7 @@
 		                        	$comm_wallet_available_balance = check_party_comm_wallet_balance($partyCode, $partyType, $con);
 		                        	$response["commWalletAmount"] = $comm_wallet_available_balance;
 		                        	$response["processingAmountType"] = "A";
-		                        	$response["processingAmount"] = "50.00";
+		                        	$response["processingAmount"] = "0.00";
 		                        	$response["result"] = "Success";
 						$response["statusCode"] = "0";
 						$response["message"] = "Success: Your request is processed";

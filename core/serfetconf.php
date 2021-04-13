@@ -177,7 +177,22 @@ legend {
 							</div>
 						    <div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
 								<label> Partner Name : <span style='color:blue'>{{name}}</span></label>								
-							</div>												
+							</div>	
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Partner Charge Factor : <span style='color:blue'>{{partner_charge_factor}}</span></label>								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Partner Charge Value : <span style='color:blue'>{{partner_charge_value}}</span></label>								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Other Charge Factor : <span style='color:blue'>{{other_charge_factor}}</span></label>								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Other Charge Value : <span style='color:blue'>{{other_charge_value}}</span></label>								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Active : <span style='color:blue'>{{active}}</span></label>								
+							</div>
 						</div>
 						</form>	
 					</div>				

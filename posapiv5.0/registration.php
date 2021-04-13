@@ -138,7 +138,8 @@
 				}
                         			
 				if ( $local_signature == $signature ) {
-			    		$select_bvn_query = "select bvn from pre_application_info where bvn = '".$bvn."'";
+			    		//$select_bvn_query = "select bvn from pre_application_info where bvn = '".$bvn."'";
+			    		$select_bvn_query = "select bvn from pre_application_info where bvn = '".$bvn."' and status != 'R'";
 			    		error_log("select_bvn_query = ".$select_bvn_query);
 			    		$select_bvn_result = mysqli_query($con, $select_bvn_query);
 			    		if ($select_bvn_result) {

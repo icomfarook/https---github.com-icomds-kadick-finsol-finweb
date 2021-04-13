@@ -150,4 +150,13 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/sanefbankacc.php",
 		controller: "sanefBankAccCtrl"
     })
+    .when("/transfund", {
+		templateUrl : "../core/transferfund.php",
+		controller: "TransFundCtrl"
+	})
+	.when("/transtatus", {
+		templateUrl : "../core/transstatus.php",
+		controller: "TransStatusCtrl"
+	})
+
 });

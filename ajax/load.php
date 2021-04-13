@@ -7,6 +7,9 @@
 	$id = $_REQUEST['id'];
 	$profile_id = $_SESSION['profile_id'];
 	$user_id = $_SESSION['user_id'];
+	$group_type = $_SESSION['group_type'];
+	$group_id = $_SESSION['group_id'];
+
 	if ($for == 'auth'){
 		if ($action == 'active'){
 			$query = "SELECT auth_id, auth_code FROM authorization WHERE active = 'Y'";
@@ -1084,6 +1087,110 @@ echo json_encode($data);
 		echo json_encode($data);
 
 	}
+	else if ($for == 'Groupagents'){
+		if ($action == 'active'){
+			$query = "select agent_code,application_id, agent_name,group_type,group_id from agent_info where active='Y' and group_id  IS NULL and group_type IS NULL";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"group_type"=>$row['group_type'],"application_id"=>$row['application_id']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	else if ($for == 'rootchild'){
+		$id = $_REQUEST['id'];
+		if ($action == 'active'){
+			$query = "select a.agent_code, a.agent_name,a.group_type,a.group_id,a.login_name from agent_info a,application_main b where a.application_id=b.application_id and a.active='Y' and a.group_id=$id and a.group_type ='C' and b.status='Z'";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"group_type"=>$row['group_type'],"group_id"=>$row['group_id'],"login_name"=>$row['login_name']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	else if ($for == 'childagents'){
+		if ($action == 'active'){
+			$query = "select agent_code, agent_name,application_id,group_type,group_id from agent_info where active='Y' and group_id > 0 and group_type ='P'";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"group_type"=>$row['group_type'],"group_id"=>$row['group_id'],"application_id"=>$row['application_id']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	else if ($for == 'childagent'){
+		if ($action == 'active'){
+			$query = "select a.agent_code, a.agent_name,a.group_type,a.group_id,a.login_name,a.application_id from agent_info a,application_main b where a.application_id = b.application_id and b.status='Z' and  a.active='Y' and a.group_id > 0 and a.group_type ='C'";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"group_type"=>$row['group_type'],"group_id"=>$row['group_id'],"login_name"=>$row['login_name'],"application_id"=>$row['application_id']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	else if ($for == 'rootparent'){
+		if ($action == 'active'){
+			$id = $_REQUEST['id'];
+			$query = "select concat(agent_code,'-', agent_name) as parentagentCode,agent_code,group_type,group_id,login_name ,application_id from agent_info where active='Y' and application_id=$id and group_type ='P'";
+			error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("parentagentCode"=>$row['parentagentCode'],"agent_code"=>$row['agent_code'],"group_type"=>$row['group_type'],"group_id"=>$row['group_id'],"login_name"=>$row['login_name']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	else if ($for == 'parentagent'){
+		if ($action == 'active'){
+			$query = "select agent_code, agent_name,group_type,group_id,login_name from agent_info where active='Y' and group_id=$group_id and group_type='C'";
+			//error_log("Authorization Load query - Active only ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"group_type"=>$row['group_type'],"group_id"=>$row['group_id'],"login_name"=>$row['login_name']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
 	else if ($for == 'terminal'){
 		if ($action == 'active'){
 			$query = "select user_id,status,terminal_id from user_pos where status='B'";
@@ -1101,6 +1208,4 @@ echo json_encode($data);
 			echo json_encode($data);
 		}
 	}
-
-
  ?>

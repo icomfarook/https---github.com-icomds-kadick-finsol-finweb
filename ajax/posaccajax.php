@@ -114,12 +114,12 @@
 		$ctrl7 = $data->ctrl7;
 		$ctrl8 = $data->ctrl8;
 		
-		$query = "SELECT  user_id ,control_field1 as Account_Base_Access  ,control_field2 as Card_Base_Access ,control_field3 as Recharge_Access,control_field4 as Bill_Payment_Access,control_field5 as Bank_Service_Access,control_field6  as Group_Service_Access, debug_flag, mpos_simulate FROM user_pos WHERE user_id=".$userid;
+		$query = "SELECT  a.user_id ,a.control_field1 as Account_Base_Access  ,a.control_field2 as Card_Base_Access ,a.control_field3 as Recharge_Access,a.control_field4 as Bill_Payment_Access,a.control_field5 as Bank_Service_Access,a.control_field6  as Group_Service_Access, a.debug_flag, a.mpos_simulate,concat('[',b.agent_code,']','-','[',b.agent_name,']') as name  FROM user_pos a,agent_info b WHERE a.user_id = b.user_id and a.user_id=".$userid;
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("userid"=>$row['user_id'],"ctrl1"=>$row['Account_Base_Access'],"ctrl2"=>$row['Card_Base_Access'],"ctrl3"=>$row['Recharge_Access'],"ctrl4"=>$row['Bill_Payment_Access'],"ctrl5"=>$row['Bank_Service_Access'],"ctrl6"=>$row['Group_Service_Access'],"ctrl7"=>$row['debug_flag'],"ctrl8"=>$row['mpos_simulate']);           
+			$data[] = array("userid"=>$row['user_id'],"name"=>$row['name'],"ctrl1"=>$row['Account_Base_Access'],"ctrl2"=>$row['Card_Base_Access'],"ctrl3"=>$row['Recharge_Access'],"ctrl4"=>$row['Bill_Payment_Access'],"ctrl5"=>$row['Bank_Service_Access'],"ctrl6"=>$row['Group_Service_Access'],"ctrl7"=>$row['debug_flag'],"ctrl8"=>$row['mpos_simulate']);           
 		}
 		echo json_encode($data);
 		if (!$result) {

@@ -396,4 +396,24 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/sanefagtde.php",
 		controller: "sanefAgentDetCtrl"
     })
+    .when("/upgrade", {
+		templateUrl : "../core/upgrade.php",
+		controller: "UpGradeCtrl"
+	})
+	.when("/crechild", {
+		templateUrl : "../core/createchild.php",
+		controller: "CreChildCtrl"
+	})
+	.when("/grouplist", {
+		templateUrl : "../core/grouplist.php",
+		controller: "GroupListCtrl"
+	})
+	.when("/transfund", {
+		templateUrl : "../core/transferfund.php",
+		controller: "TransFundCtrl"
+	})
+	.when("/transtatus", {
+		templateUrl : "../core/transstatus.php",
+		controller: "TransStatusCtrl"
+    })
 });

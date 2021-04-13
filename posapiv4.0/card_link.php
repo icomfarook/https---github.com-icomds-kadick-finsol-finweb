@@ -380,8 +380,8 @@
 			   	&& isset($data->partyType) && !empty($data->partyType) && isset($data->countryId) && !empty($data->countryId)
 			   	&& isset($data->stateId) && !empty($data->stateId) && isset($data->partnerId) && !empty($data->partnerId) 
 			   	&& isset($data->accountNo) && !empty($data->accountNo) && isset($data->cardNumber) && !empty($data->cardNumber)
-			   	&& isset($data->amsCharge) && !empty($data->amsCharge) && isset($data->bank) && !empty($data->bank)
-			   	&& isset($data->sanefAgentCode) && !empty($data->sanefAgentCode) && isset($data->agentCharge) && !empty($data->agentCharge)
+			   	//&& isset($data->amsCharge) && !empty($data->amsCharge) && isset($data->agentCharge) && !empty($data->agentCharge)
+			   	&& isset($data->bank) && !empty($data->bank) && isset($data->sanefAgentCode) && !empty($data->sanefAgentCode)
 			   	&& isset($data->otp) && !empty($data->otp) && isset($data->transactionId) && !empty($data->transactionId)
 			   	&& isset($data->flexiRate) && !empty($data->flexiRate) && isset($data->location) && !empty($data->location)
 			){

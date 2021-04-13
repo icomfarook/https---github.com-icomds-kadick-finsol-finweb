@@ -11,11 +11,25 @@
 	$expDate = $data->expDate;
 	$startDate = $data->startDate;
 	$user_id = $_SESSION['user_id'];
-	$startDate = date("Y-m-d", strtotime($startDate));
-    $expDate = date("Y-m-d", strtotime($expDate));
+	
+	if($startDate == "undefined" || $startDate == "") {
+		$startDate = 'NULL';
+	}else{
+		$startDate = date("'Y-m-d'", strtotime($startDate. '+1 day'));
+		
+	}
+	if($expDate == "undefined" || $expDate == "") {
+		$expDate = 'NULL';
+	}else{
+		$expDate = date("'Y-m-d'", strtotime($expDate. '+1 day'));
+	}
+	
+						
+	
+   
 		
 	if($action == "list") {
-		$statequery = "SELECT a.agent_code,a.agent_name,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, ifNull((SELECT CONCAT(champion_code,' - ',champion_name)  FROM champion_info WHERE champion_code = a.parent_code),'Self') as parent, b.service_feature_id FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id and b.service_feature_id = c.service_feature_id;";
+		$statequery = "SELECT a.agent_code,a.agent_name,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, ifNull((SELECT CONCAT(champion_code,' - ',champion_name)  FROM champion_info WHERE champion_code = a.parent_code),'Self') as parent, a.parent_code as parent, b.service_feature_id FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id and b.service_feature_id = c.service_feature_id;";
 		//error_log($statequery);
 		$stateresult =  mysqli_query($con,$statequery);
 		if (!$stateresult) {
@@ -45,6 +59,7 @@
 	}
 	else if($action == "create") {
 		
+	
 		$selectquery="select service_feature_id, user_id from user_pos_menu where user_id=$id and service_feature_id='$menu'";
 		error_log($selectquery);
 		$selectresult = mysqli_query($con,$selectquery);
@@ -53,7 +68,8 @@
 		if ($count != 0 ){
 			echo "The Menu is Already exist for  this User";
 			}else{
-		$query = "INSERT INTO user_pos_menu (user_id, service_feature_id, active, start_date, expiry_date, create_user, create_time) VALUES ('$id', '$menu', '$active', '$startDate','$expDate','$user_id',now())";
+						
+				$query = "INSERT INTO user_pos_menu (user_id, service_feature_id, active, start_date, expiry_date, create_user, create_time) VALUES ('$id', '$menu', '$active',$startDate,$expDate,'$user_id',now())";
 		error_log("insertquery".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {
@@ -68,6 +84,20 @@
 	else if($action == "update") {	
 	$servfeaold = $data->servfeaold;	
 	$active = $data->active;	
+	$startDate = $data->startDate;	
+	$expDate = $data->expDate;
+	
+		if(!empty($expDate)){
+		$startDate = date("'Y-m-d'", strtotime($startDate));
+		$expDate = date("'Y-m-d'", strtotime($expDate));
+	}
+	if($startDate == 'undefined' || $startDate =="" ) {
+		$startDate = 'NULL';
+	}
+	if($expDate == 'undefined' || $expDate =="" ) {
+		$expDate = 'NULL';
+	}
+	
 		$selectquery="select service_feature_id,active, user_id from user_pos_menu where user_id=$id and service_feature_id='$menu'";
 		error_log($selectquery);
 		$selectresult = mysqli_query($con,$selectquery);
@@ -77,7 +107,7 @@
 		echo "The Menu is Already exist for  this User";
 	   }
 	   else  {
-		$query =  "UPDATE user_pos_menu set start_date = '$startDate', expiry_date = '$expDate', service_feature_id = ".trim($menu).", active = '".trim($active)."' WHERE user_id = $id and service_feature_id = ".$servfeaold ;
+		$query =  "UPDATE user_pos_menu set  start_date = ".trim($startDate).", expiry_date = ".trim($expDate).",service_feature_id = ".trim($menu).", active = '".trim($active)."' WHERE user_id = $id and service_feature_id = ".$servfeaold ;
 		error_log($query);
 	if(mysqli_query($con, $query)) {
 		 echo "User Pos Menu  updated successfully";
@@ -87,7 +117,7 @@
 			exit();
 		}			
 			}
-		$query =  "UPDATE user_pos_menu set  start_date = '$startDate', expiry_date = '$expDate', active = '".trim($active)."' WHERE user_id = $id and service_feature_id = ".$servfeaold ;
+		$query =  "UPDATE user_pos_menu set  start_date = ".trim($startDate).", expiry_date = ".trim($expDate).", active = '".trim($active)."' WHERE user_id = $id and service_feature_id = ".$servfeaold ;
 		error_log($query);
 	if(mysqli_query($con, $query)) {
 			 echo "<br />User Pos Menu Active Status $active changed successfully";

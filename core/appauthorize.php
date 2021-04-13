@@ -343,8 +343,10 @@ legend {
 			<div class="modal-content">
 					<div class="modal-header">
 						<button ng-hide='isLoader' type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'><?php echo APPLICATION_AUTHORIZE_AUTHORIZE_HEADING1; ?>- {{loginname}}  <span ng-show='code'>[{{code}} <span ng-show='palogin'> - {{palogin}}</span>]</span></h2>
-					</div>	
+						
+						<h2 style='text-align:center'><?php echo APPLICATION_AUTHORIZE_AUTHORIZE_HEADING1; ?>- {{code}}  <span ng-show='code'>[{{loginname}} <span ng-show='palogin'> - {{palogin}}</span>]</span></h2>
+						
+						</div>	
 						<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>			
 					<div class='modal-body'>
 					 <form action="" method="POST" name='ApplicationApproveDialogue' id="ApplicationApproveDialogue">

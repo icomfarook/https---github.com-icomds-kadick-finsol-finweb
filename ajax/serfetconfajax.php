@@ -80,7 +80,7 @@
 	}
 	 if($action == "view") {		
 	 $id = $data->id;
-		$query = "SELECT a.service_feature_config_id, a.start_value,if(a.partner_tx_type='I','Internal',if(a.partner_tx_type = 'E','External','Fixed')) as partner_tx_type, a.end_value,b.partner_name,concat(c.feature_code,' - ',c.feature_description) as fea FROM service_feature_config a, ams_partner b, service_feature c WHERE a.service_feature_id = c.service_feature_id and b.partner_id = a.partner_id and a.service_feature_config_id= ".$id;
+		$query = "SELECT a.service_feature_config_id, a.start_value,if(a.partner_tx_type='I','Internal',if(a.partner_tx_type = 'E','External','Fixed')) as partner_tx_type, a.end_value,b.partner_name,concat(c.feature_code,' - ',c.feature_description) as fea,if(a.partner_charge_factor='P','P - Percentage',if(a.partner_charge_factor = 'A','A - Amount','Others')) as partner_charge_factor,a.partner_charge_value,if(a.other_charge_factor='P','P - Percentage',if(a.other_charge_factor = 'A','A - Amount','Others')) as other_charge_factor,a.other_charge_value,a.active FROM service_feature_config a, ams_partner b, service_feature c WHERE a.service_feature_id = c.service_feature_id and b.partner_id = a.partner_id and a.service_feature_config_id= ".$id;
 		error_log($query);
 		$app_view_view_result =  mysqli_query($con,$query);
 		if(!$app_view_view_result) {
@@ -90,7 +90,7 @@
 		else {
 			$data = array();
 			while ($row = mysqli_fetch_array($app_view_view_result)) {
-			$data[] = array("id"=>$row['service_feature_config_id'],"txtype"=>$row['partner_tx_type'],"svalue"=>$row['start_value'],"evalue"=>$row['end_value'],"name"=>$row['partner_name'],
+			$data[] = array("id"=>$row['service_feature_config_id'],"txtype"=>$row['partner_tx_type'],"partner_charge_factor"=>$row['partner_charge_factor'],"partner_charge_value"=>$row['partner_charge_value'],"other_charge_factor"=>$row['other_charge_factor'],"other_charge_value"=>$row['other_charge_value'],"active"=>$row['active'],"svalue"=>$row['start_value'],"evalue"=>$row['end_value'],"name"=>$row['partner_name'],
 							"fea"=>$row['fea']);
 							}
 			echo json_encode($data);

@@ -206,5 +206,12 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/sanefagtde.php",
 		controller: "sanefAgentDetCtrl"
     })
-
+	.when("/grouplist", {
+		templateUrl : "../core/grouplist.php",
+		controller: "GroupListCtrl"
+	})
+	.when("/transtatus", {
+		templateUrl : "../core/transstatus.php",
+		controller: "TransStatusCtrl"
+    })
 });

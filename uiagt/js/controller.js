@@ -1,3 +1,149 @@
+app.controller('TransFundCtrl', function ($scope, $http) {
+   $scope.isPayout = true;
+   $scope.CispayRequestForm = true;
+    $scope.isHideResetS = true;
+$scope.isResDiv = true;
+$scope.isUpForm = false;
+$scope.isButtonDiv = false;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'parentagent' }
+}).then(function successCallback(response) {
+$scope.parentagent = response.data;
+//window.location.reload();
+});
+$scope.fn_load = function (group_type) {
+if(group_type == 'C') {
+$scope.ispayRequestForm = true;
+$scope.CispayRequestForm = false;
+}else {
+$scope.ispayRequestForm = false;
+$scope.CispayRequestForm = true;
+}
+}
+
+$scope.payout= function () {
+$scope.CispayRequestForm = false;
+if($scope.parentwallet || $scope.availablebalance  > $scope.transamnt) {
+$http({
+method: 'post',
+url: '../ajax/transfundajax.php',
+data: {
+agentCode: $scope.agentCode,
+parentwallet: $scope.parentwallet,
+creteria: $scope.creteria,
+childagentCode: $scope.childagentCode,
+transamnt: $scope.transamnt,
+action: 'payout',
+},
+}).then(function successCallback(response) {
+$scope.ispayRequestForm = true;
+$scope.CispayRequestForm = true;
+$scope.isResDiv = false;
+$scope.isUpForm = true;
+$scope.isButtonDiv = true;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+});
+}
+else {
+alert("Transaction Amount is Greater than Available Balanace");
+}
+}
+$scope.partyload = function (agentCode) {
+//$scope.curbalance = "";
+//$scope.CispayRequestForm = true;
+$http({
+method: 'post',
+url: '../ajax/transfundajax.php',
+data: {
+creteria: $scope.creteria,
+agentCode: $scope.agentCode,
+childagentCode: $scope.childagentCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+$scope.isPayout = false;
+$scope.isHideResetS = false;
+$scope.parentwallet = response.data[0].parentwallet;
+$scope.availablebalance = response.data[0].availablebalance;
+});
+}
+
+});
+
+app.controller('TransStatusCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+$("#tbody").empty();
+$scope.tablerow = false;
+$scope.agentCode = "ALL";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+}
+
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/transstatusajax.php',
+data: {
+action: 'query',
+status: $scope.status,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.transferstatus = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/transstatusajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.sender_partner_code = response.data[0].sender_partner_code;
+$scope.sender_partner_type = response.data[0].sender_partner_type;
+$scope.sender_wallet_type = response.data[0].sender_wallet_type;
+$scope.receiver_partner_code = response.data[0].receiver_partner_code;
+$scope.receiver_parnter_type = response.data[0].receiver_parnter_type;
+$scope.receiver_wallet_type = response.data[0].receiver_wallet_type;
+$scope.transfer_amount = response.data[0].transfer_amount;
+$scope.status = response.data[0].status;
+$scope.create_user = response.data[0].create_user;
+$scope.create_time = response.data[0].create_time;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
 app.controller('sanefBankAccCtrl', ['$scope','$http', function($scope,$http ){
 $scope.isHideOk = true;
 $scope.isHideReset = false;

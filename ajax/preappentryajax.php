@@ -81,6 +81,12 @@
 		else {
 			$get_sequence_num_row = mysqli_fetch_assoc($get_sequence_number_result);
 			$application_id = $get_sequence_num_row['application_id'];
+			$select_bvn_query = "select bvn from pre_application_info where bvn = '".$bvn."' and status != 'R'";
+			 error_log("select_bvn_query = ".$select_bvn_query);
+			 $select_bvn_result = mysqli_query($con, $select_bvn_query);
+			 if ($select_bvn_result) {
+             $select_bvn_count = mysqli_num_rows($select_bvn_result);
+           	if ( $select_bvn_count == 0 ) {
 			$pre_application_query = "INSERT INTO pre_application_info (pre_application_info_id, country_id, bvn,dob,gender, outlet_name, business_type,tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) VALUES ($application_id, $countryid,'$bvn','$dob','$gender', '$outletname',$BusinessType, '$taxnumber', '$address1', '$address2', $localgovernmentid, $stateid, '$mobileno', '$workno', '$email', $langpref, '$cname', '$cmobile','$Latitude', '$Longitude', '$comment','E', $createuser, now())";
 			error_log("pre_application_query ".$pre_application_query);
 			$pre_application_result =  mysqli_query($con,$pre_application_query);
@@ -120,6 +126,12 @@
 				echo "Your Application No: $application_id submitted successfully";
 				}
 		    }
+		}else{
+			echo "Failure: BVN ".$bvn." is already used. Contact Kadick if otherwise";
+		}
+			 }else{
+				echo "Failure: Error in checking BVN";
+			 }
 		}
 	}
 ?>	

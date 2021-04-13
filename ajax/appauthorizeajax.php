@@ -34,19 +34,19 @@
 		$id = $data->id;
 		$type = $data->rtype;
 		if($type == "A" || $type == "S") {		
-			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype FROM application_main a, application_info b, agent_wallet c, agent_info d Where a.application_id = b.application_id and c.agent_code = b.party_code and c.agent_code = d.agent_code and a.application_id = $id";
+			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.agent_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.group_type,d.login_name FROM application_main a, application_info b, agent_wallet c, agent_info d Where a.application_id = b.application_id and c.agent_code = b.party_code and c.agent_code = d.agent_code and a.application_id = $id";
 		}
 		if($type == "P") {		
-			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype FROM application_main a, application_info b, personal_wallet c, personal_info d Where a.application_id = b.application_id and c.personal_code = b.party_code and c.personal_code = d.personal_code and a.application_id = $id";
+			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.personal_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.login_name FROM application_main a, application_info b, personal_wallet c, personal_info d Where a.application_id = b.application_id and c.personal_code = b.party_code and c.personal_code = d.personal_code and a.application_id = $id";
 		}
 		if($type == "C") {		
-			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype FROM application_main a, application_info b, champion_wallet c, champion_info d Where a.application_id = b.application_id and c.champion_code = b.party_code and c.champion_code = d.champion_code and a.application_id = $id";
+			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.champion_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.login_name FROM application_main a, application_info b, champion_wallet c, champion_info d Where a.application_id = b.application_id and c.champion_code = b.party_code and c.champion_code = d.champion_code and a.application_id = $id";
 		}
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("code"=>$row['parent_code'],"palogin"=>$row['parentloginname'],"id"=>$row['application_id'],"approverComment"=>$row['approver_comments'],"name"=>$row['outlet_name'],"type"=>$row['applier_type'],"climit"=>$row['credit_limit'],"dlimit"=>$row['daily_limit'],"mlimit"=>$row['minimum_balance'],"alimit"=>$row['advance_amount'],"sstype"=>$row['stype']);           
+			$data[] = array("code"=>$row['code'],"parent_code"=>$row['parent_code'],"loginname"=>$row['login_name'],"agent_code"=>$row['agent_code'],"group_type"=>$row['group_type'],"palogin"=>$row['parentloginname'],"id"=>$row['application_id'],"approverComment"=>$row['approver_comments'],"name"=>$row['outlet_name'],"type"=>$row['applier_type'],"climit"=>$row['credit_limit'],"dlimit"=>$row['daily_limit'],"mlimit"=>$row['minimum_balance'],"alimit"=>$row['advance_amount'],"sstype"=>$row['stype']);           
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -89,7 +89,8 @@
 		$dailyLimit = $data->dailyLimit;
 		$advanceAmount = $data->advanceAmount;
 		$minimumBalance = $data->minimumBalance;
-		$query = "SELECT b.application_id, a.outlet_name, a.contact_person_name, a.party_code, a.country_id, b.login_name, a.email, a.language_id FROM application_info a, application_main b WHERE a.application_id = b.application_id and a.application_id = $id";
+		$query = "SELECT b.application_id, a.outlet_name, a.contact_person_name, a.party_code, a.country_id, b.login_name, a.email, a.language_id,c.group_type ,c.agent_code,c.parent_code FROM application_info a, application_main b,agent_info c WHERE a.application_id = b.application_id and b.application_id=c.application_id and a.application_id = $id";
+		error_log("selectquery ==".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {
 			echo "Error: %s\n". mysqli_error($con);
@@ -98,8 +99,11 @@
 		else {
 			$row = mysqli_fetch_assoc($result);
 			$country_id = $row['country_id'];
+			$parent_code = $row['parent_code'];
 			$appid = $row['application_id'];
 			$outlet_name = $row['outlet_name'];
+			$group_type = $row['group_type'];
+			$agent_code = $row['agent_code'];
 			$cname = $row['contact_person_name'];
 			$party_code = $row['party_code'];
 			$login_name = $row['login_name'];
@@ -208,11 +212,13 @@
 									
 											mailSend($email_array, $body, $subject,$file_name2);
 											authorizemail($email, $transaction_password, $temp_password, $party_code, $login_name);
-											echo "Applcation No - $id Authorized Successfully";
+											if($group_type === 'C'){
+											echo "Child  Application No - $id Parent - $parent_code Authorized Successfully";
+											}else{
+												echo "Applcation No - $id Authorized Successfully";
+											}
 										}
-										else{
-											echo "Applcation No - $id Authorized Failed";
-										}
+										
 									}
 								}
 							}							

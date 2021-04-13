@@ -64,7 +64,7 @@
 							<td>{{ x.status }}</td>
 							<td><a id={{x.id}}class='editposacc' ng-click='edit($index,x.id)' data-toggle='modal' data-target='#EditPosaccDialogue'>
 							<button id = '".$row['user_id']."' class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
-							<td ><a id={{x.id}} class='icoimg' ng-click='control($index,x.userid)'  data-toggle='modal' data-target='#controlposDialogue'>
+							<td ><a id={{x.id}} class='icoimg' ng-click='control($index,x.userid,x.name)'  data-toggle='modal' data-target='#controlposDialogue'>
 								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/dotp.png' /></button></a>
 							</td>
 							<td ><a id={{x.id}} class='icoimg' ng-click='nibssedit($index,x.userid)'  data-toggle='modal' data-target='#nibssposDialogue'>
@@ -268,7 +268,7 @@
 			<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>User POS Control Edit - {{userid}}</h2>
+						<h2 style='text-align:center'>User POS Control Edit - {{name}}</h2>
 					</div>		
 					<div style='text-align:center'  class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>					
 					<div class='modal-body'>

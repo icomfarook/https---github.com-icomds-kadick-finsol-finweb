@@ -128,12 +128,12 @@
 						 <div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 							<label><?php echo APPLICATION_APPROVE_START_DATE; ?>
 							<span class = 'err' ng-show="applicationApproveForm.startDate.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input  ng-model="startdate" type='date' id='startdate' name='startdate' required class='form-control'/>
+								<input  ng-model="startdate" type='date' id='startdate' name='startdate'  class='form-control'/>
 						</div>
 						 <div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 							<label><?php echo APPLICATION_APPROVE_END_DATE; ?>
 							<span class = 'err' ng-show="applicationApproveForm.endDate.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input  ng-model="expdate" type='date' id='expdate' name='expdate' required class='form-control'/>
+								<input  ng-model="expdate" type='date' id='expdate' name='expdate'  class='form-control'/>
 						</div>
 				</div>
 				<div class='clearfix'></div>

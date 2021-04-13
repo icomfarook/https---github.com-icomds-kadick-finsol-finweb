@@ -147,6 +147,17 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 				-->
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-globe"></i>
+						<span class="hidden-xs">Group Account</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!transfund">Transfer Fund</a></li>
+						<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+					</ul>
+				</li>
+
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-users"></i>
 						 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
 					</a>
