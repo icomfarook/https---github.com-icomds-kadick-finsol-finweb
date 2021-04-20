@@ -13,15 +13,15 @@
 	$partycode = $_SESSION['party_code'];
 ?>
 
-<div ng-controller='evdtrreportCtrl'>
+<div ng-controller='BPsalesReportCtrl'>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<a href="#" class="show-sidebar">
 			<i class="fa fa-bars"></i>
 		</a>
 		<ol class="breadcrumb pull-left">
-			<li><a href="#!rpttra"><?php echo TRANSACTION_REPORT_MAIN_HEADING1; ?></a></li>
-			<li><a href="#!rpttra">EVD Sales Report</a></li>
+			<li><a href="#!rptbpsal"><?php echo TRANSACTION_REPORT_MAIN_HEADING1; ?></a></li>
+			<li><a href="#!rptbpsal">Bill Payment Sales Report</a></li>
 		</ol>
 		
 	</div>
@@ -32,7 +32,7 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">					
-					<span>EVD Sales Report</span>
+					<span>Bill Payment Sales Report</span>
 				</div>
 				<div class="box-icons">
 					<a class="expand-link">
@@ -44,11 +44,11 @@
 			
 			<div class="box-content no-padding" data-ng-init="fn_load(<?php echo "'".$partytype."',"."'".$partycode."'" ?>)">			
 			  <div style='text-align:center' ng-hide='isMainLoader' class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="../common/img/gif1.gif" /></div></div>			
-				<form name='trReportForm' action='evdtrreportexcel.php' method='POST' >	
+				<form name='trReportForm' action='bpsalesrprtexcel.php' method='POST' >	
 				<?php if($profileid ==50){ ?>
 					<div class='row appcont' style='margin-bottom:0%' >
 						<div  class='col-lg-3 col-xs-12 col-sm-12 col-md-12' ng-init="reportFor='ALL'">
-						&nbsp;&nbsp;<label></label>
+					
 							<input value='ALL'  type='radio' name='reportFor' ng-model='reportFor'  />&nbsp;<label>ALL</label>&nbsp;&nbsp;&nbsp;
 							<input value='C'  type='radio' name='reportFor' ng-model='reportFor' />&nbsp;<label>Champion</label>&nbsp;&nbsp;&nbsp;
 							<input value='A'  type='radio' name='reportFor' ng-model='reportFor' />&nbsp;<label>Agent</label>
@@ -60,15 +60,15 @@
 							</select>	
 						</div>
 					</div>
-				<?php } ?>
-					<div class='row appcont' style='margin-top:0%'>
+				<?php } ?>	
+					<div class='row appcont' style='margin-top:0%'>				
 						<div class='row appcont' ng-init="creteria='BT'">
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><input value='BT' ng-click='clickra(creteria)' ng-checked='true' type='radio' name='creteria' ng-model='creteria' /></label>
-								<label>Operator</label>
+								<label><?php echo TRANSACTION_REPORT_MAIN_ORDER_TYPE; ?></label>
 								<select ng-init = 'type="ALL"' ng-disabled="isOrderTypeDi" ng-model='type' class='form-control' name='type' required>
 									<option value='ALL'><?php echo TRANSACTION_REPORT_MAIN_ORDER_TYPE_ALL; ?></option>
-									<option ng-repeat="operator in operators" value="{{operator.operator_id}}">{{operator.operator_description}}</option>
+									<option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
 								</select>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
@@ -104,36 +104,36 @@
 							<thead>
 								<tr> 
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_ORDER_NO; ?></th>
-									<th>Operator</th>
+									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_CODE; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_REQUEST_AMOUNT; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_TOTAL_AMOUNT; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_AGENT_NAME; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_DATE_TIME; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_DETAIL; ?></th>
-									<th>Print</th>								
+									<th>Print</th>										
 								</tr>
 							</thead>
 							<tbody>
 								 <tr ng-show='tablerow' ng-repeat="x in res">
 									<td>{{ x.no }}</td>
-									<td>{{ x.operator}}</td>
+									<td>{{ x.code}}</td>
 									<td>{{ x.reqmount }}</td>
 									<td>{{ x.toamount }}</td>
 									<td>{{ x.user }}</td>
 									<td>{{ x.dtime }}</td>									
-									<td><a class='trReportDialogue' ng-click='view(x.no,reportFor)' data-toggle='modal' data-target='#trReportDialogue'>
+									<td><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
-										<a href="#"> |&nbsp;&nbsp; </a>
+										<a href="#">|&nbsp;</a>
 										<a class='trReportDialogue' ng-click='viewcomm(x.no)' data-toggle='modal' data-target='#trReportCommDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a> 
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
-									<td><a class='trReportDialogue' ng-click='print(x.no)' data-toggle='modal' >
+									<td><a class='trReportDialogue' ng-click='print(x.no,x.code)' data-toggle='modal' >
 										<button class='icoimg'><img  src='../common/images/print1.jpg' /></button></a>
 									</td>
 									
 								</tr>
 								<tr ng-show="res.length==0">
-									<td colspan='9' >
+									<td colspan='8' >
 										<?php echo NO_DATA_FOUND; ?>              
 									</td>
 								</tr>
@@ -152,7 +152,7 @@
 				<form action="" method="POST" name='trReportDialogueForm' id="trReportDialogueForm">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>EVD Sales Commission: # {{no}}</h2>
+						<h2 style='text-align:center'>Sales Report Commission: # {{no}}</h2>
 					</div>					 
 					<div class='modal-body'>
 					<div class='row'>
@@ -196,50 +196,77 @@
 	 <div id='trReportDialogue' class='modal' id='myModal' role='dialog'>
 		<div class="modal-dialog modal-lg" style='width:100%'>
 			<div class="modal-content">
-				<form action="" method="POST" name='trReportDialogueFormdetails' id="trReportDialogueFormdetails" ng-modal='clearAll' >
+				<form action="" method="POST" name='trReportDialogueFormdetails' id="trReportDialogueFormdetails" ng-modal='clearAll'>
 					<div class="modal-header">
 						<button type="button" class="close"   ng-click='clear()' data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>EVD Sales Report : # {{no}}</h2>
+						<h2 style='text-align:center'>Sales Report : # {{no}} - {{sts}}</h2>
 					</div>					 
 					<div class='modal-body'>
 					<div class='row'>
 						<div class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 					</div>
-						<div id='trReportViewBody'  ng-hide='isLoader' >
-							<table class='table table-borderd' ng-repeat='x in resview'>
+						<div id='trReportViewBody'  ng-hide='isLoader'>
+							<table class='table table-borderd'>
 								<tr>
-									<td>Order No : {{x.no}}</td>
-									<td>Operator Code : {{x.operator_code}}</td>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_NO; ?> : {{no}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_TYPE; ?> : {{code}}</td>
 								</tr>
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TOTAL_AMOUNT; ?> {{x.total_amount}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REQUEST_AMOUNT; ?> {{x.request_amount}}</td>
-								</tr>
-								<tr>									
-									<td>AMS Charge : {{x.ams_charge}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER_CHARGE; ?> {{x.partner_charge}}</td>
-								</tr>
-								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_OTHER_CHARGE; ?> {{x.other_charge}}</td>
-									<td>Operator : {{x.operator_description}}</td>
-								</tr>
-								<tr>									
-									<td>User :  {{x.user}}</td>
-									<td>Plan Description : {{x.opr_plan_desc}}</td>
-
-								</tr>
-								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REFERENCE_NO; ?> {{x.reference_no}}</td>
-									<td>Total Discount : {{x.total_discount}}</td>
-								</tr>
-								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REQUEST_AMOUNT; ?> : {{rmount}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TOTAL_AMOUNT; ?> : {{toamount}}</td>
 									
-									<td>Trans Log ID : {{x.evd_trans_log_id}}</td>
-									<td ><?php echo FIN_SERVI_TRANSACTION_REPORT_DATE_TIME; ?> {{x.date_time}}</td>
 								</tr>
 								<tr>									
-								   <td>Device ID : {{x.device_id}}</td>
-									<td>ar Lock : {{x.ar_lock}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_AMS_CHARGE; ?> : {{amscharge}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER_CHARGE; ?> : {{parcharge}}</td>
+								</tr>
+								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_OTHER_CHARGE; ?> : {{ocharge}}</td>
+									<td >Mobile Number : {{mobile}}</td>
+									
+								</tr>
+								<tr>									
+									<td>Session Id : {{session_id}}</td>
+									<td>Transaction Id : {{bp_transaction_id}}</td>
+								</tr>
+								<tr>									
+									<td>Payment Fee {{payment_fee}}</td>
+									<td>Agent Charge {{agent_charge}}</td>
+								</tr>
+								
+								<tr>									
+									<td>Stamp Charge : {{stamp_charge}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_USER; ?> : {{user}}</td>
+								</tr>
+								<tr>									
+									<td>Account Name : {{account_name}}</td>
+									<td>Account Number : {{account_no}}</td>
+								</tr>
+								<tr>									
+									<td>Bp  Account Name : {{bp_account_name}}</td>
+									<td>Bp Account Number : {{bp_account_no}}</td>
+								</tr>
+								<tr>									
+									<td>Bp Bank Code : {{bp_bank_code}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER; ?> :  {{partner}}</td>
+								</tr>
+								
+								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_DATE_TIME; ?> : {{dtime}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TRANSACTION_LOG_ID; ?> : {{transLogId1}}</td>
+								</tr>
+								<tr>									
+									<td>Translog Id 2 : {{transLogId2}}</td>
+									<td>Translog Id 3 : {{transLogId3}}</td>
+								</tr>
+								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_TIME; ?>: {{ptime}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_STATUS; ?>: {{pstatus}}</td>
+								</tr>
+								<tr>
+									<td colspan='2'><?php echo FIN_SERVI_TRANSACTION_REPORT_COMMENT; ?> {{fincomment}}</td>
+								</tr>	<tr>
+									<td colspan='2'>Additional Comments : {{appcmt}}</td>
 								</tr>
 							</table>
 						</div>
@@ -259,13 +286,12 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	LoadSelect2Script(MakeSelect2);
 }
-
 $(document).ready(function() {
 	$("#Query").click(function() {				
 		LoadDataTablesScripts(AllTables);
-		
+		// $.fn.dataTableExt.sErrMode = 'throw' ;
 	});
 	  $('.modal-content').on('hidden', function() {
     clear()
@@ -273,7 +299,7 @@ $(document).ready(function() {
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});	
-		 /* window.alert = function() {}; alert = function() {}; */
+	/*  /* window.alert = function() {}; alert = function() {}; */ 
 	
 });
 </script>

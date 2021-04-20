@@ -14,15 +14,15 @@
 	height:30px !important;
 }
 </style>
-<div ng-controller='statReportCtrl'>
+<div ng-controller='BPstatReportCtrl'>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<a href="#" class="show-sidebar">
 			<i class="fa fa-bars"></i>
 		</a>
 		<ol class="breadcrumb pull-left">
-			<li><a href="#!rptsta"><?php echo STATISTICAL_REPORT_MAIN_HEADING1; ?></a></li>
-			<li><a href="#!rptsta"><?php echo STATISTICAL_REPORT_MAIN_HEADING2; ?></a></li>
+			<li><a href="#!rptbpsta"><?php echo STATISTICAL_REPORT_MAIN_HEADING1; ?></a></li>
+			<li><a href="#!rptbpsta">Bill Payment Statistical Report</a></li>
 		</ol>
 		
 	</div>
@@ -33,7 +33,7 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">					
-					<span><?php echo STATISTICAL_REPORT_MAIN_HEADING3; ?></span>
+					<span>Bill Payment Statistical Report</span>
 				</div>
 				<div class="box-icons">
 					<a class="expand-link">
@@ -45,7 +45,7 @@
 			
 			<div class="box-content no-padding">			
 			  <div style='text-align:center' ng-hide='isMainLoader' class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="../common/img/gif1.gif" /></div></div>			
-				<form name='stateReportForm'  action='statreportexcel.php' method='POST' novalidate>	
+				<form name='stateReportForm'  action='bpstatrprtexcel.php' method='POST' novalidate>	
 					<div class='row appcont'>
 						<div class='row appcont' ng-init="creteria='BT'" style="margin-left:120px;">
 						 <div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
@@ -101,7 +101,7 @@
 							<thead>
 								<tr> 
 									<th><?php echo STATISTICAL_REPORT_MAIN_TABLE_DATE; ?></th>
-									<th ng-show="td && ad || td || ad"><?php echo STATISTICAL_REPORT_MAIN_TABLE_ORDER_TYPE; ?></th>
+									<th ng-show="td"><?php echo STATISTICAL_REPORT_MAIN_TABLE_ORDER_TYPE; ?></th>
 									<th ng-show="ad"><?php echo STATISTICAL_REPORT_MAIN_TABLE_AGENT; ?></th>
 									<th >State</th>
 									<th><?php echo STATISTICAL_REPORT_MAIN_TABLE_COUNT; ?></th>
@@ -112,11 +112,11 @@
 							<tbody>
 								 <tr ng-show="tablerow" ng-repeat="x in res">
 								
-									<td>{{ x.date }}</td>
-									<td ng-show="x.td">{{ x.otype}}</td>
-									<td  ng-show="x.ad">{{ x.agent }}</td>
-									<td >{{x.state}}</td>
-									<td>{{ x.count }}</td>
+									<td class='col-lg-1 col-xs-12 col-sm-12 col-md-12'>{{ x.date }}</td>
+									<td class='col-lg-2 col-xs-12 col-sm-12 col-md-12' ng-show="x.td">{{ x.otype}}</td>
+									<td class='col-lg-5 col-xs-12 col-sm-12 col-md-12' ng-show="x.ad">{{ x.agent }}</td>
+									<td class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >{{x.state}}</td>
+									<td class='col-lg-1 col-xs-12 col-sm-12 col-md-12'>{{ x.count }}</td>
 								</tr>
 								<tr ng-show="res.length==0">
 									<td style='text-align:center' colspan='4' >
@@ -144,9 +144,9 @@ function AllTables(){
 }
 
 $(document).ready(function() {
-	$("#Query").click(function() {				
-	$('.dataTables_info').css("display","block"); 	
-		$('#datatable-1_paginate').css("display","block");	
+	$("#Query").click(function() {			
+	$('.dataTables_info').css("display","none"); // empty in case the columns change
+		$('#datatable-1_paginate').css("display","none");
 		LoadDataTablesScripts(AllTables);
 		
 	});
@@ -164,11 +164,11 @@ $(document).ready(function() {
     $('#result').html("id : " + userid + ", name : " + username);
 
   });
-  $("#Reset").click(function() {
+   $("#Reset").click(function() {
 	   //alert();
 		$('#selUser').select2('destroy');
 		 $("#selUser").select2('val', val);
-	    $('.dataTables_info').css("display","none"); // empty in case the columns change
+		$('.dataTables_info').css("display","none"); // empty in case the columns change
 		$('#datatable-1_paginate').css("display","none");
  
 		});	

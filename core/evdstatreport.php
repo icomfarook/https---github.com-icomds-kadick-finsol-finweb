@@ -174,7 +174,9 @@ function AllTables(){
 }
 
 $(document).ready(function() {
-	$("#Query").click(function() {				
+	$("#Query").click(function() {
+$('.dataTables_info').css("display","block"); 	
+		$('#datatable-1_paginate').css("display","block");		
 		LoadDataTablesScripts(AllTables);
 		
 	});
@@ -192,5 +194,13 @@ $(document).ready(function() {
     $('#result').html("id : " + userid + ", name : " + username);
 
   });
+   $("#Reset").click(function() {
+	   //alert();
+		$('#selUser').select2('destroy');
+		 $("#selUser").select2('val', val);
+		$('.dataTables_info').css("display","none"); // empty in case the columns change
+		$('#datatable-1_paginate').css("display","none");
+ 
+		});	
 });
 </script>

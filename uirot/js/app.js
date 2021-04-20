@@ -416,5 +416,24 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/transstatus.php",
 		controller: "TransStatusCtrl"
     })
-
+    .when("/rptbpsta", {
+		templateUrl : "../core/bpstatrprt.php",
+		controller: "BPstatReportCtrl"
+	})
+	.when("/rptbpfin", {
+		templateUrl : "../core/bpfnreport.php",
+		controller: "BPfnReportCtrl"
+	})
+	.when("/rptbptra", {
+		templateUrl : "../core/bptrreport.php",
+		controller: "BPtrReportCtrl"
+	})
+	.when("/rptbpsal", {
+		templateUrl : "../core/bpsalesrprt.php",
+		controller: "BPsalesReportCtrl"
+	})
+	.when("/waltblnce", {
+		templateUrl : "../core/walatbalance.php",
+		controller: "WalletBalanceCtrl"
+	})
 });
