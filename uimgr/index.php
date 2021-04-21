@@ -254,6 +254,16 @@
 					</li>		
 					<!-- 20 - Finance Manager -->
 				<?php } else if($profile_id == 20) {?>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-arrows-alt"></i>
+						 <span class="hidden-xs"><?php echo INDEX_ACCESS; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+					</ul>
+				</li>
+				
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-bar-chart-o"></i>
@@ -345,6 +355,15 @@
 					</li>		
 					<!-- Finance Officer -->
 				<?php } else if($profile_id == 22) { ?>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-arrows-alt"></i>
+						 <span class="hidden-xs"><?php echo INDEX_ACCESS; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+					</ul>
+				</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-bar-chart-o"></i>

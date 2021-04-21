@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response["responseCode"] = 0;
 			$response["signature"] = 100;
 			
-			$response["pendingBalance"] = "0.00";
+			$response["pendingBalance"] = "0.0";
 			$response["balance"] = "17754.455000000005";
 			$response["updatedAt"] = "2021-04-07T11:04:38.862Z";
 			$response["createdAt"] = "2021-02-23T08:45:56.878Z";

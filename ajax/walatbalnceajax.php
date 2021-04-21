@@ -10,27 +10,32 @@
 	error_log($userId);
 	if($action == "query") {
 
-				$res = sendRequest($userId);
-				//error_log("print_R".print_r($res));
-				$api_response = json_decode($res, true);
-				
-				$pendingBalance = $api_response['pendingBalance'];
-				$balance = $api_response['balance'];
-				$updatedAt = $api_response['updatedAt'];
-				$createdAt = $api_response['createdAt'];
-				$name = $api_response['name'];
-				$balanceStatus = $api_response['balanceStatus'];
-				$processingStartTime = $api_response['processingStartTime'];
-				$responseDescription = $api_response['responseDescription'];
-				//echo $res;
-				/* error_log("pendingBalance".$pendingBalance);
-				
-				echo $response;
-				 */
-			//echo $res;
-			//	echo $response;
+		$res = sendRequest($userId);
+		$api_response = json_decode($res, true);
+		$response = array();
+		$response["pendingBalance"] = number_format($api_response['pendingBalance'], 2, '.', ',');
+		$response["balance"] = number_format($api_response['balance'], 2, '.', ',');
+		$response["updatedAt"] = $api_response['updatedAt'];
+		$response["createdAt"] = $api_response['createdAt'];
+		$response["name"] = $api_response['name'];
+		$response["balanceStatus"] = $api_response['balanceStatus'];
+		$response["processingStartTime"] = $api_response['processingStartTime'];
+		$response["responseDescription"] = $api_response['responseDescription'];
+		
+		/*
+		$pendingBalance = number_format($api_response['pendingBalance'], 2, ".", ",");
+		$balance = number_format($api_response['balance'], 2, '.', ',');
+		$updatedAt = $api_response['updatedAt'];
+		$createdAt = $api_response['createdAt'];
+		$name = $api_response['name'];
+		$balanceStatus = $api_response['balanceStatus'];
+		$processingStartTime = $api_response['processingStartTime'];
+		$responseDescription = $api_response['responseDescription'];
 		echo json_encode($api_response);
+		*/
+		echo json_encode($response);
 	}
+	
 	function sendRequest($userId){
 	
 		error_log("entering sendWalatbalanceRequest");
