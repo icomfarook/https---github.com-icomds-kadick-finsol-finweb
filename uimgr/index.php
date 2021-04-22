@@ -286,27 +286,74 @@
 							<li><a class="ajax-link" href="#!adjapr"><?php echo INDEX_ADJUSTMENT_APPROVE; ?></a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">
-							<i class="fa fa-line-chart"></i>
-							 <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="ajax-link" href="#!rptsal">Sales Report</a></li>
-							<li><a class="ajax-link" href="#!rptsta"><?php echo INDEX_STATISTICAL_REPORT; ?></a></li>
-							<li><a class="ajax-link" href="#!rptfin"><?php echo INDEX_FINANCIAL_REPORT; ?></a></li>	
-							<li><a class="ajax-link" href="#!rptetr">EVD Sales Report</a></li>
-							<li><a class="ajax-link" href="#!rptevdsta">EVD Statistical Report</a></li>
-							<li><a class="ajax-link" href="#!evdrptfin">EVD Financial Report</a></li>
-							<li><a class="ajax-link" href="#!rptfndwlt">Fund Wallet Report</a></li>
-							<li><a class="ajax-link" href="#!rptcashoutpay">Cash Out Payment Report</a></li>
-							<li><a class="ajax-link" href="#!nontrans"><?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
-							<li><a class="ajax-link" href="#!rptbtr">Batch Transaction Report</a></li>
-							<!--
-							<li><a class="ajax-link" href="#!trpagt">Fin.Transaction per Agent</a></li>
-							-->
-						</ul>
-					</li>
+					
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-line-chart"></i>
+						 <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+								<i class="fa fa-newspaper-o"></i>
+								 <span style="color:white" class="hidden-xs"  >Sales</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Cash Sales Report</a></li>
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptbpsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Bill Pay Sales Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptetr"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>EVD Sales Report</a></li>		
+							</ul>	
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-file"></i>
+								 <span style="color:white" class="hidden-xs" >Statistical</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Stat Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbpsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Stat Report</a></li>
+								<li><a class="ajax-link"  style="color:orange" href="#!rptevdsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Stat Report</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-money"></i>
+								<span style="color:white" class="hidden-xs" href="#!rptfin">Finance</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Finance Report</a></li>	
+								<li><a class="ajax-link" style="color:orange" href="#!rptbpfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Finance Report</a></li>	
+								<li><a class="ajax-link" style="color:orange" href="#!evdrptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Finance Report</a></li>
+							</ul>	
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-book"></i>
+								<span style="color:white" class="hidden-xs" >Transaction</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rpttra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Transaction Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbptra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Transaction Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!nontrans"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;<?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbtr"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Batch Transaction Report</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+								<i class="fa fa-money"></i>
+							 	<span style="color:white" class="hidden-xs" href="">Payment</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptfndwlt"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Fund Wallet Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptcashoutpay"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Out Report</a></li>
+							</ul>	
+						</li>
+					
+						<!--
+						<li><a class="ajax-link" href="#!trpagt">Fin.Transaction per Agent</a></li>
+						-->
+					</ul>
+				</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>
@@ -408,27 +455,74 @@
 							<li><a class="ajax-link" href="#!comjco"><?php echo INDEX_JOURNAL_COMMISSION; ?></a></li>
 						</ul>
 					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">
-							<i class="fa fa-line-chart"></i>
-							 <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="ajax-link" href="#!rptsal">Sales Report</a></li>
-							<li><a class="ajax-link" href="#!rptsta"><?php echo INDEX_STATISTICAL_REPORT; ?></a></li>
-							<li><a class="ajax-link" href="#!rptfin"><?php echo INDEX_FINANCIAL_REPORT; ?></a></li>	
-							<li><a class="ajax-link" href="#!rptetr">EVD Sales Report</a></li>
-							<li><a class="ajax-link" href="#!rptevdsta">EVD Statistical Report</a></li>
-							<li><a class="ajax-link" href="#!evdrptfin">EVD Financial Report</a></li>
-							<li><a class="ajax-link" href="#!rptfndwlt">Fund Wallet Report</a></li>
-							<li><a class="ajax-link" href="#!rptcashoutpay">Cash Out Payment Report</a></li>
-							<li><a class="ajax-link" href="#!nontrans"><?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
-							<li><a class="ajax-link" href="#!rptbtr">Batch Transaction Report</a></li>
-							<!--
-							<li><a class="ajax-link" href="#!trpagt">Fin.Transaction per Agent</a></li>
-							-->
-						</ul>
-					</li>
+					
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-line-chart"></i>
+						 <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+								<i class="fa fa-newspaper-o"></i>
+								 <span style="color:white" class="hidden-xs"  >Sales</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Cash Sales Report</a></li>
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptbpsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Bill Pay Sales Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptetr"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>EVD Sales Report</a></li>		
+							</ul>	
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-file"></i>
+								 <span style="color:white" class="hidden-xs" >Statistical</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Stat Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbpsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Stat Report</a></li>
+								<li><a class="ajax-link"  style="color:orange" href="#!rptevdsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Stat Report</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-money"></i>
+								<span style="color:white" class="hidden-xs" href="#!rptfin">Finance</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Finance Report</a></li>	
+								<li><a class="ajax-link" style="color:orange" href="#!rptbpfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Finance Report</a></li>	
+								<li><a class="ajax-link" style="color:orange" href="#!evdrptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Finance Report</a></li>
+							</ul>	
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-book"></i>
+								<span style="color:white" class="hidden-xs" >Transaction</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rpttra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Transaction Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbptra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Transaction Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!nontrans"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;<?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbtr"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Batch Transaction Report</a></li>
+							</ul>
+						</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+								<i class="fa fa-money"></i>
+							 	<span style="color:white" class="hidden-xs" href="">Payment</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptfndwlt"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Fund Wallet Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptcashoutpay"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Out Report</a></li>
+							</ul>	
+						</li>
+					
+						<!--
+						<li><a class="ajax-link" href="#!trpagt">Fin.Transaction per Agent</a></li>
+						-->
+					</ul>
+				</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>

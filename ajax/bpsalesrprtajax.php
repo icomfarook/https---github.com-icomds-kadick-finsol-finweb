@@ -10,6 +10,8 @@
 	$partycode 	= $data->partycode;
 	$reportFor 	= $data->reportFor;	
 	$creteria 	= $data->creteria;
+	$championCode 	= $data->championCode;
+	$state 	= $data->state;	
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));	
 	$profileid = $_SESSION['profile_id'];
@@ -50,6 +52,22 @@
 		}
 		if($creteria == "BO") {
 			$query .= " and a.bp_service_order_no = $orderNo order by a.bp_service_order_no";
+		}
+		if($creteria == "C") { 
+			if($championCode == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+		}
+		if($creteria == "S") { 
+			if($state == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+			}
 		}
 		
 		error_log("sales report query = ".$query);

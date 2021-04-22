@@ -44,6 +44,25 @@
 				<form name='trReportForm' action='bptransrprtexcel.php' method='POST' >	
 					<div class='row appcont'>
 						<div class='row appcont' ng-init="creteria='BT'">
+						<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label>Champion</label>
+								<select  ng-model='championCode' id='championCode'  ng-init='championCode = "ALL"'   class='form-control' name='championCode'  >
+										<option value='ALL'>--ALL--</option>
+										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>					
+									</select>	
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >
+								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
+									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
+								</select>
+								<label>State
+								<span ng-show="infoViewForm.partyType.$dirty && infoViewForm.partyType.$invalid">
+								<span class = 'err' ng-show="infoViewForm.partyType.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select  ng-model="state" ng-change='statechange(this.state)' ng-init="state='ALL'" class='form-control' name = 'state' id='state' required>											
+									<option value='ALL'>ALL</option>
+									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
+								</select>
+								</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo TRANSACTION_REPORT_MAIN_ORDER_TYPE; ?></label>
 								<select ng-init = 'type="ALL"' ng-disabled="isOrderTypeDi" ng-model='type' class='form-control' name='type' required>
@@ -66,7 +85,8 @@
 									<option value='O'>O - Others</option>
 								</select>
 							</div>
-							
+							</div>
+							<div class='row appcont' style='margin-bottom:0%' >
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							
 						    	<label><?php echo TRANSACTION_REPORT_MAIN_START_DATE; ?></label>
@@ -97,7 +117,6 @@
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_AGENT_NAME; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_REQUEST_AMOUNT; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_TOTAL_AMOUNT; ?></th>
-									<th>Account No</th>
 									<th>Status</th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_DATE_TIME; ?></th>
 									<th><?php echo TRANSACTION_REPORT_MAIN_TABLE_DETAIL; ?></th>
@@ -111,7 +130,6 @@
 									<td>{{ x.user }}</td>
 									<td>{{ x.reqmount }}</td>
 									<td>{{ x.toamount }}</td>
-									<td>{{ x.rrn }}</td>
 									<td>{{ x.status }}</td>
 									<td>{{ x.dtime }}</td>									
 									<td><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>

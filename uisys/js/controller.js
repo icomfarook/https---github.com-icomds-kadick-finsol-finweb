@@ -620,6 +620,37 @@ $scope.isStartDateDi = false;
 $scope.isEndDateDi = false;
 $scope.tablerow = true;
 $http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$http({
 method: 'post',
 url: '../ajax/load.php',
 params: { for: 'servfeaforcode',action:'active' },
@@ -750,6 +781,8 @@ data: {
 action: 'getreport',
 type: $scope.type,
 status: $scope.status,
+state: $scope.state,
+championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate
 },
@@ -767,6 +800,8 @@ $scope.endDate = new Date();
 $scope.type = "ALL";
 $scope.status = "ALL";
 $scope.creteria = "BT";
+$scope.championCode = "ALL";
+$scope.state = "ALL";
 $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 }
@@ -913,6 +948,8 @@ data: {
 action: 'getreport',
 type: $scope.type,
 status: $scope.status,
+state: $scope.state,
+championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate
 },
@@ -990,14 +1027,48 @@ $scope.sender_name = "";
 }
 });
 
-
 app.controller('BPsalesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
 $scope.isOrderNoDi = true;
 $scope.isStartDateDi = false;
 $scope.isEndDateDi = false;
+$scope.ischampionCode = true;
+$scope.isstate = true;
 $scope.tablerow = true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
 $http({
 method: 'post',
 url: '../ajax/load.php',
@@ -1132,7 +1203,9 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
-creteria: $scope.creteria
+creteria: $scope.creteria,
+championCode: $scope.championCode,
+state: $scope.state
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -1150,6 +1223,10 @@ $scope.orderNo = "";
 $scope.creteria = "BT";
 $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
+$scope.championCode = "ALL";
+$scope.state = "ALL";
+$scope.isstate = true;
+$scope.ischampionCode = true;
 }
 $scope.clickra = function (clickra) {
 $scope.orderno = "";
@@ -1165,6 +1242,8 @@ $scope.isOrderTypeDi = false;
 $scope.startDate = new Date();
 $scope.type = "ALL";
 $scope.endDate = new Date();
+$scope.ischampionCode = true;
+$scope.isstate = true;
 }
 if(clickra == "BO") {
 $scope.isOrderNoDi = false;
@@ -1173,6 +1252,34 @@ $scope.isEndDateDi = true;
 $scope.isOrderTypeDi = true
 $scope.startDate = "";
 $scope.endDate = "";
+$scope.ischampionCode = true;
+$scope.isstate = true;
+}
+if(clickra == "C") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = true;
+$scope.isOrderTypeDi = true;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+$scope.ischampionCode = false;
+$scope.isstate = true;
+$scope.Terminal_id = true;
+}
+if(clickra == "S") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = true;
+$scope.isOrderTypeDi = true;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+$scope.ischampionCode = true;
+$scope.isstate = false;
+$scope.Terminal_id = true;
 }
 
 }
@@ -1298,6 +1405,8 @@ data: {
 action: 'getreport',
 type: $scope.type,
 orderNo: $scope.orderNo,
+state: $scope.state,
+championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 creteria: $scope.creteria
@@ -1372,11 +1481,8 @@ $scope.partner = "";
 }
 });
 
-
-
 app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
-
- $scope.isHideOk = true;
+$scope.isHideOk = true;
 $http({
 url: '../ajax/load.php',
 method: "POST",

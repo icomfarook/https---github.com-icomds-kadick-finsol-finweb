@@ -9,6 +9,8 @@
 	$startDate	=  $data->startDate;
 	$endDate	=  $data->endDate;
 	$creteria 	= $data->creteria;
+	$state	=  $data->state;
+	$championCode	=  $data->championCode;
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));
 	$profileid = $_SESSION['profile_id'];
@@ -26,19 +28,37 @@
 		}
 		if($type == 'ALL') {
 			if($status == "ALL") { 
+			    if($state == "ALL") {
+			        if($championCode == "ALL") { 
+				  
 				$query .= " and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			}else{
+				$query .= " and b.parent_code = '$championCode' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-			else{ 
-				$query .= " and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+				}else{
+					$query .= " and c.state_id = '$state' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-		}
+				}else{
+					$query .= " and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+							
+				}
+			}
+			
 		else {
-			if($status == "ALL") {
-				$query .= " and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			if($status == "ALL") { 
+			    if($state == "ALL") {
+			        if($championCode == "ALL") { 
+				  
+				$query .= " and  date(c.create_time) >= '$startDate' and  c.service_feature_code = '$type' and date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			}else{
+				$query .= " and b.parent_code = '$championCode' and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
 			}
-			else{ 
-				$query .= " and c.service_feature_code = '$type' and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
-			}
+				}else{
+					$query .= " and c.state_id = '$state' and c.service_feature_code = '$type' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";
+			    }
+			}else{
+				$query .= " and c.status = '$status' and date(c.create_time) >= '$startDate' and  date(c.create_time) <= '$endDate' order by c.create_time desc ";	
+				}
 		}
 		
 		error_log("qyetr".$query);
@@ -58,7 +78,7 @@
 		$code	=  $data->code;
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26  || $profileid  == 50) {
 			if($code =='PEB - Electricity Payment'){
-		    	$query = "SELECT a.order_no, ifNULL(a.bp_trans_log_id1,'-') as  bp_trans_log_id1 ,ifNULL(a.bp_trans_log_id2,'-') as  bp_trans_log_id2,ifNULL(a.bp_trans_log_id3,'-') as  bp_trans_log_id3, a.service_feature_code, a.total_amount,g.ams_charge,a.bp_transaction_id,a.request_amount, a.service_charge, a.partner_charge, a.other_charge, a.mobile_no,  a.comments, a.create_time, a.create_time,a.payment_fee,g.agent_charge,g.stamp_charge,g.post_time,if(g.post_status='Y','Y - Yes',if(g.post_status='E','E-Error',if(g.post_status='O','O-others','-'))) as post_status, a.update_time, concat(b.user_name,' (',b.first_name,' - ', b.last_name,') ') as user,concat(d.bank_master_id,' - ',d.name) as bank,concat(h.bp_biller_id,' - ',h.bp_biller_name) as Biller , ifNUll(concat(i.bp_product_id,' - ',i.bp_product_name),'-') as  Product, concat(e.partner_id,' - ',e.partner_name) as partner,  if(a.status='I','I-Inprogress',if(a.status='S','S-Success',if(a.status='E','E-Error',if(a.status='T','T-Timeout',if(a.status='C','C-Cash In',if(a.status='I','I-Inprogress',if(a.status='V','V-Validate',if(a.status='S','S-Success',if(a.status='P','P-Payment Notify',if(a.status='O','O-others','-')))))))))) as status, a.approver_comments,a.account_no,a.account_name,a.bp_account_no,a.bp_account_name,a.bp_bank_code,a.session_id FROM kadick_bp_biller h, user b, bank_master d, ams_partner e, agent_info f,bp_biller_product i RIGHT JOIN  bp_service_order z on  z.bp_product_id = i.bp_product_id,bp_request a LEFT JOIN  bp_service_order g  on g.bp_service_order_no = a.order_no  WHERE g.bp_biller_id = h.bp_biller_id  and  a.user_id = f.user_id  and g.partner_id = e.partner_id  and a.user_id = b.user_id  and a.order_no = $orderNo LIMIT 1";
+		    	$query = "SELECT a.order_no, ifNULL(a.bp_trans_log_id1,'-') as  bp_trans_log_id1 ,ifNULL(a.bp_trans_log_id2,'-') as  bp_trans_log_id2,ifNULL(a.bp_trans_log_id3,'-') as  bp_trans_log_id3, a.service_feature_code, a.total_amount,g.ams_charge,a.bp_transaction_id,a.request_amount, a.service_charge, a.partner_charge, a.other_charge, a.mobile_no,  a.comments, a.create_time, a.create_time,a.payment_fee,g.agent_charge,g.stamp_charge,g.post_time,if(g.post_status='Y','Y - Yes',if(g.post_status='E','E-Error',if(g.post_status='O','O-others','-'))) as post_status, a.update_time, concat(b.user_name,' (',b.first_name,' - ', b.last_name,') ') as user,concat(d.bank_master_id,' - ',d.name) as bank,concat(h.bp_biller_id,' - ',h.bp_biller_name) as Biller , ifNUll(concat(i.bp_product_id,' - ',i.bp_product_name),'-') as  Product, concat(e.partner_id,' - ',e.partner_name) as partner,  if(a.status='I','I-Inprogress',if(a.status='S','S-Success',if(a.status='E','E-Error',if(a.status='T','T-Timeout',if(a.status='C','C-Cash In',if(a.status='I','I-Inprogress',if(a.status='V','V-Validate',if(a.status='S','S-Success',if(a.status='P','P-Payment Notify',if(a.status='O','O-others','-')))))))))) as status, a.approver_comments,a.account_no,a.account_name,a.bp_account_no,a.bp_account_name,a.bp_bank_code,a.session_id FROM kadick_bp_biller h, user b, bank_master d, ams_partner e, agent_info f,bp_biller_product i RIGHT JOIN  bp_service_order z on  z.bp_product_id = i.bp_product_id,bp_request a LEFT JOIN  bp_service_order g  on g.bp_service_order_no = a.order_no  WHERE  a.user_id = f.user_id  and g.partner_id = e.partner_id  and a.user_id = b.user_id  and a.order_no = $orderNo LIMIT 1";
 			}
 		}
 		else if($profileid  == 51) {
