@@ -1124,7 +1124,7 @@
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);
 
-														$approver_comments = "NE: ".$statusCode." - ".$responseDescription;
+														$approver_comments = "PV: ".$statusCode." - ".$responseDescription;
 														error_log("update_query = ".$update_query);
 														$update_query = "UPDATE bp_request SET status = 'E', approver_comments = '$approver_comments', update_time = now() WHERE bp_request_id = $bp_request_id ";
 														$update_query_result = mysqli_query($con, $update_query);
@@ -1139,7 +1139,7 @@
 													error_log("curl_error != 0 ");
 													$statusCode = $curl_error;
 													$responseDescription = "CURL Execution Error";
-													$approver_comments = "NE: ".$statusCode." - ".$responseDescription;
+													$approver_comments = "PV: ".$statusCode." - ".$responseDescription;
 													error_log("statusCode = ".$statusCode.", responseDescription = ".$responseDescription);
 													$update_query = "UPDATE bp_trans_log SET  response_received = 'Y', error_code = $statusCode, error_description = '".$responseDescription."', message_receive_time = now() WHERE bp_trans_log_id = $bp_trans_log_id";
 													error_log("update_query = ".$update_query);
@@ -2090,7 +2090,54 @@
 																		if($statusCode === 0) {
 																			
 																			error_log("inside statusCode === 0");
-																			$update_query = "UPDATE bp_request SET order_no = $bp_service_order_no, status = 'S', update_time = now(), bp_transaction_id = '".$api_response['id']."', bp_account_no = '".$api_response['reference']." / ".$api_response['dataVendRef']."', bp_bank_code = '".$api_response['dataReceiptNo']."', bp_account_name = '".$api_response['verifyName']."', comments = '".$api_response['pinCode']."', approver_comments = 'Pin SNo: ".$api_response['pinSerialNumber'].", Units: ".$api_response['pinUnits'].", AmountPaid: ".$api_response['pinUnits'].", AmountGenerated: ".$api_response['dataAmountGenerated']."', session_id = '".$api_response['dataVendTime']."' WHERE bp_request_id = $transactionId";
+																			$bp_resp_dataVendTime = $api_response['dataVendTime'];
+																			if ( empty($bp_resp_dataVendTime) || !isset($bp_resp_dataVendTime) ){
+																				$bp_resp_dataVendTime = $api_response['createdAt'];	
+																			}
+																			$bp_resp_transaction_id = $api_response['id'];
+																			if ( strlen($bp_resp_transaction_id) > 45 ){
+																				$bp_resp_transaction_id = "*".$bp_resp_transaction_id;
+																			}
+																			$bp_resp_account_no = $api_response['reference']." / ".$api_response['dataVendRef'];
+																			$bp_resp_account_no_len = strlen($bp_resp_account_no);
+																			$bp_resp_reference = "";
+																			$bp_resp_dataVendRef = "";
+																			if ( $bp_resp_account_no_len > 30 ) {
+																				$bp_resp_account_no = "*".$bp_resp_account_no;
+																				$bp_resp_reference_len = strlen($api_response['reference']);
+																				if ( $bp_resp_reference_len <= 27 ) {
+																					$bp_resp_reference = "*".$api_response['reference'];
+																					$bp_resp_dataVendRef_len = 27 - $bp_resp_reference_len;
+																					if ( $bp_resp_dataVendRef_len > 1 ) {
+																						$bp_resp_dataVendRef = substr($api_response['dataVendRef'], 0, $bp_resp_dataVendRef_len-1);
+																					}
+																				}else {
+																					$bp_resp_reference = substr($api_response['reference'], 0, 25);
+																					$bp_resp_reference = "*".$bp_resp_reference;
+																				}
+																			}else {
+																				$bp_resp_reference = $api_response['reference'];
+																				$bp_resp_dataVendRef = $api_response['dataVendRef'];
+																			}
+																			$bp_resp_account_no_new = $bp_resp_reference." / ".$bp_resp_dataVendRef;
+																			
+																			$bp_resp_bank_code = $api_response['dataReceiptNo'];
+																			if ( empty($bp_resp_bank_code) || !isset($bp_resp_bank_code) ){
+																				$bp_resp_bank_code = "-";
+																			}
+																			if ( strlen($bp_resp_bank_code) > 45 ) {
+																				$bp_resp_bank_code = "*".$bp_resp_bank_code;
+																			}
+																			$bp_resp_account_name = $api_response['verifyName'];
+																			if ( strlen($bp_resp_account_name) > 70) {
+																				$bp_resp_account_name = "*".$bp_resp_account_name;
+																			}
+																			$bp_resp_comments = $api_response['pinCode'];
+																			if ( strlen($bp_resp_comments) > 256) {
+																				$bp_resp_comments = "*".$bp_resp_comments;
+																			} 
+																			$bp_resp_approver_comments = "Pin SNo: ".$api_response['pinSerialNumber'].", Units: ".$api_response['pinUnits'].", AmountPaid: ".$api_response['pinUnits'].", AmountGenerated: ".$api_response['dataAmountGenerated'];
+																			$update_query = "UPDATE bp_request SET order_no = $bp_service_order_no, status = 'S', update_time = now(), bp_transaction_id = left('$bp_resp_transaction_id', 45), bp_account_no = left('$bp_resp_account_no_new', 30), bp_bank_code = left('$bp_resp_bank_code', 45), bp_account_name = left('$bp_resp_account_name', 70), comments = left('$bp_resp_comments', 256), approver_comments = left('$bp_resp_approver_comments', 256), session_id = '$bp_resp_dataVendTime' WHERE bp_request_id = $transactionId";
 																			error_log("update_query = ".$update_query);
 																			$update_query_result = mysqli_query($con, $update_query);
 
@@ -2151,21 +2198,27 @@
 																			$response["orderNo"] = $bp_service_order_no;
 																			$response["status"] = $api_response['status'];
 																			$response["pinUnits"] = $api_response['pinUnits'];
-																			$response["pinCode"] = $api_response['pinCode'];
+																			//$response["pinCode"] = $api_response['pinCode'];
+																			$response["pinCode"] = $bp_resp_comments;
 																			$response["pinSerialNumber"] = $api_response['pinSerialNumber'];
 																			$response["amount"] = $api_response['amount'];
-																			$response["reference"] = $api_response['reference'];
-																			$response["id"] = $api_response['id'];
+																			//$response["reference"] = $api_response['reference'];
+																			$response["reference"] = $bp_resp_reference;
+																			//$response["id"] = $api_response['id'];
+																			$response["id"] = $bp_resp_transaction_id;
 																			$response["dataResponseMessage"] = $api_response['dataResponseMessage'];
 																			$response["dataResponseCode"] = $api_response['dataResponseCode'];
-																			$response["dataVendRef"] = $api_response['dataVendRef'];
+																			//$response["dataVendRef"] = $api_response['dataVendRef'];
+																			$response["dataVendRef"] = $bp_resp_dataVendRef;
 																			$response["dataVendAmount"] = $api_response['dataVendAmount'];
 																			$response["dataUnits"] = $api_response['dataUnits'];
 																			$response["dataTotalAmountPaid"] = $api_response['dataTotalAmountPaid'];
 																			$response["dataToken"] = $api_response['dataToken'];
-																			$response["dataVendTime"] = $api_response['dataVendTime'];
+																			//$response["dataVendTime"] = $api_response['dataVendTime'];
+																			$response["dataVendTime"] = $bp_resp_dataVendTime;
 																			$response["dataTax"] = $api_response['dataTax'];
-																			$response["dataReceiptNo"] = $api_response['dataReceiptNo'];
+																			//$response["dataReceiptNo"] = $api_response['dataReceiptNo'];
+																			$response["dataReceiptNo"] = $bp_resp_bank_code;
 																			$response["dataOrderId"] = $api_response['dataOrderId'];
 																			$response["dataFreeUnits"] = $api_response['dataFreeUnits'];
 																			$response["dataDisco"] = $api_response['dataDisco'];
@@ -2182,7 +2235,8 @@
 																			$response["verifyMeterNo"] = $api_response['verifyMeterNo'];
 																			$response["verifyVendType"] = $api_response['verifyVendType'];
 																			$response["verifyAddress"] = $api_response['verifyAddress'];
-																			$response["verifyName"] = $api_response['verifyName'];
+																			//$response["verifyName"] = $api_response['verifyName'];
+																			$response["verifyName"] = $bp_resp_account_name;
 																			$response["serviceCategoryId"] = $api_response['serviceCategoryId'];
 																			$response["availableBalance"] = $availableBalance;
 																			

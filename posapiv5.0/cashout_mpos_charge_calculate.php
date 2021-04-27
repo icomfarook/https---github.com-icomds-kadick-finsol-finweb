@@ -16,8 +16,11 @@
         	$data = json_decode(file_get_contents("php://input"));
         	error_log("cashout_mpos_charge_calculate <== ".json_encode($data));				
 
-		if(isset($data -> operation) && $data -> operation == 'CASHOUT_CHARGE_OPERATION' || isset($data -> operation) && $data -> operation == 'CASHOUT_PHONE_CHARGE_OPERATION' ) {
-			error_log("inside operation == CASHOUT_CHARGE_OPERATION method");
+		if(isset($data -> operation) && $data -> operation == 'CASHOUT_CHARGE_OPERATION' 
+			|| isset($data -> operation) && $data -> operation == 'CASHOUT_PHONE_CHARGE_OPERATION' 
+			|| isset($data -> operation) && $data -> operation == 'CASHOUT_USSD_CHARGE_OPERATION'
+		) {
+			error_log("inside operation == ".$data -> operation." method");
 
 			if ( isset($data->productId) && !empty($data->productId) && isset($data->partnerId) && !empty($data->partnerId) 
 				&& isset($data->requestAmount) && !empty($data->requestAmount) && isset($data->countryId) && !empty($data->countryId)
@@ -104,7 +107,7 @@
                            				$response["chargeDetail"] = $row['result']; 
                             				$response["statusCode"] = "0";
 							$response["signature"] = $server_signature;
-							$response["message"] = "CashIn Service Charge responded successfuly";
+							$response["message"] = "CashOut Service Charge responded successfuly";
 							$response["result"] = "Success";
 							$response["partnerId"] = $partnerId;
 							$response["txtType"] = $txtType;

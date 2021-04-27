@@ -436,5 +436,21 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/walatbalance.php",
 		controller: "WalletBalanceCtrl"
 	})
+	.when("/rptaccsta", {
+        templateUrl : "../core/accstreport.php",
+		controller: "AccstatReportCtrl"
+    })
+	.when("/rptaccfin", {
+        templateUrl : "../core/accfnreport.php",
+		controller: "AccfnReportCtrl"
+    })
+	.when("/rptacctra", {
+        templateUrl : "../core/acctrreport.php",
+		controller: "AcctrReportCtrl"
+    })
+	.when("/rptaccsal", {
+		templateUrl : "../core/accsalesreport.php",
+		controller: "AccsalesReportCtrl"
+    })
 
 });

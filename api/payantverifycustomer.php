@@ -1,5 +1,5 @@
 <?php
-	sleep(5);
+	sleep(3);
 	$error_path = "N";
 	
 	$data = json_decode(file_get_contents("php://input"));
