@@ -250,5 +250,16 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/accsalesreport.php",
 		controller: "AccsalesReportCtrl"
     })
-
+ 	.when("/upgrade", {
+		templateUrl : "../core/upgrade.php",
+		controller: "UpGradeCtrl"
+	})
+	.when("/crechild", {
+		templateUrl : "../core/createchild.php",
+		controller: "CreChildCtrl"
+	})
+	.when("/transfund", {
+		templateUrl : "../core/transferfund.php",
+		controller: "TransFundCtrl"
+	})
 });

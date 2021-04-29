@@ -153,6 +153,8 @@
 							<span class="hidden-xs">Group Account</span>
 						</a>
 						<ul class="dropdown-menu">
+							<li><a class="ajax-link" href="#!upgrade">Upgrade</a></li>
+							<li><a class="ajax-link" href="#!crechild">Create Child</a></li>
 							<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
 							<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
 						</ul>
@@ -263,7 +265,17 @@
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 					</ul>
 				</li>
-				
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-globe"></i>
+						<span class="hidden-xs">Group Account</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
+						<li><a class="ajax-link" href="#!transfund">Transfer Fund</a></li>
+						<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+					</ul>
+				</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-bar-chart-o"></i>
@@ -411,6 +423,16 @@
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 					</ul>
 				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-globe"></i>
+						<span class="hidden-xs">Group Account</span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
+						<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+					</ul>
+				</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-bar-chart-o"></i>
@@ -470,8 +492,7 @@
 							<ul class="dropdown-menu">
 								<li ><a class="ajax-link"  style="color:orange" href="#!rptsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Cash Sales Report</a></li>
 								<li ><a class="ajax-link"  style="color:orange" href="#!rptbpsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Bill Pay Sales Report</a></li>
-								<li><a class="ajax-link" style="color:orange" href="#!rptetr"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>EVD Sales Report</a></li>
-								<li ><a class="ajax-link"  style="color:orange" href="#!rptaccsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Acc. Service Sales Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptetr"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>EVD Sales Report</a></li>		
 							</ul>	
 						</li>
 						<li class="dropdown">
@@ -483,7 +504,6 @@
 								<li><a class="ajax-link" style="color:orange" href="#!rptsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Stat Report</a></li>
 								<li><a class="ajax-link" style="color:orange" href="#!rptbpsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Stat Report</a></li>
 								<li><a class="ajax-link"  style="color:orange" href="#!rptevdsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Stat Report</a></li>
-								<li><a class="ajax-link" style="color:orange" href="#!rptaccsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Acc. Service Stat Report</a></li>
 							</ul>
 						</li>
 						<li class="dropdown">
@@ -495,7 +515,6 @@
 								<li><a class="ajax-link" style="color:orange" href="#!rptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Finance Report</a></li>	
 								<li><a class="ajax-link" style="color:orange" href="#!rptbpfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Finance Report</a></li>	
 								<li><a class="ajax-link" style="color:orange" href="#!evdrptfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Finance Report</a></li>
-								<li><a class="ajax-link" style="color:orange" href="#!rptaccfin"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Acc. Service Finance Report</a></li>
 							</ul>	
 						</li>
 						<li class="dropdown">
@@ -506,7 +525,6 @@
 							<ul class="dropdown-menu">
 								<li><a class="ajax-link" style="color:orange" href="#!rpttra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Transaction Report</a></li>
 								<li><a class="ajax-link" style="color:orange" href="#!rptbptra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Transaction Report</a></li>
-								<li><a class="ajax-link" style="color:orange" href="#!rptacctra"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Acc. Service Transaction Report</a></li>
 								<li><a class="ajax-link" style="color:orange" href="#!nontrans"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;<?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
 								<li><a class="ajax-link" style="color:orange" href="#!rptbtr"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Batch Transaction Report</a></li>
 							</ul>
@@ -551,6 +569,17 @@
 					</li>		
 					<!-- 23 - Customer care -->
 				<?php } else if($profile_id == 23) { ?>
+				
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-globe"></i>
+							<span class="hidden-xs">Group Account</span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
+							<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+						</ul>
+					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>
@@ -668,6 +697,18 @@
 						</ul>
 					</li>
 					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-globe"></i>
+							<span class="hidden-xs">Group Account</span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="ajax-link" href="#!upgrade">Upgrade</a></li>
+							<li><a class="ajax-link" href="#!crechild">Create Child</a></li>
+							<li><a class="ajax-link" href="#!grouplist">Group List</a></li>
+							<li><a class="ajax-link" href="#!transtatus">Transfer Status</a></li>
+						</ul>
+					</li>
+					<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-users"></i>
 						 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
@@ -679,6 +720,7 @@
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
 					</ul>
 				</li>
+				
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>
