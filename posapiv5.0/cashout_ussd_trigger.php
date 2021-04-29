@@ -239,7 +239,7 @@
 													if($statusCode == 0) {
 														error_log("inside statusCode == 0");
 														$cpMessage = "TraceId: ".$api_response['cpTraceId'].", ResponseCode: ".$api_response['cpResponseCode'].", ResponseMessage: ".$api_response['cpResponseMessage'];
-														$update_query = "UPDATE fin_request SET status = 'G', order_no = $fin_service_order_no, auth_code = '".$api_response['cpTransactionId']."', rrn = '".$api_response['reference'].", comments = '".$cpMessage.", $update_time = now() WHERE fin_request_id = $fin_request_id";
+														$update_query = "UPDATE fin_request SET status = 'G', order_no = $fin_service_order_no, auth_code = '".$api_response['cpTransactionId']."', rrn = '".$api_response['reference']."', comments = '".$cpMessage."', update_time = now() WHERE fin_request_id = $fin_request_id";
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);
 	
