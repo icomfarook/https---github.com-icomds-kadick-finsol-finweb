@@ -239,16 +239,16 @@
 													if($statusCode == 0) {
 														error_log("inside statusCode == 0");
 														$cpMessage = "TraceId: ".$api_response['cpTraceId'].", ResponseCode: ".$api_response['cpResponseCode'].", ResponseMessage: ".$api_response['cpResponseMessage'];
-														$update_query = "UPDATE fin_request SET status = 'G', order_no = $fin_service_order_no, auth_code = '".$api_response['cpTransactionId']."', rrn = '".$api_response['reference']."', comments = '".$cpMessage."', update_time = now() WHERE fin_request_id = $fin_request_id";
+														$update_query = "UPDATE fin_request SET status = 'G', order_no = $fin_service_order_no, auth_code = '".$api_response['transactionId']."', rrn = '".$api_response['reference']."', comments = '".$cpMessage."', update_time = now() WHERE fin_request_id = $fin_request_id";
 														error_log("update_query = ".$update_query);
 														$update_query_result = mysqli_query($con, $update_query);
 	
 														if($fin_service_order_no > 0) {
 															$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 															if ( $txType == "F" ) {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."', $bank->id)";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['transactionId']."', $bank->id)";
 															}else {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."', $bank->id)";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['transactionId']."', $bank->id)";
 															}
 															error_log("fin_service_order_query = ".$fin_service_order_query);
 															$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
@@ -258,7 +258,7 @@
 																$response["orderNo"] = $fin_service_order_no;
 																$response["transactionId"] = $fin_request_id;
 																$response["referenceNo"] = $api_response['reference'];
-																$response["cpTransactionId"] = $api_response['cpTransactionId'];
+																$response["cpTransactionId"] = $api_response['transactionId'];
 																$response["amount"] = $api_response['amount'];
 																$response["traceId"] = $api_response['cpTraceId'];
 																$response["cpResponseCode"] = $api_response['cpResponseCode'];
