@@ -246,9 +246,9 @@
 														if($fin_service_order_no > 0) {
 															$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 															if ( $txType == "F" ) {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."')";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."', $bank->id)";
 															}else {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."')";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, auth_code, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COD', $partnerId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['cpTransactionId']."', $bank->id)";
 															}
 															error_log("fin_service_order_query = ".$fin_service_order_query);
 															$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
@@ -497,7 +497,100 @@
 		                $response["message"] = "Failure: Invalid Data";
 		                $response["signature"] = 0;
 			}
-        	}		
+        	}
+		else if(isset($data -> operation) && $data -> operation == 'CASHOUT_USSD_CHECK_STATUS') {
+			error_log("inside operation == CASHOUT_USSD_CHECK_STATUS method");
+			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+				&& isset($data->userId) && !empty($data->userId) && isset($data->stateId) && !empty($data->stateId) 
+				&& isset($data->countryId) && !empty($data->countryId) && isset($data->partnerId) && !empty($data->partnerId)
+				&& isset($data->partyCode) && !empty($data->partyCode) && isset($data->partyType) && !empty($data->partyType)
+				&& isset($data->orderNo) && !empty($data->orderNo) && isset($data->referenceNo) && !empty($data->referenceNo)
+				&& isset($data->transactionId) && !empty($data->transactionId)
+			){
+				error_log("inside all inputs are set correctly");
+				$userId = $data->userId;
+				$partyCode = $data->partyCode;
+				$partyType = $data->partyType;
+				$countryId = $data->countryId;
+				$stateId = $data->stateId;
+				$signature = $data->signature;
+				$key1 = $data->key1;
+				$orderNo = $data->orderNo;
+				$referenceNo = $data->referenceNo;
+				$transactionId = $data->transactionId;
+				$session_validity = AGENT_SESSION_VALID_TIME;
+		                
+		                error_log("signature = ".$signature.", key1 = ".$key1);
+				date_default_timezone_set('Africa/Lagos');
+				$nday = date('z')+1;
+				$nyear = date('Y');
+				$nth_day_prime = get_prime($nday);
+				$nth_year_day_prime = get_prime($nday+$nyear);
+				$local_signature = $nday + $nth_day_prime;
+				error_log("local_signature = ".$local_signature);
+				$server_signature = $nth_year_day_prime + $nday + $nyear;
+		                error_log("server_signature = ".$server_signature);
+		                                
+				if ( $local_signature == $signature ) {
+		                	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+					error_log("validateKey1 result = ".$validate_result);
+					if ( $validate_result != 0 ) {
+						// Invalid key1 - Session Timeut
+						$response["statusCode"] = "999";
+						$response["result"] = "Error";
+						$response["message"] = "Failure: Session Timeout";
+						$response["signature"] = 0;
+						error_log(json_encode($response));
+						echo json_encode($response);
+						return;
+					} 
+		                	$select_cashout_ussd_check_status_query = "select c.ussd_code, ifnull(a.reference_no, '-') as institution_code, ifnull(b.account_no,'-') as customer_mobile, b.status, a.fin_service_order_no, b.fin_request_id, b.rrn as reference_no, b.auth_code as cp_transaction_id, ifnull(b.comments,'-') as transaction_time from fin_service_order a, fin_request b, cashout_ussd_bank c where c.bank_master_id = b.bank_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = $orderNo and b.fin_request_id = $transactionId";
+		                	error_log("select_cashout_ussd_check_status_query = ".$select_cashout_ussd_check_status_query);
+		                	$select_cashout_ussd_check_status_result = mysqli_query($con, $select_cashout_ussd_check_status_query);
+		                   	if ( $select_cashout_ussd_check_status_result ) {
+		                   		if (!empty($select_cashout_ussd_check_status_result) && mysqli_num_rows($select_cashout_ussd_check_status_result) > 0 ) {
+							$select_cashout_ussd_check_status_row = mysqli_fetch_assoc($select_cashout_ussd_check_status_result);
+					    		$response['shortCode'] = $select_cashout_ussd_check_status_row['ussd_code'];
+					    		$response['institutionCode'] = $select_cashout_ussd_check_status_row['institution_code'];
+					    		$response['customerMobile'] = $select_cashout_ussd_check_status_row['customer_mobile'];
+					    		$response['orderStatus'] = $select_cashout_ussd_check_status_row['status'];
+					    		$response['orderNo'] = $select_cashout_ussd_check_status_row['fin_service_order_no'];
+					    		$response['transactionId'] = $select_cashout_ussd_check_status_row['fin_request_id'];
+					    		$response['referenceNo'] = $select_cashout_ussd_check_status_row['reference_no'];
+					    		$response['cpTransactionId'] = $select_cashout_ussd_check_status_row['cp_transaction_id'];
+					    		$response['dateTime'] = $select_cashout_ussd_check_status_row['transaction_time'];
+					    		$response["result"] = "Success";
+		                        		$response["message"] = "Your request is processed successfuly";
+		                        		$response["statusCode"] = 0;
+		                        		$response["signature"] = $server_signature;
+		                        	}else {
+		                        		$response["result"] = "Error";
+							$response["message"] = "Your Cashout USSD Order is not available";
+							$response["statusCode"] = "90";
+		                	       		$response["signature"] = $server_signature;
+		                        	}
+					}
+		                	else {
+		                	       	$response["result"] = "Error";
+		                	       	$response["message"] = "Error in finding your Cashout USSD Order";
+		                	       	$response["statusCode"] = "100";
+		                	       	$response["signature"] = $server_signature;
+		                	}
+				}else {
+					// Invalid Singature
+					$response["statusCode"] = "300";
+					$response["result"] = "Error";
+		                	$response["message"] = "Failure: Invalid request";
+		                	$response["signature"] = $server_signature;
+				}
+			}else {
+				// Invalid Data
+				$response["statusCode"] = "400";
+				$response["result"] = "Error";
+		                $response["message"] = "Failure: Invalid Data";
+		                $response["signature"] = 0;
+			}
+        	}        	
 		else {	
 			// Invalid Operation
 			$response["statusCode"] = 500;

@@ -1,5 +1,4 @@
 <?php
-    	error_log("inside posapi/cashout_ussd_order_update.php");
     	include('../common/admin/configmysql.php');
     	include ("get_prime.php");	
     	include ("functions.php");
@@ -21,13 +20,14 @@
 			error_log("inside operation == CASHOUT_USSD_ORDER_UPDATE method");
 
 			if ( isset($data -> responseCode ) && !empty($data -> responseCode) &&  isset($data -> responsemessage ) && !empty($data -> responsemessage) 
-    		        	&& isset($data -> reference ) && !empty($data -> reference) && isset($data -> amount ) && !empty($data -> amount) 
-    		        	&& isset($data -> terminalId ) && !empty($data -> terminalId) && isset($data -> merchantId ) && !empty($data -> merchantId)
-    		        	&& isset($data -> retrievalReference ) && !empty($data -> retrievalReference) && isset($data -> institutionCode ) && !empty($data -> institutionCode) 
-    		        	&& isset($data -> shortName ) && !empty($data -> shortName) && isset($data -> customerMobile ) && !empty($data -> customerMobile) 
+    		        	//&& isset($data -> reference ) && !empty($data -> reference) //&& isset($data -> amount ) && !empty($data -> amount) 
+    		        	//&& isset($data -> terminalId ) && !empty($data -> terminalId) 
+    		        	&& isset($data -> merchantId ) && !empty($data -> merchantId)
+    		        	//&& isset($data -> retrievalReference ) && !empty($data -> retrievalReference) && isset($data -> institutionCode ) && !empty($data -> institutionCode) 
+    		        	//&& isset($data -> shortName ) && !empty($data -> shortName) && isset($data -> customerMobile ) && !empty($data -> customerMobile) 
             			//&& isset($data -> SubMerchantName ) && !empty($data -> SubMerchantName) 
             			&& isset($data -> TransactionID ) && !empty($data -> TransactionID) && isset($data -> orderType ) && !empty($data -> orderType)
-            			&& isset($data -> UserID ) && !empty($data -> UserID) && isset($data -> TraceID ) && !empty($data -> TraceID) 
+            			//&& isset($data -> UserID ) && !empty($data -> UserID) && isset($data -> TraceID ) && !empty($data -> TraceID) 
 				&& isset($data -> signature ) && !empty($data -> signature) && isset($data -> key1 ) && !empty($data -> key1 )) {
 			
 				error_log("inside all inputs are set correctly");
@@ -66,7 +66,7 @@
 				if ( $local_signature == $signature ){	
 
                 			if ( "Cash-Out (USSD)" == $orderType ) {
-						$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.auth_code = '".$cpTransactionID."'";
+						$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and b.auth_code = '".$cpTransactionID."'";
                     				error_log("select query for Cash-Out (USSD): ".$query);
                    				$result = mysqli_query($con, $query);
                     				if (!$result) {
@@ -119,7 +119,7 @@
 								error_log("txtType = ".$txType.", partyCount = ".$partyCount);
 				
                             					$glComment = "Cash-Out (USSD) Order #".$fin_service_order_no;
-                            					$check_order_result = checkForAlreadyProcessedCashOutOrder($user_id, $orderNo, $con);
+                            					$check_order_result = checkForAlreadyProcessedCashOutOrder($user_id, $fin_service_order_no, $con);
                             					error_log("checkForAlreadyProcessedCashOutOrder.check_order_result = ".$check_order_result);
                             					if ( $check_order_result == 0  ) {
                                 					error_log("First time order for ".$orderNo." for user_id = ".$user_id);
@@ -165,7 +165,7 @@
 													    error_log("Error in purchase fin_request status update for: fin_service_order_no = ".$fin_service_order_no);
 													}
 
-													$update_query2 = "UPDATE fin_service_order set auth_code = '$cpTransactionID', comment = '$comment', reference_no = '$cpInstitutionCode' WHERE fin_service_order_no = $orderNo";
+													$update_query2 = "UPDATE fin_service_order set auth_code = '$cpTransactionID', comment = '$comment', reference_no = '$cpInstitutionCode' WHERE fin_service_order_no = $fin_service_order_no";
 													error_log("update_query2 = ".$update_query2);
 													$update_result2 = mysqli_query($con, $update_query2);
 													if ( $update_result2 ) {
@@ -215,8 +215,8 @@
 														error_log("Error in fin_service_order_comm records insert. Insert Count = ".$pcu_result);
 													}
 
-													$new_available_balance = check_party_available_balance($partyType, $userId, $con);
-													error_log("new_available_balance for userId [".$userId."] = ".$new_available_balance);
+													$new_available_balance = check_party_available_balance($partyType, $user_id, $con);
+													error_log("new_available_balance for userId [".$user_id."] = ".$new_available_balance);
 
 													/*
 													$url = LIVE_CASHOUT_MCASH_SMS_NOTIFICATION_URL;
@@ -272,7 +272,7 @@
 												    */						
 													$response["result"] = "Success";
 													$response["serverUpdate"] = "Y";
-													$response["orderNo"] = $orderNo;
+													$response["orderNo"] = $fin_service_order_no;
 													$response["orderType"] = $orderType;
 													$response["signature"] = $server_signature;
 													$response["newAvailableBalance"] = $new_available_balance;
@@ -299,7 +299,7 @@
 									}else {
 										//Error Order
 										$delete_query = "delete from fin_service_order where fin_service_order_no = ".$fin_service_order_no;
-										error_log("Delete_query for Card Payment: ".$delete_query);
+										error_log("Delete_query for Cashout USSD: ".$delete_query);
 										$delete_result = mysqli_query($con, $delete_query);
 										if ( $delete_result ) {
 											error_log("successful delete from fin_service_order table for fin_service_order_no = ".$fin_service_order_no);
@@ -307,9 +307,9 @@
 											error_log("error in delete from fin_service_order table for fin_service_order_no = ".$fin_service_order_no." - ".mysqli_error($con));
 										}
 	
-										//$updatequery = "UPDATE fin_request SET status = 'X', comments = '$comment', approver_comments = '$approverComment', update_time = now() WHERE fin_request_id = ".$fin_request_id;
-										$updatequery = "UPDATE fin_request SET status = 'X', approver_comments = '$approverComment', update_time = now() WHERE fin_request_id = ".$fin_request_id;
-										error_log("updatequery = ".$updatequery);
+										$updatequery = "UPDATE fin_request SET status = 'X', comments = '$comment', approver_comments = '$approverComment', update_time = now() WHERE fin_request_id = ".$fin_request_id;
+										//$updatequery = "UPDATE fin_request SET status = 'X', approver_comments = '$approverComment', update_time = now() WHERE fin_request_id = ".$fin_request_id;
+										error_log("Error Path fin_request updatequery = ".$updatequery);
 										$update_result = mysqli_query($con, $updatequery);
 										if ( $update_result ) {
 											$response["message"] = "CashOut (USSD) order is rejected for Order # ".$fin_service_order_no;
@@ -319,13 +319,13 @@
 											$response["orderType"] = $orderType;
 											$response["signature"] = $server_signature;
 											$response["newAvailableBalance"] = 0;
-											error_log("Purchase order is rejected for Order # ".$fin_service_order_no);
+											error_log("Cashout USSD order is rejected for # ".$fin_service_order_no);
 										}
 										else {
 											$response["message"] = "Error: Cashout (USSD) order rejected for Order # ".$fin_service_order_no;
 											$response["result"] = "Failure";
 											$response["signature"] = $server_signature;
-											error_log("Error: Purchase rejected for order # ".$fin_service_order_no);
+											error_log("Error: Cashout USSD order rejected for # ".$fin_service_order_no);
 										}								
 									}
                             					}else {
@@ -337,7 +337,7 @@
 							}
 							else {
 								$response["result"] = "Failure";
-								$response["message"] = "No Purchase order for fin_request_id = ".$orderNo;
+								$response["message"] = "No Cashout USSD order for fin_request_id = ".$orderNo;
 							}
 						}	
                 			}else {
