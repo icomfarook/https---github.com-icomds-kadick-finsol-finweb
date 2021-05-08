@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response["orderNo"] = $data->orderId;
 			$response["transactionId"] = $data->transactionId;
 			$response["reference"] = "2".$data->transactionId."10";
-			$response["cpTransactionId"] = "1901230100000".$data->transactionId;
+			$response["transactionId"] = "1901230100000".$data->transactionId;
 			$response["amount"] = $data->totalAmount;
 			$response["cpTraceId"] = "09283474728";
 			$response["cpResponseCode"] = "00";

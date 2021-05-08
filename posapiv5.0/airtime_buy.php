@@ -136,7 +136,7 @@
 												$journal_entry_id = process_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $secondpartycode, $secondpartytype, $narration, $totalAmount, $userId, $con);
 												if($journal_entry_id > 0) {
 													$journal_entry_error = "N";																								
-													$evd_transaction_query = "INSERT INTO evd_transaction (e_transaction_id, evd_trans_log_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, operator_id, opr_plan_id, opr_plan_desc, mobile_number, total_discount, date_time) VALUES ($evd_transaction_id, $evd_trans_log_id, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $operatorId, $operatorPlanId, '$narration', '$mobile', 0, now())";
+													$evd_transaction_query = "INSERT INTO evd_transaction (e_transaction_id, evd_trans_log_id, service_feature_code, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, operator_id, opr_plan_id, opr_plan_desc, mobile_number, total_discount, date_time) VALUES ($evd_transaction_id, $evd_trans_log_id, 'AFX', $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $operatorId, $operatorPlanId, '$narration', '$mobile', 0, now())";
 													error_log("evd_transaction_query = ".$evd_transaction_query);
 													$evd_transaction_result = mysqli_query($con, $evd_transaction_query);
 													if($evd_transaction_result ) {
