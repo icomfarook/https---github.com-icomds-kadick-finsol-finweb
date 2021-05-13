@@ -452,5 +452,17 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/accsalesreport.php",
 		controller: "AccsalesReportCtrl"
     })
+	.when("/aisummary", {
+		templateUrl : "../core/aisummary.php",
+		controller: "AiSummaryCtrl"
+    })
+	.when("/aidetail", {
+		templateUrl : "../core/aidetail.php",
+		controller: "AiDetailCtrl"
+    })
+	.when("/aiservice", {
+		templateUrl : "../core/aiservice.php",
+		controller: "AiServiceCtrl"
+    })
 
 });

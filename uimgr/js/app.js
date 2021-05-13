@@ -262,4 +262,17 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/transferfund.php",
 		controller: "TransFundCtrl"
 	})
+	.when("/aisummary", {
+		templateUrl : "../core/aisummary.php",
+		controller: "AiSummaryCtrl"
+    })
+	.when("/aidetail", {
+		templateUrl : "../core/aidetail.php",
+		controller: "AiDetailCtrl"
+    })
+	.when("/aiservice", {
+		templateUrl : "../core/aiservice.php",
+		controller: "AiServiceCtrl"
+    })
+
 });

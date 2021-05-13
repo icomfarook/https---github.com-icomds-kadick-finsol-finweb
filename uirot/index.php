@@ -220,6 +220,9 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 						<li><a class="ajax-link" href="#!accservice">Account Service Bank</a></li>
+						<li><a class="ajax-link" href="#!aiservice">AI Services</a></li>
+						<li><a class="ajax-link" href="#!aisummary">AI Summary</a></li>
+						<li><a class="ajax-link" href="#!aidetail">AI Detail</a></li>
 					</ul>
 				</li>
 				

@@ -1,3 +1,310 @@
+app.controller('AiServiceCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/aiserviceajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.serviceList = response.data;
+});
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/aiserviceajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.id = response.data[0].id;
+$scope.serfea = response.data[0].serfea;
+$scope.active = response.data[0].active;
+$scope.startdate = new Date(response.data[0].startdate);
+$scope.expdate = new Date(response.data[0].expdate);
+
+if(response.data[0].startdate==null){
+$scope.startdate="";
+}
+if(response.data[0].expdate==null){
+$scope.expdate="";
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/aiserviceajax.php',
+data: {
+createstate: $scope.createstate,
+serfea: $scope.serfea,
+active: $scope.active,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#AiserviceCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/aiserviceajax.php',
+data: {
+id:id,
+feature: $scope.serfea,
+active: $scope.active,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#ServiceCreateBody").html("<h3>" + response.data + "</h3>");
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/aiserviceajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.name = response.data[0].name;
+$scope.active = response.data[0].active;
+$scope.sdate = response.data[0].sdate;
+$scope.edate = response.data[0].edate;
+$scope.create_user = response.data[0].create_user;
+$scope.create_time = response.data[0].create_time;
+$scope.update_user = response.data[0].update_user;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.restric = function () {
+window.location.reload();
+}
+});
+
+app.controller('AiDetailCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.tablerow = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.type = "ALL";
+$scope.orderNo = "";
+$scope.creteria = "BT";
+$scope.isOrderTypeDi = false;
+$scope.isOrderNoDi = true;
+}
+$scope.clickra = function (clickra) {
+$scope.orderNo = "";
+$scope.type = "";
+$scope.isOrderNoDi = true;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+if(clickra == "BT") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderNo = "";
+$scope.isOrderTypeDi = false;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+}
+if(clickra == "BO") {
+$scope.isOrderNoDi = false;
+$scope.isStartDateDi = true;
+$scope.isEndDateDi = true;
+$scope.isOrderTypeDi = true;
+$scope.startDate = "";
+$scope.type = "ALL";
+$scope.endDate = "";
+}
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$http({
+method: 'post',
+url: '../ajax/aidetailajax.php',
+data: {
+action: 'query',
+type: $scope.type,
+orderNo: $scope.orderNo,
+creteria: $scope.creteria,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.aidetail = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.update = function (reference_no) {
+$http({
+method: 'post',
+url: '../ajax/aidetailajax.php',
+data: {
+reference_no: reference_no,
+action: 'reprocess'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+alert(response.data);
+window.location.reload();
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.detail = function (reference_no) {
+
+$http({
+method: 'post',
+url: '../ajax/aidetailajax.php',
+data: {
+reference_no: reference_no,
+action: 'view'
+},
+}).then(function successCallback(response) {
+$scope.create_time = response.data[0].create_time;
+$scope.update_time = response.data[0].update_time;
+$scope.reprocess_time = response.data[0].reprocess_time;
+$scope.complete_time = response.data[0].complete_time;
+$scope.service_feature_code = response.data[0].service_feature_code;
+$scope.reprocess = response.data[0].reprocess;
+$scope.reference_no = response.data[0].reference_no;
+$scope.document_no = response.data[0].document_no;
+$scope.status = response.data[0].status;
+$scope.post_id = response.data[0].post_id;
+$scope.pic_point = response.data[0].pic_point;
+$scope.process_count = response.data[0].process_count;
+$scope.infilefol = response.data[0].infilefol;
+$scope.outfilefol = response.data[0].outfilefol;
+$scope.in_file_content = response.data[0].in_file_content;
+$scope.out_file_content = response.data[0].out_file_content;
+$scope.ifile = response.data[0].ifile;
+$scope.ofile = response.data[0].ofile;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+
+app.controller('AiSummaryCtrl', function ($scope, $http) {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+$("#tbody").empty();
+$scope.tablerow = false;
+$scope.agentCode = "ALL";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$http({
+method: 'post',
+url: '../ajax/aisumaryajax.php',
+data: {
+action: 'query',
+type: $scope.type,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.alsumary = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
 app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
 $scope.isHideOk = true;
 $http({
@@ -3138,6 +3445,36 @@ var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colsp
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
 }
+else if(response.data[0].code =='PED'){
+
+
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].account_name +"</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>Serial</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
+"<tr><td class='name'>Pin Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
+"<tr><td class='name'>Vend Status</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Education</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+}
 var win = window.open("", "height=1000", "width=1000");
 with (win.document) {
 open();
@@ -3254,8 +3591,7 @@ $scope.partner = "";
 });
 
 app.controller('GroupListCtrl', function ($scope, $http, $filter) {
-
- $scope.isHideOk = true;
+$scope.isHideOk = true;
 $http({
 url: '../ajax/load.php',
 method: "POST",
