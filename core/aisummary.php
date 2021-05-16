@@ -24,7 +24,7 @@
 }
 
 </style>
-<div ng-controller='AlSummaryCtrl'>
+<div ng-controller='AiSummaryCtrl'>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<a href="#" class="show-sidebar">
@@ -103,7 +103,7 @@
 									<td>{{ x.count}}</td>														
 								</tr>
 								<tr ng-show="alsumary.length==0">
-									<td colspan='7' >
+									<td colspan='4' >
 										<?php echo NO_DATA_FOUND; ?>              
 									</td>
 								</tr>

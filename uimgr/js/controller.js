@@ -3393,7 +3393,7 @@ var valu = "";
 text = "By Date";
 valu = "From: " + startDate + " to " + endDate;
 
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+var PEB = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
 '<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
 '<h2 style="text-align:right;font-size:32px;">Electricity Payment (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
 
@@ -3444,9 +3444,17 @@ var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colsp
 "<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment</td></tr>" +
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
 }
 else if(response.data[0].code =='PED'){
-
+var PED = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Education Payment (Web) for PED Service Code</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
 
 if(response.data[0].sts=='Error'){
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
@@ -3474,13 +3482,14 @@ var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colsp
 "<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Education</td></tr>" +
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}
 var win = window.open("", "height=1000", "width=1000");
 with (win.document) {
 open();
-write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+write(PED + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
 close();
 }
+}
+
 }, function errorCallback(response) {
 // console.log(response);
 });

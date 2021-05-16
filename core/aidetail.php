@@ -18,7 +18,7 @@
 }
 </style>
 
-<div ng-controller='AlDetailCtrl'>
+<div ng-controller='AiDetailCtrl'>
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<a href="#" class="show-sidebar">

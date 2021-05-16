@@ -176,7 +176,7 @@
 													if ( $pin_flag == "N" || ( $pin_flag == "Y" && $pin_sort == $tokensplit1 ) ) {
 														error_log("first_time_login = ".$first_time_login);
 														if($first_time_login == "N") {
-															$sanef_party_code = "02190800002";
+															
 															if ( $profile_id == 50 ) {
 																$user_sec_check_query = "SELECT a.user_id, a.user_type as party_type, a.user_name, a.first_name, a.last_name, a.last_login, a.invalid_attempt, a.email, a.profile_id, b.profile_name, c.champion_code as party_code, c.champion_name as party_name, c.local_govt_id, c.state_id, c.party_category_type_id, b.auth_id, c.language_id, d.available_balance, c.outlet_name from user a, profile b, champion_info c, champion_wallet d WHERE a.profile_id = b.profile_id and a.user_id = ".$user_id." and c.champion_code = d.champion_code and (c.block_status is null or c.block_status = 'Y') and c.user_id = a.user_id and a.profile_id = 50 and (c.start_date is null or (c.start_date is not null and date(c.start_date) <= current_date())) and (c.expiry_date is null or (c.expiry_date is not null and date(c.expiry_date) > current_date())) limit 1";
 															}else {
@@ -246,6 +246,20 @@
 																		$outlet_name = $row['outlet_name'];
 																		$language_id = $row['language_id'];
 																		$user_access_control = new \stdClass();
+																		
+																		$sanef_party_code = "02190800002";
+																		$sanef_agent_detail_query = "select sanef_agent_code from agent_sanef_detail where agent_code = '".$party_code."'";
+																		error_log("sanef_agent_detail_query = ".$sanef_agent_detail_query);
+																		$sanef_agent_detail_result = mysqli_query($con, $sanef_agent_detail_query);
+																		$sanef_agent_detail_count = mysqli_num_rows($sanef_agent_detail_result);
+																		if($sanef_agent_detail_count > 0){
+																			$sanef_agent_detail_row = mysqli_fetch_assoc($sanef_agent_detail_result);
+																			$sanef_party_code = $sanef_agent_detail_row['sanef_agent_code'];
+																		}else {
+																			error_log("$$$$$$ Warning.. sanef_agent_detail not found for agent_code = ".$party_code.", using default $$$$$$$");
+																		}
+																		error_log("sanef_party_code = ".$sanef_party_code);
+																		 
 																		$user_access_query = "select s.feature_code from user_pos_menu u, service_feature s where s.service_feature_id = u.service_feature_id and s.active = 'Y' and u.active = 'Y' and (u.start_date is null or (u.start_date is not null and date(u.start_date) <= current_date())) and (u.expiry_date is null or (u.expiry_date is not null and date(u.expiry_date) > current_date())) and u.user_id = ".$user_id;
 																		error_log("user_access_query = ".$user_access_query);
 																		$user_access_result = mysqli_query($con, $user_access_query);
