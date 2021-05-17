@@ -563,6 +563,9 @@
 		                        		$response["message"] = "Your request is processed successfuly";
 		                        		$response["statusCode"] = 0;
 		                        		$response["signature"] = $server_signature;
+		                        		$new_available_balance = check_party_available_balance($partyType, $userId, $con);
+							error_log("new_available_balance for userId [".$user_id."] = ".$new_available_balance);
+							$response["newAvailableBalance"] = $new_available_balance;
 		                        	}else {
 		                        		$response["result"] = "Error";
 							$response["message"] = "Your Cashout USSD Order is not available";
