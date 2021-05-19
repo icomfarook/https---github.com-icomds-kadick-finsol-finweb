@@ -32,6 +32,7 @@ define ("BPAPI_SERVER_APP_PASSWORD","Ready4BPayServerFIN");
 define ("SANEFAPI_SERVER_APP_USERNAME","SANEFSERVER");
 define ("SANEFAPI_SERVER_APP_PASSWORD","Ready4Sanef");
 
+define ("EVD_FIXED_SERVER_URL","http://localhost:8989/finweb/api/fixedrecharge.php");
 define ("EVD_SERVER_URL","http://localhost:8989/finweb/api/flexirecharge.php");
 define ("EVD_SERVER_9M_URL","http://localhost:8989/finweb/api/flexirecharge.php");
 

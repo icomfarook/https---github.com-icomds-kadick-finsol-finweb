@@ -8,7 +8,7 @@
 	$edate2 =  $data->endDate;
 	$id   = $data->id;
 	$action =  $data->action;
-
+	$party_type = $_SESSION['party_type'];
 	//$sdate = date("Y-m-d", strtotime($sdate2. "+1 days"));
 	//$edate = date("Y-m-d", strtotime($edate2. "+1 days"));
 
@@ -89,7 +89,12 @@
 		$dailyLimit = $data->dailyLimit;
 		$advanceAmount = $data->advanceAmount;
 		$minimumBalance = $data->minimumBalance;
-		$query = "SELECT b.application_id, a.outlet_name, a.contact_person_name, a.party_code, a.country_id, b.login_name, a.email, a.language_id,c.group_type ,c.agent_code,c.parent_code FROM application_info a, application_main b,agent_info c WHERE a.application_id = b.application_id and b.application_id=c.application_id and a.application_id = $id";
+		$party_type = $data->party_type;
+		if($party_type == "A" || $party_type == "S"){
+			$query = "SELECT b.application_id, a.outlet_name, a.contact_person_name, a.party_code, a.country_id, b.login_name, a.email, a.language_id,c.group_type ,c.agent_code,c.parent_code FROM application_info a, application_main b WHERE a.application_id = b.application_id and a.application_id = $id";
+			}else{
+			$query = "SELECT b.application_id, a.outlet_name, a.contact_person_name, a.party_code, a.country_id, b.login_name, a.email, a.language_id FROM application_info a, application_main b WHERE a.application_id = b.application_id and a.application_id = $id";
+			}
 		error_log("selectquery ==".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {
