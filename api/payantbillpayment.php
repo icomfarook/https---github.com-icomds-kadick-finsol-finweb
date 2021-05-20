@@ -14,12 +14,15 @@
 		$response["status"] = "success";
 		$response["message"] = "Successful";
 		$response["pinUnits"] = "2.5Kwh";
-		$response["pinCode"] = "1854-8374-9528-5083-0023";
-		$response["pinSerialNumber"] = "28001096";
+		//$response["pinCode"] = "1854-8374-9528-5083-0023";
+		$response["pinCode"] = password_generate_num(4)."-".password_generate_num(4)."-".password_generate_num(4)."-".password_generate_num(4)."-".password_generate_num(4);
+		//$response["pinSerialNumber"] = "28001096";
+		$response["pinSerialNumber"] = password_generate_num(8);
 		$response["serviceId"] = "2";
-		$response["amount"] = "107.0";
-		$response["reference"] = "705780612";
-		$response["id"] = "606b6b0e73c64e1c0acb83a6";
+		$response["amount"] = $data->amount;
+		$response["reference"] = date('Ymdhis');
+		//$response["id"] = "606b6b0e73c64e1c0acb83a6";
+		$response["id"] = password_generate(24);
 		$response["dataResponseMessage"] = "ACCEPTED";
 		$response["dataResponseCode"] = "100";
 		$response["dataVendRef"] = "28001096";
@@ -27,7 +30,7 @@
 		$response["dataUnits"] = "2.5";
 		$response["dataTotalAmountPaid"] = "107";
 		$response["dataToken"] = "1854-8374-9528-5083-0023";
-		$response["dataVendTime"] = "2021-04-05 20:54:58";
+		$response["dataVendTime"] = date('Y-m-d h:i:s');
 		$response["dataTax"] = "0";
 		$response["dataReceiptNo"] = "102989817";
 		$response["dataOrderId"] = "606b6b0e73c64e1c0acb83a6";
@@ -43,11 +46,11 @@
 		$response["verifyDaysLastVend"] = "";
 		$response["verifyTariff"] = "";
 		$response["verifyFreeUnits"] = "false";
-		$response["verifyMeterNo"] = "04271892301";
+		$response["verifyMeterNo"] = $data->meterNumber;
 		$response["verifyVendType"] = "PREPAID";
 		$response["verifyAddress"] = "Cell:08033070901";
 		$response["verifyName"] = "MR ABIODUN MATHEW ADEOYE";
-		$response["serviceCategoryId"] = "1";
+		$response["serviceCategoryId"] = $data->serviceCategoryId;
 		$response["createdAt"] = "2021-04-21T19:10:13.714Z";
 		
 		/*
@@ -60,7 +63,8 @@
 		$response["amount"] = "107.0";
 		//$response["reference"] = "829515572";
 		$response["reference"] = "829515572122222233dddcDFDDAFDDSSD";
-		$response["id"] = "606b6b0e73c64e1c0acb83a6";
+		//$response["id"] = "606b6b0e73c64e1c0acb83a6";
+		$response["id"] = password_generate(24);
 		$response["dataResponseMessage"] = "ACCEPTED";
 		$response["dataResponseCode"] = "100";
 		$response["dataVendRef"] = "9501d592-c47c-4e22-afa8-0dd9fdb1d538";
@@ -93,7 +97,7 @@
 		*/
 				
 		$response["signature"] = 20471;
-		$response["processingStartTime"] = "2020-03-20 20:30:56";
+		$response["processingStartTime"] = date('Y-m-d h:i:s');
 	}else {
 		$response["responseCode"] = 25;
 		$response["responseDescription"] = "Error";
@@ -102,9 +106,22 @@
 		$response["message"] = "Invalid Account";
 		
 		$response["signature"] = 20471;
-		$response["processingStartTime"] = "2020-03-20 20:30:56";
+		$response["processingStartTime"] = date('Y-m-d h:i:s');
 	}
 	error_log(json_encode($response));
 	echo json_encode($response);
+
+
+function password_generate($chars) 
+{
+  $data = '1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZabcefghijklmnopqrstuvwxyz';
+  return substr(str_shuffle($data), 0, $chars);
+}
+
+function password_generate_num($chars) 
+{
+  $data = '1234567890';
+  return substr(str_shuffle($data), 0, $chars);
+}
 
 ?>

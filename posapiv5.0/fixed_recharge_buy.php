@@ -197,6 +197,11 @@
 																			$update_query = "UPDATE evd_transaction SET reference_no = '".$api_response['voucher']['serialNo']."', opr_plan_desc = '".$api_response['voucher']['dateString']."' WHERE e_transaction_id = $evd_transaction_id";
 																			error_log("update_query2 = ".$update_query);
 																			$update_result = mysqli_query($con, $update_query);
+																			if ( $update_result) {
+																				error_log("update_query update is success");
+																			}else {
+																				error_log("update_query update is not success");
+																			}
 																					
 																			$gl_post_return_value = process_glpost($journal_entry_id, $con);
 																			if ( $gl_post_return_value == 0 ) {
