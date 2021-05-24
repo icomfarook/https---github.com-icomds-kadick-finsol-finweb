@@ -100,12 +100,15 @@
 							if ( $available_balance >= 0 || $available_balance != "" || $available_balance != null ) {	
 								if ( floatval($totalAmount) <= floatval($available_balance) ) {
 									$evd_trans_log_id = generate_seq_num(1300, $con);
+									unset($data->key1);
 									$request_message = json_encode($data);
+									$request_message = mysqli_real_escape_string($con, $request_message);
 									if( $evd_trans_log_id > 0 )  {
 										error_log("evd_trans_log_id = ".$evd_trans_log_id);
 										$evd_trans_log_query = "INSERT INTO evd_trans_log (evd_trans_log_id, party_type, party_code, country_id, state_id, request_message, message_send_time, create_user, create_time) VALUES ($evd_trans_log_id, '$partyType', '$partyCode', $countryId, $stateId, left('EVD Fixed Request = $request_message', 600), now(), $userId, now())";
 										error_log("evd_trans_log_query = ".$evd_trans_log_query);
 										$evd_trans_log_result = mysqli_query($con, $evd_trans_log_query);
+										error_log("evd_trans_log_query insert affected rows = ".$con->affected_rows);
 										if($evd_trans_log_result ) {
 											$evd_transaction_id = generate_seq_num(1400, $con);
 											if( $evd_transaction_id > 0 ) {
@@ -129,6 +132,7 @@
 													$evd_transaction_query = "INSERT INTO evd_transaction (e_transaction_id, evd_trans_log_id, service_feature_code, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, operator_id, mobile_number, total_discount, date_time) VALUES ($evd_transaction_id, $evd_trans_log_id, 'AFI', $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, $operatorId, '$mobile', 0, now())";
 													error_log("evd_fixed_transaction_query = ".$evd_transaction_query);
 													$evd_transaction_result = mysqli_query($con, $evd_transaction_query);
+													error_log("evd_transaction_query insert affected rows = ".$con->affected_rows);
 													if($evd_transaction_result ) {
 														$evd_order_rollback = "N";					
 														error_log("inside success evd_fixed_transaction table entry");																									
@@ -192,11 +196,13 @@
 																		$update_query = "UPDATE evd_trans_log SET response_received = 'Y', error_code = $statusCode, error_description = '".$responseDescription."', message_receive_time = now() WHERE evd_trans_log_id = $evd_trans_log_id";
 																		error_log("update_query = ".$update_query);
 																		$update_query_result = mysqli_query($con, $update_query);
+																		error_log("evd_trans_log update affected rows = ".$con->affected_rows);
 																		if($statusCode == 0) {
 																			error_log("inside statusCode == 0");
 																			$update_query = "UPDATE evd_transaction SET reference_no = '".$api_response['voucher']['serialNo']."', opr_plan_desc = '".$api_response['voucher']['dateString']."' WHERE e_transaction_id = $evd_transaction_id";
 																			error_log("update_query2 = ".$update_query);
 																			$update_result = mysqli_query($con, $update_query);
+																			error_log("evd_transaction2 update affected rows = ".$con->affected_rows);
 																			if ( $update_result) {
 																				error_log("update_query update is success");
 																			}else {
@@ -216,11 +222,13 @@
 																			$service_feature_details = $checking_feature_value_response_split[0];
 																			$servicefeature = explode("|", $service_feature_details);
 																			$service_feature_id = $servicefeature[1];
-																			$mask_pin = maskPin($api_response['voucher']['pin'], 4, 4);
+																			//$mask_pin = maskPin($api_response['voucher']['pin'], 4, 4);
+																			$mask_pin = $api_response['voucher']['pin'];
 																			error_log("pin = ".$api_response['voucher']['serialNo'].", mask_pin = ".$mask_pin);
-																			$update_query3 = "UPDATE evd_transaction SET service_feature_config_id = ".$service_feature_id.", reference_no2 = '".$mask_pin."', reference_no3 = '".$api_response['voucher']['dialString']."' WHERE e_transaction_id = $evd_transaction_id";
+																			$update_query3 = "UPDATE evd_transaction SET service_feature_config_id = ".$service_feature_id.", reference_no2 = '".$mask_pin."', reference_no3 = '".$api_response['voucher']['dialString']."', reference_no4 = '".$api_response['voucher']['contactInfo']."' WHERE e_transaction_id = $evd_transaction_id";
 																			error_log("update_query3 = ".$update_query3);
 																			$update_result = mysqli_query($con, $update_query3);
+																			error_log("evd_transaction3 update affected rows = ".$con->affected_rows);
 																			
 																			$rateparties_details = $checking_feature_value_response_split[1];
 																			$service_insert_count = 0;
@@ -305,7 +313,7 @@
 																		$update_query = "UPDATE evd_trans_log SET  response_received = 'Y', error_code = $statusCode, error_description = '".$responseDescription."', message_receive_time = now() WHERE evd_trans_log_id = $evd_trans_log_id";
 																		error_log("update_query = ".$update_query);
 																		$update_query_result = mysqli_query($con, $update_query);
-								
+																		error_log("evd_trans_log update affected rows = ".$con->affected_rows);
 																		$gl_reverse_repsonse = process_glreverse($journal_entry_id, $con);
 																		if ( $gl_reverse_repsonse != 0 ) {
 																			error_log("Error in EVD Fixed Recharge gl_reverse for: ".$journal_entry_id);
@@ -340,6 +348,7 @@
 																	$update_query = "UPDATE evd_trans_log SET  response_received = 'Y', error_code = $statusCode, error_description = '".$responseDescription."', message_receive_time = now() WHERE evd_trans_log_id = $evd_trans_log_id";
 																	error_log("update_query = ".$update_query);
 																	$update_query_result = mysqli_query($con, $update_query);
+																	error_log("evd_trans_log update affected rows = ".$con->affected_rows);
 																	$gl_reverse_repsonse = process_glreverse($journal_entry_id, $con);
 				
 																	if ( $gl_reverse_repsonse != 0 ) {
