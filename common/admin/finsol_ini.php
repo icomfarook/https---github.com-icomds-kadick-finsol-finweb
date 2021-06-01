@@ -69,8 +69,12 @@ define ("FINAPI_SERVER_CASHOUT_USSD_TSQ_URL","http://localhost:8989/finweb/api/c
 //PayAnt Bill Pay
 define ("BPAPI_PAYANT_SERVER_VERIFY_CUSTOMER_URL","http://localhost:8989/finweb/api/payantverifycustomer.php");
 //define ("BPAPI_PAYANT_SERVER_VERIFY_CUSTOMER_URL","http://localhost:8080/finsolbp/bppayant.api/verifycustomer");
+define ("BPAPI_PAYANT_SERVER_VERIFY_TV_CUSTOMER_URL","http://localhost:8989/finweb/api/payantverifytvcustomer.php");
+//define ("BPAPI_PAYANT_SERVER_VERIFY_TV_CUSTOMER_URL","http://localhost:8080/finsolbp/bppayant.api/verifytvcustomer");
 define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_URL","http://localhost:8989/finweb/api/payantbillpayment.php");
 //define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_URL","http://localhost:8080/finsolbp/bppayant.api/billpayment");
+define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8989/finweb/api/payanttvbillpayment.php");
+//define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8080/finsolbp/bppayant.api/billpaymenttv");
 define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_EDUCATION_URL","http://localhost:8989/finweb/api/payantbillpaymenteducation.php");
 //define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_EDUCATION_URL","http://localhost:8080/finsolbp/bppayant.api/billpaymentedu");
 define ("BPAPI_PAYANT_SERVER_WALLET_BALANCE_URL","http://localhost:8989/finweb/api/bpwalletbalance.php");
