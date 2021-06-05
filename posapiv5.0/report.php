@@ -291,7 +291,7 @@
 								$myTransaction["comment"] = $row["comment"];
 								$myTransaction["approverComment"] = $row["approver_comments"];
 								$myTransaction["dateTime"] = $row["date_time"];
-								if ( $row["order_type"] == "Bill Payment" || $row["order_type"] == "Bill Payment - Education") {
+								if ( $row["order_type"] == "Bill Payment" || $row["order_type"] == "Bill Payment - Education" || $row["order_type"] == "Bill Payment - TV") {
 									$myTransaction["dateTime"] = $row["date_time1"];
 								}
 								$myTransaction["status"] = $row["status"];

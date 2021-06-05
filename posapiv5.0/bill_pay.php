@@ -2894,7 +2894,7 @@
 				&& isset($data->bpAccountNo) && !empty($data->bpAccountNo) && isset($data->bpAccountName) && !empty($data->bpAccountName)
 				&& isset($data->email) && !empty($data->email) && isset($data->mobile) && !empty($data->mobile)
 				&& isset($data->serviceFeatureCode) && !empty($data->serviceFeatureCode) && isset($data->partnerId) && !empty($data->partnerId)
-				&& isset($data->bpInvoicePeriod) && !empty($data->bpInvoicePeriod) && isset($data->bpAmount) && !empty($data->bpAmount)
+				//&& isset($data->bpInvoicePeriod) && !empty($data->bpInvoicePeriod) && isset($data->bpAmount) && !empty($data->bpAmount)
 				&& isset($data->transactionId) && !empty($data->transactionId) && isset($data->location) && !empty($data->location)
 			){
 				ini_set('max_execution_time', 120);
