@@ -3083,4 +3083,20 @@ define("CASHOUT_TREATMENT_MAIN_NO_DATA_FOUND", "No Data Found..!!");
 //define("CASHOUT_TREATMENT_DETAIL_FIN_REQUEST_ID : ", "#");
 define("CASHOUT_TREATMENT_DETAIL_HEADING : ", "Cash-Out (Card) Treatment Detail For ");
 define("CASHOUT_TREATMENT_DETAIL_AGENT_CODE :  ", "Agent Code");
+
+define("DUPLICATE_ORDER_HEADING1", "Dashboard");   
+define("DUPLICATE_ORDER_HEADING2", "Duplicate Order"); 
+define("DUPLICATE_ORDER_HEADING3", "Duplicate Order");
+define("DUPLICATE_ORDER_START_DATE", "Start Date");
+define("DUPLICATE_ORDER_END_DATE", "End Date"); 
+define("DUPLICATE_ORDER_QUERY_BUTTON", "Search");
+define("DUPLICATE_ORDER_REFRESH_BUTTON", "Refresh");
+define("DUPLICATE_ORDER_EDIT", "Edit");
+define("DUPLICATE_ORDER_AGENT_CODE", "Agent Code");
+define("DUPLICATE_ORDER_DESCRIPTION", "Description");
+define("DUPLICATE_ORDER_AMOUNT", "Amount");
+define("DUPLICATE_ORDER_DETAILS_ICON", "Details");
+define("DUPLICATE_ORDER_DETAIL_HEADING1", "Duplicate Order Details");
+define("DUPLICATE_ORDER_PRINT", "Print");
+define("DUPLICATE_ORDER_NO_DATA_FOUND", "No Data Found..!!");
 ?>

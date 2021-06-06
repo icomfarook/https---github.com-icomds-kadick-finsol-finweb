@@ -556,6 +556,7 @@
 						<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>	
 						<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
+						<li><a class="ajax-link" href="#!rptDup">Duplicate Order</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">

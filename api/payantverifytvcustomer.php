@@ -14,7 +14,7 @@
 		$response["name"] = "ERIMOSO IBRAHIM";
 		$response["accountNumber"] = $data->account;
 		$response["customerNumber"] = "277504454";
-		$response["status"] = "Open";
+		$response["verifyStatus"] = "Open";
 		$response["message"] = "Verification successful";
 		$response["boxOffice"] = "false";
 		$response["invoicePeriod"] = "1";

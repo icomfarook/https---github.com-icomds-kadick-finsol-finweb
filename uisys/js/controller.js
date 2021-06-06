@@ -1,3 +1,55 @@
+app.controller('duplicateOrderCtrl', function ($scope, $http) {
+$scope.isLoader = true;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/duplicateorderajax.php',
+data: {
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.tableviews = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+
+$scope.view = function (index, description) {
+$http({
+method: 'post',
+url: '../ajax/duplicateorderajax.php',
+data: {
+description: description,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.agent_code = response.data[0].agent_code;
+$scope.order_no = response.data[0].order_no;
+$scope.description = response.data[0].description;
+$scope.amount = response.data[0].amount;
+$scope.status = response.data[0].status;
+$scope.create_date = response.data[0].create_date;
+$scope.post_date = response.data[0].post_date;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
 app.controller('AiServiceCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $http({
@@ -3084,27 +3136,41 @@ valu = "From: " + startDate + " to " + endDate;
 
 var PEB = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
 '<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Electricity Payment (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+'<h2 style="text-align:right;font-size:32px;">Bill Payment - TV Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
 
-if(response.data[0].code =='CIN'){
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-"<tr><td colspan='2' ><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td></tr>" +
-"<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>" +
+if(response.data[0].code =='PTV'){
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
 "<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Bank</td><td class='result'>" + response.data[0].bank + "</td></tr>" +
-"<tr><td class='name'>Name </td><td class='result'>" + response.data[0].name + "</td></tr>" +
-"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
-"<tr><td class='name'>Session ID</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
-"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID </td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
+"<tr><td class='name'>Bundle Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>SmartCard</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
+"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
 "<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].amscharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
 "<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - TV </td></tr>" +
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}else if(response.data[0].code =='PEB'){
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+else if(response.data[0].code =='PEB'){
 
 
 if(response.data[0].sts=='Error'){
@@ -3140,6 +3206,7 @@ write(PEB + response + '<script> document.getElementById("myimg").addEventListen
 close();
 }
 }
+
 else if(response.data[0].code =='PED'){
 var PED = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
 '<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
@@ -3287,6 +3354,7 @@ $scope.partner = "";
 
 }
 });
+
 
 app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
 $scope.isHideOk = true;
@@ -5803,311 +5871,664 @@ $scope.sender_name = "";
 });
 
 app.controller('evdtrreportCtrl', function ($scope, $http, $filter) {
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.isOrderNoDi = true;
-	$scope.isStartDateDi = false;
-	$scope.isEndDateDi = false;
-	$scope.tablerow = true;
-	$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'operators',action:'active' },
-		}).then(function successCallback(response) {
-			$scope.operators = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	$scope.checkdate = function (startDate,endDate){
-		var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-		var currdate = new Date();
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$scope.isQueryDi = false;
-		}
-	}
-	$scope.impor =function () {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.tablerow = true;
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'operators',action:'active' },
+}).then(function successCallback(response) {
+$scope.operators = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+$scope.impor =function () {
      $scope.tablerow = false;
 }
-	$scope.viewcomm = function (no) {
-	$http({
-			method: 'post',
-			url: '../ajax/evdtransactionreportajax.php',
-			data: {
+$scope.viewcomm = function (no) {
+$http({
+method: 'post',
+url: '../ajax/evdtransactionreportajax.php',
+data: {
                 action: 'viewcomm',
                 orderNo: no
             },
-		}).then(function successCallback(response) {
-			$scope.no =no;
-			$scope.rescomms = response.data;
+}).then(function successCallback(response) {
+$scope.no =no;
+$scope.rescomms = response.data;
 
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.view = function (no) {
-		$http({
-			method: 'post',
-			url: '../ajax/evdtransactionreportajax.php',
-			data: {
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (no) {
+$http({
+method: 'post',
+url: '../ajax/evdtransactionreportajax.php',
+data: {
                 action: 'view',
                 orderNo: no
-				},
-		}).then(function successCallback(response) {
-			$scope.resview = response.data;
-			$scope.no = response.data[0].no;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.query = function () {
-		$scope.tablerow = true;
-		var startDate =  $scope.startDate;
-		var endDate =  $scope.endDate;
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		var currdate = new Date();
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$scope.dateerr ="";
-			$http({
-				method: 'post',
-				url: '../ajax/evdtransactionreportajax.php',
-				data: {
-					action: 'getreport',
-					type: $scope.type,
-					orderNo: $scope.orderNo,
-					startDate: $scope.startDate,
-					endDate: $scope.endDate,
-					creteria: $scope.creteria
-				},
-			}).then(function successCallback(response) {
-				$scope.res = response.data;
-			}, function errorCallback(response) {
-				// console.log(response);
-			});
-		}
-	}
-	$scope.reset = function () {
-		$scope.tablerow = false;
-		$scope.startDate = new Date();
-		$scope.endDate = new Date();
-		$scope.type = "ALL";
-		$scope.orderNo = "";
-		$scope.creteria = "BT";
-		$scope.isOrderTypeDi = false;
-		$scope.isOrderNoDi = true;
-	}
-	$scope.clickra = function (clickra) {
-		$scope.orderno = "";
-		$scope.type = "";
-		$scope.startDate = new Date();
-		$scope.endDate = new Date();
-		if(clickra == "BT") {
-			$scope.isOrderNoDi = true;
-			$scope.isStartDateDi = false;
-			$scope.isEndDateDi = false;
-			$scope.orderno = "";
-			$scope.isOrderTypeDi = false;
-			$scope.startDate = new Date();
-			$scope.type = "ALL";
-			$scope.endDate = new Date();
-		}
-		if(clickra == "BO") {
-			$scope.isOrderNoDi = false;
-			$scope.isStartDateDi = true;
-			$scope.isEndDateDi = true;
-			$scope.isOrderTypeDi = true
-			$scope.startDate = "";
-			$scope.endDate = "";
-		}
-	}
-
-		$scope.print = function (no) {
-		$http({
-			method: 'post',
-			url: '../ajax/evdtransactionreportajax.php',
-			data: {
-				action: 'view',
-                orderNo: no
-			},
-		}).then(function successCallback(response) {
-			//	$scope.isHide = true;
-			//	$scope.isHideOk = false;
-			var creteria = $scope.creteria;
-			var id = $scope.id;
-			var statusa = $scope.statusa;
-			var startDate = $scope.startDate;
-			var endDate = $scope.endDate;
-			var m = new Date();
-			var datetime =
-				m.getUTCFullYear() + "-" +
-				("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
-				("0" + m.getUTCDate()).slice(-2) + " " +
-				("0" + m.getUTCHours()).slice(-2) + ":" +
-				("0" + m.getUTCMinutes()).slice(-2) + ":" +
-				("0" + m.getUTCSeconds()).slice(-2);
-			var text = "";
-			var valu = "";
-			text = "By Date";
-			valu = "From: " + startDate + " to " + endDate;
-
-			var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-				'<style>body{font-family:Helvetica;padding-top:70px} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-				'<h2 style="text-align:right;font-size:32px;">EVD Sales Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-					var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-					"<tr><td colspan='2' ><b style='font-size:27px;color:#028450'> SUCCESS</b></td></tr>" +
-					"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-					"<tr><td class='name'>Operator</td><td class='result'>" + response.data[0].operator_description + "</td></tr>" +
-					"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile_number + "</td></tr>" +
-					"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].reference_no + "</td></tr>" +
-					"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].date_time + "</td></tr>" +
-					"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].request_amount + "</td></tr>" +
-					"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].ams_charge + "</td></tr>" +
-					"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].other_charge + "</td></tr>" +
-					"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].total_amount + "</td></tr>" +
-					"<tr><td class='name'>Transaction Type</td><td class='result'>Recharge</td></tr>" +
-					"</tbody></table><br />"+
-					"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-			var win = window.open("", "height=1000", "width=1000");
-		with (win.document) {
-		open();
-		write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-		close();
-		}
-		}, function errorCallback(response) {
-		// console.log(response);
-		});
-	}
-
-	$scope.printAll = function () {
-		$scope.tablerow = true;
-		var startDate =  $scope.startDate;
-		var endDate =  $scope.endDate;
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		var currdate = new Date();
-		if(endDate > currdate) {
-		alert("End Date can't be more than current Date");
-		$scope.endDate = currdate;
-		//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-		$scope.dateerr = "Date should be valid";
-		//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-		alert("Date Range should between 7 days");
-		//$scope.isQueryDi = true;
-		}
-		else {
-		$scope.dateerr ="";
-		$http({
-		method: 'post',
-		url: '../ajax/evdtransactionreportajax.php',
-		data: {
-		action: 'getreport',
-		type: $scope.type,
-		orderNo: $scope.orderNo,
-		startDate: $scope.startDate,
-		endDate: $scope.endDate,
-		creteria: $scope.creteria
-		},
-		}).then(function successCallback(response) {
-		$scope.res = response.data;
-		// $scope.isHide = true;
-		// $scope.isHideOk = false;
-		var rerows = "";
-		for(var i=0;i < response.data.length;i++) {
-
-		rerows += "<td>"+ response.data[i].no +"</td>"+
-		"<td>"+ response.data[i].operator +"</td>"+
-		"<td>"+ response.data[i].reqmount +"</td>"+
-		"<td>"+ response.data[i].toamount +"</td>"+
-		"<td>"+ response.data[i].user +"</td>"+
-		"<td>"+ response.data[i].dtime +"</td>"+
-		"</tr>"
-		}
-		var startDate = $scope.startDate;
-		var endDate = $scope.endDate;
-		var text = "";
-		var valu = "";
-
-		var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-		'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-		'<h2 style="text-align:center;margin-top:30px">EVD Sales Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-		var responsetablehead ="<table width='100%'><thead>" +
-		"<tr><th>Order No</th>" +
-		"<th>Operator</th>" +
-		"<th>Request Amount</th>" +
-		"<th>Total Amount</th>" +
-		"<th>Agent Name</th>" +
-		"<th>Date and  Time</th>" +
-		"</tr></thead>" +
-		"<tbody>"+rerows+"</tbody></table>";
-		var win = window.open("", "height=1000", "width=1000");
-		with (win.document) {
-		open();
-		write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-		close();
-		}
-		}, function errorCallback(response) {
-		// console.log(response);
-		});
-		}
-		}
-	$scope.clear = function () {
-		$scope.no = "";
-		$scope.code = "";
-		$scope.toamount = "";
-		$scope.rmount = "";
-		$scope.service_charge = "";
-		$scope.parcharge = "";
-		$scope.ocharge = "";
-		$scope.name = "";
-		$scope.mobile = "";
-		$scope.auth = "";
-		$scope.refNo = "";
-		$scope.fincomment = "";
-		$scope.dtime = "";
-		$scope.sts = "";
-		$scope.update_time = "";
-		$scope.user = "";
-		$scope.transLogId1 = "";
-		$scope.transLogId2 = "";
-		$scope.sconfid = "";
-		$scope.bank = "";
-		$scope.partner = "";
-		$scope.sender_name = "";
-
-	}
+},
+}).then(function successCallback(response) {
+$scope.resview = response.data;
+$scope.no = response.data[0].no;
+}, function errorCallback(response) {
+// console.log(response);
 });
+}
+$scope.query = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/evdtransactionreportajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+orderNo: $scope.orderNo,
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+creteria: $scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.type = "ALL";
+$scope.orderNo = "";
+$scope.creteria = "BT";
+$scope.isOrderTypeDi = false;
+$scope.isOrderNoDi = true;
+}
+$scope.clickra = function (clickra) {
+$scope.orderno = "";
+$scope.type = "";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+if(clickra == "BT") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = "";
+$scope.isOrderTypeDi = false;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+}
+if(clickra == "BO") {
+$scope.isOrderNoDi = false;
+$scope.isStartDateDi = true;
+$scope.isEndDateDi = true;
+$scope.isOrderTypeDi = true
+$scope.startDate = "";
+$scope.endDate = "";
+}
+}
+
+$scope.print = function (no) {
+$http({
+method: 'post',
+url: '../ajax/evdtransactionreportajax.php',
+data: {
+action: 'view',
+                orderNo: no
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var creteria = $scope.creteria;
+var id = $scope.id;
+var statusa = $scope.statusa;
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var m = new Date();
+var datetime =
+m.getUTCFullYear() + "-" +
+("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+("0" + m.getUTCDate()).slice(-2) + " " +
+("0" + m.getUTCHours()).slice(-2) + ":" +
+("0" + m.getUTCMinutes()).slice(-2) + ":" +
+("0" + m.getUTCSeconds()).slice(-2);
+var text = "";
+var valu = "";
+text = "By Date";
+valu = "From: " + startDate + " to " + endDate;
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;padding-top:70px} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Recharge Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+//var number = response.data[0].reference_no2;
+if(response.data[0].reference_no2 === null){
+var reference_no2 = response.data[0].reference_no2;
+}else{
+var reference_no2 = response.data[0].reference_no2.slice(0, 4) + response.data[0].reference_no2.slice(4, 12).replace(/\d/g, '*') + response.data[0].reference_no2.slice(-4);
+}
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + "Success" + "</b></td></tr>";
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code+ "</b></td>"
++statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile_number + "</td></tr>" +
+"<tr><td class='name'>Operator</td><td class='result'>" + response.data[0].operator_description + "</td></tr>" +
+"<tr><td class='name'>Serial No</td><td class='result'>" + response.data[0].reference_no + "</td></tr>" +
+"<tr><td class='name'>Pin</td><td class='result'>" + reference_no2 + "</td></tr>" +
+"<tr><td class='name'>Voucher Value</td><td class='result'>" + response.data[0].request_amount + "</td></tr>" +
+"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].date_time + "</td></tr>" +
+"<tr><td class='name'>Dial String</td><td class='result'>" + response.data[0].reference_no3 + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].request_amount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].ams_charge + "</td></tr>" +
+"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].other_charge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].total_amount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Fixed Recharge</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.printAll = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/evdtransactionreportajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+orderNo: $scope.orderNo,
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+creteria: $scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var rerows = "";
+for(var i=0;i < response.data.length;i++) {
+
+rerows += "<td>"+ response.data[i].no +"</td>"+
+"<td>"+ response.data[i].operator +"</td>"+
+"<td>"+ response.data[i].reqmount +"</td>"+
+"<td>"+ response.data[i].toamount +"</td>"+
+"<td>"+ response.data[i].user +"</td>"+
+"<td>"+ response.data[i].dtime +"</td>"+
+"</tr>"
+}
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var text = "";
+var valu = "";
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+'<h2 style="text-align:center;margin-top:30px">Sales Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+var responsetablehead ="<table width='100%'><thead>" +
+"<tr><th>Order No</th>" +
+"<th>Operator</th>" +
+"<th>Request Amount</th>" +
+"<th>Total Amount</th>" +
+"<th>Agent Name</th>" +
+"<th>Date and  Time</th>" +
+"</tr></thead>" +
+"<tbody>"+rerows+"</tbody></table>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.clear = function () {
+$scope.no = "";
+$scope.code = "";
+$scope.toamount = "";
+$scope.rmount = "";
+$scope.service_charge = "";
+$scope.parcharge = "";
+$scope.ocharge = "";
+$scope.name = "";
+$scope.mobile = "";
+$scope.auth = "";
+$scope.refNo = "";
+$scope.fincomment = "";
+$scope.dtime = "";
+$scope.sts = "";
+$scope.update_time = "";
+$scope.user = "";
+$scope.transLogId1 = "";
+$scope.transLogId2 = "";
+$scope.sconfid = "";
+$scope.bank = "";
+$scope.partner = "";
+$scope.sender_name = "";
+
+}
+});
+
+
+app.controller('CardAllocCtrl', function ($scope, $http) {
+ $scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/cardallocajax.php',
+data: {
+AccountNumber: $scope.AccountNumber,
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.AllocationList = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.update = function (inventory_id,Status) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cardallocajax.php',
+data: {
+action: 'Update',
+Status: Status,
+agentCode: $scope.agentCode,
+inventory_id: inventory_id
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#allocaupdateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.allocationview = function (index,inventory_id) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { for: 'agents',"action": "active" }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+$http({
+method: 'post',
+url: '../ajax/cardallocajax.php',
+data: {
+
+action: 'view',
+inventory_id:inventory_id,
+
+},
+}).then(function successCallback(response) {
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.isHideCancel = false;
+$scope.isLoader = false;
+
+$scope.isMainLoader = false;
+//$scope.res = response.data;
+$scope.inventory_id = response.data[0].inventory_id;
+$scope.Status = response.data[0].Status;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.allocationCancel = function (index,inventory_id) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cardallocajax.php',
+data: {
+action: 'cancel',
+inventory_id:inventory_id,
+
+},
+}).then(function successCallback(response) {
+// alert(response);
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.isHideCancel = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+   $scope.Status = response.data[0].Status;
+$scope.inventory_id = response.data[0].inventory_id;
+$scope.agent = response.data[0].agent;
+//alert(response.data[0].agent);
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statusupdate = function (inventory_id) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cardallocajax.php',
+data: {
+action: 'Reject',
+Status: $scope.CancStatus,
+inventory_id: inventory_id,
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#allocancelBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+});
+
+
+app.controller('CardInvenCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.sushow = true;
+creteria:$scope.creteria;
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'bankaccount' }
+}).then(function successCallback(response) {
+$scope.bankaccounts = response.data;
+//window.location.reload();
+});
+
+$scope.change = function(){
+$scope.susshow = true;
+$scope.desshow = false;
+
+}
+$scope.changes = function(){
+$scope.desshow = true;
+$scope.susshow = false;
+$scope.vendor = "-1";
+$scope.status = "-1";
+$scope.terid = "";
+$scope.terslno = "";
+}
+/*
+if($scope.creteria == 'D'){
+alert($scope.vendor);
+alert($scope.status);
+alert($scope.terid);
+alert($scope.terslno);
+if($scope.vendor == "" || $scope.status == "" || $scope.terid == "" || $scope.terslno == ""){
+$scope.search =true;
+}else{
+$scope.search =true;
+}
+
+}
+ */
+$scope.query = function () {
+//alert($scope.creteria);
+if($scope.creteria == "S") {
+$scope.search = false;
+$scope.sushow = true;
+$scope.deshow = false;
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: {
+action: 'list',
+type:$scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.Inventory_list = [];
+if(response.data.length > 0) {
+$scope.Inventory_list = response.data;
+}
+else {
+alert("There is no inventory list found..");
+$scope.Inventory_list = [];
+}
+});
+}
+else {
+
+$scope.deshow = true;
+$scope.sushow = false;
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: {
+action: 'list',
+type:$scope.creteria,
+vendor:$scope.vendor,
+status:$scope.status,
+terid:$scope.terid,
+terslno:$scope.terslno
+},
+}).then(function successCallback(response) {
+$scope.Inventory_list = [];
+// alert(response.data.length);
+if(response.data.length > 0) {
+$scope.Inventory_list = response.data;
+}
+else {
+alert("There is no inventory list found..");
+$scope.Inventory_list = [];
+}
+});
+}
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+
+$scope.edit = function (index, inventory_id) {
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: { inventory_id: inventory_id, action: 'edit' },
+}).then(function successCallback(response) {
+   $scope.inventory_id = response.data[0].inventory_id;
+   $scope.id = response.data[0].id;
+$scope.BankMasterid = response.data[0].BankMasterid;
+$scope.CardType = response.data[0].CardType;
+$scope.AccountNumber = response.data[0].AccountNumber;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: {
+BankMasterid: $scope.BankMasterid,
+CardType: $scope.CardType,
+AccountNumber: $scope.AccountNumber,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#invenCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function (id, type) {
+window.location.reload();
+}
+$scope.update = function (inventory_id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: {
+inventory_id: $scope.inventory_id,
+BankMasterid: $scope.BankMasterid,
+CardType: $scope.CardType,
+AccountNumber: $scope.AccountNumber,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#inventoryEditBody").html("<h3>" + response.data + "</h3>");
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.detail = function (index, inventory_id) {
+$http({
+method: 'post',
+url: '../ajax/cardinventajax.php',
+data: {
+inventory_id: inventory_id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.inventory_id = response.data[0].inventory_id;
+   $scope.BankMasterid = response.data[0].BankMasterid;
+$scope.CardType = response.data[0].CardType;
+$scope.AccountNumber = response.data[0].AccountNumber;
+$scope.Status = response.data[0].Status;
+$scope.card_num = response.data[0].card_num;
+$scope.reference_num = response.data[0].reference_num;
+$scope.agent_allocated = response.data[0].agent_allocated;
+$scope.agent_sold = response.data[0].agent_sold;
+$scope.allocate_time = response.data[0].allocate_time;
+$scope.sold_time = response.data[0].sold_time;
+$scope.order_no = response.data[0].order_no;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
 
 app.controller('salesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();

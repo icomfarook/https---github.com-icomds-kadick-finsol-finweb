@@ -464,5 +464,17 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/aiservice.php",
 		controller: "AiServiceCtrl"
     })
+    .when("/cardalloc", {
+		templateUrl : "../core/cardalloc.php",
+		controller: "CardAllocCtrl"
+	})
+	.when("/cardinvn", {
+		templateUrl : "../core/cardinvnet.php",
+		controller: "CardInvenCtrl"
+	})
+	.when("/rptDup", {
+		templateUrl : "../core/duplicateorder.php",
+		controller: "duplicateOrderCtrl"
+    })
 
 });

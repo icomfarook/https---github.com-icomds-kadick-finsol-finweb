@@ -2890,4 +2890,20 @@ define("EVD_FINANCIAL_REPORT_MAIN_TABLE_REQUEST_AMOUNT", "Request Amount");
 define("EVD_FINANCIAL_REPORT_MAIN_TABLE_TOTAL_AMOUNT", "Total Amount");
 define("EVD_FINANCIAL_REPORT_MAIN_NO_DATA_FOUND", "No Data Found..!!");
 
+define("DUPLICATE_ORDER_HEADING1", "Dashboard");   
+define("DUPLICATE_ORDER_HEADING2", "Duplicate Order"); 
+define("DUPLICATE_ORDER_HEADING3", "Duplicate Order");
+define("DUPLICATE_ORDER_START_DATE", "Start Date");
+define("DUPLICATE_ORDER_END_DATE", "End Date"); 
+define("DUPLICATE_ORDER_QUERY_BUTTON", "Search");
+define("DUPLICATE_ORDER_REFRESH_BUTTON", "Refresh");
+define("DUPLICATE_ORDER_EDIT", "Edit");
+define("DUPLICATE_ORDER_AGENT_CODE", "Agent Code");
+define("DUPLICATE_ORDER_DESCRIPTION", "Description");
+define("DUPLICATE_ORDER_AMOUNT", "Amount");
+define("DUPLICATE_ORDER_DETAILS_ICON", "Details");
+define("DUPLICATE_ORDER_DETAIL_HEADING1", "Duplicate Order Details");
+define("DUPLICATE_ORDER_PRINT", "Print");
+define("DUPLICATE_ORDER_NO_DATA_FOUND", "No Data Found..!!");
+
 ?>

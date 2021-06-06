@@ -214,9 +214,29 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!acsacs"><?php echo INDEX_POS_ACCESS; ?></a></li>
 						<li><a class="ajax-link" href="#!ascposmen">POS Menu</a></li>
 						<li><a class="ajax-link" href="#!acsact"><?php echo INDEX_POS_ACTIVITY; ?></a></li>
-						<li><a class="ajax-link" href="#!ascteralloc">Terminal Allocation </a></li>
-						<li><a class="ajax-link" href="#!asctervend">Terminal Vendor </a></li>
-						<li><a class="ajax-link" href="#!ascterinvn">Terminal Inventory </a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-mobile"></i>
+						<span style="color:white" class="hidden-xs"  >Terminal</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link"  style="color:orange" href="#!asctervend"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Vendor</a></li>
+						<li><a class="ajax-link"  style="color:orange" href="#!ascterinvn"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Inventory</a></li>
+						<li><a class="ajax-link"  style="color:orange" href="#!ascteralloc"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Allocation</a></li>
+						</ul>
+						</li>
+						
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-credit-card"></i>
+						<span style="color:white" class="hidden-xs"  >Card</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link"  style="color:orange" href="#!cardinvn"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Card Inventory</a></li>
+						<li><a class="ajax-link"  style="color:orange" href="#!cardalloc"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Card Allocation</a></li>
+						</ul>
+						</li>
+
 						<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 						<li><a class="ajax-link" href="#!accservice">Account Service Bank</a></li>
@@ -391,6 +411,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!rptlis">Agent Last Activity</a></li>
 						<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
+						<li><a class="ajax-link" href="#!rptDup">Duplicate Order</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">
