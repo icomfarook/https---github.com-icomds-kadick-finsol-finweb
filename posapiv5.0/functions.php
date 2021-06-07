@@ -720,6 +720,30 @@
 		return $result;
 	}
 
+	function checkForAlreadyProcessedJournalEntry($user_id, $description, $party_code, $con) {
+		$result = -1;
+		
+		$order_check_query2 = "SELECT journal_entry_id from journal_entry where first_party_code = '".$party_code."' and description = '".$description."' and create_user = ".$user_id;
+		error_log("order_check_query2 = ".$order_check_query2);
+		
+		$order_check_result2 = mysqli_query($con, $order_check_query2);
+		if (!$order_check_result2) {
+			$result = -2;
+			error_log("Error in checkForAlreadyProcessedJournalEntry check query2: ".mysqli_error($con));
+		}else {
+			$rowcount = mysqli_num_rows($order_check_result2);
+			if ( $rowcount == 0 ) {
+				$result = 0;
+			}else  {
+				$result = -1;
+			}
+		}
+		error_log("checkForAlreadyProcessedJournalEntry for user_id = ".$user_id." for description = ".$description.", party_code = ".$party_code.", result = ".$result);
+		return $result;
+	}	
+	
+	
+	
 	function checkForAlreadyProcessedFundWalletOrder($user_id, $payment_reference, $con) {
 		$result = -1;
 		$payment_check_query = "SELECT p_receipt_id, payment_status from payment_receipt where payment_reference_no = '".$payment_reference."'";

@@ -65,7 +65,7 @@
 			
 			<div class="box-content no-padding">	
                  <div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>						
-				<form name='duplicateOrderForm' method='POST'>	
+				<form name='duplicateOrderForm' action='duplicateorderexcel.php' method='POST'>	
 					<div class='row appcont'>
 						<div class='row appcont' >
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>					    	
@@ -89,6 +89,7 @@
 							<div style='text-align: center;' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<button type="button" class="btn btn-primary"  ng-disabled = '' ng-click='duplicateOrderForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo DUPLICATE_ORDER_QUERY_BUTTON; ?></button>
 								<button type="button" class="btn btn-primary"   id="Refresh"><?php echo DUPLICATE_ORDER_REFRESH_BUTTON; ?></button>
+								<button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'>Excel</button>
 							</div>
 						</div>
 					<div class='row appcont'>					
@@ -98,6 +99,7 @@
 									<th><?php echo DUPLICATE_ORDER_AGENT_CODE; ?></th>
 									<th><?php echo DUPLICATE_ORDER_DESCRIPTION; ?></th>
 									<th><?php echo DUPLICATE_ORDER_AMOUNT; ?></th>
+									<th>Date</th>
 									<th><?php echo DUPLICATE_ORDER_DETAILS_ICON; ?></th>
 								</tr>
 							</thead>
@@ -106,6 +108,7 @@
 									<td>{{ x.agent_code }}</td>
 									<td>{{ x.description}}</td>
 									<td>{{ x.amount }}</td>
+									<td>{{ x.date }}</td>
 									<td><a id={{x.description}} class='duplicateOrderDetailsViewDialogue' ng-click='view($index,x.description)' data-toggle='modal' data-target='#duplicateOrderDetailsViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>

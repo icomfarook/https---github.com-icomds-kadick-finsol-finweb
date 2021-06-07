@@ -15,8 +15,7 @@
     	
 if($action == "query") {
 
-		$duplicate_order_query = "select first_party_code as agent_code, description, i_format(amount) as amt from journal_entry where date(create_date) between '".$startDate."' and '".$endDate."' and description like 'Cash-Out (Card) Order #%' group by first_party_code, description, amount having count(*) > 1";
-		
+		$duplicate_order_query = "select first_party_code as agent_code, description,  i_format(amount) as amt, date(create_date) as date from journal_entry where date(create_date) between '".$startDate."' and '".$endDate."' and description like 'Cash-Out (Card) Order #%' group by first_party_code, description, amount, date(create_date) having count(*) > 1 order by date(create_date), first_party_code";
 		error_log("duplicate_order_query == ".$duplicate_order_query);
 		$duplicate_order_result =  mysqli_query($con,$duplicate_order_query);
 		if(!$duplicate_order_result) {
@@ -26,7 +25,7 @@ if($action == "query") {
 		else {
 			$data = array();
 			while ($row = mysqli_fetch_array($duplicate_order_result)) {
-				$data[] = array("agent_code"=>$row['agent_code'],"description"=>$row['description'],"amount"=>$row['amt']);           
+				$data[] = array("agent_code"=>$row['agent_code'],"description"=>$row['description'],"amount"=>$row['amt'],"date"=>$row['date']);           
 			}
 			echo json_encode($data);
 		}
