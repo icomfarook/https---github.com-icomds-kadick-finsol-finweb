@@ -291,6 +291,7 @@
 				$name = mysqli_real_escape_string($con, $name);
 				$address1 = mysqli_real_escape_string($con, $address1);
 				$cpn = mysqli_real_escape_string($con, $cpn);
+				$login_name = mysqli_real_escape_string($con, $login_name);
 				$insert_query = "INSERT INTO champion_info(party_category_type_id,champion_code, champion_name, country_id, bvn, dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time, local_govt_id, language_id, login_name,outlet_name) VALUES ('$partycatype','$party_code','$name',$countryid,'$bvn','$dob','$gender','$business_type', '$address1', '$address2', '$stateid', '$zip', '$mobile','$work','$email','$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(), $local_govt_id, $language_id, '$login_name','$outlet_name')";
 			}else if($type == "A" || $type == "S") {	
 				if($type == 'S') {
@@ -302,13 +303,15 @@
 				if($parent_code != "" || !empty($parent_code) || $parent_code != null) {
 					$name = mysqli_real_escape_string($con, $name);
 					$address1 = mysqli_real_escape_string($con, $address1);
-					$cpn = mysqli_real_escape_string($con, $cpn);					
+					$cpn = mysqli_real_escape_string($con, $cpn);	
+					$login_name = mysqli_real_escape_string($con, $login_name);					
 					$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, parent_code, parent_type, language_id, login_name,outlet_name) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type','$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id,'$parent_code','$parent_type', $language_id, '$login_name','$outlet_name')";
 				}
 				else {
 					$name = mysqli_real_escape_string($con, $name);
 					$address1 = mysqli_real_escape_string($con, $address1);
 					$cpn = mysqli_real_escape_string($con, $cpn);
+					$login_name = mysqli_real_escape_string($con, $login_name);
 					$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, language_id, login_name,outlet_name) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type', '$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id, $language_id, '$login_name','$outlet_name')";
 				}
 			}

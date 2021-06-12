@@ -100,6 +100,7 @@
 									<th><?php echo DUPLICATE_ORDER_DESCRIPTION; ?></th>
 									<th><?php echo DUPLICATE_ORDER_AMOUNT; ?></th>
 									<th>Date</th>
+									<th>count</th>
 									<th><?php echo DUPLICATE_ORDER_DETAILS_ICON; ?></th>
 								</tr>
 							</thead>
@@ -109,13 +110,14 @@
 									<td>{{ x.description}}</td>
 									<td>{{ x.amount }}</td>
 									<td>{{ x.date }}</td>
+									<td>{{ x.count }}</td>									
 									<td><a id={{x.description}} class='duplicateOrderDetailsViewDialogue' ng-click='view($index,x.description)' data-toggle='modal' data-target='#duplicateOrderDetailsViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
 									
 								</tr>
 								<tr ng-show="tableviews.length==0">
-									<td colspan='10' >
+									<td colspan='6' >
 										<?php echo NO_DATA_FOUND; ?>              
 									</td>
 								</tr>

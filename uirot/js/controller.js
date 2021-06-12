@@ -5540,6 +5540,16 @@ app.controller('StatOthrCharCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
 $http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+
+$http({
 method: 'post',
 url: '../ajax/stateothrchrajax.php',
 data: { action: 'list' },
@@ -5565,6 +5575,7 @@ data: { id: id, action: 'edit' },
 $scope.createstate = response.data[0].createstate;
 $scope.chargefactor = response.data[0].chargefactor;
 $scope.chargevalue = response.data[0].chargevalue;
+$scope.serfea = response.data[0].serfea;
 $scope.active = response.data[0].active;
 $scope.startdate = new Date(response.data[0].startdate);
 $scope.expdate = new Date(response.data[0].expdate);
@@ -5593,6 +5604,7 @@ chargefactor: $scope.chargefactor,
 chargevalue: $scope.chargevalue,
 active: $scope.active,
 startdate: $scope.startdate,
+serfea: $scope.serfea,
 expdate: $scope.expdate,
 action: 'create'
 },
@@ -5622,6 +5634,7 @@ state: $scope.createstate,
 chargefactor: $scope.chargefactor,
 chargevalue: $scope.chargevalue,
 active: $scope.active,
+serfea: $scope.serfea,
 startdate: $scope.startdate,
 expdate: $scope.expdate,
 action: 'update'
@@ -5640,7 +5653,6 @@ $scope.restric = function () {
 window.location.reload();
 }
 });
-
 
 
 app.controller('trReportCtrl', function ($scope, $http, $filter) {

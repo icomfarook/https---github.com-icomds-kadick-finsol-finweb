@@ -27,7 +27,7 @@ if($endDate == null ){
 $msg = "Duplicate Order For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
-		$query = "select first_party_code as agent_code, description,  i_format(amount) as amt, date(create_date) as date from journal_entry where date(create_date) between '".$startDate."' and '".$endDate."' and description like 'Cash-Out (Card) Order #%' group by first_party_code, description, amount, date(create_date) having count(*) > 1 order by date(create_date), first_party_code";
+		$query = "select first_party_code as agent_code, description,  i_format(amount) as amt, date(create_date) as date, count(*) as count  from journal_entry where date(create_date) between '".$startDate."' and '".$endDate."' and description like 'Cash-Out (Card) Order #%' group by first_party_code, description, amount, date(create_date) having count(*) > 1 order by date(create_date), first_party_code";
 			
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
@@ -36,8 +36,8 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Agent Code","Description","Amount","Date");
-		$headcount = 4;
+		$heading = array("Agent Code","Description","Amount","Date", "Count");
+		$headcount = 5;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
