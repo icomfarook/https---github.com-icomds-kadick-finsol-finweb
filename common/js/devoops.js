@@ -1208,7 +1208,7 @@ jQuery.fn.swap = function(b){
 //
 function ScreenSaver(){
 	var canvas = document.getElementById("canvas");
-	var ctx = canvas.getContext("2d");
+	var ctx = canvas("2d");
 	// Size of canvas set to fullscreen of browser
 	var W = window.innerWidth;
 	var H = window.innerHeight;
@@ -2582,7 +2582,7 @@ function SparklineLoop(){
 //
 // Draw Morris charts on Dashboard (panel- Statistics - Planning + 3 donuts)
 //
-function MorrisDashboard(){
+/* function MorrisDashboard(){
 	Morris.Line({
 		element: 'stat-graph',
 		data: [
@@ -2699,7 +2699,7 @@ function MorrisDashboard(){
 		],
 		colors: ['#CCC', '#DDD', '#BBB']
 	});
-}
+} */
 //
 // Draw SparkLine example Charts for Dashboard (table- Tickers)
 //
@@ -2736,7 +2736,7 @@ function DrawKnobDashboard(){
 //
 // Draw Springy graphs (Network map) on Dashboard page
 //
-function SpringyNetmap(){
+/* function SpringyNetmap(){
 	var graph = new Springy.Graph();
 	var core1 = graph.newNode({label: 'Network core 1 (Cisco 3750G-48PS)'});
 	var core2 = graph.newNode({label: 'Network core 2 (Cisco 3750G-48PS)'});
@@ -2772,7 +2772,7 @@ function SpringyNetmap(){
 			//console.log('Node selected: ' + JSON.stringify(node.data));
 		}
 	});
-}
+} */
 /*-------------------------------------------
 	Function for File upload page (form_file_uploader.html)
 ---------------------------------------------*/
@@ -2875,9 +2875,9 @@ function FullScreenLeafletMap(){
 function CreateStockPage(){
 	var yqlURL="http://query.yahooapis.com/v1/public/yql?q=";
 	var dataFormat="&format=json&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys";
-	$(function() { //Load jQueryUI DatePicker by class name
-		$( ".datePick" ).datepicker({dateFormat: 'yy-mm-dd'} );
-	});
+	/* $(function() { //Load jQueryUI DatePicker by class name
+		$( ".datePick" ).datetimepicker({format: 'yy-mm-dd'} );
+	}); */
 	$("#submit").click(function() {
 		var symbol = $("#txtSymbol").val();
 		var startDate=$("#startDate").val();
