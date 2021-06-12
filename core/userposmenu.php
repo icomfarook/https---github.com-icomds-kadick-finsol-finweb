@@ -95,7 +95,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h2 style='text-align:center'>Create User POS Menu</h2>
 				</div>		
-					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../commom/img/gif2.gif" /></div></div>
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../common/img/gif2.gif" /></div></div>
 				<div class='modal-body'>
 				<form action="" method="POST" name='addusrposForm' id="addusrposForm">
 				 <div  id='usrposCreateBody'  ng-hide='isLoader'>
@@ -279,7 +279,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

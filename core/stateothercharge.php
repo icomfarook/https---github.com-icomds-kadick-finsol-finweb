@@ -62,6 +62,7 @@
 							<th>Active</th>
 							<th>Start Date</th>
 							<th>End Date</th>
+							<th>Service Feature Code</th>
 							<th>Edit</th>
 						</tr>
 					</thead>
@@ -74,6 +75,7 @@
 							<td>{{ x.active }}</td>
 							<td>{{ x.sdate }}</td>
 							<td>{{ x.edate }}</td>
+							<td>{{ x.code }}</td>
 							<td><a id={{x.id}} class='editpro' ng-click='edit($index,x.id)' data-toggle='modal' data-target='#EditstatechrgeDialogue'>
 								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
 						</tr>
@@ -91,7 +93,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h2 style='text-align:center'>State Other Charge - Create</h2>
 				</div>		
-					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../commom/img/gif2.gif" /></div></div>
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../common/img/gif2.gif" /></div></div>
 				<div class='modal-body'>
 				<form action="" method="POST" name='addstateForm' id="AddstateForm">
 				 <div  id='statechrCreateBody'  ng-hide='isLoader'>
@@ -121,15 +123,15 @@
 										<span class = 'err' ng-show="addstateForm.chargevalue.$error.required"><?php echo REQUIRED;?></span></span></label>
 									<input type='text'    ng-model="chargevalue" required  name='chargevalue' maxlength="15" id='chargevalue' class='form-control'/>
 								</div>
-						<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="addstateForm.active.$touched ||addstateForm.active.$dirty && addstateForm.active.$invalid">
-								<span class = 'err' ng-show="addstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
-									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
-									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
-									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
-								</select>
-						</div>
+								<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+										<label> <?php echo SERVICE_FEATURE_CONFIG_SERVICE_FEATURE; ?><span class='spanre'>*</span><span ng-show=" addstateForm.serfea.$touched || addstateForm.serfea.$dirty &&  addstateForm.serfea.$invalid">
+										<span class = 'err' ng-show=" addstateForm.serfea.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+										<select ng-model="serfea" class='form-control' name = 'serfea' id='serfea' required>											
+											<option value=''><?php echo SERVICE_FEATURE_CONFIG_SELECT_SERVICE_FEATURE; ?></option>
+											<option ng-repeat="ser in servfeas" value="{{ser.id}}">{{ser.name}}</option>
+										</select>
+									</div>
+						
 						
 					</div>
 					<div class='row' style='padding:0px 15px'>
@@ -143,6 +145,15 @@
 							<span class = 'err' ng-show="addstateForm.endDate.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<input  ng-model="expdate" type='date' id='expdate' name='expdate'  class='form-control'/>
 						</div>
+						</div>
+						<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="addstateForm.active.$touched ||addstateForm.active.$dirty && addstateForm.active.$invalid">
+								<span class = 'err' ng-show="addstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
+									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
+									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
+									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
+								</select>
 						</div>
 				</div>
 				<div class='clearfix'></div>
@@ -195,15 +206,16 @@
 										<span class = 'err' ng-show="editstateForm.chargevalue.$error.required"><?php echo REQUIRED;?></span></span></label>
 									<input type='text'   ng-model="chargevalue" required  name='chargevalue' maxlength="15" id='chargevalue' class='form-control'/>
 								</div>
-						<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="editstateForm.active.$touched ||editstateForm.active.$dirty && editstateForm.active.$invalid">
-								<span class = 'err' ng-show="editstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
-									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
-									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
-									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
-								</select>
-						</div>
+								
+								<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+										<label> <?php echo SERVICE_FEATURE_CONFIG_SERVICE_FEATURE; ?><span class='spanre'>*</span><span ng-show=" editstateForm.serfea.$touched || editstateForm.serfea.$dirty &&  editstateForm.serfea.$invalid">
+										<span class = 'err' ng-show=" editstateForm.serfea.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+										<select ng-model="serfea" class='form-control' name = 'serfea' id='serfea' required>											
+											<option value=''><?php echo SERVICE_FEATURE_CONFIG_SELECT_SERVICE_FEATURE; ?></option>
+											<option ng-repeat="ser in servfeas" value="{{ser.id}}">{{ser.name}}</option>
+										</select>
+									</div>
+						
 						
 					</div>
 					<div class='row' style='padding:0px 15px'>
@@ -218,6 +230,15 @@
 								<input  ng-model="expdate" type='date' id='expdate' name='expdate'  class='form-control'/>
 								
 						</div>
+						</div>
+						<div class='col-xs-6 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="editstateForm.active.$touched ||editstateForm.active.$dirty && editstateForm.active.$invalid">
+								<span class = 'err' ng-show="editstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
+									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
+									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
+									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
+								</select>
 						</div>
 				</div>
 					<div class='modal-footer ' >
@@ -240,7 +261,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

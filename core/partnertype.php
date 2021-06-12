@@ -81,7 +81,7 @@
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12'>
 								<label> <?php echo PARTNER_TYPE_EDIT_NAME; ?><span class='spanre'>*</span><span ng-show="editPartnerTypeForm.outletname.$touched ||editPartnerTypeForm.outletname.$dirty && editPartnerTypeForm.outletname.$invalid">
 								<span class = 'err' ng-show="editPartnerTypeForm.partner_type_name.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input type='text' maxlength='10' spl-char-not restrict-field="partner_type_name" name='partner_type_name' required ng-model='partner_type_name'  id='partner_type_name' class='form-control'/>
+								<input type='text' maxlength='12' spl-char-not restrict-field="partner_type_name" name='partner_type_name' required ng-model='partner_type_name'  id='partner_type_name' class='form-control'/>
 							</div>									
 							
 							
@@ -121,7 +121,7 @@
 									<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12'>
 								<label> <?php echo PARTNER_TYPE_CREATE_NAME; ?><span class='spanre'>*</span><span ng-show="addPartnerTypeForm.partner_type_name.$touched ||addPartnerTypeForm.partner_type_name.$dirty && addPartnerTypeForm.partner_type_name.$invalid">
 								<span class = 'err' ng-show="addPartnerTypeForm.partner_type_name.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input type='text' name='partner_type_name' maxlength='10' spl-char-not restrict-field="partner_type_name" ng-trim="false"   required ng-model='partner_type_name'  id='partner_type_name' class='form-control'/>
+								<input type='text' name='partner_type_name' maxlength='12 spl-char-not restrict-field="partner_type_name" ng-trim="false"   required ng-model='partner_type_name'  id='partner_type_name' class='form-control'/>
 							</div>	
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12'>
 								<label><?php echo PARTNER_TYPE_CREATE_ACTIVE; ?><span ng-show="addPartnerTypeForm.active.$touched ||addPartnerTypeForm.active.$dirty && addPartnerTypeForm.active.$invalid">
@@ -149,7 +149,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
 	// Load Datatables and run plugin on tables 

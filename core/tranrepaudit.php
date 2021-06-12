@@ -220,7 +220,7 @@
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	LoadSelect2Script(MakeSelect2);
+	LoadSelect2Script();
 } */
 $(document).ready(function() {
  // LoadDataTablesScripts(AllTables);

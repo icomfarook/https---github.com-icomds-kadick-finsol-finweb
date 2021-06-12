@@ -122,7 +122,7 @@
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
 									<label><?php echo SERVICE_GROUP_CREATE_NAME; ?><span class='spanre'>*</span><span ng-show="addsergrpForm.name.$touched ||addsergrpForm.name.$dirty && addsergrpForm.name.$invalid">
 									<span class = 'err' ng-show="addsergrpForm.name.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-									<input ng-model="name" type='text' ng-trim="false"   name='name'  id='name' class='form-control' required />
+									<input ng-model="name" type='text' ng-trim="false"   name='name' maxlength="14"  id='name' class='form-control' required />
 								</div>
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12'>
 									<label><?php echo SERVICE_GROUP_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="addsergrpForm.active.$touched ||addsergrpForm.active.$dirty && addsergrpForm.active.$invalid">
@@ -152,7 +152,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
 	// Load Datatables and run plugin on tables 

@@ -145,28 +145,28 @@
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_ACC_NAME; ?><span class='spanre'>*</span><span ng-show="editPBankForm.accname.$touched ||editPBankForm.accname.$dirty && editPBankForm.accname.$invalid">
 								<span class = 'err' ng-show="editPBankForm.accname.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <input type='text' name='accname' required ng-model='accname' id='accname' class='form-control'/>	
+								 <input type='text' name='accname' required  maxlength="50" ng-model='accname' id='accname' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_ACC_NO; ?><span class='spanre'>*</span><span ng-show="editPBankForm.accno.$touched ||editPBankForm.accno.$dirty && editPBankForm.accno.$invalid">
 								<span class = 'err' ng-show="editPBankForm.accno.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <input autofocus="true" type='text' numbers-only name='accno'  required ng-model='accno' id='accno' class='form-control'/>	
+								 <input autofocus="true" type='text' numbers-only  maxlength="30" name='accno'  required ng-model='accno' id='accno' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_ACC_RENO; ?><span class='spanre'>*</span><span ng-show="editPBankForm.reaccno.$touched ||editPBankForm.reaccno.$dirty && editPBankForm.reaccno.$invalid">
 								<span class = 'err' ng-show="editPBankForm.reaccno.$error.required"><?php echo REQUIRED;?></span></span>
 								<span class = 'err' ng-show="(editPBankForm.accno.$modelValue !== editPBankForm.reaccno.$modelValue) "><?php echo BANK_ACCOUNT_VALID_ACCNT_NO_DOESNOT_MATCH; ?></span></label>
-								 <input type='text' numbers-only name='reaccno' required ng-model='reaccno'  id='reaccno' class='form-control'/>	
+								 <input type='text' numbers-only name='reaccno' maxlength="30" required ng-model='reaccno'  id='reaccno' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_EDIT_ADDRESS; ?><span class='spanre'>*</span><span ng-show="editPBankForm.bankaddress.$touched ||editPBankForm.bankaddress.$dirty && editPBankForm.bankaddress.$invalid">
 								<span class = 'err' ng-show="editPBankForm.bankaddress.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <textarea type='text'  name='bankaddress' required style="height:34px" ng-model='bankaddress' id='bankaddress' class='form-control'/>	
+								 <textarea type='text'  name='bankaddress' maxlength="100" required style="height:34px" ng-model='bankaddress' id='bankaddress' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_BANK_BRANCH; ?><span class='spanre'>*</span><span ng-show="editPBankForm.bankbranch.$touched ||editPBankForm.bankbranch.$dirty && editPBankForm.bankbranch.$invalid">
 								<span class = 'err' ng-show="editPBankForm.bankbranch.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input type='text'name='bankbranch' required ng-model='bankbranch' id='bankbranch' class='form-control'/>	
+								<input type='text'name='bankbranch' maxlength="30" required ng-model='bankbranch' id='bankbranch' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_ACTIVE; ?><span ng-show="editPBankForm.active.$touched ||editPBankForm.active.$dirty && editPBankForm.active.$invalid">
@@ -274,28 +274,28 @@
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_CREATE_ACC_NAME; ?><span class='spanre'>*</span><span ng-show="addPBankForm.accname.$touched ||addPBankForm.accname.$dirty && addPBankForm.accname.$invalid">
 								<span class = 'err' ng-show="addPBankForm.accname.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <input type='text' name='accname' required ng-model='accname' id='accname' class='form-control'/>	
+								 <input type='text' name='accname' maxlength="50" max required ng-model='accname' id='accname' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_CREATE_ACC_NO; ?><span class='spanre'>*</span><span ng-show="addPBankForm.accno.$touched ||addPBankForm.accno.$dirty && addPBankForm.accno.$invalid">
 								<span class = 'err' ng-show="addPBankForm.accno.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <input type='text' numbers-only name='accno' required ng-model='accno' id='accno' class='form-control'/>	
+								 <input type='text' numbers-only name='accno'  maxlength="30" required ng-model='accno' id='accno' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_CREATE_ACC_RENO; ?><span class='spanre'>*</span><span ng-show="addPBankForm.reaccno.$touched ||addPBankForm.reaccno.$dirty && addPBankForm.reaccno.$invalid">
 								<span class = 'err' ng-show="addPBankForm.reaccno.$error.required"><?php echo REQUIRED;?></span></span>
 								<span class = 'err' ng-show="(addPBankForm.accno.$modelValue !== addPBankForm.reaccno.$modelValue) "><?php echo BANK_ACCOUNT_VALID_ACCNT_NO_DOESNOT_MATCH; ?></span></label>
-								 <input type='text' numbers-only name='reaccno' required ng-model='reaccno' id='reaccno' class='form-control'/>	
+								 <input type='text' numbers-only name='reaccno' maxlength="30" required ng-model='reaccno' id='reaccno' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_CREATE_BANK_ADDRESS; ?><span class='spanre'>*</span><span ng-show="addPBankForm.bankaddress.$touched ||addPBankForm.bankaddress.$dirty && addPBankForm.bankaddress.$invalid">
 								<span class = 'err' ng-show="addPBankForm.bankaddress.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <textarea type='text'  name='bankaddress' required ng-model='bankaddress' id='bankaddress' class='form-control'/>	
+								 <textarea type='text'  name='bankaddress' maxlength="100" required ng-model='bankaddress' id='bankaddress' class='form-control'/>	
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo BANK_ACCOUNT_BANK_BRANCH; ?><span class='spanre'>*</span><span ng-show="addPBankForm.bankbranch.$touched ||addPBankForm.bankbranch.$dirty && addPBankForm.bankbranch.$invalid">
 								<span class = 'err' ng-show="addPBankForm.bankbranch.$error.required"><?php echo REQUIRED;?></span></span></label>
-								 <input type='text'name='bankbranch' required ng-model='bankbranch' id='bankbranch' class='form-control'/>	
+								 <input type='text'name='bankbranch' required maxlength="30" ng-model='bankbranch' id='bankbranch' class='form-control'/>	
 							</div>
 							<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12'>
 								<label><?php echo BANK_ACCOUNT_CREATE_ACTIVE; ?><span ng-show="addPBankForm.active.$touched ||addPBankForm.active.$dirty && addPBankForm.active.$invalid">
@@ -386,7 +386,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

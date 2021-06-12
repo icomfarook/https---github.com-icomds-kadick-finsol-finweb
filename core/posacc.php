@@ -110,7 +110,7 @@
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 									<label> <?php echo POS_ACCESS_EDIT_IMEI_NO; ?><span ng-show="editPosaccForm.imeino.$touched ||editPosaccForm.imeino.$dirty && editPosaccForm.imeino.$invalid">
 									<span class = 'err' ng-show="editPosaccForm.imeino.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-									<input type='text' name='imeino' required ng-model='imei' maxlength='10' id='imeino' class='form-control'/>
+									<input type='text' name='imeino' required ng-model='imei' maxlength='50' id='imeino' class='form-control'/>
 								</div>
 									
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
@@ -353,7 +353,7 @@
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12  form_col12_element'>
 									<label> <?php echo POS_ACCESS_CREATE_IMEI_NO; ?><span ng-show="addPosaccForm.imei.$touched ||addPosaccForm.imei.$dirty && addPosaccForm.imei.$invalid">
 									<span class = 'err' ng-show="addPosaccForm.imei.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-									<input type='text' name='imei' required ng-model='imei' maxlength='10' id='imei' class='form-control'/>
+									<input type='text' name='imei' required ng-model='imei' maxlength='50' id='imei' class='form-control'/>
 				    			</div>			
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12   form_col12_element'>
 								<label><?php echo POS_ACCESS_CREATE_STATUS; ?><span ng-show="addPosaccForm.status.$touched ||addCountryForm.status.$dirty && addCountryForm.status.$invalid">
@@ -384,7 +384,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

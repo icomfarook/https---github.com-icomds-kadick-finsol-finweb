@@ -86,7 +86,7 @@
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 								<label> <?php echo AUTHORIZATION_EDIT_ID; ?><span ng-show="editAuthorizationForm.id.$dirty && editAuthorizationForm.id.$invalid">
 								<span class = 'err' ng-show="editAuthorizationForm.id.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								<input maxlength='10' 	type='text'  name='id'  ng-model='id'  id='id' class='form-control'/>
+								<input maxlength='10' numbers-only	type='text'  name='id'  ng-model='id'  id='id' class='form-control'/>
 							</div>
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 								<label> <?php echo AUTHORIZATION_EDIT_CODE; ?><span ng-show="editAuthorizationForm.code.$touched ||editAuthorizationForm.code.$dirty && editAuthorizationForm.code.$invalid">
@@ -189,7 +189,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
   LoadDataTablesScripts(AllTables);

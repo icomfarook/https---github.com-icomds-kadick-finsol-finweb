@@ -148,7 +148,6 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h2 style='text-align:center'>Adempiere Service - Create</h2>
 				</div>		
-					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../commom/img/gif2.gif" /></div></div>
 				<div class='modal-body'>
 				<form action="" method="POST" name='addstampdutyForm' id="AddstampdutyForm">
 				 <div  id='AiserviceCreateBody'  ng-hide='isLoader'>

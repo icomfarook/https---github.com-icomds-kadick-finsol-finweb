@@ -126,12 +126,12 @@
 										<tr>
 											<th><?php echo USER_MAIN_USER_EDIT_FIRST_NAME; ?><span ng-show="editUserForm.fname.$touched ||editUserForm.fname.$dirty && editUserForm.fname.$invalid">
 													  <span class = 'err' ng-show="editUserForm.fname.$error.required"><?php echo USER_MAIN_FIRST_NAME_IS_REQUIRED; ?></span></span></th>
-											<th><input maxlength = "256" spl-char-not  type='text' name='fname' ng-model='fname' required  id='FirstName' class='form-control'/></th>
+											<th><input maxlength = "30" spl-char-not  type='text' name='fname' ng-model='fname' required  id='FirstName' class='form-control'/></th>
 										</tr>
 										<tr>
 											<th><?php echo USER_MAIN_USER_EDIT_LAST_NAME; ?><span ng-show="editUserForm.lname.$touched ||editUserForm.lname.$dirty && editUserForm.lname.$invalid">
 													  <span class = 'err' ng-show="editUserForm.lname.$error.required"><?php echo USER_MAIN_LAST_NAME_IS_REQUIRED; ?></span></span></th>
-											<th><input maxlength = "256" spl-char-not type='text' name='lname' ng-model='lname' required  id='LastName' class='form-control'/></th>
+											<th><input maxlength = "30" spl-char-not type='text' name='lname' ng-model='lname' required  id='LastName' class='form-control'/></th>
 										</tr>
 										<tr>
 											<th><?php echo USER_MAIN_USER_EDIT_ACTIVE; ?><span ng-show="editUserForm.active.$touched ||editUserForm.active.$dirty && editUserForm.active.$invalid">
@@ -147,7 +147,7 @@
 											<th><?php echo USER_MAIN_USER_EDIT_EMAIL; ?><span ng-show="editUserForm.email.$touched ||editUserForm.email.$dirty && editUserForm.email.$invalid">
 													  <span class = 'err' ng-show="editUserForm.email.$error.required"><?php echo USER_MAIN_EMAIL_IS_REQUIRED; ?></span></span>
 													<span style="color:Red" ng-show="editUserForm.email.$dirty&&editUserForm.email.$error.pattern"><?php echo USER_MAIN_PLEASE_ENTER_VALID_EMAIL; ?></span></th>
-											<th><input maxlength = "256" type='email' ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name='email' ng-model='email' required id='Email'  class='form-control'/></th>
+											<th><input maxlength = "100" type='email' ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name='email' ng-model='email' required id='Email'  class='form-control'/></th>
 										</tr>
 										
 									</thead>
@@ -600,7 +600,7 @@
 									<span class = 'err' ng-show="userCreateForm.email.$error.required"><?php echo USER_MAIN_CREATE_EMAIL_IS_REQUIRED; ?>.</span></span>
 									<span style="color:Red" ng-show="userCreateForm.email.$dirty&&userCreateForm.email.$error.pattern"><?php echo USER_MAIN_CREATE_PLZ_ENTER_VALID_EMAIL; ?></span>
 								</label> <br/>
-								<input id="email2" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name="email" ng-disabled='usrform' ng-model = 'email' required class='form-control' type="email"  required />
+								<input id="email2" ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name="email" ng-disabled='usrform' maxlength='100' ng-model = 'email' required class='form-control' type="email"  required />
 								</td>
 							</tr>	
 							
@@ -676,7 +676,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
 	LoadDataTablesScripts(AllTables);

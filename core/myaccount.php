@@ -24,18 +24,9 @@
 ?>
 
 <div ng-controller='MyaccCtrl'>
-
-
-
-  
-</head>
-
+<head>
 <body class="materialdesign">
-	<!--[if lt IE 8]>
-            <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-    	<!-- Header top area start-->
-
+	
 <div id="overlay">
 <div class="preloader-single shadow-reset mg-t-30 loadpag">
 	<div class="ts_preloading_box">
@@ -54,6 +45,8 @@
 <div id="container">
 
 </div>
+</body>
+</head>
   
     	<div class="wrapper-pro">
         	<div class="left-sidebar-pro">
@@ -126,6 +119,8 @@ login-input-head p {
 			</div>
 		</div>
 	</div>
+	</div>
+
 	<script>
 	
 	// Run Datables plugin and create 3 variants of settings
@@ -133,7 +128,7 @@ function AllTables(){
 	//TestTable1();
 	//TestTable2();
 	//TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

@@ -92,7 +92,7 @@
 					                <div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 						<label>Vendor Name<span ng-show="addVendorForm.vendor_name.$touched ||addVendorForm.vendor_name.$dirty && addVendorForm.vendor_name.$invalid">
 								<span class = 'err' ng-show="addVendorForm.vendor_name.$error.required"><?php echo REQUIRED;?></span></span></label>
-						<input type='text' ng-trim="false"  ng-model="vendor_name" name='vendor_name' maxlength="15"  id='vendor_name' required class='form-control'/>
+						<input type='text' ng-trim="false"  ng-model="vendor_name" name='vendor_name' maxlength="30"  id='vendor_name' required class='form-control'/>
 					</div>
 					<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
 						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="addVendorForm.active.$touched ||addVendorForm.active.$dirty && addVendorForm.active.$invalid">
@@ -106,7 +106,7 @@
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 						<label>Terminal Model<span ng-show="addVendorForm.terminal_model.$touched ||addVendorForm.terminal_model.$dirty && addVendorForm.terminal_model.$invalid">
 								<span class = 'err' ng-show="addVendorForm.terminal_model.$error.required"><?php echo REQUIRED;?></span></span></label>
-						<input type='text' restrict-field="terminal_model" ng-model="terminal_model" name='terminal_model' maxlength="15"  id='terminal_model' required class='form-control'/>
+						<input type='text' restrict-field="terminal_model" ng-model="terminal_model" name='terminal_model' maxlength="20"  id='terminal_model' required class='form-control'/>
 					</div>
 						</div>	
 						</div>
@@ -137,7 +137,7 @@
 					                <div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 						<label>Vendor Name<span ng-show="editvendorForm.vendor_name.$touched ||editvendorForm.vendor_name.$dirty && editvendorForm.vendor_name.$invalid">
 								<span class = 'err' ng-show="editvendorForm.vendor_name.$error.required"><?php echo REQUIRED;?></span></span></label>
-						<input type='text' ng-trim="false"  ng-model="vendor_name" name='vendor_name' maxlength="15"  id='vendor_name' required class='form-control'/>
+						<input type='text' ng-trim="false"  ng-model="vendor_name" name='vendor_name' maxlength="30"  id='vendor_name' required class='form-control'/>
 					</div>
 					<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
 						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="editvendorForm.active.$touched ||editvendorForm.active.$dirty && editvendorForm.active.$invalid">
@@ -151,7 +151,7 @@
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 						<label>Terminal Model<span ng-show="editvendorForm.terminal_model.$touched ||editvendorForm.terminal_model.$dirty && editvendorForm.terminal_model.$invalid">
 								<span class = 'err' ng-show="editvendorForm.terminal_model.$error.required"><?php echo REQUIRED;?></span></span></label>
-						<input type='text' restrict-field="terminal_model" ng-model="terminal_model" name='terminal_model' maxlength="15"  id='terminal_model' required class='form-control'/>
+						<input type='text' restrict-field="terminal_model" ng-model="terminal_model" name='terminal_model' maxlength="20"  id='terminal_model' required class='form-control'/>
 					</div>
 						</div>	
 						</div>
@@ -177,7 +177,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

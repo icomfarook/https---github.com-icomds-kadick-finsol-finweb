@@ -229,26 +229,13 @@
 
 								</tr>
 								<tr>									
-									<td>Total Discount : {{x.total_discount}}</td>
 									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REFERENCE_NO; ?> {{x.reference_no}}</td>
-									
+									<td>Total Discount : {{x.total_discount}}</td>
 								</tr>
-								
-									<tr>									
+								<tr>									
+									
 									<td>Trans Log ID : {{x.evd_trans_log_id}}</td>
 									<td ><?php echo FIN_SERVI_TRANSACTION_REPORT_DATE_TIME; ?> {{x.date_time}}</td>
-								</tr>
-								 <tr>
-								 	<?php if($profileid ==1 || $profileid ==10 ||  $profileid ==20 ||  $profileid ==24 ||  $profileid ==22) { ?>
-									<td>Pin: <input disabled type="password" value="{{x.reference_no2}}" id="myInput">
-										<input type="checkbox" style='margin-right:1%'; onclick="myFunction()">Show Pin
-									</td> 
-									<td>Dial String : {{x.reference_no3}}</td>
-								</tr>
-									<?php } ?>
-								<tr>
-									<td>Reference No4 : {{x.reference_no4}}</td>
-									<td>Mobile No : {{x.mobile_number}}</td>
 								</tr>
 								<tr>									
 								   <td>Device ID : {{x.device_id}}</td>
@@ -272,16 +259,9 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
-function myFunction() {
-  var x = document.getElementById("myInput");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
+
 $(document).ready(function() {
 	$("#Query").click(function() {				
 		LoadDataTablesScripts(AllTables);
@@ -294,15 +274,6 @@ $(document).ready(function() {
 		window.location.reload();
 	});	
 		 /* window.alert = function() {}; alert = function() {}; */
-		 
-$("#EditINFODialogue, #AddINFODialogue").on("keypress",".sc", function (event) {
-		    var regex = new RegExp("^[a-zA-Z0-9 \b:/.~!@#$*_-]+$");
- 		    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
- 		    if (!regex.test(key)) {
- 		       event.preventDefault();
- 		       return false;
- 		    }
- 		});
+	
 });
-
 </script>

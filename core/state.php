@@ -85,7 +85,7 @@
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
 					<h2 style='text-align:center'><?php echo STATE_CREATE_HEADING1;?></h2>
 				</div>		
-					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../commom/img/gif2.gif" /></div></div>
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' style="text-align:center" src="../common/img/gif2.gif" /></div></div>
 				<div class='modal-body'>
 				<form action="" method="POST" name='addstateForm' id="AddstateForm">
 				 <div  id='stateCreateBody'  ng-hide='isLoader'>
@@ -93,7 +93,7 @@
 					<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 						<label><?php echo STATE_CREATE_NAME; ?><span ng-show="addstateForm.name.$touched ||addstateForm.name.$dirty && addstateForm.name.$invalid">
 								<span class = 'err' ng-show="addstateForm.name.$error.required"><?php echo REQUIRED;?></span></span></label>
-						<input type='text' ng-trim="false"  spl-char-not restrict-field="name" ng-model="name" name='name' maxlength="15"  id='name' required class='form-control'/>
+						<input type='text' ng-trim="false"  spl-char-not restrict-field="name" ng-model="name" name='name' maxlength="45"  id='name' required class='form-control'/>
 					</div>
 					<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
 						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="addstateForm.active.$touched ||addstateForm.active.$dirty && addstateForm.active.$invalid">
@@ -142,7 +142,7 @@
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 									<label><?php echo STATE_EDIT_NAME; ?><span ng-show="editstateForm.name.$touched ||editstateForm.name.$dirty && editstateForm.name.$invalid">
 										<span class = 'err' ng-show="editstateForm.name.$error.required"><?php echo REQUIRED;?></span></span></label>
-									<input type='text' ng-trim="false"  spl-char-not restrict-field="name" ng-model='name' required  name='name' maxlength="15" id='name' class='form-control'/>
+									<input type='text' ng-trim="false"  spl-char-not restrict-field="name" ng-model='name' required  name='name' maxlength="45" id='name' class='form-control'/>
 								</div>
 								
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
@@ -187,7 +187,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {

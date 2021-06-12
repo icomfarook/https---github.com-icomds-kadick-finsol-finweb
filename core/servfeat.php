@@ -123,7 +123,7 @@
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 								<label>Priority.<span class='spanre'>*</span><span ng-show="editservfeatForm.priority.$touched ||editservfeatForm.priority.$dirty && editservfeatForm.priority.$invalid">
 								<span class = 'err' ng-show="editserCharGrpForm.priority.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								 <input  numbers-only type='text' name='priority' required ng-model='priority'  ng-trim="false"  restrict-field="priority" maxlength='10' id='priority' class='form-control'/>
+								 <input  numbers-only type='text' name='priority' required ng-model='priority'  ng-trim="false"  restrict-field="priority" maxlength='11' id='priority' class='form-control'/>
 							</div>								
 
 						<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
@@ -194,7 +194,7 @@
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 								<label>Priority.<span class='spanre'>*</span><span ng-show="addservfeatForm.priority.$touched ||addservfeatForm.priority.$dirty && addservfeatForm.priority.$invalid">
 								<span class = 'err' ng-show="addservfeatForm.priority.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								 <input  numbers-only type='text' name='priority' required ng-model='priority'  ng-trim="false"  restrict-field="priority" maxlength='10' id='priority' class='form-control'/>
+								 <input  numbers-only type='text' name='priority' required ng-model='priority'  ng-trim="false"  restrict-field="priority" maxlength='11' id='priority' class='form-control'/>
 							</div>			
 					</div>
 			</div>
@@ -217,7 +217,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
 	// Load Datatables and run plugin on tables 

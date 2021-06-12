@@ -311,7 +311,7 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {
@@ -322,5 +322,5 @@ $(document).ready(function() {
 	$("#Ok").on("click",function() {
 		window.location.reload();
 		});
-							
+});		
 </script>

@@ -397,7 +397,7 @@
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label>Vendor Id<span ng-show="addinventoryForm.id.$touched ||addinventoryForm.id.$dirty && addinventoryForm.id.$invalid">
 								<span class = 'err' ng-show="addinventoryForm.id.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input ng-model="id" numbers-only type='text'  ng-disabled='isInputDisabled' id='id'  maxlength='11' name='id' required class='form-control'/>
+								<input ng-model="id" numbers-only type='text'  ng-disabled='isInputDisabled' id='id'  maxlength='10' name='id' required class='form-control'/>
 							</div>	
 							
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
@@ -453,7 +453,7 @@
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Bank Code<span ng-show="addinventoryForm.BankCode.$touched ||addinventoryForm.BankCode.$dirty && addinventoryForm.BankCode.$invalid">
 								<span class = 'err' ng-show="addinventoryForm.BankCode.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input ng-model="BankCode"  type='text' ng-disabled='isInputDisabled' id='BankCode' maxlength='11' name='BankCode' maxlength='5' required class='form-control'/>
+								<input ng-model="BankCode"  type='text' ng-disabled='isInputDisabled' id='BankCode' maxlength='11' name='BankCode' maxlength='11' required class='form-control'/>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Bank Account Number<span ng-show="addinventoryForm.BankAccountNo.$touched ||addinventoryForm.BankAccountNo.$dirty && addinventoryForm.BankAccountNo.$invalid">
@@ -478,7 +478,7 @@
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Master Acquirer Id<span ng-show="addinventoryForm.MastAcqID.$touched ||addinventoryForm.MastAcqID.$dirty && addinventoryForm.MastAcqID.$invalid">
 								<span class = 'err' ng-show="addinventoryForm.MastAcqID.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input ng-model="MastAcqID"  type='text' ng-disabled='isInputDisabled' id='MastAcqID' ng-minlength="10" maxlength='11' name='MastAcqID' required class='form-control'/>
+								<input ng-model="MastAcqID"  type='text' ng-disabled='isInputDisabled' id='MastAcqID' ng-minlength="10" maxlength='10' name='MastAcqID' required class='form-control'/>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>New Terminal Owner Code<span ng-show="addinventoryForm.NewTerOwnCode.$touched ||addinventoryForm.NewTerOwnCode.$dirty && addinventoryForm.NewTerOwnCode.$invalid">
@@ -489,7 +489,7 @@
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Lga<span ng-show="addinventoryForm.Lga.$touched ||addinventoryForm.Lga.$dirty && addinventoryForm.Lga.$invalid">
 								<span class = 'err' ng-show="addinventoryForm.Lga.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input ng-model="Lga"  type='text' ng-disabled='isInputDisabled' id='Lga' ng-minlength="11" maxlength='11' name='Lga' required class='form-control'/>
+								<input ng-model="Lga"  type='text' ng-disabled='isInputDisabled' id='Lga' ng-minlength="10" maxlength='10' name='Lga' required class='form-control'/>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Merchant Account Name<span ng-show="addinventoryForm.MerAccName.$touched ||addinventoryForm.MerAccName.$dirty && addinventoryForm.MerAccName.$invalid">
@@ -504,7 +504,12 @@
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							       <label>Test Terminal<span ng-show="addinventoryForm.TestTerm.$touched ||addinventoryForm.TestTerm.$dirty && addinventoryForm.TestTerm.$invalid">
 								<span class = 'err' ng-show="addinventoryForm.TestTerm.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input ng-model="TestTerm"  type='text' ng-disabled='isInputDisabled' id='TestTerm'  maxlength='11' name='TestTerm' required class='form-control'/>
+								<select ng-model="TestTerm"  type='text' ng-disabled='isInputDisabled' id='TestTerm'  name='TestTerm' required class='form-control' >											
+									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
+									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
+									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
+								</select>
+								
 							</div>
 												
 						</div>
@@ -529,7 +534,7 @@ function AllTables(){
 	//TestTable1();
 	//TestTable2();
 	//TestTable3();
-	//LoadSelect2Script(MakeSelect2);
+	//LoadSelect2Script();
 }
 
 $(document).ready(function() {
