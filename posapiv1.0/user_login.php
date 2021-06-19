@@ -107,6 +107,16 @@
 						$app_version = $key2_array[1];
 						$device_location = $key2_array[2];
 						error_log("device_sno = ".$device_sno.", app_version = ".$app_version.", devie_location = ".$device_location);
+
+						$invalid_version = "Y";
+						if ( $invalid_version == "Y" ) {
+							$response["statusCode"] = 675;
+							$response["result"] = "Error";
+							$response["message"] = "Old App version. Please upgrade your Kadickmoni App..";
+							error_log(json_encode($response));
+							echo json_encode($response);
+							return;
+						}
 						
 						$user_check_query = "SELECT temp_password, first_time_login, user_id, user_name, password, active, profile_id, country_id, COALESCE(invalid_attempt,0) as invalid_attempt, locked, access_restrict, pos_access, use_otp FROM user WHERE UPPER(user_name) = UPPER(?) and profile_id in (50, 51, 52) and loginable = 'Y' limit 1";
 						error_log("query1 = ".$user_check_query);

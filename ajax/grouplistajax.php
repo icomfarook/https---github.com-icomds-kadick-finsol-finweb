@@ -9,7 +9,7 @@
 	 $action = $data->action;
 	 
 	if($action == "query") {
-				$upgrade_query = " select a.agent_code, a.agent_name, a.login_name, IFNULL(a.parent_code,'None') as  parent_code, if(a.parent_type='A','Super Agent', if(a.parent_type='C', 'Champion', if(a.parent_type='N', '-','Other'))) as parent_type, b.name as state, c.name as local_govt, ifnull(a.active,'-') as active, ifnull(a.block_status,'N') as block_status from agent_info a, state_list b, local_govt_list c,application_main d where  d.application_id =  a.application_id and a.state_id = b.state_id and b.state_id = c.state_id and a.local_govt_id = c.local_govt_id and d.status='Z' and a.parent_code='$agentCode' order by a.agent_code";
+		$upgrade_query = "select a.agent_code, a.agent_name, a.login_name, IFNULL(a.parent_code,'None') as  parent_code, if(a.parent_type='A','Super Agent', if(a.parent_type='C', 'Champion', if(a.parent_type='N', '-','Other'))) as parent_type, b.name as state, c.name as local_govt, ifnull(a.active,'-') as active, ifnull(a.block_status,'N') as block_status from agent_info a, state_list b, local_govt_list c,application_main d where  d.application_id =  a.application_id and a.state_id = b.state_id and b.state_id = c.state_id and a.local_govt_id = c.local_govt_id and d.status='Z' and a.parent_code='$agentCode' order by a.agent_code";
 		error_log("app_view_query == ".$upgrade_query);
 		$upgrade_result =  mysqli_query($con,$upgrade_query);
 		if(!$upgrade_result) {

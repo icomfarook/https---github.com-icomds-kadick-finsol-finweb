@@ -60,9 +60,10 @@
 			$orderAmount = $data -> totalAmount;
 			$requestAmount = $data -> requestAmount;
 			$new_available_balance = 0;
+			$aid = $data -> aid;
 
             		//$comment = "TID: ".$terminalId.", PAN: ".$mPan.", ID: ".$transactionId.", Time :".$transactionTime;
-            		$comment = "TID: ".$terminalId.", PAN: ".$mPan.", ID: ".$transactionId.", DTime: ".$transactionTime;
+            		$comment = "TID: ".$terminalId.", PAN: ".$mPan.", ID: ".$transactionId.", DTime: ".$transactionTime.", AID: ".$aid;
             		$approverComment = "RC: ".$mPosResponseCode."-".$mPosResponseDesc.", STAN: ".$stan.", RRN: ".$rrn;
             		error_log("agentCharge = ".$agentCharge.", stampCharge = ".$stampCharge.", flexiRate = ".$flexiRate);
 			
@@ -77,7 +78,7 @@
 			if ( $local_signature == $signature ){	
 
                 		if ( "Cash-Out (Card)" == $orderType ) {
-					$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = ".$orderNo;
+					$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type, date(b.create_time) as create_date FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = ".$orderNo;
                     			error_log("select query: ".$query);
                    			$result = mysqli_query($con, $query);
                     			if (!$result) {
@@ -104,10 +105,14 @@
 						    	$partyType = "A";
 						    	$parentCode = $row['parent_code'];
 						    	$parentType = $row['parent_type'];
+						    	$order_create_date = $row['create_date'];
 						    	$acc_trans_type = "PAYMT";
 						    	$productId = 90;
 						    	$partnerId = 2;
 						    	$txType = "E";
+						    	
+						    	$now_date = date("Y-m-d");
+						    	error_log("now_date = ".$now_date.", order_create_date = ".$order_create_date." for order No = ".$orderNo);
 						    	if ($parentCode == "") {
 								$partyCount = 2;
 							}else {

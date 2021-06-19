@@ -94,9 +94,10 @@
 						    				$acc_trans_type2 = "CPYFW"; 
 						    				$from_comment = "Payout from Comm Wallet #".$payout_request_id;
 						    				$to_comment = "Payout to Main Wallet #".$payout_request_id;
-						    				$journal_entry_id1 = process_glentry($acc_trans_type1, $payout_request_id, $partyCode, $partyType, $parentCode, $parentType, $from_comment, $totalAmount, $userId, $con);
-										error_log("select_journal_entry1 = ".$journal_entry_id1);
-                                    						if($journal_entry_id1 > 0) {
+						    				$journal_entry_id = 0;
+						    				$journal_entry_com_id = process_comm_glentry($acc_trans_type1, $payout_request_id, $partyCode, $partyType, $journal_entry_id, $totalAmount, $from_comment, $userId, $con);
+										error_log("process_comm_glentry = ".$journal_entry_com_id);
+                                    						if($journal_entry_com_id > 0) {
                                     							$get_acc_trans_type1 = getAcccTransType($acc_trans_type1, $con);
 											error_log("get_acc_trans_type1 = ".$get_acc_trans_type1);
 											if($get_acc_trans_type1 != "-1"){
@@ -104,11 +105,11 @@
 												$ac_factor1 = $split[0];
 											        $cb_factor1 = $split[1];
 											        $acc_trans_type_id1 = $split[2];
-											        $update_wallet1 = commWalletupdateWithTransaction($acc_trans_type1, $cb_factor1, $partyType, $partyCode, $totalAmount, $con, $userId, $journal_entry_id1);
+											        $update_wallet1 = commWalletupdateWithTransaction($acc_trans_type1, $cb_factor1, $partyType, $partyCode, $totalAmount, $con, $userId, $journal_entry_com_id);
                                             							if($update_wallet1 == 0) {
-                                            								$journal_entry_id2 = process_glentry($acc_trans_type2, $payout_request_id, $partyCode, $partyType, $parentCode, $parentType, $to_comment, $payOutAmount, $userId, $con);
-													error_log("select_journal_entry2 = ".$journal_entry_id2);
-													if($journal_entry_id2 > 0) {
+                                            								$journal_entry_id = process_glentry($acc_trans_type2, $payout_request_id, $partyCode, $partyType, $parentCode, $parentType, $to_comment, $payOutAmount, $userId, $con);
+													error_log("process_glentry journal_entry_id = ".$journal_entry_id);
+													if($journal_entry_id > 0) {
 														$get_acc_trans_type2 = getAcccTransType($acc_trans_type2, $con);
 														error_log("get_acc_trans_type2 = ".$get_acc_trans_type2);
 														if($get_acc_trans_type2 != "-1"){
@@ -116,8 +117,22 @@
 															$ac_factor2 = $split[0];
 															$cb_factor2 = $split[1];
 															$acc_trans_type_id2 = $split[2];
-															$update_wallet2 = walletupdateWithTransaction($acc_trans_type2, $cb_factor2, $partyType, $partyCode, $payOutAmount, $con, $userId, $journal_entry_id2);
+															$update_wallet2 = walletupdateWithTransaction($acc_trans_type2, $cb_factor2, $partyType, $partyCode, $payOutAmount, $con, $userId, $journal_entry_id);
                                             										if($update_wallet2 == 0) {
+																$gl_post_return_value1 = process_comm_glpost($journal_entry_com_id, $con);
+																if ( $gl_post_return_value1 == 0 ) {
+																    error_log("Success in payout1 gl_comm_post for: ".$journal_entry_com_id);
+																}else {
+																    insertjournalerror($user_id, $journal_entry_com_id, $get_acc_trans_type1, "AP", "W", "N", $totalAmount, $con);
+																    error_log("Error in payout1 gl_comm_post for: ".$journal_entry_com_id);
+																}
+																$gl_post_return_value2 = process_glpost($journal_entry_id, $con);
+																if ( $gl_post_return_value2 == 0 ) {
+																    error_log("Success in payout2 gl_post for: ".$journal_entry_id);
+																}else {
+																    insertjournalerror($user_id, $journal_entry_id, $get_acc_trans_type1, "AP", "W", "N", $totalAmount, $con);
+																    error_log("Error in payout2 gl_post for: ".$journal_entry_id);
+																}
                                             											$update_payout_query2 = "update comm_payout_request set status = 'S', update_user = $userId, update_time = now() where comm_payout_request_id = $payout_request_id";
 													    			error_log("update_payout_query2 = ".$update_payout_query2);
 													    			$update_payout_result2 = mysqli_query($con, $update_payout_query2);

@@ -220,7 +220,8 @@
 													else {
 														$secondpartytype = substr($secondpartycode,0);
 													}
-													$journal_entry_id = process_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $secondpartycode, $secondpartytype, $narration, $totalAmount, $userId, $con);
+													$glComment = "Cash-In (Account) Order #".$fin_service_order_no;
+													$journal_entry_id = process_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $secondpartycode, $secondpartytype, $glComment, $totalAmount, $userId, $con);
 													if($journal_entry_id > 0) {
 														$journal_entry_error = "N";	
 														$narration = mysqli_real_escape_string($con, $narration);

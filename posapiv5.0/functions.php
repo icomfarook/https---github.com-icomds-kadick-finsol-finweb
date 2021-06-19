@@ -341,6 +341,58 @@
 		error_log("result = ".$ret_val);
 		return $ret_val;
 	}
+
+	function process_comm_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $journal_entry_id, $amount, $comment, $uid, $con) {
+	    	
+		$query = "select gl_comm_entry('$acc_trans_type', $transaction_id, '$firstpartycode', '$firstpartytype', $journal_entry_id, $amount, left('$comment', 49), $uid) as journal_comm_entry_id";
+		error_log("process_comm_glentry = ".$query);
+		$result = mysqli_query($con, $query);
+		if (!$result) {
+			error_log("Error: process_comm_glentry - = ".mysqli_error($con));
+			$ret_val = -1;
+		}
+		else {
+			$row = mysqli_fetch_array($result); 
+			$journal_comm_entry_id = $row['journal_comm_entry_id'];
+			$ret_val = $journal_comm_entry_id;
+		}
+		error_log("journal_comm_entry_id = ".$ret_val);
+		return $ret_val;
+	}
+
+	function process_comm_glpost($journal_comm_entry_id, $con) {
+	    	
+		$query = "select gl_comm_post($journal_comm_entry_id) as result";
+		error_log("process_comm_glpost = ".$query);
+		$result = mysqli_query($con, $query);
+		if (!$result) {
+			error_log("Error: process_comm_glpost = ".mysqli_error($con));
+			$ret_val = -1;
+		}
+		else {
+			$row = mysqli_fetch_array($result); 
+			$ret_val = $row['result'];
+		}
+		error_log("result = ".$ret_val);
+		return $ret_val;
+	}
+
+	function process_comm_glreverse($journal_comm_entry_id, $con) {
+	    	
+		$query = "select gl_comm_reverse($journal_comm_entry_id) as result";
+		error_log("process_comm_glreverse = ".$query);
+		$result = mysqli_query($con, $query);
+		if (!$result) {
+			error_log("Error: process_comm_glreverse = ".mysqli_error($con));
+			$ret_val = -1;
+		}
+		else {
+			$row = mysqli_fetch_array($result); 
+			$ret_val = $row['result'];
+		}
+		error_log("result = ".$ret_val);
+		return $ret_val;
+	}
 	
 	function post_finorder($fin_service_order_no, $con) {
 	    	

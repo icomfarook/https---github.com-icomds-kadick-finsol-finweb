@@ -241,7 +241,8 @@
 								</select>
 						</div>
 				</div>
-					<div class='modal-footer ' >
+				<div class='clearfix'></div>
+					<div class='modal-footer ' style="margin-top: -8%;margin-right:6%">
 						<button type='button' class='btn btn-primary' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo STATE_EDIT_BUTTON_OK; ?></button>
 						<button type='button' class='btn btn-primary' ng-click='restric()'  data-dismiss='modal' ng-hide='isHide' ><?php echo STATE_EDIT_BUTTON_CANCEL; ?></button>
 						<button type='button' class='btn btn-primary' ng-hide='isHide'  ng-disabled="editstateForm.$invalid" ng-click="editstateForm.$invalid=true;update(id)" id="Update"><?php echo STATE_EDIT_BUTTON_UPDATE; ?></button>

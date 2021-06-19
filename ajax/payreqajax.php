@@ -19,21 +19,20 @@
 			$partyCode = $_SESSION['party_code'];
 			$partyType = $_SESSION['party_type'];
 		}
-		
 		if($partyType == "A") {
 			$tablename = "agent_comm_wallet";
 			$colname = "agent_code";
 		}
-		if($partyType == "C") {
+		else if($partyType == "C") {
 			$tablename = "champion_comm_wallet";
 			$colname = "champion_code";
 		}	
-		if($partyType == "P") {
+		else if($partyType == "P") {
 			$tablename = "personal_comm_wallet";
 			$colname = "personal_code";
 		}
 		$query = "SELECT current_balance FROM $tablename WHERE $colname = '$partyCode'";
-		error_log("queyr".$query);
+		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
 			printf("Error: %s\n".mysqli_error($con));
@@ -45,8 +44,7 @@
 		}
 		echo json_encode($data);
 	}
-	
-	if($action == "payout") {
+	else if($action == "payout") {
 		 $partyType = $data->partyType;
 		 $partyCode = $data->partyCode;
 		 $creteria = $data->creteria;
@@ -70,11 +68,11 @@
 			$tablename = "agent_comm_wallet";
 			$colname = "agent_code";
 		}
-		if($partyType == "C") {
+		else if($partyType == "C") {
 			$tablename = "champion_comm_wallet";
 			$colname = "champion_code";
 		}	
-		if($partyType == "P") {
+		else if($partyType == "P") {
 			$tablename = "personal_comm_wallet";
 			$colname = "personal_code";
 		}
