@@ -127,7 +127,8 @@
 								<button type="button" ng-click='reset()'  class="btn btn-primary"   id="Reset"><?php echo TRANSACTION_REPORT_MAIN_RESET_BUTTON; ?></button>
 								<button type="button" class="btn btn-primary"   id="Refresh"><?php echo TRANSACTION_REPORT_MAIN_REFRESH_BUTTON; ?></button>
 							<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='printAll()' ng-hide='isHide'  id="Query">Print</button>
-								<button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'>Excel</button>
+								<button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'> Excel</button>
+								<button type="submit" class="btn btn-primary"  onclick='this.form.action="salesreportnewexcel.php";'  id="excel" ng-hide='isHideexcel;'>Detail Excel</button>
 							</div>
 						</div>
 					<div class='row appcont'>
@@ -151,7 +152,7 @@
 									<td>{{ x.reqmount }}</td>
 									<td>{{ x.toamount }}</td>
 									<td>{{ x.user }}</td>
-									<td>{{ x.dtime }}</td>									
+									<td>{{ x.post_time }}</td>									
 									<td><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 										<a href="#">|&nbsp;</a>

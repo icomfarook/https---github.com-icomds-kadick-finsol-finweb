@@ -1,6 +1,6 @@
 <?php
 	function generateExcel ($i,$row,$objPHPExcel,$column) { 
-        $Header=array("A", "B", "C", "D", "E","F","G", "H", "I", "J", "K", "L", "M");        
+        $Header=array("A", "B", "C", "D", "E","F","G", "H", "I", "J", "K", "L", "M","N","O","P");        
         $style = array(
         'alignment' => array(
             'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER,
@@ -37,7 +37,7 @@
 			)
 		  )
 		); 	
-		$Header2=array("A", "B", "C", "D", "E","F","G", "H", "I", "J", "K", "L", "M");		
+		$Header2=array("A", "B", "C", "D", "E","F","G", "H", "I", "J", "K", "L", "M","N","O","P");		
 		for($j=0; $j<$column; $j++) {			
 			$objPHPExcel->getActiveSheet()->setCellValue($Header2[$j]."1",$heading[$j]);
 			$objPHPExcel->getActiveSheet()->getStyle($Header2[$j]."1")->applyFromArray($styleArray);

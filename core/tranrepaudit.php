@@ -57,7 +57,7 @@
 			
 			<div class="box-content no-padding" >	
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
-				<form name='trrepaduitForm' action='tranreauditexcel.php' method='POST'>	
+				<form name='trrepaduitForm' id='trrepaduitForm' action='tranreauditexcel.php' method='POST'>	
 					<div class='row appcont'>						
 						
 									
@@ -84,9 +84,11 @@
 											<select  ng-model='partyCode'  class='form-control'   id='selUser' name='partyCode' required >
 											<option value=""><?php echo JOUNRAL_ENTRY_MAIN_SELECT_PARTY_CODE; ?></option>												
 											<option ng-repeat="info in infos" value="{{info.code}}">{{info.code}} - {{info.name}}</option>
-											</select>										
+											
+											</select>					
+											
 										</div>
-									
+																			
 										<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >
 						    	<label><?php echo TSS_ACCOUNT_START_DATE; ?>
 								<span ng-show="trrepaduitForm.startDate.$touched ||trrepaduitForm.startDate.$dirty && trrepaduitForm.startDate.$invalid">
@@ -106,6 +108,7 @@
 											<button type="button" class="btn btn-primary" ng-disabled = 'trrepaduitForm.$invalid' ng-click='trrepaduitForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_MAIN_BUTTON_QUERY; ?></button>
 											<button type="button" class="btn btn-primary"   id="Refresh"><?php echo JOUNRAL_ENTRY_MAIN_BUTTON_REFRESH; ?></button>
 										 <button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'>Excel</button>
+										  <button type="submit" class="btn btn-primary"  ng-hide='isPdf' id="GenPdf" ng-hide='isHideexcel;'>PDF</button>
 										</div>
 								  <?php } ?>
 								 
@@ -225,6 +228,37 @@
 $(document).ready(function() {
  // LoadDataTablesScripts(AllTables);
  // WinMove();
+ $("#GenPdf").click(function() {
+				var startDate = $("#startDate").val();
+					var endDate = $("#endDate").val();
+					var betweendate = new Date(startDate);
+					betweendate.setDate(betweendate.getDate()+parseInt(7));
+					var month = betweendate.getMonth()+1;
+					var date = betweendate.getDate();
+					betweendate = betweendate.getFullYear()+"-"+(month < 10 ? '0' + month: month)+"-"+(date < 10 ? '0' + date:date);
+					if(startDate == ""){
+						alert("Start Date is required");
+						$("#startDate").focus();
+						return false;
+					}
+					else if(endDate == ""){
+						alert("End Date is required");
+						$("#EndDate").focus();
+						return false;				
+					}
+					else if(startDate > endDate) {
+						alert("Should enter valid dates");
+						$("#EndDate").focus();
+						return false;				
+					}
+					else if(endDate > betweendate) {
+						alert("Start and End date should between 7 days");
+						return false;
+					}
+					else {
+						$("#trrepaduitForm").attr("action","trreportauditpdfajax.php")
+					}
+			});
 	$("#infoViewDialogue, #infoEditDialogue").on("click","#Ok",function() {
 		window.location.reload();
 	});

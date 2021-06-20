@@ -120,6 +120,7 @@
 								<button type="button" class="btn btn-primary"   id="Refresh"><?php echo TRANSACTION_REPORT_MAIN_REFRESH_BUTTON; ?></button>
 							<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='printAll()' ng-hide='isHide'  id="Query">Print</button>
 								<button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'>Excel</button>
+									<button type="submit" class="btn btn-primary"  onclick='this.form.action="bpsalesrprtnewexcel.php";'  id="excel" ng-hide='isHideexcel;'>Detail Excel</button>
 							</div>
 						</div>
 					<div class='row appcont'>

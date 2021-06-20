@@ -157,9 +157,9 @@
 								<tr> 
 									<th>Agent Code</th>
 									<th>Agent Name</th>
-									<th>Login Name</th>
-									<th>Parent Code</th>
-									<th>Parent Type</th>
+									<th>Parent</th>
+									<th>Contact Person Mobile</th>
+									<th>Email</th>
 									<th>State</th>
 									<th>Local Government</th>
 									<th>View</th>
@@ -170,9 +170,9 @@
 								 <tr ng-show='tablerow' ng-repeat="x in res">
 									<td>{{ x.agent_code }}</td>
 									<td>{{ x.agent_name }}</td>
-									<td>{{ x.login_name }}</td>
 									<td>{{ x.parent_code }}</td>
-									<td>{{ x.parent_type }}</td>
+									<td>{{ x.contact_person_mobile }}</td>
+									<td>{{ x.email }}</td>
 									<td>{{ x.state }}</td>
 									<td>{{ x.local_govt }}</td>
 									<td><a id='{{x.agent_code}}' class='ApplicationViewDialogue' ng-click='view($index,x.agent_code)' data-toggle='modal' data-target='#ApplicationViewDialogue'>

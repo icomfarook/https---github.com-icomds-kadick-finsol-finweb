@@ -6843,8 +6843,15 @@ var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link 
 '<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
 '<h2 style="text-align:right;font-size:32px;">Sales Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
 if(response.data[0].code =='CIN'){
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-"<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>" +
+if(response.data[0].sts=='TRIGGERED'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='2'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
 "<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
 "<tr><td class='name'>Bank</td><td class='result'>" + response.data[0].bank + "</td></tr>" +
 "<tr><td class='name'>Name </td><td class='result'>" + response.data[0].name + "</td></tr>" +
@@ -6866,9 +6873,9 @@ var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" 
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
 }else{
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-
 }
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +"<tr><td colspan='2' ><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td></tr>" +
 statushead +
 "<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
 "<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].sender_name + "</td></tr>" +
@@ -6891,10 +6898,9 @@ var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" 
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
 }else{
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-
 }
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-statushead +
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='2'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
 "<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
 "<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
 "<tr><td class='name'>Description</td><td class='result'>" + response.data[0].appcmt + "</td></tr>" +
@@ -6954,9 +6960,12 @@ var ressplit = response.data[0].fincomment.split(",");
 //alert(ressplit);
 var TID = (ressplit[0]).replace('TID:','');
 //alert(TID);
+if(TID == "" ) {
+TID = response.data[0].terminal_id;
+}
 var PAN = (ressplit[1]).replace('PAN:','');
 var ID = (ressplit[2]).replace('ID:','');
-var Time = (ressplit[3]).replace('Time :','');
+var Time = (ressplit[3]).replace('DTime:','');
 var ressplit1 = response.data[0].appcmt.split(',');
 var RC = (ressplit1[0]).replace('RC:','').trim();
 var STAN = (ressplit1[1]).replace('STAN:','');
@@ -6965,6 +6974,7 @@ var postTime = response.data[0].ptime;
 var dayTime = formatDate(response.data[0].ptime.substring(0,10)) ;
 var hourTime = postTime.substring(11);
 var rcValue = RC.substring(0, 2);
+var APKVERS = '2.34 20210124';
 
 if(rcValue.trim() ==00){
 var transacStatus = "Transaction Successful";
@@ -6978,13 +6988,15 @@ var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>"
 }else{
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
 }
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +statushead +
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +"<tr><td colspan='2' ><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td></tr>" +
+statushead +
 "<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
 "<tr><td class='name'>Status</td><td class='result'>" + transacStatus + "</td></tr>" +
 "<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
-"<tr><td class='name'>Terminal ID</td><td class='result'>" + TID + " / "+response.data[0].agentCode+"</td></tr>" +
+"<tr><td class='name'>Terminal ID</td><td class='result'>" + TID + " / "+response.data[0].agentCode+ " / "+ APKVERS +"</td></tr>" +
 "<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
-"<tr><td class='name'>Date</td><td class='result'>" + dayTime+ " "+hourTime+"</td></tr>" +
+"<tr><td class='name'>Date</td><td class='result'>" + Time +"</td></tr>" +
 "<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
 "<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
 "<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +

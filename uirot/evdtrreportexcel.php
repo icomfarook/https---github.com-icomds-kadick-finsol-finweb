@@ -30,7 +30,7 @@ $msg = "EVD Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id";
+			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time  FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id ";
 		}
 		if($profileid  == 51) {
 			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'";
@@ -59,7 +59,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Operator","Agent","Request Amount","Total Amount","Date Time");
+		$heading = array("Order No","Operator","Agent","Request Amount","Total Amount","Date Time","Update Time");
 		$headcount = 6;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
