@@ -308,6 +308,7 @@ if($(this).val() != "")
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
+						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 						<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
@@ -411,7 +412,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!rptlis">Agent Last Activity</a></li>
 						<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
-						<li><a class="ajax-link" href="#!rptDup">Duplicate Order</a></li>
+						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">

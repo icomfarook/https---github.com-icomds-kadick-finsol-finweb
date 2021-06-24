@@ -286,5 +286,9 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/duplicateorder.php",
 		controller: "duplicateOrderCtrl"
     })
+	.when("/walhis", {
+		templateUrl : "../core/walhistory.php",
+		controller: "WallHistoryCtrl"
+    })
 
 });

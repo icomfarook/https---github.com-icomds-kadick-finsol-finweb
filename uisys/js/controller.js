@@ -1,3 +1,152 @@
+app.controller('WallHistoryCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params:
+{ partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/24/60/60/1000;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays > 31) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$http({
+method: 'post',
+url: '../ajax/walhistoryajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+topartyCode:$scope.topartyCode,
+partyType:$scope.partyType,
+Walltype:$scope.Walltype,
+startDate:$scope.startDate,
+endDate:$scope.endDate,
+creteria:$scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.jentrys = response.data;
+}, function errorCallback(response) {
+console.log(response.data);
+});
+}
+}
+$scope.view = function (index, id) {
+  $http({
+   method: 'post',
+   url: '../ajax/walhistoryajax.php',
+   data: {
+    id: id,
+    action: 'view'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+   // $scope.isHideOk = false;
+   $scope.id = response.data[0].id;
+   $scope.party_type = response.data[0].party_type;
+   $scope.party_code = response.data[0].party_code;
+   $scope.wallet_type = response.data[0].wallet_type;
+   $scope.credit_limit = response.data[0].credit_limit;
+   $scope.date_time = response.data[0].date_time;
+   $scope.daily_limit = response.data[0].daily_limit;
+   $scope.advance_amount = response.data[0].advance_amount;
+   $scope.available_balance = response.data[0].available_balance;
+   $scope.current_balance = response.data[0].current_balance;
+   $scope.minimum_balance = response.data[0].minimum_balance;
+   $scope.previous_current_balance = response.data[0].previous_current_balance;
+   $scope.uncleared_balance = response.data[0].uncleared_balance;
+   $scope.last_tx_no = response.data[0].last_tx_no;
+   $scope.last_tx_amount = response.data[0].last_tx_amount;
+   $scope.last_tx_date = response.data[0].last_tx_date;
+   $scope.active = response.data[0].active;
+   $scope.block_status = response.data[0].block_status;
+   $scope.block_date = response.data[0].block_date;
+   $scope.block_reason_id = response.data[0].block_reason_id;
+    }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+});
+
+
 app.controller('duplicateOrderCtrl', function ($scope, $http) {
 $scope.isLoader = true;
 $scope.startDate = new Date();
