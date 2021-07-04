@@ -6527,7 +6527,6 @@ $scope.sender_name = "";
 }
 });
 
-
 app.controller('CardAllocCtrl', function ($scope, $http) {
  $scope.isLoader = true;
 $scope.isMainLoader = true;
@@ -6671,7 +6670,6 @@ $scope.refresh = function () {
 window.location.reload();
 }
 });
-
 
 app.controller('CardInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;

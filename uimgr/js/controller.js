@@ -6286,7 +6286,6 @@ $scope.update_time = response.data[0].update_time;
 
 });
 
-
 app.controller('jEntryCtrl', function ($scope, $http, $filter) {
 	$scope.isHideOk = true;
 	$scope.startDate = new Date();

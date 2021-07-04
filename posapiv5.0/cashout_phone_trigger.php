@@ -56,6 +56,7 @@
 				$agentCharge = $data->agentCharge;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 				$acc_trans_type = "PAYMT";
+				$bank = $data->bank;
 				
 				if (isset($data->parentCode) && !empty($data->parentCode) ) {
 					if ( substr($parentCode, 0, 1) == 'C') {
@@ -218,9 +219,9 @@
 										$senderName = mysqli_real_escape_string($con, $senderName);
 										if ( $txType == "F" ) {
 											$newAmsCharge = $amsCharge + $agentCharge;
-											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no)";
+											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no, bank_id) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no, $bank->id)";
 										}else {
-											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no)";
+											$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, create_time, order_no, bank_id) VALUES ($fin_request_id, $fin_trans_log_id, 'COP', $countryId, $stateId, $requestAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', now(), $fin_service_order_no, $bank->id)";
 										}
 										error_log("fin_request_query = ".$fin_request_query);
 										$fin_request_result = mysqli_query($con, $fin_request_query);
@@ -261,9 +262,9 @@
 														if($fin_service_order_no > 0) {
 															$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 															if ( $txType == "F" ) {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."')";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $amsCharge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."', $bank->id)";
 															}else {
-																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."')";
+																$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, partner_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, service_feature_config_id, mobile_no, date_time, stamp_charge, agent_charge, reference_no, auth_code, comment, bank_id) VALUES ($fin_service_order_no, $fin_trans_log_id, 'COP', $partnerId, $userId, $totalAmount, $requestAmount, $new_ams_charge, $partnerCharge, $otherCharge, $service_feature_config_id, '$mobileNo', now(), $stampCharge, $agentCharge, '".$api_response['orderId']."', '".$api_response['transactionTime']."', '".$api_response['statusDescription']."', $bank->id)";
 															}
 															error_log("fin_service_order_query = ".$fin_service_order_query);
 															$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
@@ -541,6 +542,84 @@
 				$response["signature"] = 0;
 			}
 		}
+		else if(isset($data -> operation) && $data -> operation == 'CASHOUT_PHONE_BANK_LIST') {
+			error_log("inside operation == CASHOUT_PHONE_BANK_LIST method");
+			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+				&& isset($data->userId) && !empty($data->userId) && isset($data->stateId) && !empty($data->stateId) 
+				&& isset($data->countryId) && !empty($data->countryId)
+			){
+				error_log("inside all inputs are set correctly");
+				$userId = $data->userId;
+				$partyCode = $data->partyCode;
+				$partyType = $data->partyType;
+				$countryId = $data->countryId;
+				$stateId = $data->stateId;
+				$signature = $data->signature;
+				$key1 = $data->key1;
+				$billerId = $data->billerId;
+				$session_validity = AGENT_SESSION_VALID_TIME;
+		                
+		                error_log("signature = ".$signature.", key1 = ".$key1);
+				date_default_timezone_set('Africa/Lagos');
+				$nday = date('z')+1;
+				$nyear = date('Y');
+				$nth_day_prime = get_prime($nday);
+				$nth_year_day_prime = get_prime($nday+$nyear);
+				$local_signature = $nday + $nth_day_prime;
+				error_log("local_signature = ".$local_signature);
+				$server_signature = $nth_year_day_prime + $nday + $nyear;
+		                error_log("server_signature = ".$server_signature);
+		                                
+				if ( $local_signature == $signature ) {
+		                	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+					error_log("validateKey1 result = ".$validate_result);
+					if ( $validate_result != 0 ) {
+						// Invalid key1 - Session Timeut
+						$response["statusCode"] = "999";
+						$response["result"] = "Error";
+						$response["message"] = "Failure: Session Timeout";
+						$response["signature"] = 0;
+						error_log(json_encode($response));
+						echo json_encode($response);
+						return;
+					} 
+		                	$select_phone_bank_query = "select m.bank_master_id, m.name from bank_master m, cashout_phone_bank p where m.bank_master_id = p.bank_master_id and p.active = 'Y' and m.active = 'Y' and (start_date is null or current_date >= start_date) and (expiry_date is null or current_date() <= expiry_date) order by m.name";
+		                	error_log("select_ussd_bank_query = ".$select_phone_bank_query);
+		                	$select_phone_bank_result = mysqli_query($con, $select_phone_bank_query);
+		                   	$response["phoneBanks"] = array();
+					if ( $select_phone_bank_result ) {
+						while($select_phone_bank_row = mysqli_fetch_assoc($select_phone_bank_result)) {
+						    	$phoneBank = array();
+						    	$phoneBank['id'] = $select_phone_bank_row['bank_master_id'];
+						    	$phoneBank['name'] = $select_phone_bank_row['name'];
+						    	array_push($response["phoneBanks"], $phoneBank);
+						}
+		                        	$response["result"] = "Success";
+		                        	$response["message"] = "Your request is processed successfuly";
+		                        	$response["statusCode"] = 0;
+		                        	$response["signature"] = $server_signature;
+					}
+		                	else {
+		                	       	$response["result"] = "Error";
+		                	       	$response["message"] = "Error in finding your Phone Bank list";
+		                	       	$response["statusCode"] = "100";
+		                	       	$response["signature"] = $server_signature;
+		                	}
+				}else {
+					// Invalid Singature
+					$response["statusCode"] = "300";
+					$response["result"] = "Error";
+		                	$response["message"] = "Failure: Invalid request";
+		                	$response["signature"] = $server_signature;
+				}
+			}else {
+				// Invalid Data
+				$response["statusCode"] = "400";
+				$response["result"] = "Error";
+		                $response["message"] = "Failure: Invalid Data";
+		                $response["signature"] = 0;
+			}
+        	}		
 		else {	
 			// Invalid Operation
 			$response["statusCode"] = 500;

@@ -68,8 +68,8 @@
 					</select>										
 				</div>
 				<div class='col-lg-2 col-xs-2 col-sm-2 col-md-2'>
-					<label>Account Number</label> 
-					<input  ng-disabled="creteria=='S'" type='text' numbers-only maxlength='30' ng-model='terid'  ng-init = "terid = ''" class='form-control'/>											
+					<label>Reference Number</label> 
+					<input  ng-disabled="creteria=='S'" type='text' maxlength='30' ng-model='terid'  ng-init = "terid = ''" class='form-control'/>											
 				</div>
 				
 				<div class='col-lg-2 col-xs-2 col-sm-2 col-md-2'>
@@ -130,7 +130,7 @@
 					<thead>
 						<tr>
 							<th>Inventory id</th>
-      						<th>Account Number</th>
+      						<th>Reference Number</th>
 							<th>Card Type</th>
 							<th>Status</th>
 							<th>Edit</th>
@@ -140,7 +140,7 @@
 					<tbody>
 					      <tr ng-repeat="x in Inventory_list" ng-hide='desshow' >
 							<td>{{ x.inventory_id }}</td>
-						 	<td>{{ x.TerminalSerialNo }}</td>
+						 	<td>{{ x.reference_num }}</td>
 							<td>{{ x.card_type }}</td>
 							<td>{{ x.Status }}</td>
 							<td><a id={{x.inventory_id }} class='editcountry' ng-click='edit($index,x.inventory_id )' data-toggle='modal' data-target='#EditinventoryDialogue'>
@@ -272,7 +272,7 @@
 						</div>
 						
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-								<label>Account Number<span class='spanre'>*</span><span ng-show="InventoryEditForm.AccountNumber.$touched ||InventoryEditForm.AccountNumber.$dirty && InventoryEditForm.AccountNumber.$invalid">
+								<label>Reference Number<span class='spanre'>*</span><span ng-show="InventoryEditForm.AccountNumber.$touched ||InventoryEditForm.AccountNumber.$dirty && InventoryEditForm.AccountNumber.$invalid">
 								<span class = 'err' ng-show="InventoryEditForm.AccountNumber.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 					<input   maxlength='30'  required ng-model='AccountNumber' class='form-control'/>	
 							</div>	
@@ -326,7 +326,7 @@
 						</div>
 						
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-								<label>Account Number<span ng-show="addPBankForm.AccountNumber.$touched ||addPBankForm.AccountNumber.$dirty && addPBankForm.AccountNumber.$invalid">
+								<label>Reference Number<span ng-show="addPBankForm.AccountNumber.$touched ||addPBankForm.AccountNumber.$dirty && addPBankForm.AccountNumber.$invalid">
 								<span class = 'err' ng-show="addPBankForm.AccountNumber.$error.required"><?php echo REQUIRED;?></span></span></label>
 					<input   maxlength='30' ng-model='AccountNumber' class='form-control' required />	
 							</div>	

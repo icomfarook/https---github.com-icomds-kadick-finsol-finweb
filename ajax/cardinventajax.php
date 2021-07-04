@@ -35,10 +35,10 @@
 			}
 			if(trim($terid) != "" && !empty($terid) &&  trim($terid) != null) {
 				if((trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "-1" &&  trim($vendor) != -1) || (trim($status) != "" && !empty($status) &&  trim($status) != null &&  trim($status) != -1 &&  trim($status) != "-1") || (trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null)) {
-					$queryapd .= "   and account_num = '$terid'";
+					$queryapd .= "   and reference_num = '$terid'";
 				}
 				else {
-					$queryapd .= "  account_num = '$terid'";
+					$queryapd .= "  reference_num = '$terid'";
 				}
 			}
 			if(trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null) {
@@ -87,12 +87,12 @@
 		$BankMasterid = $data->BankMasterid;
 		$CardType = $data->CardType;
 		$AccountNumber = $data->AccountNumber;
-		$query = "SELECT card_inventory_id,bank_master_id,card_type,status,account_num  FROM card_inventory WHERE card_inventory_id=".$inventory_id;
+		$query = "SELECT card_inventory_id,bank_master_id,card_type,status,reference_num  FROM card_inventory WHERE card_inventory_id=".$inventory_id;
 		error_log("select_query".$query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("inventory_id"=>$row['card_inventory_id'],"BankMasterid"=>$row['bank_master_id'],"CardType"=>$row['card_type'],"status"=>$row['status'],"AccountNumber"=>$row['account_num']);           
+			$data[] = array("inventory_id"=>$row['card_inventory_id'],"BankMasterid"=>$row['bank_master_id'],"CardType"=>$row['card_type'],"status"=>$row['status'],"AccountNumber"=>$row['reference_num']);           
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -105,7 +105,7 @@
 		$CardType = $data->CardType;
 		$AccountNumber = $data->AccountNumber;
 				
-		$query = "INSERT INTO card_inventory (bank_master_id, card_type, account_num,status,create_user, create_time) VALUES($BankMasterid, '$CardType', '$AccountNumber', 'A', '$user_id',now())";
+		$query = "INSERT INTO card_inventory (bank_master_id, card_type, reference_num,status,create_user, create_time) VALUES($BankMasterid, '$CardType', '$AccountNumber', 'A', '$user_id',now())";
 		error_log($query );
 		$result = mysqli_query($con,$query);
 		if (!$result) {
@@ -120,7 +120,7 @@
 		$BankMasterid = $data->BankMasterid;
 		$CardType = $data->CardType;
 		$AccountNumber = $data->AccountNumber;	
-		$query =  "UPDATE card_inventory set bank_master_id = ".trim($BankMasterid).", card_type = '".trim($CardType)."', account_num = '".trim($AccountNumber)."',update_time=now() WHERE card_inventory_id = ".$inventory_id;
+		$query =  "UPDATE card_inventory set bank_master_id = ".trim($BankMasterid).", card_type = '".trim($CardType)."', reference_num = '".trim($AccountNumber)."',update_time=now() WHERE card_inventory_id = ".$inventory_id;
 		error_log($query);
 		if(mysqli_query($con, $query)) {
 			 echo "Card Inventory  updated successfully";
@@ -132,7 +132,7 @@
 	}
 	else if($action == "view") {
 		
-		$query = "SELECT a.card_inventory_id, concat(c.name) as bank_master_id,if(a.card_type='M','M-Master',if(a.card_type='V','V-Visa',if(a.card_type ='D','D-Discover',if(a.card_type='C','C-Citi Diners',if(a.card_type='A','Amex',if(a.card_type='R','R-verver','O-Others')))))) as card_type, if(a.status ='A','A-Available',if(a.status ='B','B-Bound',if(a.status ='X','X-Block',if(a.status = 'D','D-Damage',if(a.status ='F','F-Fault',if(a.status ='S','S-Suspend','O - Others')))))) as status, a.account_num, ifNull(a.card_num,'-') as card_num, ifNULL(a.reference_num,'-') as reference_num, ifNUll(a.agent_allocated,'-') as agent_allocated, ifNUll(a.agent_sold,'-') as agent_sold , concat(b.user_id,'-',b.user_name) as create_user, a.create_time, a.update_time,ifNULL(a.allocate_time,'-') as allocate_time ,ifNULL(a.sold_time,'-') as sold_time, ifNUll(a.order_no,'-') as order_no   From card_inventory  a,user b,bank_master c where a.create_user = b.user_id  and a.bank_master_id = c.bank_master_id and  card_inventory_id=".$inventory_id;
+		$query = "SELECT a.card_inventory_id, concat(c.name) as bank_master_id,if(a.card_type='M','M-Master',if(a.card_type='V','V-Visa',if(a.card_type ='D','D-Discover',if(a.card_type='C','C-Citi Diners',if(a.card_type='A','Amex',if(a.card_type='R','R-verver','O-Others')))))) as card_type, if(a.status ='A','A-Available',if(a.status ='B','B-Bound',if(a.status ='X','X-Block',if(a.status = 'D','D-Damage',if(a.status ='F','F-Fault',if(a.status ='S','S-Suspend','O - Others')))))) as status, ifNULL(a.account_num,'-') as account_num, ifNull(a.card_num,'-') as card_num, ifNULL(a.reference_num,'-') as reference_num, ifNUll(a.agent_allocated,'-') as agent_allocated, ifNUll(a.agent_sold,'-') as agent_sold , concat(b.user_id,'-',b.user_name) as create_user, a.create_time, a.update_time,ifNULL(a.allocate_time,'-') as allocate_time ,ifNULL(a.sold_time,'-') as sold_time, ifNUll(a.order_no,'-') as order_no   From card_inventory  a,user b,bank_master c where a.create_user = b.user_id  and a.bank_master_id = c.bank_master_id and  card_inventory_id=".$inventory_id;
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();

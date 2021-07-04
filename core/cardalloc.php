@@ -50,7 +50,7 @@
 			 		<div class='row appcont' >		
 
 							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12' style="width:28%;margin-left:35%">
-								<label style='text-align:center;margin-left:62px'>Account Number<span class='spanre'>*</span><span ng-show="InventoryEditForm.AccountNumber.$touched ||InventoryEditForm.AccountNumber.$dirty && InventoryEditForm.AccountNumber.$invalid">
+								<label style='text-align:center;margin-left:62px'>Reference Number<span class='spanre'>*</span><span ng-show="InventoryEditForm.AccountNumber.$touched ||InventoryEditForm.AccountNumber.$dirty && InventoryEditForm.AccountNumber.$invalid">
 								<span class = 'err' ng-show="InventoryEditForm.AccountNumber.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 					<input   maxlength='30' ng-model='AccountNumber' class='form-control'/>										
 							</div>
@@ -70,7 +70,7 @@
 								 <th>Inventory Id</th>						 
 								 <th>Card Type</th>
 								 <th>Status</th>
-								 <th>Account Number</th>
+								 <th>Reference Number</th>
 								 <th>Bank</th>	
 								 <th>Card Agent Allocation</th>	
 								 </tr>
@@ -80,7 +80,7 @@
 									<td>{{ x.inventory_id }}</td>
 									<td>{{ x.card_type }}</td>
 									<td>{{ x.Status }}</td>
-									<td>{{ x.account_num }}</td>
+									<td>{{ x.reference_num }}</td>
 									<td>{{ x.bank }}</td>
 									<td ng-if="x.Status === 'A-Available'"><a id={{x.inventory_id}} class='icoimg' ng-click='allocationview($index,x.inventory_id)'  data-toggle='modal' data-target='#allocationview' >
 										<button class='icoimg'><img class='icoimg' style="height:22px;width:22px;" src='../common/images/details_open.png'/></button></a>
