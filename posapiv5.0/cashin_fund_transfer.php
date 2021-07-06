@@ -225,6 +225,7 @@
 													if($journal_entry_id > 0) {
 														$journal_entry_error = "N";	
 														$narration = mysqli_real_escape_string($con, $narration);
+														$accountName = mysqli_real_escape_string($con, $accountName);
 														$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 														if ( $txType == "F" ) {
 															$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, bank_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, customer_name, mobile_no, comment, date_time, service_feature_config_id, partner_id, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'CIN', $bankId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, '$accountName', '$mobileNo', '$narration', now(), $service_feature_config_id, $partnerId, $stampCharge, $agentCharge)";

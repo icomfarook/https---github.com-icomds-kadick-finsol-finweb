@@ -211,9 +211,18 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!acsaut"><?php echo INDEX_AUTHORIZATION; ?></a></li>
 						<li><a class="ajax-link" href="#!acsusr"><?php echo INDEX_USER; ?></a></li>
 						<li><a class="ajax-link" href="#!acsrsn"><?php echo INDEX_BLOCK_REASON; ?></a></li>
-						<li><a class="ajax-link" href="#!acsacs"><?php echo INDEX_POS_ACCESS; ?></a></li>
-						<li><a class="ajax-link" href="#!ascposmen">POS Menu</a></li>
-						<li><a class="ajax-link" href="#!acsact"><?php echo INDEX_POS_ACTIVITY; ?></a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-tablet"></i>
+						<span style="color:white" class="hidden-xs" href="">POS</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" style="color:orange" href="#!acsacs"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Access</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!ascposmen"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Menu</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!acsact"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Activity</a></li>
+						</ul>
+						</li>
+
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 						<i class="fa fa-mobile"></i>
@@ -236,13 +245,33 @@ if($(this).val() != "")
 						<li><a class="ajax-link"  style="color:orange" href="#!cardalloc"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Card Allocation</a></li>
 						</ul>
 						</li>
-
-						<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
+		
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
-						<li><a class="ajax-link" href="#!accservice">Account Service Bank</a></li>
-						<li><a class="ajax-link" href="#!aiservice">AI Services</a></li>
-						<li><a class="ajax-link" href="#!aisummary">AI Summary</a></li>
-						<li><a class="ajax-link" href="#!aidetail">AI Detail</a></li>
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-building"></i>
+						<span style="color:white" class="hidden-xs" href="">Bank</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" style="color:orange" href="#!accservice"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Account Service Bank</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!bankacc"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Payment Bank</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!casussd"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;CashOut USSD Bank</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!casphone"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;CashOut Phone Bank</a></li>
+						</ul>
+						</li>
+						
+
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-laptop"></i>
+						<span style="color:white" class="hidden-xs" href="">Adempiere</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" style="color:orange" href="#!aiservice"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;AI Services</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!aisummary"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;AI Summary</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!aidetail"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;AI Detail</a></li>
+						</ul>
+						</li>
 					</ul>
 				</li>
 				
@@ -429,24 +458,32 @@ if($(this).val() != "")
 					</ul>
 				</li>
 				
-				<li class="dropdown">
+					<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-tachometer"></i>
 						 <span class="hidden-xs"><?php echo INDEX_RATING; ?></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!ratfea"><?php echo INDEX_SERVICE_FEATURE; ?></a></li>
-						<li><a class="ajax-link" href="#!ratpty"><?php echo INDEX_SERVICE_CHARGE_PARTY; ?></a></li>
-						<li><a class="ajax-link" href="#!ratgrp"><?php echo INDEX_SERVICE_CHARGE_GROUP; ?></a></li>
-						<li><a class="ajax-link" href="#!ratcfg"><?php echo INDEX_SERVICE_FEATURE_CONFIG; ?></a></li>
-						<li><a class="ajax-link" href="#!ratrte"><?php echo SERVICE_CHARGE_RATE; ?></a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-star"></i>
+						<span style="color:white" class="hidden-xs" href="">Rate Rule</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" style="color:orange" href="#!ratfea"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Service Feature</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!ratpty"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Service Charge Party</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!ratgrp"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Service Charge Group</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!ratcfg"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Service Feature Config</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!ratrte"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Service Charge Rate</a></li>
+						</ul>
+						</li>
 						<li><a class="ajax-link" href="#!ratvat">Value Added Tax</a></li>
 						<li><a class="ajax-link" href="#!ratflx">Flexi Rate</a></li>
 						<li><a class="ajax-link" href="#!flxratagt">Flexi Rate - Agent</a></li>
 						<li><a class="ajax-link" href="#!stamduty">Stamp Duty</a></li>
 						<li><a class="ajax-link" href="#!rulval">Rule Validator</a></li>
 					</ul>
-				</li>				
+				</li>						
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-university"></i>

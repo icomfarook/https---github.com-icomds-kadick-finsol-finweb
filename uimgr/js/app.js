@@ -290,5 +290,12 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/walhistory.php",
 		controller: "WallHistoryCtrl"
     })
-
+	.when("/casussd", {
+		templateUrl : "../core/cashoutussd.php",
+		controller: "CashoutUssdCtrl"
+    })
+	.when("/casphone", {
+		templateUrl : "../core/cashoutphone.php",
+		controller: "CashoutPhoneCtrl"
+    })
 });

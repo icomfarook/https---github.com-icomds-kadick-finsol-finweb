@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response["bvn"] = 11223344550;		
 			$response["responseDescription"] = "Successful";
 		
-			$response["accountName"] = "EMMANUEL ADEMUYIWA AJIBODU";
+			$response["accountName"] = "EMMANUEL ADEMUYIW'A AJIBODU";
 			$response["description"] = "Successful";
 		}else {
 			// array for JSON response

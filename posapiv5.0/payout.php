@@ -95,8 +95,14 @@
 						    				$from_comment = "Payout from Comm Wallet #".$payout_request_id;
 						    				$to_comment = "Payout to Main Wallet #".$payout_request_id;
 						    				$journal_entry_id = 0;
+						    				$journal_entry_com_id = 0;
 						    				$journal_entry_com_id = process_comm_glentry($acc_trans_type1, $payout_request_id, $partyCode, $partyType, $journal_entry_id, $totalAmount, $from_comment, $userId, $con);
 										error_log("process_comm_glentry = ".$journal_entry_com_id);
+                                    						if ( $journal_entry_com_id == -1 ) {
+											error_log("Error in getting journal_entry_com_id..trying one more time.");
+											$journal_entry_com_id = process_comm_glentry($acc_trans_type1, $payout_request_id, $partyCode, $partyType, $journal_entry_id, $totalAmount, $from_comment, $userId, $con);
+											error_log("process_comm_glentry = ".$journal_entry_com_id);
+										}
                                     						if($journal_entry_com_id > 0) {
                                     							$get_acc_trans_type1 = getAcccTransType($acc_trans_type1, $con);
 											error_log("get_acc_trans_type1 = ".$get_acc_trans_type1);
@@ -109,6 +115,11 @@
                                             							if($update_wallet1 == 0) {
                                             								$journal_entry_id = process_glentry($acc_trans_type2, $payout_request_id, $partyCode, $partyType, $parentCode, $parentType, $to_comment, $payOutAmount, $userId, $con);
 													error_log("process_glentry journal_entry_id = ".$journal_entry_id);
+													if ( $journal_entry_id == -1 ) {
+														error_log("Error in getting journal_entry_id..trying one more time.");
+														$journal_entry_id = process_glentry($acc_trans_type2, $payout_request_id, $partyCode, $partyType, $parentCode, $parentType, $to_comment, $payOutAmount, $userId, $con);
+														error_log("process_glentry journal_entry_id = ".$journal_entry_id);
+													}
 													if($journal_entry_id > 0) {
 														$get_acc_trans_type2 = getAcccTransType($acc_trans_type2, $con);
 														error_log("get_acc_trans_type2 = ".$get_acc_trans_type2);

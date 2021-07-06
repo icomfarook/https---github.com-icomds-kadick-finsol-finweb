@@ -1,3 +1,260 @@
+app.controller('CashoutPhoneCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+method: 'post',
+url: '../ajax/cashoutphoneajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.BankList = response.data;
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'bankaccount' }
+}).then(function successCallback(response) {
+$scope.bankaccounts = response.data;
+//window.location.reload();
+});
+
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cashoutphoneajax.php',
+data: {
+   bankmasterid: $scope.bankmasterid,
+ussdCode: $scope.ussdCode,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+active: $scope.active,
+action: 'create'
+},
+}).then(function successCallback(response) {
+// alert(id);
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#CashoutPhoneCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/cashoutphoneajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.id = response.data[0].id;
+$scope.bankmasterid = response.data[0].bank;
+$scope.active = response.data[0].active;
+$scope.ussdCode = response.data[0].ussd_code;
+$scope.startdate = new Date(response.data[0].startdate);
+$scope.expdate = new Date(response.data[0].expdate);
+
+if(response.data[0].startdate==null){
+$scope.startdate="";
+}
+if(response.data[0].expdate==null){
+$scope.expdate="";
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/cashoutphoneajax.php',
+data: {
+id:id,
+bankmasterid: $scope.bankmasterid,
+ussdCode: $scope.ussdCode,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+active: $scope.active,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#CashoutPhoneEditBody").html("<h3>" + response.data + "</h3>");
+}, function errorCallback(response) {
+//console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/cashoutphoneajax.php',
+data: {
+id: id,
+crestatus: $scope.crestatus,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.ussdCode = response.data[0].ussdCode;
+$scope.bankmasterid = response.data[0].bankmasterid;
+$scope.active = response.data[0].active;
+$scope.startdate = response.data[0].startdate;
+$scope.expdate = response.data[0].expdate;
+$scope.create_time = response.data[0].create_time;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
+app.controller('CashoutUssdCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+method: 'post',
+url: '../ajax/cashoutussdajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.BankList = response.data;
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'bankaccount' }
+}).then(function successCallback(response) {
+$scope.bankaccounts = response.data;
+//window.location.reload();
+});
+
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/cashoutussdajax.php',
+data: {
+   bankmasterid: $scope.bankmasterid,
+ussdCode: $scope.ussdCode,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+active: $scope.active,
+action: 'create'
+},
+}).then(function successCallback(response) {
+// alert(id);
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#CashoutUSSDCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/cashoutussdajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.id = response.data[0].id;
+$scope.bankmasterid = response.data[0].bank;
+$scope.active = response.data[0].active;
+$scope.ussdCode = response.data[0].ussd_code;
+$scope.startdate = new Date(response.data[0].startdate);
+$scope.expdate = new Date(response.data[0].expdate);
+
+if(response.data[0].startdate==null){
+$scope.startdate="";
+}
+if(response.data[0].expdate==null){
+$scope.expdate="";
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/cashoutussdajax.php',
+data: {
+id:id,
+bankmasterid: $scope.bankmasterid,
+ussdCode: $scope.ussdCode,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+active: $scope.active,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#CashoutUSSDCreateBody").html("<h3>" + response.data + "</h3>");
+}, function errorCallback(response) {
+//console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/cashoutussdajax.php',
+data: {
+id: id,
+crestatus: $scope.crestatus,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.ussdCode = response.data[0].ussdCode;
+$scope.bankmasterid = response.data[0].bankmasterid;
+$scope.active = response.data[0].active;
+$scope.startdate = response.data[0].startdate;
+$scope.expdate = response.data[0].expdate;
+$scope.create_time = response.data[0].create_time;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
 app.controller('WallHistoryCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $scope.startDate = new Date();

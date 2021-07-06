@@ -12,7 +12,7 @@
 	
 	
 	if($action == "query") {
-		$query = "SELECT if(a.card_type='M','M-Master',if(a.card_type='V','V-Visa',if(a.card_type ='D','D-Discover',if(a.card_type='C','C-Citi Diners',if(a.card_type='A','Amex',if(a.card_type='R','R-verver','O-Others')))))) as card_type,a.card_inventory_id,a.account_num, if(a.status ='A','A-Available',if(a.status ='B','B-Bound',if(a.status ='X','X-Block',if(a.status = 'D','D-Damage',if(a.status ='F','F-Fault',if(a.status ='S','S-Suspend','O - Others')))))) as status, (b.name) as bank, count(*) as count,a.reference_num FROM card_inventory a,bank_master b WHERE a.bank_master_id = b.bank_master_id and  reference_num ='$AccountNumber'";
+		$query = "SELECT if(a.card_type='M','M-Master',if(a.card_type='V','V-Visa',if(a.card_type ='D','D-Discover',if(a.card_type='C','C-Citi Diners',if(a.card_type='A','Amex',if(a.card_type='R','R-verver','O-Others')))))) as card_type,a.card_inventory_id,a.account_num, if(a.status ='A','A-Available',if(a.status ='B','B-Bound',if(a.status ='X','X-Block',if(a.status = 'D','D-Damage',if(a.status ='F','F-Fault',if(a.status ='S','S-Suspend','O - Others')))))) as status, (b.name) as bank, count(*) as count,a.reference_num FROM card_inventory a,bank_master b WHERE a.bank_master_id = b.bank_master_id and  a.reference_num ='$AccountNumber' GROUP BY card_type,card_inventory_id;";
 			
 		
 		error_log("Allocation == ".$query);

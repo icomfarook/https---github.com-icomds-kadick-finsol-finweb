@@ -138,9 +138,17 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a class="ajax-link" href="#!acsusr"><?php echo INDEX_USER; ?></a></li>
-							<li><a class="ajax-link" href="#!acsacs"><?php echo INDEX_POS_ACCESS; ?></a></li>
-							<li><a class="ajax-link" href="#!ascposmen">POS Menu</a></li>
-							<li><a class="ajax-link" href="#!acsact"><?php echo INDEX_POS_ACTIVITY; ?></a></li>
+							<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+							<i class="fa fa-tablet"></i>
+							<span style="color:white" class="hidden-xs" href="">POS</span>
+							</a>
+							<ul class="dropdown-menu">
+							<li><a class="ajax-link" style="color:orange" href="#!acsacs"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Access</a></li>
+							<li><a class="ajax-link" style="color:orange" href="#!ascposmen"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Menu</a></li>
+							<li><a class="ajax-link" style="color:orange" href="#!acsact"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Activity</a></li>
+							</ul>
+							</li>
 							<li><a class="ajax-link" href="#!ascteralloc">Terminal Allocation </a></li>
 							<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 							<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>

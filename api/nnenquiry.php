@@ -6,7 +6,7 @@
 	$response = array();
 	$response["partnerId"] = 2;
 	$response["responseCode"] = 0;
-	$response["accountName"] = 'DICKSON UMUSU';
+	$response["accountName"] = "DICKSON UMUSU";
 	$response["accountNumber"] = '0006492419';
 	$response["sessionId"] = '110008202003201953193798653928';
 	$response["responseDescription"] = "Success";
