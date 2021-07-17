@@ -3963,6 +3963,44 @@ write(PED + response + '<script> document.getElementById("myimg").addEventListen
 close();
 }
 }
+else if(response.data[0].code =='PBT'){
+var PBT = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Bill - Payment Betting (web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].bp_opay_service_name + "</td></tr>" +
+"<tr><td class='name'>Provider</td><td class='result'>" + response.data[0].appcmt + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>Customer ID</td><td class='result'>" + response.data[0].account_no + "</td></tr>" +
+"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Betting</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PBT + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+
 
 }, function errorCallback(response) {
 // console.log(response);
