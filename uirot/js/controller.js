@@ -456,6 +456,7 @@ $scope.post_date = response.data[0].post_date;
 }
 });
 
+
 app.controller('AiServiceCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $http({

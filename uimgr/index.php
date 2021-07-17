@@ -155,6 +155,24 @@
 							<li><a class="ajax-link" href="#!aisummary">AI Summary</a></li>
 						</ul>
 					</li>
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-crosshairs"></i>
+						 <span class="hidden-xs"><?php echo INDEX_ADJUSTMENT; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!adjviw"><?php echo INDEX_ADJUSTMENT_VIEW; ?></a></li>
+					</ul>
+				</li>
+				<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+						<i class="fa fa-bar-chart-o"></i>
+						 <span class="hidden-xs"><?php echo INDEX_PAYEMENT; ?></span>
+					</a>
+					<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!payviw"><?php echo INDEX_PAYMENT_VIEW; ?></a></li>
+					</ul>
+				</li>
 					
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
@@ -246,6 +264,7 @@
 						</a>
 						<ul class="dropdown-menu">		
 							<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>	
+						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -569,7 +588,7 @@
 						<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>	
 						<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
-						<li><a class="ajax-link" href="#!rptDup">Duplicate Order</a></li>
+						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>
 						</ul>
 					</li>
 					<li class="dropdown">

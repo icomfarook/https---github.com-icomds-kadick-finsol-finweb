@@ -472,7 +472,7 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/cardinvnet.php",
 		controller: "CardInvenCtrl"
 	})
-	.when("/rptDup", {
+	.when("/rptdup", {
 		templateUrl : "../core/duplicateorder.php",
 		controller: "duplicateOrderCtrl"
     })

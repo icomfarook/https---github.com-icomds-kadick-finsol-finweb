@@ -73,13 +73,18 @@ define ("BPAPI_PAYANT_SERVER_VERIFY_TV_CUSTOMER_URL","http://localhost:8989/finw
 //define ("BPAPI_PAYANT_SERVER_VERIFY_TV_CUSTOMER_URL","http://localhost:8080/finsolbp/bppayant.api/verifytvcustomer");
 define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_URL","http://localhost:8989/finweb/api/payantbillpayment.php");
 //define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_URL","http://localhost:8080/finsolbp/bppayant.api/billpayment");
-//define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8989/finweb/api/payanttvbillpayment.php");
-define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8080/finsolbp/bppayant.api/billpaymenttv");
+define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8989/finweb/api/payanttvbillpayment.php");
+//define ("BPAPI_PAYANT_SERVER_TV_BILL_PAYMENT_URL","http://localhost:8080/finsolbp/bppayant.api/billpaymenttv");
 define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_EDUCATION_URL","http://localhost:8989/finweb/api/payantbillpaymenteducation.php");
 //define ("BPAPI_PAYANT_SERVER_BILL_PAYMENT_EDUCATION_URL","http://localhost:8080/finsolbp/bppayant.api/billpaymentedu");
 define ("BPAPI_PAYANT_SERVER_WALLET_BALANCE_URL","http://localhost:8989/finweb/api/bpwalletbalance.php");
 //define ("BPAPI_PAYANT_SERVER_WALLET_BALANCE_URL","http://localhost:8080/finsolbp/bppayant.api/walletbalance");
 
+//Opay Betting Pay
+define ("BPAPI_OPAY_SERVER_VERIFY_BETTING_CUSTOMER_URL","http://localhost:8989/finweb/api/opayverifybettingcustomer.php");
+//define ("BPAPI_OPAY_SERVER_VERIFY_BETTING_CUSTOMER_URL","http://localhost:8080/finsolbp/opay.api/validate");
+define ("BPAPI_OPAY_SERVER_PAYMENT_BETTING_CUSTOMER_URL","http://localhost:8989/finweb/api/opaybettingpayment.php");
+//define ("BPAPI_OPAY_SERVER_PAYMENT_BETTING_CUSTOMER_URL","http://localhost:8080/finsolbp/opay.api/payment");
 
 //NIBSS Bill Pay
 define ("BPAPI_SERVER_PRODUCT_FORM_VALIDATE_URL","http://localhost:8989/finweb/api/bpvalidate.php");
@@ -220,6 +225,9 @@ define ("PAYANT_CURL_TIMEOUT",70);
 
 define ("CORALPAY_CURL_CONNECTION_TIMEOUT",70);
 define ("CORALPAY_CURL_TIMEOUT",70);
+
+define ("OPAY_CURL_CONNECTION_TIMEOUT",70);
+define ("OPAY_CURL_TIMEOUT",70);
 
 define ("FLEXI_OPERATOR_CURL_CONNECTION_TIMEOUT",50);
 define ("FLEXI_OPERATOR_CURL_TIMEOUT",50);
