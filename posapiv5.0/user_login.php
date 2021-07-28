@@ -394,7 +394,7 @@
 																					if (!$user_session_result ) {
 																						error_log("Error in user_session_result");
 																					}
-																					recordUserPosActivity($user_id, $device_sno, 'L', $device_api."~".$device_location, $con);
+																					recordUserPosActivity($user_id, $device_sno, 'L', $device_api."~".$app_version."~".$device_location, $con);
 																					$bank_master_query = "select a.bank_master_id as id, a.name, a.cbn_short_code as code, b.acc_service_allowed as accService from bank_master a, acc_service_bank b where a.country_id = ".ADMIN_COUNTRY_ID." and a.active = 'Y' and a.bank_master_id = b.bank_id order by a.bank_master_id";
 																					error_log("bank_master_query = ".$bank_master_query);
 																					$bank_master_result = mysqli_query($con, $bank_master_query);
@@ -460,7 +460,7 @@
 																					$userLogin->outletName = $outlet_name;
 																					$userLogin->sanefAgentCode = $sanef_party_code;
 																					$response["user"] = $userLogin;
-																					error_log(json_encode($response));
+																					//error_log(json_encode($response));
 																				}else {
 																					error_log("inside device_sno != db_imei");
 																					error_log("@@@@username = ".$uname.": This device is not attached to login user");

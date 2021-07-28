@@ -27,7 +27,7 @@
 		if ($bankaccount == '') {
 			$bankaccount = 'NULL';
 		}
-		if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22) {
+		if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22 || $profile == 23 || $profile == 24 || $profile == 25) {
 			if($partytype == "MA") {
 				$partytype = "A";
 			}
@@ -113,7 +113,7 @@
 		$approvedstartDate = date("Y-m-d", strtotime($approvedstartDate));
 		$approvedendDate = date("Y-m-d", strtotime($approvedendDate));
 		$query = "";
-		if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22 ) {
+		if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22 || $profile == 23 || $profile == 24 || $profile == 25) {
 			if($creteria == "BI") {
 				$query = "SELECT a.p_receipt_id, a.party_code, if(a.party_type = 'A','Agent',if(a.party_type = 'C','Champion',if(party_type = 'P','Personal','SubAgent'))) as party_type, if(payment_type = 'AC','Acccount Transfer',if(a.payment_type = 'CA','Cash',if(a.payment_type = 'CH','Cheque','Other' ))) as payment_type,a.payment_amount, ifNull(a.payment_approved_amount, '-') as payment_approved_amount, if(a.payment_status = 'E','Entered',if(a.payment_status = 'P','Pending',if(a.payment_status = 'R','Rejected',if(a.payment_status = 'F','Failed','Approved')))) as status, ifNull(concat(b.bank_name , ' - ',b.account_no),'-')  as bank_name,ifNull(DATE(a.payment_approved_date),'-')  as payment_approved_date,ifNull(DATE(a.payment_date),'-') as payment_date FROM payment_receipt a left join bank_account b on a.payment_account_id = b.bank_account_id WHERE payment_source = 'M' and p_receipt_id = ".$id;
 			}

@@ -18,7 +18,7 @@
 			$partyType = substr($topartyCode, 0, 1, "UTF-8");
 			$partyCode = $topartyCode;
 		} 
-		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 22 || $profile_id == 26) {
+		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 22 || $profile_id == 26 || $profile_id == 23) {
 		$query = "";		
 		$query = "SELECT journal_entry_id, acc_trans_type_code, transaction_id,first_party_code, ifNull(second_party_code,' - ') as second_party_code, description, amount, status,create_date from journal_entry where first_party_code = '$partyCode' and date(create_date) between '$startDate' and '$endDate' order by create_date";
 		}

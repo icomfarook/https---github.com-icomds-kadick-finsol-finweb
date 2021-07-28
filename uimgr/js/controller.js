@@ -17808,114 +17808,116 @@ app.controller('agStatReportCtrl', function ($scope, $http, $filter) {
 });
 
 app.controller('jEntryCtrl', function ($scope, $http, $filter) {
-	$scope.isHideOk = true;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.fn_load = function (partyType,partyCode) {
-	if(partyType == 'C' || partyType == 'A') {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params:
-				{ partyType:partyType,
-				partyCode:partyCode,
-				action: 'infolist'
-			},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-		}
-	}
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-			   type: type
-				},
-		}).then(function successCallback(response) {
-			$scope.infos = response.data;
-		});
-	}
-		$scope.checkdate = function (startDate,endDate){
-			var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-			var currdate = new Date();
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$scope.isQueryDi = false;
-			}
-		}
-		$scope.query = function () {
-			$scope.tablerow = true;
-			var startDate =  $scope.startDate;
-			var endDate =  $scope.endDate;
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			var currdate = new Date();
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$http({
-					method: 'post',
-					url: '../ajax/jentryajax.php',
-					data: {
-					action: 'findlist',
-					partyCode: $scope.partyCode,
-					topartyCode:$scope.topartyCode,
-					startDate:$scope.startDate,
-					endDate:$scope.endDate,
-					creteria:$scope.creteria
-					},
-				}).then(function successCallback(response) {
-					$scope.jentrys = response.data;
-				}, function errorCallback(response) {
-					console.log(response.data);
-				});
-			}
-		}
-	});
+$scope.isHideOk = true;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params:
+{ partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+$scope.query = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$http({
+method: 'post',
+url: '../ajax/jentryajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+topartyCode:$scope.topartyCode,
+startDate:$scope.startDate,
+endDate:$scope.endDate,
+creteria:$scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.jentrys = response.data;
+}, function errorCallback(response) {
+console.log(response.data);
+});
+}
+}
+});
+
+
 app.controller('ajEntryCtrl', function ($scope, $http, $filter) {
 	$scope.isHideOk = true;
 	$scope.startDate = new Date();

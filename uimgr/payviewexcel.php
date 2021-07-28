@@ -40,7 +40,7 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	}
 	$objPHPExcel = new PHPExcel();
 
-	if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22 ) {
+	if($profile == 1 || $profile == 10 || $profile == 20 || $profile == 22 || $profile == 23 || $profile == 24 || $profile == 25 ) {
 			if($creteria == "BI") {
 				$query = "SELECT a.p_receipt_id, a.party_code,ifNull(concat(b.bank_name , ' - ',b.account_no),'-')  as bank_name, if(payment_type = 'AC','Acccount Transfer',if(a.payment_type = 'CA','Cash',if(a.payment_type = 'CH','Cheque','Other' ))) as payment_type,a.payment_amount,a.payment_reference_no,ifNull(DATE(a.payment_date),'-') as payment_date, ifNull(a.payment_approved_amount, '-') as payment_approved_amount,ifNull(DATE(a.payment_approved_date),'-')  as payment_approved_date, if(a.payment_status = 'E','Entered',if(a.payment_status = 'P','Pending',if(a.payment_status = 'R','Rejected',if(a.payment_status = 'F','Failed','Approved')))) as status,a.comments,ifNull(a.approver_comments, '-') as approver_comments,a.payment_reference_date FROM payment_receipt a left join bank_account b on a.payment_account_id = b.bank_account_id WHERE payment_source = 'M' and p_receipt_id = ".$id;
 			}

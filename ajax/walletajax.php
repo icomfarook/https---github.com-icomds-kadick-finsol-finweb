@@ -178,9 +178,18 @@
 			$table_name = 'champion_wallet';	
 			$col_name = 'champion_code';				
 		}
+		$select_query="Select available_balance,credit_limit,advance_amount,daily_limit,current_balance from $table_name where $col_name = '$partyCode'";
+		error_log($select_query);
+		$select_result = mysqli_query($con,$select_query);
+		$row = mysqli_fetch_assoc($select_result);
+		$current_balance = $row['current_balance'];
+		
+		error_log("current_balance ==".$current_balance);
+		
+		
 		
 		error_log("table_name = ".$table_name.", col_name = ".$col_name);
-		$query ="UPDATE $table_name SET daily_limit = '$dailyLimit', credit_limit = '$creditLimit', minimum_balance = '$minimumBalance', advance_amount = '$advanceAmount',  active = '$Active' WHERE $col_name = '$partyCode'";
+		$query ="UPDATE $table_name SET daily_limit = '$dailyLimit', credit_limit = '$creditLimit', minimum_balance = '$minimumBalance', available_balance = (ifNull($current_balance,0) + ifNull($creditLimit,0) + ifNull($advanceAmount,0) - ifNull($minimumBalance,0)),advance_amount = '$advanceAmount',  active = '$Active' WHERE $col_name = '$partyCode'";
 		error_log("update query = ".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {

@@ -4909,8 +4909,8 @@
 																			
 																		$response["statusCode"] = $statusCode;
 																		$response["result"] = "Error";
-																		//$response["message"] = $responseDescription;
-																		$response["message"] = $statusMessage;
+																		$response["message"] = $responseDescription;
+																		//$response["message"] = $statusMessage;
 																		$response["partnerId"] = $partnerId;
 																		$response["signature"] = $server_signature;
 																	}
