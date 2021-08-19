@@ -2203,8 +2203,10 @@
 				$transactionId = $data->transactionId;
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				$location = $data->location;
 				$bp_service_order_no = 0;
-
+				
+				if(is_null($location)) $location = "-";
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -2217,8 +2219,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5', $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";
@@ -2814,8 +2817,10 @@
 				$transactionId = $data->transactionId;
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				$location = $data->location;
 				$bp_service_order_no = 0;
 
+				if(is_null($location)) $location = "-";
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -2828,8 +2833,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5', $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";
@@ -3440,9 +3446,11 @@
 				$transactionId = $data->transactionId;
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				$location = $data->location;
 				$bp_service_order_no = 0;
 				$bpProductId = $bpBillerId;
 
+				if(is_null($location)) $location = "-";
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -3455,8 +3463,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5', $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";
@@ -4031,8 +4040,10 @@
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 				$lgaId = ADMIN_LOCAL_GOVT_ID;
+				$location = $data->location;
 				$bp_service_order_no = 0;
 
+				if(is_null($location)) $location = "-";
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -4045,8 +4056,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5', $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";
@@ -4634,7 +4646,10 @@
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 				$lgaId = ADMIN_LOCAL_GOVT_ID;
+				$location = $data->location;
 				$bp_service_order_no = 0;
+				
+				if(is_null($location)) $location = "-";
 
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
@@ -4648,8 +4663,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5', $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";
@@ -4802,14 +4818,18 @@
 																	error_log("update_query = ".$update_query);
 																	$update_query_result = mysqli_query($con, $update_query);
 
-																	if($statusCode === 0) {
+																	if($statusCode === 0 || $statusCode === 20 ) {
 																			
-																		error_log("inside statusCode === 0");
+																		error_log("inside statusCode === 0 || $statusCode === 20");
 																		$bp_resp_dataTime = $api_response['processingStartTime'];	
 																		$bp_resp_transaction_id = $api_response['orderNo'];
 																		$bp_resp_reference = $api_response['reference'];
 																		$bp_comments = $api_response['status']." ".$api_response['errorMsg'];
-																		$update_query = "UPDATE bp_request SET order_no = $bp_service_order_no, status = 'S', update_time = now(), bp_transaction_id = left('$bp_resp_transaction_id', 45), bp_account_no = left('$bp_resp_reference', 30), comments = left('$bp_comments', 256), session_id = '$bp_resp_dataTime', approver_comments = left('$bpProductName', 256) WHERE bp_request_id = $transactionId";
+																		if ( $statusCode === 0 ) {
+																			$update_query = "UPDATE bp_request SET order_no = $bp_service_order_no, status = 'S', update_time = now(), bp_transaction_id = left('$bp_resp_transaction_id', 45), bp_account_no = left('$bp_resp_reference', 30), comments = left('$bp_comments', 256), session_id = '$bp_resp_dataTime', approver_comments = left('$bpProductName', 256) WHERE bp_request_id = $transactionId";
+																		}else {
+																			$update_query = "UPDATE bp_request SET order_no = $bp_service_order_no, status = 'G', update_time = now(), bp_transaction_id = left('$bp_resp_transaction_id', 45), bp_account_no = left('$bp_resp_reference', 30), comments = left('$bp_comments', 256), session_id = '$bp_resp_dataTime', approver_comments = left('$bpProductName', 256) WHERE bp_request_id = $transactionId";
+																		}
 																		error_log("update_query = ".$update_query);
 																		$update_query_result = mysqli_query($con, $update_query);
 
@@ -4861,7 +4881,7 @@
 																		$availableBalance = check_party_available_balance($partyType, $userId, $con);
 																		$orderTime = getBpOrderTime($bp_service_order_no, $con);
 
-																		$response["statusCode"] = "0";
+																		$response["statusCode"] = $statusCode;
 																		$response["result"] = "SUCCESS";
 																		$response["message"] = $api_response['responseDescription'];
 																		$response["processingStartTime"] = $api_response['processingStartTime'];
@@ -5173,8 +5193,10 @@
 				$transactionId = $data->transactionId;
 				$serviceFeatureId = $data->serviceFeatureId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				$location = $data->location;
 				$bp_service_order_no = 0;
 
+				if(is_null($location)) $location = "-";
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -5187,8 +5209,9 @@
 				error_log("server_signature = ".$server_signature);
 
 				if ( $local_signature == $signature ) {
-					$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
-					error_log("validateKey1 result = ".$validate_result);
+					//$validate_result = validateKey1($key1, $userId, $session_validity, '5', $con);
+					$validate_result = validateKey2($key1, $userId, $session_validity, '5',  $location, $con);
+					error_log("validateKey2 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
 						$response["statusCode"] = "999";

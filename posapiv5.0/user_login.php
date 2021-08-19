@@ -107,7 +107,15 @@
 						$app_version = $key2_array[1];
 						$device_location = $key2_array[2];
 						$device_api = $key2_array[3];
-						error_log("device_sno = ".$device_sno.", app_version = ".$app_version.", device_location = ".$device_location.", device_api = ".$device_api);
+						$apk_type = $key2_array[4];
+						error_log("device_sno = ".$device_sno.", app_version = ".$app_version.", device_location = ".$device_location.", device_api = ".$device_api.", apk_type = ".$apk_type);
+						
+						if (is_null($device_sno) )  $device_sno = "-";
+						if (is_null($app_version) )  $app_version = "-";
+						if (is_null($device_location) )  $device_location = "-";
+						if (is_null($device_api) )  $device_api = "-";
+						if (is_null($apk_type) )  $apk_type = "-";
+						error_log("set ==> device_sno = ".$device_sno.", app_version = ".$app_version.", device_location = ".$device_location.", device_api = ".$device_api.", apk_type = ".$apk_type);
 						
 						$user_check_query = "SELECT temp_password, first_time_login, user_id, user_name, password, active, profile_id, country_id, COALESCE(invalid_attempt,0) as invalid_attempt, locked, access_restrict, pos_access, use_otp FROM user WHERE UPPER(user_name) = UPPER(?) and profile_id in (50, 51, 52) and loginable = 'Y' limit 1";
 						error_log("query1 = ".$user_check_query);
@@ -394,7 +402,7 @@
 																					if (!$user_session_result ) {
 																						error_log("Error in user_session_result");
 																					}
-																					recordUserPosActivity($user_id, $device_sno, 'L', $device_api."~".$app_version."~".$device_location, $con);
+																					recordUserPosActivity($user_id, $device_sno, 'L', $device_api."~".$app_version."~".$device_location."~".$apk_type, $con);
 																					$bank_master_query = "select a.bank_master_id as id, a.name, a.cbn_short_code as code, b.acc_service_allowed as accService from bank_master a, acc_service_bank b where a.country_id = ".ADMIN_COUNTRY_ID." and a.active = 'Y' and a.bank_master_id = b.bank_id order by a.bank_master_id";
 																					error_log("bank_master_query = ".$bank_master_query);
 																					$bank_master_result = mysqli_query($con, $bank_master_query);
@@ -550,7 +558,7 @@
 																				$userLogin->sanefAgentCode = $sanef_party_code;
 																				
 																				$response["user"] = $userLogin;
-																				error_log(json_encode($response));
+																				//error_log(json_encode($response));
 																			} else if ($pos_status == "X") {
 																				error_log("inside user_pos.status = X");
 																				error_log("@@@@username = ".$uname.": User Pos Status is terminate X status");

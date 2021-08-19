@@ -690,6 +690,50 @@
 		return $result;
 	}
 
+	function validateKey2($key1, $user_id, $session_validity, $action, $detail, $con) {
+
+		//valid key1: return 0, invalid key1: return 1;
+		$result = 1;
+		error_log("session_validity = ".$session_validity);
+		$session_key = getValidSessionKey($user_id, $con);
+		if ( strlen($session_key) > 1 ) {
+			try {
+				error_log("before calling Security::decrypt");
+				$key1_result = AesCipher::decrypt($session_key, $key1);
+				error_log("after calling Security::decrypt");
+				error_log("key1_result = ".$key1_result);
+				$tilda_found = strpos($key1_result, '~');
+				if ( $tilda_found == true ) {
+					$key1_array = explode("~", $key1_result);
+					$key1_user_id = $key1_array[0];
+					$key1_serial_no = $key1_array[1];
+					$key1_time = $key1_array[2];
+					error_log("key1_user_id = ".$key1_user_id.", key1_serial_no = ".$key1_serial_no.", key1_time = ".$key1_time);
+					if ( $user_id == $key1_user_id ) {
+						$user_session_update = "UPDATE user_pos set session_key_create_time = now(), session_key_valid_time = ADDTIME(now(), '".$session_validity."') where user_id = ".$user_id;
+						error_log("user_session_update = ".$user_session_update);
+						$user_session_result = mysqli_query($con, $user_session_update);
+						if (!$user_session_result ) {
+							error_log("Error in user_session_result");
+						}
+						if ( $action != 'L' ) {
+							recordUserPosActivity($user_id, $key1_serial_no, $action, $detail, $con);
+						}
+						$result = 0;
+					}else {
+						error_log("validateKey1 -> invalid user_id");
+					}
+				}else {
+					error_log("validateKey1 -> invalid key1 values");
+				}
+			}catch(Exception $e1) {
+				error_log("Exception in validateKey1: ".$e1->getMessage());
+			}
+		}
+		error_log("validateKey1.result = ".$result);
+		return $result;
+	}
+	
 	function checkDailyLimit($user_id, $requestAmount, $con) {
 		//Within Daily Limit: return 0, Exceed Daily Limit: -1, Invalid User: -2, Other Error: -3
 		$result = -1;

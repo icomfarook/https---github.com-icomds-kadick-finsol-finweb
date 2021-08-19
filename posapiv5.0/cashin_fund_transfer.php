@@ -67,6 +67,9 @@
 				$flexiRate = $data->flexiRate;
 				$agentCharge = $data->agentCharge;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				$location = $data->location;
+				
+				if(is_null($location)) $location = "6.47668,3.60819";
 
 				if ( $partnerId == 1 ) {
 					$txType = "I";
@@ -225,12 +228,12 @@
 													if($journal_entry_id > 0) {
 														$journal_entry_error = "N";	
 														$narration = mysqli_real_escape_string($con, $narration);
-														$accountName = mysqli_real_escape_string($con, $accountName);
+														$accountName1 = mysqli_real_escape_string($con, $accountName);
 														$new_ams_charge = floatval($amsCharge) - floatval($agentCharge);
 														if ( $txType == "F" ) {
-															$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, bank_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, customer_name, mobile_no, comment, date_time, service_feature_config_id, partner_id, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'CIN', $bankId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, left('$accountName', 45), '$mobileNo', '$narration', now(), $service_feature_config_id, $partnerId, $stampCharge, $agentCharge)";
+															$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, bank_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, customer_name, mobile_no, comment, date_time, service_feature_config_id, partner_id, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'CIN', $bankId, $userId, $totalAmount, $requestedAmount, $amsCharge, $partnerCharge, $otherCharge, left('$accountName1', 45), '$mobileNo', '$narration', now(), $service_feature_config_id, $partnerId, $stampCharge, $agentCharge)";
 														}else {
-															$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, bank_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, customer_name, mobile_no, comment, date_time, service_feature_config_id, partner_id, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'CIN', $bankId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, left('$accountName', 45), '$mobileNo', '$narration', now(), $service_feature_config_id, $partnerId, $stampCharge, $agentCharge)";
+															$fin_service_order_query = "INSERT INTO fin_service_order (fin_service_order_no, fin_trans_log_id, service_feature_code, bank_id, user_id, total_amount, request_amount, ams_charge, partner_charge, other_charge, customer_name, mobile_no, comment, date_time, service_feature_config_id, partner_id, stamp_charge, agent_charge) VALUES ($fin_service_order_no, $fin_trans_log_id, 'CIN', $bankId, $userId, $totalAmount, $requestedAmount, $new_ams_charge, $partnerCharge, $otherCharge, left('$accountName1', 45), '$mobileNo', '$narration', now(), $service_feature_config_id, $partnerId, $stampCharge, $agentCharge)";
 														}	
 														error_log("fin_service_order_query = ".$fin_service_order_query);
 														$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
@@ -265,7 +268,8 @@
 																	$data['localGovtId'] = ADMIN_LOCAL_GOVT_ID;
 																	$data['userId'] = $userId;
 																	$data['mobile'] = $mobileNo;
-																	$data['location'] = "6.4300747,3.4110715";
+																	//$data['location'] = "6.4300747,3.4110715";
+																	$data['location'] = $location;
 																																				
 																	$url = FUND_TRANSFER_URL;
 																	$tsec = time();

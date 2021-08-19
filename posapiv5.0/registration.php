@@ -32,7 +32,7 @@
 			    && isset($data->registration->mobile) && !empty($data->registration->mobile) 
 			    && isset($data->registration->email) && !empty($data->registration->email)
 			    && isset($data->registration->address) && !empty($data->registration->address) 
-			    && isset($data->registration->businessType) && !empty($data->registration->businessType)
+			    //&& isset($data->registration->businessType) && !empty($data->registration->businessType)
 			    && isset($data->registration->stateId) && !empty($data->registration->stateId)
 			    && isset($data->registration->localGovtId) && !empty($data->registration->localGovtId) 
 			    && isset($data->registration->countryId) && !empty($data->registration->countryId)
