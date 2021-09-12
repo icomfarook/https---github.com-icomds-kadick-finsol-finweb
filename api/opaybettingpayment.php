@@ -8,14 +8,16 @@
 	
 	if ( $error_path == "N") {
 		$response["responseCode"] = 0;
+		//$response["responseCode"] = 20;
 		$response["responseDescription"] = "Success";
 			
-		$response["status"] = "success";
+		//$response["status"] = "success";
 		$response["message"] = "Successful";
 		
 		$response["orderNo"] = password_generate_num(20);
 		$response["reference"] = $data->reference;
 		$response["status"] = "SUCCESS";
+		//$response["status"] = "PENDING";
 		$response["errorMsg"] = "";
 		
 		$response["signature"] = 20471;
