@@ -93,16 +93,16 @@ $objPHPExcel = new PHPExcel();
 			$agent_slit = $split_charges[0] ;
 			$row['14'] = $agent_slit;
 			
-			error_log("agent_slit  ==".$agent_slit);
-			error_log("agent_slit1  ==".$row['14'] );
-			error_log("split_charges  ==".$split_charges );
+			//error_log("agent_slit  ==".$agent_slit);
+			//error_log("agent_slit1  ==".$row['14'] );
+			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
 			$row['15'] = $champion_slit;
 			$kadick_slit = $split_charges[2];
 			$row['16'] = $kadick_slit;
 			//$row['10'] = null;
 			
-			error_log("agent_Charge  ==".$row['15']);
+			//error_log("agent_Charge  ==".$row['15']);
 			generateExcel ($i, $row,$objPHPExcel,$headcount);
 			$i++;
 			$lastrow = $objPHPExcel->getActiveSheet()->getHighestRow();			

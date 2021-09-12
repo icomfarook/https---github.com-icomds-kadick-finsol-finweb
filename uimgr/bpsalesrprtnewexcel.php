@@ -86,14 +86,14 @@ $objPHPExcel = new PHPExcel();
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
-				error_log("agentrow['10']_slit  ==".$row['14']);
+			//error_log("agentrow['10']_slit  ==".$row['14']);
 			$split_charges = explode(",",$row['14']);
 			$agent_slit = $split_charges[0] ;
 			$row['15'] = $agent_slit;
 			
-			error_log("agent_slit  ==".$agent_slit);
-			error_log("agent_slit1  ==".$row['15'] );
-			error_log("split_charges  ==".$split_charges );
+			//error_log("agent_slit  ==".$agent_slit);
+			//error_log("agent_slit1  ==".$row['15'] );
+			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
 			$row['16'] = $champion_slit;
 			$kadick_slit = $split_charges[2];
@@ -113,7 +113,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  ////error_log($query);
+	  	////error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

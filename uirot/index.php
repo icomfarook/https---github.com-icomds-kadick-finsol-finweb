@@ -246,7 +246,7 @@ if($(this).val() != "")
 						</ul>
 						</li>
 		
-						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+						<li><a class="ajax-link" href="#!waltblnce"><i class="fa fa-university" aria-hidden="true">&nbsp;</i>Wallet Balance</a></li>
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 						<i class="fa fa-building"></i>
@@ -450,10 +450,11 @@ if($(this).val() != "")
 						 <span class="hidden-xs"><?php echo INDEX_TREATMENT; ?></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!treinf"><?php echo INDEX_TREATMENT_INFO; ?></a></li>
-						<li><a class="ajax-link" href="#!trewlt"><?php echo INDEX_TREATMENT_WALLET; ?></a></li>
-						<li><a class="ajax-link" href="#!cashotre">Cash Out - Card</a></li>
-						<li><a class="ajax-link" href="#!batch">Batch</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!treinf"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;<?php echo INDEX_TREATMENT_INFO; ?></a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!trewlt"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;<?php echo INDEX_TREATMENT_WALLET; ?></a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!cashotre"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Out - Card</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!billbet"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Betting</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!batch"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Batch</a></li>
 
 					</ul>
 				</li>

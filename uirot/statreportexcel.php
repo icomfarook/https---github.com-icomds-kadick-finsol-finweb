@@ -2,7 +2,6 @@
 ERROR_REPORTING(E_ALL);
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
@@ -26,8 +25,6 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
 $msg = "Stat Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 			if($state == "ALL"){

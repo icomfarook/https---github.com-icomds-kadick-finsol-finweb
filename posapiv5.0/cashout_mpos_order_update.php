@@ -1,5 +1,5 @@
 <?php
-    	error_log("inside posapi/cashout_mpos_order_update.php");
+    	//error_log("inside posapi/cashout_mpos_order_update.php");
     	include('../common/admin/configmysql.php');
     	include ("get_prime.php");	
     	include ("functions.php");

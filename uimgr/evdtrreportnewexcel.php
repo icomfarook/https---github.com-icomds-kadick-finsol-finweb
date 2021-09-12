@@ -41,15 +41,15 @@ $objPHPExcel = new PHPExcel();
 		
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time, user, a.ams_charge order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge order by a.date_time desc ";
 			}
 			else{ 
 				
-				$query .= " and a.operator_id = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and a.operator_id = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group_by a.e_transaction_id,b.agent_name,b.parent_code order by a.date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.e_transaction_id = $orderNo order by a.e_transaction_id";
+			$query .= " and a.e_transaction_id = $orderNo group_by a.e_transaction_id,b.agent_name,b.parent_code order by a.e_transaction_id";
 		}
 			
 		$result =  mysqli_query($con,$query);
@@ -64,14 +64,14 @@ $objPHPExcel = new PHPExcel();
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
-				error_log("agentrow['10']_slit  ==".$row['11']);
+			//error_log("agentrow['10']_slit  ==".$row['11']);
 			$split_charges = explode(",",$row['9']);
 			$agent_slit = $split_charges[0] ;
 			$row['10'] = $agent_slit;
 			
-			error_log("agent_slit  ==".$agent_slit);
-			error_log("agent_slit1  ==".$row['14'] );
-			error_log("split_charges  ==".$split_charges );
+			//error_log("agent_slit  ==".$agent_slit);
+			//error_log("agent_slit1  ==".$row['14'] );
+			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
 			$row['11'] = $champion_slit;
 			$kadick_slit = $split_charges[2];

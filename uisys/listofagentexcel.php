@@ -2,7 +2,6 @@
 ERROR_REPORTING(E_ALL);
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 
@@ -22,8 +21,6 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	error_log("partytype".$rpartytype);
 	$title = "KadickMoni";
 
-//error_log($ba);
-//error_log($endDate);
 $msg = "List of Agent Reports";
 $objPHPExcel = new PHPExcel();
 				if($rpartytype=='A'){	

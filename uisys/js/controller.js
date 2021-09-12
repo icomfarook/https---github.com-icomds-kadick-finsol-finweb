@@ -1,3 +1,142 @@
+   app.controller('BillPayBettingCtrl', function ($scope, $http, $filter) {
+    $scope.isHideOk = true;
+    $scope.startDate = new Date();
+    $scope.endDate = new Date();
+    $scope.query = function () {
+        $scope.tablerow = true;
+        var orderno =  $scope.orderno;
+        var startDate =  $scope.startDate;
+        var endDate =  $scope.endDate;
+        var difference  = new Date(endDate - startDate);
+        var diffInDays  = difference/1000/60/60/24;
+        var currdate = new Date();
+        if(endDate > currdate) {
+            alert("End Date can't be more than current Date");
+            $scope.endDate = currdate;
+        //$scope.isQueryDi = true;
+        }
+        else if(startDate > endDate){
+            $scope.dateerr = "Date should be valid";
+        //$scope.isQueryDi = true;
+        }
+        else if(diffInDays>7) {
+            alert("Date Range should between 7 days");
+        //$scope.isQueryDi = true;
+        }
+        else {
+            $http({
+                method: 'post',
+                url: '../ajax/paybettingajax.php',
+                data: {
+                    action: 'query',
+                    startDate:$scope.startDate,
+                    endDate:$scope.endDate,
+                    orderno:$scope.orderno
+                },
+            }).then(function successCallback(response) {
+                $scope.ctress = response.data;
+            }, function errorCallback(response) {
+                console.log(response.data);
+            });
+        }
+    }
+    $scope.refresh = function () {
+        window.location.reload();
+        };
+        $scope.reset = function () {
+    $("#tbody").empty();
+    $scope.tablerow = false;
+    $scope.orderno = "";
+    $scope.startDate = new Date();
+    $scope.endDate = new Date();
+    }
+    $scope.resetstatus= function () {
+        $scope.Status = "";
+    }
+    $scope.process = function (orderno) {
+        stats = $scope.Status == "E" ? "Failed" : "Success";
+        var confirmCheck = confirm("Are you sure, do you want to update this  order "+ orderno +" with this status "+stats+"?.");
+        if(confirmCheck){
+            $http({
+                method: 'post',
+                url: '../ajax/paybettingajax.php',
+                data: {
+                    action: 'process',
+                    Status:$scope.Status,
+                    orderno:orderno
+                },
+            }).then(function successCallback(response) {
+                $scope.isHide = true;
+                $scope.isHideOk = false;
+                $scope.isLoader = false;
+                $scope.isMainLoader = false;
+                $("#BillPaymentBody").html("<h3>" + response.data + "</h3>");
+
+            }, function errorCallback(response) {
+                console.log(response);
+            });
+        }else{
+            return
+        }
+
+    }
+
+    $scope.action = function (orderno) {
+        $scope.no = orderno;
+    }
+    $scope.view = function (orderno) {
+        $http({
+            method: 'post',
+            url: '../ajax/paybettingajax.php',
+            data: {
+                action: 'view',
+                orderno:orderno
+            },
+        }).then(function successCallback(response) {
+            $scope.no = response.data[0].no;
+            $scope.code = response.data[0].code;
+            $scope.transLogId1 = response.data[0].transLogId1;
+            $scope.transLogId2 = response.data[0].transLogId2;
+            $scope.transLogId3 = response.data[0].transLogId3;
+            $scope.toamount = response.data[0].toamount;
+            $scope.rmount = response.data[0].rmount;
+            $scope.Biller = response.data[0].Biller;
+            $scope.Product = response.data[0].Product;
+            $scope.account_no = response.data[0].account_no;
+            $scope.account_name = response.data[0].account_name;
+            $scope.bp_account_no = response.data[0].bp_account_no;
+            $scope.bp_account_name = response.data[0].bp_account_name;
+            $scope.bp_bank_code = response.data[0].bp_bank_code;
+            $scope.session_id = response.data[0].session_id;
+            $scope.user = response.data[0].user;
+            $scope.amscharge = response.data[0].amscharge;
+            $scope.parcharge = response.data[0].parcharge;
+            $scope.ocharge = response.data[0].ocharge;
+            $scope.name = response.data[0].name;
+            $scope.mobile = response.data[0].mobile;
+            $scope.sts = response.data[0].sts;
+            $scope.scharge = response.data[0].scharge;
+            $scope.refNo = response.data[0].refNo;
+            $scope.fincomment = response.data[0].fincomment;
+            $scope.dtime = response.data[0].dtime;
+            $scope.pstatus = response.data[0].pstatus;
+            $scope.ptime = response.data[0].ptime;
+            $scope.sconfid = response.data[0].sconfid;
+            $scope.bank = response.data[0].bank;
+            $scope.partner = response.data[0].partner;
+            $scope.sender_name = response.data[0].sender_name;
+            $scope.appcmt = response.data[0].appcmt;
+            $scope.bp_transaction_id = response.data[0].bp_transaction_id;
+            $scope.payment_fee = response.data[0].payment_fee;
+            $scope.agent_charge = response.data[0].agent_charge;
+            $scope.stamp_charge = response.data[0].stamp_charge;
+            $scope.create_time = response.data[0].create_time;
+        }, function errorCallback(response) {
+            console.log(response.data);
+        });
+    }
+});
+
 app.controller('CashoutPhoneCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -2225,36 +2364,59 @@ close();
 
 });
 
-app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
-$scope.tablerow=true;
-$scope.query = function () {
-$scope.tablerow=false;
-$http({
-method: 'post',
-url: '../ajax/walatbalnceajax.php',
-data: {
-action: 'query'
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-$scope.pendingBalance = response.data.pendingBalance;
-$scope.balance = response.data.balance;
-$scope.updatedAt = response.data.updatedAt;
-$scope.createdAt = response.data.createdAt;
-$scope.name = response.data.name;
-$scope.balanceStatus = response.data.balanceStatus;
-$scope.processingStartTime = response.data.processingStartTime;
-$scope.processingStartTime = response.data.processingStartTime;
 
-//alert(response.data.pendingBalance);
+   app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
+   $scope.tablerow=true;
+   $scope.query = function () {
+   $scope.tablerow=false;
+   if($scope.Partner == "PB"){
+    $http({
+    method: 'post',
+    url: '../ajax/walatbalnceajax.php',
+    data: {
+    action: 'query'
+    },
+    }).then(function successCallback(response) {
+    $scope.res = response.data;
+    $scope.pendingBalance = response.data.pendingBalance;
+    $scope.balance = response.data.balance;
+    $scope.updatedAt = response.data.updatedAt;
+    $scope.createdAt = response.data.createdAt;
+    $scope.name = response.data.name;
+    $scope.balanceStatus = response.data.balanceStatus;
+    $scope.processingStartTime = response.data.processingStartTime;
+    $scope.processingStartTime = response.data.processingStartTime;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+  }
+   else{
+    $http({
+    method: 'post',
+    url: '../ajax/opaywaletbalajax.php',
+    data: {
+    action: 'query'
+    },
+    }).then(function successCallback(response) {
+    $scope.res = response.data;
+    $scope.pendingBalance = response.data.pendingBalance;
+    $scope.balance = response.data.cashBalance;
+    $scope.updatedAt = response.data.updatedAt;
+    $scope.createdAt = response.data.createdAt;
+    $scope.name = response.data.name;
+    $scope.balanceStatus = response.data.message;
+    $scope.processingStartTime = response.data.processingStartTime;
+    $scope.processingStartTime = response.data.processingStartTime;
 
-}, function errorCallback(response) {
-// console.log(response);
-});
+    //alert(response.data.pendingBalance);
+
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+}
 }
 $scope.reset = function () {
 $scope.tablerow = true;
-
 }
 });
 
@@ -15434,6 +15596,8 @@ $scope.view = function (index, id) {
    $scope.other_charge_factor = response.data[0].other_charge_factor;
    $scope.other_charge_value = response.data[0].other_charge_value;
    $scope.active = response.data[0].active;
+   $scope.ams_charge_factor = response.data[0].ams_charge_factor;
+   $scope.ams_charge_value = response.data[0].ams_charge_value;
     }, function errorCallback(response) {
    // console.log(response);
   });
@@ -15499,6 +15663,7 @@ console.log(response);
 });
 }
 });
+
 
 app.controller('rulValCtrl', function ($scope, $http) {
 $http({

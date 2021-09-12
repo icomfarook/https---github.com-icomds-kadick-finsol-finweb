@@ -3,18 +3,15 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
 	$endDate	=  $_POST['endDate'];
 	$creteria 	= $_POST['creteria'];
 	$profileid = $_SESSION['profile_id'];
-$reportFor 	= $_POST['reportFor'];
+	$reportFor 	= $_POST['reportFor'];
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));
 $title = "";
@@ -25,9 +22,7 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
- if($creteria =="BT"){
+if($creteria =="BT"){
 		$msg = "Bill_payment_Sales_Report_Order_Type_".$type."_And_Date_Between_".$startDate."_".$endDate;
 	}else if($creteria =="BO"){
 		$msg = "Bill_payment_Sales_Report_Order_Type_".$orderNo;
@@ -99,7 +94,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  ////error_log($query);
+	  	//error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

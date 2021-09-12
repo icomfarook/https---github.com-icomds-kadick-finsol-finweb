@@ -83,14 +83,14 @@ $objPHPExcel = new PHPExcel();
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
-				error_log("agentrow['10']_slit  ==".$row['12']);
+			//error_log("agentrow['10']_slit  ==".$row['12']);
 			$split_charges = explode(",",$row['14']);
 			$agent_slit = $split_charges[0] ;
 			$row['15'] = $agent_slit;
 			
-			error_log("agent_slit  ==".$agent_slit);
-			error_log("agent_slit1  ==".$row['14'] );
-			error_log("split_charges  ==".$split_charges );
+			//error_log("agent_slit  ==".$agent_slit);
+			//error_log("agent_slit1  ==".$row['14'] );
+			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
 			$row['16'] = $champion_slit;
 			$kadick_slit = $split_charges[2];

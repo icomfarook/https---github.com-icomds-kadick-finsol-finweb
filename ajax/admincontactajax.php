@@ -44,13 +44,19 @@
 						else if ($typeradio == 'ST'){
 							$query = "SELECT a.cms_id, c.agent_code as partyCode,  c.agent_name as partyName, if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'S'";
 						}
+						else {
+							$query = "SELECT a.cms_id, c.agent_code as partyCode,  c.agent_name as partyName, if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'R'";
+						}
 			}	
 			else  if ($partyCode != "ALL"){
 				 if ($typeradio == 'CT'){
 				$query = "SELECT a.cms_id, c.agent_code as partyCode,  c.agent_name as partyName, if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode'   and a.cms_type = 'C'";
 				 }
-				 else{
+				 else if ($typeradio == 'ST') {
 					 $query = "SELECT a.cms_id, c.agent_code as partyCode,  c.agent_name as partyName, if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode'   and a.cms_type = 'S'";
+				 }
+				 				 else {
+					 $query = "SELECT a.cms_id, c.agent_code as partyCode,  c.agent_name as partyName, if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode'   and a.cms_type = 'R'";
 				 }
 			}
 		}
@@ -63,13 +69,19 @@
 				else if ($typeradio == 'ST'){
 					$query = "SELECT a.cms_id, c.agent_code as partyCode, c.agent_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE  c.sub_agent= 'Y' and b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'S'";
 				}
+				else {
+					$query = "SELECT a.cms_id, c.agent_code as partyCode, c.agent_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE  c.sub_agent= 'Y' and b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'R'";
+				}
 			}
 			else  if ($partyCode != "ALL"){
 				 if ($typeradio == 'CT'){
 				$query = "SELECT a.cms_id, c.agent_code as partyCode, c.agent_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE c.sub_agent= 'Y' and b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode' and a.cms_type = 'C'";
 				 }
-				 else{
+				 else if ($typeradio == 'ST') {
 					 $query = "SELECT a.cms_id, c.agent_code as partyCode, c.agent_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE c.sub_agent= 'Y' and b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode' and a.cms_type = 'S'";
+				 }
+				 else{
+					 $query = "SELECT a.cms_id, c.agent_code as partyCode, c.agent_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, agent_info c WHERE c.sub_agent= 'Y' and b.user_id = a.create_user and b.user_id = c.user_id and c.agent_code = '$partyCode' and a.cms_type = 'R'";
 				 }
 			}
 		}
@@ -82,13 +94,20 @@
 				else if ($typeradio == 'ST'){
 					$query = "SELECT a.cms_id, c.champion_code as partyCode, c.champion_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, champion_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'S'";
 				}
+				else {
+					$query = "SELECT a.cms_id, c.champion_code as partyCode, c.champion_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, champion_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'R'";
+				}
 			}
 			else  if ($partyCode != "ALL"){
 				 if ($typeradio == 'CT'){
 				$query = "SELECT a.cms_id,  c.champion_code as partyCode, c.champion_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, champion_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'C'";
 				 }
-				 else{
+				 else if ($typeradio == 'ST') {
 					 $query = "SELECT a.cms_id,  c.champion_code as partyCode, c.champion_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, champion_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'S'";
+					 
+				 }
+			 else  {
+					 $query = "SELECT a.cms_id,  c.champion_code as partyCode, c.champion_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, champion_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'R'";
 					 
 				 }
 			}
@@ -102,13 +121,20 @@
 				 else if ($typeradio == 'ST'){
 					 $query = "SELECT a.cms_id,  c.personal_code as partyCode, c.personal_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, personal_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'S'";
 				 }
+				 else {
+					 $query = "SELECT a.cms_id,  c.personal_code as partyCode, c.personal_name as partyName,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, personal_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id  and a.cms_type = 'R'";
+				 }
 			}
 			else  if ($partyCode != "ALL"){
 				 if ($typeradio == 'CT'){
 				$query = "SELECT a.cms_id,  c.personal_code as partyCode, c.personal_name as partyName,,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, personal_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'C'";
 			 }
-			 else{
+			 else if ($typeradio == 'ST'){
 				 $query = "SELECT a.cms_id,  c.personal_code as partyCode, c.personal_name as partyName,,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, personal_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'S'";
+				 
+			 }
+			 else {
+				 $query = "SELECT a.cms_id,  c.personal_code as partyCode, c.personal_name as partyName,,if(a.status='O','Open',if(a.status = 'I','InProgress',if(a.status = 'C','Close',if(a.status = 'H','Hold','')))) as status, a.category, a.sub_category, date(a.create_time) as date, a.subject, a.create_user, concat(b.first_name,' ',b.last_name,' (', b.user_name,') ') as user FROM cms_main a, user b, personal_info c WHERE b.user_id = a.create_user and b.user_id = c.user_id and c.champion_code = '$partyCode'  and a.cms_type = 'R'";
 				 
 			 }
 			 }

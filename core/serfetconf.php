@@ -190,6 +190,13 @@ legend {
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
 								<label> Other Charge Value : <span style='color:blue'>{{other_charge_value}}</span></label>								
 							</div>
+							
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Ams Charge Factor : <span style='color:blue'>{{ams_charge_factor}}</span></label>								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+								<label> Ams Charge : <span style='color:blue'>{{ams_charge_value}}</span></label>								
+							</div>
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
 								<label> Active : <span style='color:blue'>{{active}}</span></label>								
 							</div>

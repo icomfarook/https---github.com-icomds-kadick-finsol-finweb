@@ -488,4 +488,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/cashoutphone.php",
 		controller: "CashoutPhoneCtrl"
     })
+    .when("/billbet", {
+		templateUrl : "../core/billbetting.php",
+		controller: "BillPayBettingCtrl"
+	})
 });

@@ -17,8 +17,6 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	if($endDate == null ){
 			$endDate   =  date('Y-m-d');
 	}
-	//error_log($ba);
-	//error_log($endDate);
 	$msg = "Android App Report";
 	$objPHPExcel = new PHPExcel();
 

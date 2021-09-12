@@ -24,8 +24,6 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
 $msg = "Bill_payment_Finance Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 			if ($state == "ALL") {		
@@ -640,7 +638,7 @@ $objPHPExcel = new PHPExcel();
 			//exit();
 		}
 		
-		////error_log($query);
+		//error_log($query);
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{

@@ -3,11 +3,8 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
@@ -24,8 +21,6 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
 $msg = "Deatiled EVD Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
@@ -41,15 +36,15 @@ $objPHPExcel = new PHPExcel();
 		
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time, user, a.ams_charge order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge order by a.date_time desc ";
 			}
 			else{ 
 				
-				$query .= " and a.operator_id = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and a.operator_id = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group_by a.e_transaction_id,b.agent_name,b.parent_code order by a.date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.e_transaction_id = $orderNo order by a.e_transaction_id";
+			$query .= " and a.e_transaction_id = $orderNo group_by a.e_transaction_id,b.agent_name,b.parent_code order by a.e_transaction_id";
 		}
 			
 		$result =  mysqli_query($con,$query);
@@ -89,7 +84,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  ////error_log($query);
+	  	//error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

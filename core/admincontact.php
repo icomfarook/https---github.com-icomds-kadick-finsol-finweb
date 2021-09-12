@@ -109,7 +109,7 @@ input[type="radio"] {
 					<div class='row appcont' style='margin: 0% 1%;'>					
 					<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 23 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) {?>
 						 <div class='row appcont'>
-							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12' style='border:1px solid black'>
+							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12' style='border:1px solid black;width: 800px;margin-left: 10%;'>
 								<div class='col-lg-5 col-xs-12 col-sm-12 col-md-12' >												
 									<label style='display:block;text-align:center;color:red'>For <?php 
 										$mons = array(1 => "Jan", 2 => "Feb", 3 => "Mar", 4 => "Apr", 5 => "May", 6 => "Jun", 7 => "Jul", 8 => "Aug", 9 => "Sep", 10 => "Oct", 11 => "Nov", 12 => "Dec");
@@ -120,8 +120,9 @@ input[type="radio"] {
 										</label>
 									
 									<div style='display:inline-flex' ng-init="comsugsetrdiogroup='C';searchload('C')">
-										<label style='display:inline-flex;width:max-content'><input ng-checked='true' ng-click='searchload(this.comsugsetrdiogroup)' type="radio" name="comsugsetrdiogroup" ng-model='comsugsetrdiogroup' id="ComplaintRadio" value="C" style="padding-left:10px" />&nbsp Complaint</label>
-										<label style='display:inline-flex;width:max-content'><input ng-click='searchload(this.comsugsetrdiogroup)' type="radio" name="comsugsetrdiogroup" ng-model='comsugsetrdiogroup'  id="SuggestionRadio" value="S" style="padding-left:10px"/>&nbsp  Suggestion</label>	
+										<label style='display:inline-flex;width:max-content'><input ng-checked='true' ng-click='searchload(this.comsugsetrdiogroup)' type="radio" name="comsugsetrdiogroup" ng-model='comsugsetrdiogroup' id="ComplaintRadio" value="C" style="padding-left:6x" />&nbsp Complaint</label>
+										<label style='display:inline-flex;width:max-content'><input ng-click='searchload(this.comsugsetrdiogroup)' type="radio" name="comsugsetrdiogroup" ng-model='comsugsetrdiogroup'  id="SuggestionRadio" value="S" style="padding-left:6px"/>&nbsp  Suggestion</label>	
+										<label style='display:inline-flex;width:max-content'><input ng-click='searchload(this.comsugsetrdiogroup)' type="radio" name="comsugsetrdiogroup" ng-model='comsugsetrdiogroup'  id="SuggestionRadio" value="R" style="padding-left:6px"/>&nbsp  Request</label>
 									</div>
 								</div>
 								<div class='col-lg-7 col-xs-12 col-sm-12 col-md-12' style='display:inline-flex' >												
@@ -142,8 +143,8 @@ input[type="radio"] {
 									</div>	
 																
 								</div>
-							</div>
-								<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'> 
+							</div><br /><br /><br />
+								<div style="border:1px solid black;width: 800px;padding:15px;margin-left: 10%;margin-top: inherit;"class='col-lg-12 col-xs-12 col-sm-12 col-md-12'> 
 								<?php if($profileId == 50) { ?>
 							<div class='row ' ng-init="partyCode='<?php echo $partyCode; ?>';creteria='SP'" >
 								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
@@ -211,7 +212,7 @@ input[type="radio"] {
 									
 								  <?php }  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 23 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) {?>
 									 <div class=' '>
-										 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+										 <div  class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 											
 											<label><?php echo INFO_PARTY_CODE_TYPE ; ?><span class='spanre'>*</span>
 											  <span ng-show="contactForm.partyType.$touched ||contactForm.partyType.$dirty && contactForm.partyType.$invalid">
@@ -243,15 +244,16 @@ input[type="radio"] {
 								  <?php } ?>
 								  <div class='col-lg-6 col-xs-12 col-sm-12 col-md-12' ng-init="comsugsetrdiogroupbytype='CT'">		
 									<label>By Type</label> <br />
-									<label style='display:inline-flex;'><input type="radio" name="comsugsetrdiogroupbytype" ng-model='comsugsetrdiogroupbytype' id="ComplaintRadioByType" value="CT" style="padding-left:10px" />Complaint</label>
-									<label style='display:inline-flex;'><input type="radio" name="comsugsetrdiogroupbytype" ng-model='comsugsetrdiogroupbytype' id="SuggestionRadioByType" value="ST" style="padding-left:10px"/>Suggestion</label>
-								</div>								</div>
+									<label style='display:inline-flex;'><input type="radio" name="comsugsetrdiogroupbytype" ng-model='comsugsetrdiogroupbytype' id="ComplaintRadioByType" value="CT" style="padding-left:10px" />&nbsp;Complaint</label>
+									<label style='display:inline-flex;'><input type="radio" name="comsugsetrdiogroupbytype" ng-model='comsugsetrdiogroupbytype' id="SuggestionRadioByType" value="ST" style="padding-left:10px"/>&nbsp;Suggestion</label>
+									<label style='display:inline-flex;'><input type="radio" name="comsugsetrdiogroupbytype" ng-model='comsugsetrdiogroupbytype' id="RequestRadioByType" value="RT" style="padding-left:10px"/>&nbsp;Request</label>
+								</div>															</div>
 						</div>						
 							<?php } ?>
 														 
 						</div>
 				</div>
-					<div class='rowcontent no-padding' style=' padding: 0px;margin: 1% 1%;' ng-init="creteria='BI'">
+					<div class='rowcontent no-padding' style=' padding: 0px;margin: 1% 1%;' ng-init="creteria='BD'">
 						<div class="box-content" style='display: grid; padding: 0px;'>	 
                       	    <div class='row appcont' style='margin-bottom: 10px; margin-top: 10px;'>
 								    <div class='col-lg-9'>
@@ -289,7 +291,7 @@ input[type="radio"] {
 											<input ng-disabled="creteria==='BI' || creteria==='BS'"  type='date' ng-model="endDate" id='EndDate' name='endDate' required class='form-control'/>
 									</div>							
 								</div>		
-								<div  style = 'text-align:Center' class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<div  style = 'text-align:Center;margin-top:28px' class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 									<button type="button" class="btn btn-primary" ng-disabled = 'contactForm.$invalid' ng-click='query()'   id="Query">Search</button>
 									<button type="button" class="btn btn-primary"   id="Refresh">Reset</button>
 								</div>

@@ -26,8 +26,6 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 		$table_name = 'agent_info';	
 			$code='agent_code';
 	}
-	//error_log($ba);
-	//error_log($endDate);
 	if($creteria =="BI"){
 		$msg = "Payment Report_ID_#".$id;
 	}else if($creteria =="BS"){

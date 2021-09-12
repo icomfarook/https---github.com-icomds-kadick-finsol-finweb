@@ -152,6 +152,7 @@
 							<li><a class="ajax-link" href="#!ascteralloc">Terminal Allocation </a></li>
 							<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 							<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 							<li><a class="ajax-link" href="#!aisummary">AI Summary</a></li>
 						</ul>
 					</li>
@@ -296,6 +297,7 @@
 					</a>
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -455,6 +457,7 @@
 					</a>
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
+						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">

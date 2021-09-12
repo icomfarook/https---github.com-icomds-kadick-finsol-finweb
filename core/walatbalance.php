@@ -64,6 +64,7 @@
 								<select ng-disabled='isInputDisabled' id='selUser' ng-model='Partner'  class='form-control' name='Partner' required >
 									<option value=''>-- Select Partner --</option>
 									<option value='PB'>PayAnt Bill Pay</option>
+									<option value='OP'>Opay Bill Pay</option>
 								</select>								
 						</div>
 						</div>

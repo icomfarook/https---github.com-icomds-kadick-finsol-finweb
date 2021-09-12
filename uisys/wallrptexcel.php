@@ -3,11 +3,8 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-////error_log("s");
 include("excelfunctions.php");
-//////error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//////error_log("1");
 	$state	= $_POST['state'];
 	$localgovernment	= $_POST['localgovernment'];	
 	$partytype	= $_POST['pt'];
@@ -16,18 +13,8 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$userName = $_SESSION['user_name'];
 	
 $title = "FINSERVER";
-
-
-//////error_log($ba);
-//////error_log($endDate);
 $msg = "Wallet Report ";
 $objPHPExcel = new PHPExcel();
-//error_log("State = ".$state);
-//error_log("localgovernment = ".$localgovernment);
-//error_log("active = ".$active);
-//error_log("ba = ".$ba);
-//error_log("userName = ".$userName);
-//error_log("partytype = ".$partytype);
 if($partytype=='A'){	
 $name = "Agent Name";
 $code= "Agent Code";	
@@ -132,19 +119,19 @@ $code= "Agent Code";
 			}
 		}
 		$result =  mysqli_query($con,$query);
-		 ////error_log("comming00");		
+		 //error_log("comming00");		
 		if (!$result) {
 			printf("Error: %s\n".mysqli_error($con));
 			//exit();
 		}
 		
-		////error_log($query);
-		 ////error_log("comming1000000000");
+		//error_log($query);
+		//error_log("comming1000000000");
 $heading = array($name,$code,"State", "Local Goverment", "Available Balance", "Current Balance", "Advance Amount", "Minimum Balance");
 $headcount = 8;		 
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;			
- //////error_log("comming1");		
+ 		//error_log("comming1");		
 		while ($row = mysqli_fetch_array($result))	{
 			generateExcel ($i, $row,$objPHPExcel,$headcount);
 			$i++;				
@@ -152,7 +139,7 @@ $headcount = 8;
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  //////error_log("comming");
+	  	//error_log("comming");
 		
 	
 		$objPHPExcel->getProperties()

@@ -85,6 +85,7 @@ define ("BPAPI_OPAY_SERVER_VERIFY_BETTING_CUSTOMER_URL","http://localhost:8989/f
 //define ("BPAPI_OPAY_SERVER_VERIFY_BETTING_CUSTOMER_URL","http://localhost:8080/finsolbp/opay.api/validate");
 define ("BPAPI_OPAY_SERVER_PAYMENT_BETTING_CUSTOMER_URL","http://localhost:8989/finweb/api/opaybettingpayment.php");
 //define ("BPAPI_OPAY_SERVER_PAYMENT_BETTING_CUSTOMER_URL","http://localhost:8080/finsolbp/opay.api/payment");
+define ("BPAPI_OPAY_SERVER_WALLET_BALANCE_URL","http://localhost:8989/finweb/api/opaywalletbalance.php");
 
 //NIBSS Bill Pay
 define ("BPAPI_SERVER_PRODUCT_FORM_VALIDATE_URL","http://localhost:8989/finweb/api/bpvalidate.php");
