@@ -69,6 +69,9 @@
 				$session_validity = AGENT_SESSION_VALID_TIME;
 				$location = $data->location;
 				
+				//Ansari - 17Sep2021
+				$flexiRate = "N";
+				
 				if(is_null($location)) $location = "6.47668,3.60819";
 
 				if ( $partnerId == 1 ) {

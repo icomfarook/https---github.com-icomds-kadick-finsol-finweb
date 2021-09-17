@@ -39,6 +39,9 @@
 				$partyType = $data->partyType;
 				$flexiRate = $data->flexiRate;
 				$session_validity = AGENT_SESSION_VALID_TIME;
+				
+				//Ansari - 17Sep2021
+				$flexiRate = "N";
 
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
