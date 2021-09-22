@@ -103,7 +103,7 @@
 		}
 		
 		error_log("table_name = ".$table_name.", col_name = ".$col_name);
-		$query ="UPDATE $table_name SET last_tx_no = $transaction_id, last_tx_date = now(), last_tx_amount = ".$amount.", previous_current_balance = current_balance, current_balance = (IFNULL(current_balance,0.00) + ($cb_factor * $amount)), available_balance = (ifNull(current_balance, 0) + ifNull(credit_limit, 0) + ifNull(advance_amount, 0) - ifNull(minimim_balance, 0)), update_user = $uid, update_time = now() WHERE $col_name = '$partycode'";
+		$query = "UPDATE $table_name SET last_tx_no = $transaction_id, last_tx_date = now(), last_tx_amount = ".$amount.", previous_current_balance = current_balance, current_balance = (IFNULL(current_balance,0.00) + ($cb_factor * $amount)), available_balance = (ifNull(current_balance, 0) + ifNull(credit_limit, 0) + ifNull(advance_amount, 0) - ifNull(minimim_balance, 0)), update_user = $uid, update_time = now() WHERE $col_name = '$partycode'";
 		error_log("transactionwalletupdate query = ".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {
