@@ -3406,19 +3406,20 @@ url: '../ajax/bptrreportajax.php',
 data: {
                 action: 'view',
                 orderNo: no,
-code: code
+                code: code
             },
 }).then(function successCallback(response) {
 $scope.no = response.data[0].no;
 $scope.code = response.data[0].code;
 $scope.transLogId1 = response.data[0].transLogId1;
 $scope.transLogId2 = response.data[0].transLogId2;
-$scope.transLogId3 = response.data[0].transLogId23;
+$scope.transLogId3 = response.data[0].transLogId3;
 $scope.toamount = response.data[0].toamount;
 $scope.rmount = response.data[0].rmount;
 $scope.user = response.data[0].user;
-$scope.service_charge = response.data[0].service_charge;
+$scope.amscharge = response.data[0].amscharge;
 $scope.parcharge = response.data[0].parcharge;
+$scope.service_charge = response.data[0].service_charge;
 $scope.ocharge = response.data[0].ocharge;
 $scope.name = response.data[0].name;
 $scope.mobile = response.data[0].mobile;

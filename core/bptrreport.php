@@ -9,6 +9,11 @@
 		include('../common/admin/haus_finsol_label_ini.php');
 	}
 ?>
+<style>
+	.labspa {
+	color:blue;
+}
+	</style>
 
 <div ng-controller='BPtrReportCtrl'>
 <div class="row">
@@ -132,12 +137,19 @@
 									<td>{{ x.toamount }}</td>
 									<td>{{ x.status }}</td>
 									<td>{{ x.dtime }}</td>									
-									<td><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
+									<td ng-if="x.stat !== 'E'"><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
 										<button class='icoimg'><img style='height:18px;width:17px' src='../common/images/edit.png' /></button></a>
 										<a href="#">|&nbsp;&nbsp; </a>
-										<a class='trReportDialogue' ng-click='viewcomm(x.no)' data-toggle='modal' data-target='#trReportCommDialogue'>
-										<button class='icoimg'><img style='height:18px;width:17px' src='../common/images/detail.png' /></button></a>
-									</td>
+										<a ng-if="x.stat !== 'E'" class='trReportDialogue' ng-click='viewcomm(x.no)' data-toggle='modal' data-target='#trReportCommDialogue'>
+										<button class='icoimg'><img style='height:18px;width:17px' src='../common/images/detail.png' /></button></a></td>
+										
+										<td ng-if="x.stat === 'E'"><a class='trReportDialogue' ng-click='view(x.no,x.code)' data-toggle='modal' data-target='#trReportDialogue'>
+										<button class='icoimg'><img style='height:18px;width:17px' src='../common/images/edit.png' /></button></a>
+										<a href="#">|&nbsp;&nbsp; </a>
+										<a style='margin-right:20px;' >
+										-
+										</a></td>
+									
 									<!--<td><a class='trReportDialogue' ng-click='print(x.no,x.code)' data-toggle='modal' >
 										<button class='icoimg'><img  src='../common/images/print1.jpg' /></button></a>
 									</td>-->
@@ -219,64 +231,64 @@
 						<div id='trReportViewBody'  ng-hide='isLoader'>
 							<table class='table table-borderd'>
 							<tr>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_NO; ?> : {{no}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_TYPE; ?> : {{code}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_NO; ?> <span class='labspa'> {{no}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_ORDER_TYPE; ?> <span class='labspa'> {{code}}</td>
 								</tr>
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REQUEST_AMOUNT; ?> : {{rmount}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TOTAL_AMOUNT; ?> : {{toamount}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_REQUEST_AMOUNT; ?> <span class='labspa'> {{rmount}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TOTAL_AMOUNT; ?> <span class='labspa'> {{toamount}}</td>
 								</tr>
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_AMS_CHARGE; ?> : {{amscharge}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER_CHARGE; ?> : {{parcharge}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_AMS_CHARGE; ?> <span class='labspa'> {{amscharge}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER_CHARGE; ?> <span class='labspa'> {{parcharge}}</td>
 								</tr>
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_OTHER_CHARGE; ?> : {{ocharge}}</td>
-									<td >Mobile Number : {{mobile}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_OTHER_CHARGE; ?> <span class='labspa'> {{ocharge}}</td>
+									<td >Mobile Number :<span class='labspa'> {{mobile}}</td>
 									
 								</tr>
 								<tr>									
-									<td>Session Id : {{session_id}}</td>
-									<td>Transaction Id : {{bp_transaction_id}}</td>
+									<td>Session Id :<span class='labspa'> {{session_id}}</td>
+									<td>Transaction Id :<span class='labspa'> {{bp_transaction_id}}</td>
 								</tr>
 								<tr>									
-									<td>Payment Fee {{payment_fee}}</td>
-									<td>Agent Charge {{agent_charge}}</td>
-								</tr>
-								
-								<tr>									
-									<td>Stamp Charge : {{stamp_charge}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_USER; ?> : {{user}}</td>
-								</tr>
-								<tr>									
-									<td>Account Name : {{account_name}}</td>
-									<td>Account Number : {{account_no}}</td>
-								</tr>
-								<tr>									
-									<td>Bp  Account Name : {{bp_account_name}}</td>
-									<td>Bp Account Number : {{bp_account_no}}</td>
-								</tr>
-								<tr>									
-									<td>Bp Bank Code : {{bp_bank_code}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER; ?> :  {{partner}}</td>
+									<td>Payment Fee :<span class='labspa'> {{payment_fee}}</td>
+									<td>Agent Charge :<span class='labspa'> {{agent_charge}}</td>
 								</tr>
 								
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_DATE_TIME; ?> : {{dtime}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TRANSACTION_LOG_ID; ?> : {{transLogId1}}</td>
+									<td>Stamp Charge :<span class='labspa'> {{stamp_charge}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_USER; ?> <span class='labspa'> {{user}}</td>
 								</tr>
 								<tr>									
-									<td>Translog Id 2 : {{transLogId2}}</td>
-									<td>Translog Id 3 : {{transLogId3}}</td>
+									<td>Account Name :<span class='labspa'> {{account_name}}</td>
+									<td>Account Number :<span class='labspa'> {{account_no}}</td>
 								</tr>
 								<tr>									
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_TIME; ?>: {{ptime}}</td>
-									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_STATUS; ?>: {{pstatus}}</td>
+									<td>Bp  Account Name :<span class='labspa'> {{bp_account_name}}</td>
+									<td>Bp Account Number :<span class='labspa'> {{bp_account_no}}</td>
+								</tr>
+								<tr>									
+									<td>Bp Bank Code :<span class='labspa'> {{bp_bank_code}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_PARTNER; ?> <span class='labspa'>  {{partner}}</td>
+								</tr>
+								
+								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_DATE_TIME; ?> <span class='labspa'> {{dtime}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_TRANSACTION_LOG_ID; ?> <span class='labspa'> {{transLogId1}}</td>
+								</tr>
+								<tr>									
+									<td>Translog Id 2 :<span class='labspa'> {{transLogId2}}</td>
+									<td>Translog Id 3 :<span class='labspa'> {{transLogId3}}</td>
+								</tr>
+								<tr>									
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_TIME; ?><span class='labspa'> {{ptime}}</td>
+									<td><?php echo FIN_SERVI_TRANSACTION_REPORT_POST_STATUS; ?><span class='labspa'> {{pstatus}}</td>
 								</tr> 
 								<tr>
-									<td colspan='2'><?php echo FIN_SERVI_TRANSACTION_REPORT_COMMENT; ?> {{fincomment}}</td>
+									<td colspan='2'><?php echo FIN_SERVI_TRANSACTION_REPORT_COMMENT; ?>  <span class='labspa'> {{fincomment}}</td>
 								</tr>	<tr>
-									<td colspan='2'>Additional Comments : {{appcmt}}</td>
+									<td colspan='2'>Additional Comments :<span class='labspa'> {{appcmt}}</td>
 								</tr>							
 							</table>
 						</div>
