@@ -645,7 +645,8 @@
 							 <span class="hidden-xs"><?php echo INDEX_AUDIT; ?></span>
 						</a>
 						<ul class="dropdown-menu">		
-							<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>	
+							<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>
+							<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>	
 							<li><a class="ajax-link" href="#!rptloa">Agent List</a></li>
 							<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>							

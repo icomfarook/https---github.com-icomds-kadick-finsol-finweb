@@ -489,19 +489,26 @@
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
-	////TestTable1();
-	//TestTable2();
-	//TestTable3();
+	TestTable1();
+	TestTable2();
+	TestTable3();
+	LoadSelect2Script();
 }
 $(document).ready(function() {
-  LoadDataTablesScripts(AllTables);
- // WinMove();
+
 	$("#infoViewDialogue, #infoEditDialogue").on("click","#Ok",function() {
 		window.location.reload();
 	});
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});
+   
+	//this script for the datatable.
+	$("#Query").click(function() {				
+		LoadDataTablesScripts(AllTables);
+		
+	});
+
 	$("#EditINFODialogue, #AddINFODialogue").on("keypress",".sc", function (event) {
 		    var regex = new RegExp("^[a-zA-Z0-9 \b:/.~!@#$*_-]+$");
  		    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);

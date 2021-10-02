@@ -61,7 +61,7 @@
 					<div class='row appcont'>						
 						
 									
-								  <?php   if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 22 || $profileId == 26) {?>
+								  <?php   if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 22 || $profileId == 26 || $profileId == 23) {?>
 									 <div class='row appcont'>
 										 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 											

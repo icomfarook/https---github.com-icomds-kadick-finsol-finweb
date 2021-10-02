@@ -5677,8 +5677,6 @@ $scope.new_last_tx_date = response.data[0].new_last_tx_date;
 }
 });
 
-
-
 app.controller('trReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -6853,7 +6851,6 @@ app.controller('jEntryCtrl', function ($scope, $http, $filter) {
 			}
 		}
 	});
-
 
 app.controller('salesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();

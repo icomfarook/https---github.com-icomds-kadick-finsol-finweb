@@ -7147,7 +7147,6 @@ $scope.update_time = response.data[0].update_time;
 
 });
 
-
 app.controller('salesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -7733,7 +7732,6 @@ $scope.partner = "";
 
 }
 });
-
 
 app.controller('evdstatreportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();

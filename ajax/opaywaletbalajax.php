@@ -7,6 +7,9 @@
 	require '../common/gh/autoload.php';	
 	$action =$data->action;
 	$userId = $_SESSION['user_id'];
+	date_default_timezone_set("Africa/Lagos");
+	$CurrentDate = date("Y-m-d H:i:s");
+
 	if($action == "query") {
 
 		$res = sendRequest($userId);
@@ -16,10 +19,10 @@
 		$response["cashBalance"] = number_format($api_response['cashBalance'], 2, '.', ',');
 		$response["updatedAt"] = $api_response['updatedAt'];
 		$response["createdAt"] = $api_response['createdAt'];
-		$response["name"] = $api_response['name'];
 		$response["message"] = $api_response['message'];
-		$response["processingStartTime"] = $api_response['processingStartTime'];
-		$response["responseDescription"] = $api_response['responseDescription'];
+		$response["updatedAt"] = $CurrentDate;
+		$response["createdAt"] = $CurrentDate;
+		$response["name"] = "Opay Bill Pay";
 		
 		echo json_encode($response);
 	}

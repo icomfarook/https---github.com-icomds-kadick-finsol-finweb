@@ -11,7 +11,7 @@
 		$partyCode = $data->partyCode;
 		
 		
-		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 22 || $profile_id == 26) {
+		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 22 || $profile_id == 26 || $profile_id == 23) {
 			$partyCode = $data->partyCode;
 			$partyType = $data->partyType;
 			$startDate =  $data->startDate;
