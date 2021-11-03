@@ -234,4 +234,15 @@ define ("FLEXI_OPERATOR_CURL_CONNECTION_TIMEOUT",50);
 define ("FLEXI_OPERATOR_CURL_TIMEOUT",50);
 
 
+define ("PTSP_POSVAS_CONNECTION_TIMEOUT",50);
+define ("PTSP_POSVAS_READ_TIMEOUT",50);
+define ("PTSP_FLAG","P");
+define ("PTSP_POSVAS_HOST_URL","http://nibssepms.intellifin.com.ng/nibss/");
+//define ("PTSP_POSVAS_HOST_URL","http://192.168.2.104:8989/finweb/");
+define ("PTSP_POSVAS_HOME_URI","api/callhome_posvas");
+//define ("PTSP_POSVAS_HOME_URI","api/callhome_posvas.php");
+define ("PTSP_POSVAS_PREP_URI","/nibss/api/prep_posvas");
+define ("PTSP_POSVAS_TRANSACTION_URI","/nibss/api/transaction_posvas");
+
+
 ?>

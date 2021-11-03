@@ -322,13 +322,31 @@
 																		$invalid_attempt = $row['invalid_attempt'];
 																		$auth_id = $row['auth_id'];
 																		$available_balance = $row['available_balance'];
-																																		
+																		
+																		//Get PTSP Configuration
+																		$client_ptsp_flag = "E";
+																		$db_user_ptsp_flag = "E";
+																		$db_state_ptsp_flag = "E";
+																		$ini_ptsp_flag = PTSP_FLAG;
+																		$terminal_serial_no = "";
+																		$db_state_ptsp_query = "select ifnull(ptsp_type, 'E') as ptsp_type from state_ptsp_switch where active = 'Y' and ((state_id = ".$state_id." and local_govt_id is null) or (state_id = ".$state_id." and local_govt_id = ".$local_govt_id.")) and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) > current_date())) limit 1";
+																		error_log("db_state_ptsp_query = ".$db_state_ptsp_query);
+																		$db_state_ptsp_result = mysqli_query($con, $db_state_ptsp_query);
+																		if ( $db_state_ptsp_result ) {
+																			$db_state_ptsp_count = mysqli_num_rows($db_state_ptsp_result);
+																			if ( $db_state_ptsp_count > 0 ) {
+																				$rowx = mysqli_fetch_assoc($db_state_ptsp_result);
+																				$db_state_ptsp_flag = $rowx['ptsp_type'];
+																			}
+																		}
+																		
 																		//Get POS Configuration
 																		//$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model from user_pos a, terminal_inventory b, terminal_vendor c where a.terminal_id = b.terminal_id and b.vendor_id = c.terminal_vendor_id and a.user_id = ".$user_id;
-																		$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model from user_pos a left join terminal_inventory b on a.terminal_id = b.terminal_id left join terminal_vendor c on b.vendor_id = c.terminal_vendor_id where a.user_id = ".$user_id;
+																		$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model, ifnull(a.ptsp_type,'') as ptsp_type, ifnull(b.terminal_serial_no, '') as terminal_serial_no, ifnull(a.logcat_debug_flag, 'N') as logcat_debug_flag from user_pos a left join terminal_inventory b on a.terminal_id = b.terminal_id left join terminal_vendor c on b.vendor_id = c.terminal_vendor_id where a.user_id = ".$user_id;
 																		error_log("user_pos_config_query = ".$user_pos_config_query);
 																		$user_pos_config_result = mysqli_query($con, $user_pos_config_query);
 																		$user_pos_config_ready = "N";
+																		
 																		if ( $user_pos_config_result ) {
 																			$user_pos_config_count = mysqli_num_rows($user_pos_config_result);
 																			if ( $user_pos_config_count > 0 ) {
@@ -343,6 +361,7 @@
 																				$db_imei = $row3['imei'];
 																				$pos_status = $row3['status'];
 																				$pos_debug = $row3['debug_flag'];
+																				$pos_logcat_debug = $row3['logcat_debug_flag'];
 																				$mpos_debug = $row3['mpos_simulate'];
 																				$pos_pin = $row3['pos_pin'];
 																				$pay_min_limit = $row3['pay_min_limit'];
@@ -380,8 +399,17 @@
 																					$user_access_control->groupServiecAccess = "Y";
 																				}
 																				$user_pos_config_ready = "Y";
+																				$db_user_ptsp_flag = $row3['ptsp_type'];
+																				$terminal_serial_no = $row3['terminal_serial_no'];
 																			}
 																		}
+																		
+																		//Check PTSP Flag
+																		if ( $db_user_ptsp_flag == "P" || $db_state_ptsp_flag == "P" || $ini_ptsp_flag == "P" ) {
+																			$client_ptsp_flag = "P";
+																		}
+																		error_log("db_user_ptsp_flag = ".$db_user_ptsp_flag.", db_state_ptsp_flag = ".$db_state_ptsp_flag.", ini_ptsp_flag = ".$ini_ptsp_flag.", client_ptsp_flag = ".$client_ptsp_flag);
+																		
 																		if ( $user_pos_config_ready == "Y") {
 																			$session_key = bin2hex(openssl_random_pseudo_bytes(8));
 																			if ( $pos_status == "B") {
@@ -423,6 +451,7 @@
 																					$response["message"] = "Login validated successfully";
 																					$response["signature"] = $server_signature;
 																					$response["debug"] = $pos_debug;
+																					$response["logCatDebug"] = $pos_logcat_debug;
 																					$response["mPosSimulate"] = $mpos_debug;
 																					$userLogin = new \stdClass();
 																					$userLogin->userId = $user_id;
@@ -467,6 +496,14 @@
 																					$userLogin->posType = $terminal_model;
 																					$userLogin->outletName = $outlet_name;
 																					$userLogin->sanefAgentCode = $sanef_party_code;
+																					$userLogin->ptspFlag = $client_ptsp_flag;
+																					$userLogin->ptspReadTimeout = PTSP_POSVAS_READ_TIMEOUT;
+																					$userLogin->ptspConnectTimeout = PTSP_POSVAS_CONNECTION_TIMEOUT;
+																					$userLogin->ptspHostUrl = PTSP_POSVAS_HOST_URL;
+																					$userLogin->ptspHomeUri = PTSP_POSVAS_HOME_URI;
+																					$userLogin->ptspPrepUri = PTSP_POSVAS_PREP_URI;
+																					$userLogin->ptspTransactionUri = PTSP_POSVAS_TRANSACTION_URI;
+																					$userLogin->terminalSerialNo = $terminal_serial_no;
 																					$response["user"] = $userLogin;
 																					//error_log(json_encode($response));
 																				}else {
@@ -512,6 +549,7 @@
 																				$response["message"] = "Login validated successfully";
 																				$response["signature"] = $server_signature;
 																				$response["debug"] = $pos_debug;
+																				$response["logCatDebug"] = $pos_logcat_debug;
 																				$response["mPosSimulate"] = $mpos_debug;
 																				$userLogin = new \stdClass();
 																				$userLogin->userId = $user_id;
@@ -556,7 +594,14 @@
 																				$userLogin->posType = $terminal_model;
 																				$userLogin->outletName = $outlet_name;
 																				$userLogin->sanefAgentCode = $sanef_party_code;
-																				
+																				$userLogin->ptspFlag = $client_ptsp_flag;
+																				$userLogin->ptspReadTimeout = PTSP_POSVAS_READ_TIMEOUT;
+																				$userLogin->ptspConnectTimeout = PTSP_POSVAS_CONNECTION_TIMEOUT;
+																				$userLogin->ptspHostUrl = PTSP_POSVAS_HOST_URL;
+																				$userLogin->ptspHomeUri = PTSP_POSVAS_HOME_URI;
+																				$userLogin->ptspPrepUri = PTSP_POSVAS_PREP_URI;
+																				$userLogin->ptspTransactionUri = PTSP_POSVAS_TRANSACTION_URI;
+																				$userLogin->terminalSerialNo = $terminal_serial_no;
 																				$response["user"] = $userLogin;
 																				//error_log(json_encode($response));
 																			} else if ($pos_status == "X") {
