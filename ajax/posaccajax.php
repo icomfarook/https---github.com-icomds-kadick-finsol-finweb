@@ -113,13 +113,15 @@
 		$ctrl6 = $data->ctrl6;
 		$ctrl7 = $data->ctrl7;
 		$ctrl8 = $data->ctrl8;
+		$ctrl9 = $data->ctrl9;
+		$ctr20 = $data->ctr20;
 		
-		$query = "SELECT  a.user_id ,a.control_field1 as Account_Base_Access  ,a.control_field2 as Card_Base_Access ,a.control_field3 as Recharge_Access,a.control_field4 as Bill_Payment_Access,a.control_field5 as Bank_Service_Access,a.control_field6  as Group_Service_Access, a.debug_flag, a.mpos_simulate,concat('[',b.agent_code,']','-','[',b.agent_name,']') as name  FROM user_pos a,agent_info b WHERE a.user_id = b.user_id and a.user_id=".$userid;
+		$query = "SELECT  a.user_id ,a.control_field1 as Account_Base_Access  ,a.control_field2 as Card_Base_Access ,a.control_field3 as Recharge_Access,a.control_field4 as Bill_Payment_Access,a.control_field5 as Bank_Service_Access,a.control_field6  as Group_Service_Access, a.debug_flag, a.mpos_simulate,concat('[',b.agent_code,']','-','[',b.agent_name,']') as name,a.logcat_debug_flag,a.ptsp_type as ctms_type  FROM user_pos a,agent_info b WHERE a.user_id = b.user_id and a.user_id=".$userid;
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("userid"=>$row['user_id'],"name"=>$row['name'],"ctrl1"=>$row['Account_Base_Access'],"ctrl2"=>$row['Card_Base_Access'],"ctrl3"=>$row['Recharge_Access'],"ctrl4"=>$row['Bill_Payment_Access'],"ctrl5"=>$row['Bank_Service_Access'],"ctrl6"=>$row['Group_Service_Access'],"ctrl7"=>$row['debug_flag'],"ctrl8"=>$row['mpos_simulate']);           
+			$data[] = array("userid"=>$row['user_id'],"name"=>$row['name'],"ctrl1"=>$row['Account_Base_Access'],"ctrl2"=>$row['Card_Base_Access'],"ctrl3"=>$row['Recharge_Access'],"ctrl4"=>$row['Bill_Payment_Access'],"ctrl5"=>$row['Bank_Service_Access'],"ctrl6"=>$row['Group_Service_Access'],"ctrl7"=>$row['debug_flag'],"ctrl8"=>$row['mpos_simulate'],"ctrl9"=>$row['logcat_debug_flag'],"ctr20"=>$row['ctms_type']);           
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -137,6 +139,8 @@
 	$ctrl6 = $data->ctrl6;
 	$ctrl7 = $data->ctrl7;
 	$ctrl8 = $data->ctrl8;
+	$ctrl9 = $data->ctrl9;
+	$ctr20 = $data->ctr20;
 	
 	if($ctrl1 == "true" || $ctrl1 == "Y") {
 		$ctrl1 = "Y";
@@ -181,11 +185,23 @@
 		$ctrl8 = "N";
 	}
 	
+	if($ctrl9 == "true" || $ctrl9 == "Y") {
+		$ctrl9 = "Y";
+	}else{
+		$ctrl9 = "N";
+	}
+	
+	if($ctr20 == "true" || $ctr20 == "P") {
+		$ctr20 = "P";
+	}else{
+		$ctr20 = "E";
+	}
+	
 	if($profileId == "1") {
-		$query =  "UPDATE user_pos set control_field1 = '".trim($ctrl1)."', control_field2  = '".trim($ctrl2)."', control_field3 = '".trim($ctrl3)."', control_field4 = '".trim($ctrl4)."', control_field5 = '".trim($ctrl5)."', control_field6 = '".trim($ctrl6)."', debug_flag = '".trim($ctrl7)."',  mpos_simulate = '".trim($ctrl8)."' WHERE user_id = ".$userid;
+		$query =  "UPDATE user_pos set control_field1 = '".trim($ctrl1)."', control_field2  = '".trim($ctrl2)."', control_field3 = '".trim($ctrl3)."', control_field4 = '".trim($ctrl4)."', control_field5 = '".trim($ctrl5)."', control_field6 = '".trim($ctrl6)."', debug_flag = '".trim($ctrl7)."',  mpos_simulate = '".trim($ctrl8)."',logcat_debug_flag = '".trim($ctrl9)."',ptsp_type = '".trim($ctr20)."' WHERE user_id = ".$userid;
 	}	
-	if($profileId == "10") {
-		$query =  "UPDATE user_pos set control_field1 = '".trim($ctrl1)."', control_field2  = '".trim($ctrl2)."', control_field3 = '".trim($ctrl3)."', control_field4 = '".trim($ctrl4)."', control_field5 = '".trim($ctrl5)."', control_field6 = '".trim($ctrl6)."', debug_flag = '".trim($ctrl7)."' WHERE user_id = ".$userid;
+	if($profileId == "10" || $profileId == "24" || $profileId == "20" || $profileId == "22") {
+		$query =  "UPDATE user_pos set control_field1 = '".trim($ctrl1)."', control_field2  = '".trim($ctrl2)."', control_field3 = '".trim($ctrl3)."', control_field4 = '".trim($ctrl4)."', control_field5 = '".trim($ctrl5)."', control_field6 = '".trim($ctrl6)."', debug_flag = '".trim($ctrl7)."',ptsp_type = '".trim($ctr20)."' WHERE user_id = ".$userid;
 	}
 		error_log($query);
 		if(mysqli_query($con, $query)) {

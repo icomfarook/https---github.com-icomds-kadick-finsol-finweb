@@ -3,18 +3,16 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
 	$endDate	=  $_POST['endDate'];
 	$creteria 	= $_POST['creteria'];
 	$profileid = $_SESSION['profile_id'];
-$reportFor 	= $_POST['reportFor'];
+	$reportFor 	= $_POST['reportFor'];
+	$reportFor 	= $_POST['reportFor'];
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));
 $title = "";
@@ -38,7 +36,11 @@ if($endDate == null ){
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = "SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,c.account_no, a.date_time as date_time,c.update_time FROM bp_service_order a, agent_info b, bp_request c, service_feature d WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			$query = "SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(N.bp_payant_service_category_name,'-') name,  concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,c.account_no, a.date_time as date_time,c.update_time FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service l, bp_payant_service_category N WHERE c.bp_biller_id = l.bp_payant_service_id and l.bp_payant_service_id = N.bp_payant_service_id and c.bp_product_id = N.bp_payant_service_category_id and  (a.service_feature_code ='PEB' OR  a.service_feature_code ='PED') and a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'
+			UNION ALL
+			SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(N.name,'-') as  name, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,c.account_no, a.date_time as date_time,c.update_time FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service_category l, bp_payant_service_product N where c.bp_biller_id = l.bp_payant_service_category_id and l.bp_payant_service_category_id = N.bp_payant_service_category_id and c.bp_product_id = N.bp_payant_service_product_id  and (a.service_feature_code ='PTV') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'
+			UNION ALL
+			SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(N.bp_opay_service_provider_name,'-') as name, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,c.account_no, a.date_time as date_time,c.update_time FROM bp_service_order a, agent_info b, bp_request c, service_feature d, bp_opay_service l, bp_opay_service_provider N WHERE c.bp_biller_id = l.bp_opay_service_id and c.bp_biller_id = N.bp_opay_service_id and c.bp_product_id = N.bp_opay_service_provider_id   and  (a.service_feature_code ='PBT') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
 		}
 			if($profileid  == 50) {
 			if($reportFor == 'ALL'){
@@ -63,14 +65,14 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by date_time desc ";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.bp_service_order_no = $orderNo order by a.bp_service_order_no";
+			$query .= " and a.bp_service_order_no = $orderNo order by bp_service_order_no";
 		}
 		
 			
@@ -81,8 +83,8 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type", "Agent Name", "Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Reference","Date Time","Update Time");
-		$headcount = 10;
+		$heading = array("Order No","Order Type","Sub Product", "Agent Name", "Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Reference","Date Time","Update Time");
+		$headcount = 11;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
@@ -99,7 +101,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  ////error_log($query);
+	  	//error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

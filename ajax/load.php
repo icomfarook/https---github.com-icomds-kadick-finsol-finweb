@@ -1056,7 +1056,7 @@ echo json_encode($data);
 	}
 	else if ($for == 'localgvtlistall'){
 		if ($action == 'active'){
-			$query = "SELECT a.local_govt_id,CONCAT(b.name,':', a.name,'[',local_govt_id,']') as name FROM local_govt_list a, state_list b WHERE a.state_id = b.state_id and a.active = 'Y' ";
+			$query = "SELECT local_govt_id, name FROM local_govt_list where active = 'Y' ";
 			//error_log(json_encode($query));
 			$result = mysqli_query($con,$query);
 			if (!$result) {

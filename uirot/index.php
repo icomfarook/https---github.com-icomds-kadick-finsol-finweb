@@ -272,6 +272,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" style="color:orange" href="#!aidetail"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;AI Detail</a></li>
 						</ul>
 						</li>
+						<li><a class="ajax-link" href="#!ctmstype">&nbsp;CTMS Type State</a></li>
 					</ul>
 				</li>
 				
@@ -338,6 +339,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
 						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
+						<li><a class="ajax-link" href="#!partrans">Party Transfer</a></li>
 						<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>

@@ -1,3 +1,136 @@
+app.controller('ParentTransCtrl', function ($scope, $http) {
+$scope.Listbox =true;
+$scope.isResDiv = true;
+
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+
+
+if($scope.NewpartyType == 'C') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: {
+'C':$scope.NewpartyType,
+partyCode:$scope.NewpartyType,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.champ = response.data;
+});
+}
+$scope.Newpartyload = function () {
+var action = "";var fora="";
+
+fora = "champion";
+
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora
+
+},
+}).then(function successCallback(response) {
+$scope.champ = response.data;
+});
+
+}
+
+    $scope.query = function () {
+$scope.Listbox = false;
+$scope.parties = true;
+$scope.partyType == 'Agent';
+        $http({
+            method: 'post',
+            url: '../ajax/partranajax.php',
+            data: {
+                action: 'query',
+                partyType: $scope.partyType,
+                partyCode: $scope.partyCode
+            },
+        }).then(function successCallback(response) {
+$scope.ParentTransfer = response.data;
+$scope.parent_code = response.data[0].parents;
+
+}, function errorCallback(response) {
+console.log(response.data);
+});
+
+    }
+$scope.Transfer = function (partyCode,partyType,parent_code) {
+
+
+var confirmCheck = confirm("Do you want to transfer this  Agent  - "+ partyCode +  " from  this Parent - "+ parent_code +"  to "+ $scope.NewpartyCode+ " ?");
+
+if(confirmCheck){
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/partranajax.php',
+data: {
+NewpartyType: $scope.NewpartyType,
+NewpartyCode: $scope.NewpartyCode,
+partyCode: $scope.partyCode,
+partyType: partyType,
+                partyCode: partyCode,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.ispayRequestForm = true;
+$scope.isResDiv = false;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}else{
+            return
+        }
+}
+ $scope.refresh = function () {
+        window.location.reload();
+        };
+$scope.cancel = function () {
+alert( "To Cancel this transfer");
+window.location.reload();
+          };
+});
+
+
    app.controller('BillPayBettingCtrl', function ($scope, $http, $filter) {
     $scope.isHideOk = true;
     $scope.startDate = new Date();
@@ -13996,6 +14129,8 @@ $('#ctrl5').prop('checked', response.data[0].ctrl5 == 'Y');
 $('#ctrl6').prop('checked', response.data[0].ctrl6 == 'Y');
 $('#ctrl7').prop('checked', response.data[0].ctrl7 == 'Y');
 $('#ctrl8').prop('checked', response.data[0].ctrl8 == 'Y');
+$('#ctrl9').prop('checked', response.data[0].ctrl9 == 'Y');
+$('#ctr20').prop('checked', response.data[0].ctr20 == 'Y');
 $scope.ctrl1 = response.data[0].ctrl1;
 $scope.ctrl2 = response.data[0].ctrl2;
 $scope.ctrl3 = response.data[0].ctrl3;
@@ -14004,6 +14139,8 @@ $scope.ctrl5 = response.data[0].ctrl5;
 $scope.ctrl6 = response.data[0].ctrl6;
 $scope.ctrl7 = response.data[0].ctrl7;
 $scope.ctrl8 = response.data[0].ctrl8;
+$scope.ctrl9 = response.data[0].ctrl9;
+$scope.ctr20 = response.data[0].ctr20;
 $scope.name = response.data[0].name;
 //alert(response.data[0].ctrl1);
 }, function errorCallback(response) {
@@ -14028,6 +14165,8 @@ ctrl5: $scope.ctrl5,
 ctrl6: $scope.ctrl6,
 ctrl7: $scope.ctrl7,
 ctrl8: $scope.ctrl8,
+ctrl9: $scope.ctrl9,
+ctr20: $scope.ctr20,
 action: 'controlupdate'
 },
 }).then(function successCallback(response) {
@@ -14095,6 +14234,202 @@ console.log(response);
 }
 $scope.refresh = function () {
 window.location.reload();
+}
+});
+
+app.controller('CtmsTypeCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlistall', "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+$http({
+method: 'post',
+url: '../ajax/ctmsajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.ctmsstatelist = response.data;
+});
+
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/ctmsajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+
+$scope.state_id = response.data[0].state;
+$scope.local_govt_id = response.data[0].local;
+$scope.active = response.data[0].active;
+$scope.Ptsp = response.data[0].ptsp_type;
+$scope.id = response.data[0].id;
+$scope.startdate = new Date(response.data[0].startdate);
+$scope.expdate = new Date(response.data[0].expdate);
+
+if(response.data[0].startdate==null){
+$scope.startdate="";
+}
+if(response.data[0].expdate==null){
+$scope.expdate="";
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+
+$http({
+method: 'post',
+url: '../ajax/ctmsajax.php',
+data: {
+
+id: $scope.id,
+state: $scope.state_id,
+local: $scope.local_govt_id,
+active: $scope.active,
+ptsp: $scope.Ptsp,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+
+
+action: 'create'
+},
+}).then(function successCallback(response) {
+
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#CtmsstateCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function () {
+
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/ctmsajax.php',
+data: {
+id: $scope.id,
+state: $scope.state_id,
+local: $scope.local_govt_id,
+active: $scope.active,
+ptsp: $scope.Ptsp,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#ctmscountryBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+});
+
+app.controller('NibssCtrl', function ($scope, $http, $filter) {
+$scope.isHideOk = true;
+$scope.isHideexcel = true;
+$scope.startDate = new Date();
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params:
+{ partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel = false;
+
+$http({
+method: 'post',
+url: '../ajax/nibssajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+topartyCode:$scope.topartyCode,
+startDate:$scope.startDate,
+status:$scope.ApiType,
+},
+}).then(function successCallback(response) {
+
+$scope.nibsslist = response.data;
+console.log(response.data);
+
+}, function errorCallback(response) {
+console.log(response.data);
+});
+
 }
 });
 

@@ -303,11 +303,24 @@
 							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left: 34%;">
 							<label><input   id='ctrl7' type='checkbox' ng-true-value="'Y'" ng-false-value="'N'" name='control' ng-model='ctrl7' /></label>
 							<label>Debug Flag </label>
+							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left: -13px;">
+							<label><input   id='ctr20' type='checkbox' ng-true-value="'P'" ng-false-value="'E'" name='control' ng-model='ctr20' /></label>
+							<label>CTMS Type</label>
+							</div>
+						<?php } if($profileId == 20 || $profileId == 22 || $profileId == 24) { ?>
+							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left:196px;">
+							<label><input   id='ctr20' type='checkbox' ng-true-value="'P'" ng-false-value="'E'" name='control' ng-model='ctr20' /></label>
+							<label>CTMS Type</label>
 							</div>
 						<?php } if($profileId == 1 ) { ?>
-							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left: 34%;">
+							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left: -13px;">
 							<label><input   id='ctrl8' type='checkbox' ng-true-value="'Y'" ng-false-value="'N'" name='control' ng-model='ctrl8' /></label>
 							<label>MPOS Stimulate </label>
+							
+							</div>
+							<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12 form_col12_element' style="margin-left: -13px;">
+							<label><input   id='ctrl9' type='checkbox' ng-true-value="'Y'" ng-false-value="'N'" name='control' ng-model='ctrl9' /></label>
+							<label>Logcat Debug Flag </label>
 							</div>
 						<?php } ?>	
 							</div>								 

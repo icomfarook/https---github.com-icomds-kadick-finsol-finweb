@@ -236,6 +236,8 @@ define ("FLEXI_OPERATOR_CURL_TIMEOUT",50);
 
 define ("PTSP_POSVAS_CONNECTION_TIMEOUT",50);
 define ("PTSP_POSVAS_READ_TIMEOUT",50);
+define ("PTSP_POSVAS_KEY_VALIDITY",90);
+define ("PTSP_POSVAS_CALLHOME_VALIDITY_HOUR",12);
 define ("PTSP_FLAG","P");
 define ("PTSP_POSVAS_HOST_URL","http://nibssepms.intellifin.com.ng/nibss/");
 //define ("PTSP_POSVAS_HOST_URL","http://192.168.2.104:8989/finweb/");

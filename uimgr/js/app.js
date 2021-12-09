@@ -302,4 +302,16 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/billbetting.php",
 		controller: "BillPayBettingCtrl"
 	})
+	.when("/nibss", {
+		templateUrl : "../core/nibss.php",
+		controller: "NibssCtrl"
+	})
+	.when("/ctmstype", {
+		templateUrl : "../core/ctmstype.php",
+		controller: "CtmsTypeCtrl"
+	})
+	.when("/partrans", {
+		templateUrl : "../core/parenttrans.php",
+		controller: "ParentTransCtrl"
+	})
 });

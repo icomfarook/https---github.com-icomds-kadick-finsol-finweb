@@ -216,7 +216,7 @@
 		$BusinessType = $data->BusinessType;
 		$dob = date("Y-m-d", strtotime($dob));
 		$state_id = $data->state_id;
-		$type = mb_substr($partyCode, 0, 1, "UTF-8");
+		$type = substr($partyCode, 0, 1);
 		
 		$query = "";
 		$table_name = "";

@@ -503,6 +503,8 @@
 																					$userLogin->ptspHomeUri = PTSP_POSVAS_HOME_URI;
 																					$userLogin->ptspPrepUri = PTSP_POSVAS_PREP_URI;
 																					$userLogin->ptspTransactionUri = PTSP_POSVAS_TRANSACTION_URI;
+																					$userLogin->keyValidityInDays = PTSP_POSVAS_KEY_VALIDITY;
+																					$userLogin->callHomeValidityInHours = PTSP_POSVAS_CALLHOME_VALIDITY_HOUR;
 																					$userLogin->terminalSerialNo = $terminal_serial_no;
 																					$response["user"] = $userLogin;
 																					//error_log(json_encode($response));
@@ -601,6 +603,8 @@
 																				$userLogin->ptspHomeUri = PTSP_POSVAS_HOME_URI;
 																				$userLogin->ptspPrepUri = PTSP_POSVAS_PREP_URI;
 																				$userLogin->ptspTransactionUri = PTSP_POSVAS_TRANSACTION_URI;
+																				$userLogin->keyValidityInDays = PTSP_POSVAS_KEY_VALIDITY;
+																				$userLogin->callHomeValidityInHours = PTSP_POSVAS_CALLHOME_VALIDITY_HOUR;
 																				$userLogin->terminalSerialNo = $terminal_serial_no;
 																				$response["user"] = $userLogin;
 																				//error_log(json_encode($response));
