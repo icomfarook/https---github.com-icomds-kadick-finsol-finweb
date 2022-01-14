@@ -504,4 +504,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/parenttrans.php",
 		controller: "ParentTransCtrl"
 	})
+	.when("/posapi", {
+		templateUrl : "../core/posvasapi.php",
+		controller: "PosvasapiCtrl"
+	})
 });

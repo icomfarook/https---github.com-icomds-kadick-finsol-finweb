@@ -4406,7 +4406,6 @@ $scope.partner = "";
 }
 });
 
-
 app.controller('GroupListCtrl', function ($scope, $http, $filter) {
 $scope.isHideOk = true;
 $http({
@@ -15654,7 +15653,7 @@ $('#ctrl6').prop('checked', response.data[0].ctrl6 == 'Y');
 $('#ctrl7').prop('checked', response.data[0].ctrl7 == 'Y');
 $('#ctrl8').prop('checked', response.data[0].ctrl8 == 'Y');
 $('#ctrl9').prop('checked', response.data[0].ctrl9 == 'Y');
-$('#ctr20').prop('checked', response.data[0].ctr20 == 'P');
+$('#ctr20').prop('checked', response.data[0].ctr20 == 'Y');
 $scope.ctrl1 = response.data[0].ctrl1;
 $scope.ctrl2 = response.data[0].ctrl2;
 $scope.ctrl3 = response.data[0].ctrl3;
@@ -15665,7 +15664,6 @@ $scope.ctrl7 = response.data[0].ctrl7;
 $scope.ctrl8 = response.data[0].ctrl8;
 $scope.ctrl9 = response.data[0].ctrl9;
 $scope.ctr20 = response.data[0].ctr20;
-
 $scope.name = response.data[0].name;
 //alert(response.data[0].ctrl1);
 }, function errorCallback(response) {
@@ -15692,11 +15690,9 @@ ctrl7: $scope.ctrl7,
 ctrl8: $scope.ctrl8,
 ctrl9: $scope.ctrl9,
 ctr20: $scope.ctr20,
-
 action: 'controlupdate'
 },
 }).then(function successCallback(response) {
-
 $scope.isHide = true;
 $scope.isHideOk = false;
 $scope.isLoader = false;
@@ -15960,6 +15956,55 @@ console.log(response.data);
 });
 
 }
+});
+
+
+app.controller('PosvasapiCtrl', function ($scope, $http, $filter) {
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isHideexcel = true;
+
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/24/60/60/1000;
+ if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays > 31) {
+alert("Date Range should between 31 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+
+
+$scope.query = function () {
+$scope.isHideexcel = false;
+$scope.tablerow = true;
+
+$http({
+method: 'post',
+url: '../ajax/posapiajax.php',
+data: {
+endDate: $scope.endDate,
+startDate:$scope.startDate,
+status:$scope.ApiType,
+action: 'findlist'
+},
+}).then(function successCallback(response) {
+$scope.posapilist = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+
 });
 
 app.controller('payaccCtrl', function ($scope, $http) {

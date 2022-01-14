@@ -3,18 +3,15 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
 	$endDate	=  $_POST['endDate'];
 	$creteria 	= $_POST['creteria'];
 	$profileid = $_SESSION['profile_id'];
-$reportFor 	= $_POST['reportFor'];
+	$reportFor 	= $_POST['reportFor'];
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));
 $title = "";
@@ -25,9 +22,7 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
- if($creteria =="BT"){
+if($creteria =="BT"){
 		$msg = "Detail Bill_payment_Sales_Report_Order_Type_".$type."_And_Date_Between_".$startDate."_".$endDate;
 	}else if($creteria =="BO"){
 		$msg = "Detail Bill_payment_Sales_Report_Order_Type_".$orderNo;
@@ -38,7 +33,8 @@ if($endDate == null ){
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = " SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,a.date_time as date_time ,c.update_time,c.account_no,c.account_name,a.agent_charge,a.ams_charge, group_concat(p.charge_value ORDER BY p.service_charge_party_name) as charges FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_service_order_comm p WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.bp_service_order_no = p.bp_service_order_no";
+			
+			$query = "SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,a.date_time as date_time ,c.update_time,c.account_no,c.account_name,a.agent_charge,a.ams_charge, group_concat(p.charge_value ORDER BY p.service_charge_party_name) as charges FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_service_order_comm p WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.bp_service_order_no = p.bp_service_order_no";
 		}
 			if($profileid  == 50) {
 			if($reportFor == 'ALL'){
@@ -66,11 +62,11 @@ $objPHPExcel = new PHPExcel();
 				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group by service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time,c.update_time,c.account_no,c.account_name, user, a.agent_charge, a.ams_charge, c.service_charge order by date_time desc";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' order by a.date_time desc ";
+				$query .= " and a.service_feature_code = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group by a.bp_service_order_no order by a.date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.bp_service_order_no = $orderNo order by a.bp_service_order_no";
+			$query .= " and a.bp_service_order_no = $orderNo group by a.bp_service_order_no order by a.bp_service_order_no";
 		}
 		
 			
@@ -81,7 +77,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type","Agent Name","Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Date Time","Update Time",  "Account Number","Account Name","Agent Charges","Ams Charge","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
+		$heading = array("Order No","Order Type","Sub Product", "Agent Name", "Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Date Time","Update Time",  "Account Number","Account Name","Agent Charges","Ams Charge","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
 		$headcount = 18;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
@@ -113,7 +109,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  	////error_log($query);
+	  	//error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

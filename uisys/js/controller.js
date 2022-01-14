@@ -14041,6 +14041,7 @@ window.location.reload();
 }
 });
 
+
 app.controller('CtmsTypeCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -14235,6 +14236,55 @@ console.log(response.data);
 });
 
 }
+});
+
+
+app.controller('PosvasapiCtrl', function ($scope, $http, $filter) {
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isHideexcel = true;
+
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/24/60/60/1000;
+ if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays > 31) {
+alert("Date Range should between 31 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+
+
+$scope.query = function () {
+$scope.isHideexcel = false;
+$scope.tablerow = true;
+
+$http({
+method: 'post',
+url: '../ajax/posapiajax.php',
+data: {
+endDate: $scope.endDate,
+startDate:$scope.startDate,
+status:$scope.ApiType,
+action: 'findlist'
+},
+}).then(function successCallback(response) {
+$scope.posapilist = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+
 });
 
 

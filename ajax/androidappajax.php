@@ -15,7 +15,11 @@
 			$partyType = substr($topartyCode, 0, 1, "UTF-8");
 			$partyCode = $topartyCode;
 		} 
+		if($profile_id == 1){
 		$query = "SELECT mpos_debug_dump_id, user_id, party_type,party_code, message, pic_point,if(message_type = 'D','D - Debug',if(message_type = 'I','I - info',if(message_type = 'W','W - Warning',if(message_type = 'S',' S - Severe',' E - Exception')))) as status, date_time from mpos_debug_dump where party_code = '$partyCode' and date(date_time) = '$startDate' order by date_time";
+		}else{
+			$query = "SELECT mpos_debug_dump_id, user_id, party_type,party_code, message, pic_point,if(message_type = 'D','D - Debug',if(message_type = 'I','I - info',if(message_type = 'W','W - Warning',if(message_type = 'S',' S - Severe',' E - Exception')))) as status, date_time from mpos_debug_dump where party_code = '$partyCode' and date(date_time) = '$startDate' and pic_point not in (14000, 14001, 14002, 14003, 14004, 14005) order by date_time";
+		}
 		error_log("queyr".$query);
 		$result =  mysqli_query($con,$query);
 		if (!$result) {

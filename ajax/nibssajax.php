@@ -11,7 +11,7 @@
 		$partyCode = $data->partyCode;
 		$startDate = $data->startDate;
 		$status = $data->status;
-		$startDate = date("Y-m-d", strtotime($startDate. ' +1 day'));
+		$startDate = date("Y-m-d", strtotime($startDate));
 		$query = "";
 		
 		$topartyCode = $data->topartyCode;

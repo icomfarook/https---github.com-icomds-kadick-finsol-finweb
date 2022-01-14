@@ -267,6 +267,7 @@ if($(this).val() != "")
 						</ul>
 						</li>
 						<li><a class="ajax-link" href="#!ctmstype">&nbsp;CTMS Type State</a></li>
+						<li><a class="ajax-link" href="#!nibss">&nbsp;NIBSS POSVAS</a></li>
 
 					</ul>
 				</li>
@@ -433,6 +434,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!rptlis">Agent Last Activity</a></li>
 						<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 						<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
+						<li><a class="ajax-link" href="#!posapi">POSVAS API</a></li>
 						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>
 					</ul>
 				</li>

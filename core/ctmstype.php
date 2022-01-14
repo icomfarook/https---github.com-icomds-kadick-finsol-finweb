@@ -112,7 +112,7 @@
 						</div>	
 						<div class='row' style='padding:0px 15px'>		
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="addctmsstateForm.active.$touched ||addctmsstateForm.active.$dirty && addctmsstateForm.active.$invalid">
+						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="addctmsstateForm.active.$touched ||addctmsstateForm.active.$dirty && addctmsstateForm.active.$invalid">
 								<span class = 'err' ng-show="addctmsstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
 									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
@@ -121,7 +121,7 @@
 								</select>
 						</div>
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label>PTSP Type<span class='spanre'>*</span><span ng-show="addctmsstateForm.Ptsp.$touched ||addctmsstateForm.Ptsp.$dirty && addctmsstateForm.Ptsp.$invalid">
+						<label>PTSP Type<span ng-show="addctmsstateForm.Ptsp.$touched ||addctmsstateForm.Ptsp.$dirty && addctmsstateForm.Ptsp.$invalid">
 								<span class = 'err' ng-show="addctmsstateForm.Ptsp.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 								<select ng-model="Ptsp" class='form-control' name = 'Ptsp' id='Ptsp' required >											
 									<option value=''>--Select PTSP Type--</option>
@@ -188,7 +188,7 @@
 						</div>	
 						<div class='row' style='padding:0px 15px'>		
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="EditctmsstateForm.active.$touched ||EditctmsstateForm.active.$dirty && EditctmsstateForm.active.$invalid">
+						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="EditctmsstateForm.active.$touched ||EditctmsstateForm.active.$dirty && EditctmsstateForm.active.$invalid">
 								<span class = 'err' ng-show="EditctmsstateForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
 									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
@@ -197,7 +197,7 @@
 								</select>
 						</div>
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label>PTSP Type<span class='spanre'>*</span><span ng-show="EditctmsstateForm.Ptsp.$touched ||EditctmsstateForm.Ptsp.$dirty && EditctmsstateForm.Ptsp.$invalid">
+						<label>PTSP Type<span ng-show="EditctmsstateForm.Ptsp.$touched ||EditctmsstateForm.Ptsp.$dirty && EditctmsstateForm.Ptsp.$invalid">
 								<span class = 'err' ng-show="EditctmsstateForm.Ptsp.$error.required"><?php echo REQUIRED;?>.</span></span></label>
 								<select ng-model="Ptsp" class='form-control' name = 'Ptsp' id='Ptsp' required >											
 									<option value=''>--Select PTSP Type--</option>

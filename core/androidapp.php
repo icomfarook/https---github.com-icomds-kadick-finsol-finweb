@@ -248,13 +248,16 @@ td {
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
-	//TestTable1();
-	//TestTable2();
-	//TestTable3();
+	TestTable1();
+	TestTable2();
+	TestTable3();
 }
 $(document).ready(function() {
-  LoadDataTablesScripts(AllTables);
- // WinMove();
+ $("#Query").click(function() {				
+		LoadDataTablesScripts(AllTables);
+		
+	});
+	
 	$("#infoViewDialogue, #infoEditDialogue").on("click","#Ok",function() {
 		window.location.reload();
 	});
