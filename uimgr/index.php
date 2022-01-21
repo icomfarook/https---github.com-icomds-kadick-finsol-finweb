@@ -274,6 +274,7 @@
 							 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
 						</a>
 						<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!partrans">Party Transfer</a></li>
 							<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
@@ -607,6 +608,15 @@
 					</li>		
 					<!-- 23 - Customer care -->
 				<?php } else if($profile_id == 23) { ?>
+				<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-table"></i>
+							<span class="hidden-xs"><?php echo INDEX_APPLICATION; ?></span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" href="#!appviw"><?php echo INDEX_APPLICATION_VIEW; ?></a></li>
+						</ul>
+					</li>
 				
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
@@ -658,6 +668,7 @@
 						 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
 					</a>
 					<ul class="dropdown-menu">
+					<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
 					</ul>
 				</li>

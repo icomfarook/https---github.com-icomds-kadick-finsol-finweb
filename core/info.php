@@ -167,9 +167,11 @@
 									<th><?php echo INFO_MAIN_TABLE_ID; ?></th>
 									<th><?php echo INFO_MAIN_TABLE_CODE; ?></th>
 									<th><?php echo INFO_MAIN_TABLE_ASSIGNABLE; ?></th>
-									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 23 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) ?>
+									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>Edit</th>
+									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>View</th>
+									<?php } ?>
 								</tr>
 							</thead>
 							<tbody>
@@ -177,15 +179,17 @@
 									<td>{{ x.partyCode }}</td>
 									<td>{{ x.name }}</td>
 									<td>{{ x.lname }}</td>
-									 <?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 23 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) ?>
+									 <?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									  <td>
 										<a id={{x.code}} class='infoViewDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
+									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<td>
 										<a id={{x.code}} class='infoViewDialogue' ng-click='view($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
+									<?php } ?>
 								</tr>
 								<tr ng-show="infoss.length==0">
 									<td style='text-align:left' colspan='4' >
@@ -485,7 +489,7 @@
 		</div>	
 	</div>	
 </div>
-</div>
+
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){

@@ -19,7 +19,29 @@
 	if($action == "getreport") {
 	
 		if($profileid == 1 || $profileid == 10 || $profileid == 20 || $profileid == 21 || $profileid == 22 || $profileid == 23 || $profileid == 24 || $profileid == 25 || $profileid == 26 ) {
-			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no  ,ifNULL(N.bp_payant_service_category_name,'-') name FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service l, bp_payant_service_category N WHERE c.bp_biller_id = l.bp_payant_service_id and l.bp_payant_service_id = N.bp_payant_service_id and c.bp_product_id = N.bp_payant_service_category_id and  (a.service_feature_code ='PEB' || a.service_feature_code ='PED') and a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' and a.service_feature_code = '$type'  UNION ALL SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no ,ifNULL(l.bp_payant_service_category_name,'-') as  name FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service_category l, bp_payant_service_product N where c.bp_biller_id = l.bp_payant_service_category_id and l.bp_payant_service_category_id = N.bp_payant_service_category_id and c.bp_product_id = N.bp_payant_service_product_id  and (a.service_feature_code ='PTV') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' and a.service_feature_code = '$type' UNION ALL SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no ,ifNULL(N.bp_opay_service_provider_name,'-') as name FROM bp_service_order a, agent_info b, bp_request c, service_feature d, bp_opay_service l, bp_opay_service_provider N WHERE c.bp_biller_id = l.bp_opay_service_id and c.bp_biller_id = N.bp_opay_service_id and c.bp_product_id = N.bp_opay_service_provider_id and  (a.service_feature_code ='PBT') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			error_log("Type ==".$type);
+			
+			 if($type <> 'PBT' || $type <> 'PTV' || $type <> 'PED' || $type <> 'PEB'){
+				 error_log("service_feature_code==ALL");
+				$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no FROM bp_service_order a, agent_info b, bp_request c, service_feature d WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			} 
+			
+			if($type == 'PEB'){
+				error_log("service_feature_code==PEB");
+				$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no  ,ifNULL(N.bp_payant_service_category_name,'-') name FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service l, bp_payant_service_category N WHERE c.bp_biller_id = l.bp_payant_service_id and l.bp_payant_service_id = N.bp_payant_service_id and c.bp_product_id = N.bp_payant_service_category_id and  (a.service_feature_code ='PED') and a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code ";
+			}if($type == 'PED'){
+				error_log("service_feature_code==PED");
+					$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no  ,ifNULL(N.bp_payant_service_category_name,'-') name FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service l, bp_payant_service_category N WHERE c.bp_biller_id = l.bp_payant_service_id and l.bp_payant_service_id = N.bp_payant_service_id and c.bp_product_id = N.bp_payant_service_category_id and  (a.service_feature_code ='PEB') and a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			}if($type == 'PTV'){
+				
+				error_log("service_feature_code==PTV");
+				$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no ,ifNULL(l.bp_payant_service_category_name,'-') as  name FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_payant_service_category l, bp_payant_service_product N where c.bp_biller_id = l.bp_payant_service_category_id and l.bp_payant_service_category_id = N.bp_payant_service_category_id and c.bp_product_id = N.bp_payant_service_product_id  and (a.service_feature_code ='PTV') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code ";
+			}if($type == 'PBT'){
+				error_log("service_feature_code==PBT");
+				$query =  "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,c.account_no ,ifNULL(N.bp_opay_service_provider_name,'-') as name FROM bp_service_order a, agent_info b, bp_request c, service_feature d, bp_opay_service l, bp_opay_service_provider N WHERE c.bp_biller_id = l.bp_opay_service_id and c.bp_biller_id = N.bp_opay_service_id and c.bp_product_id = N.bp_opay_service_provider_id and  (a.service_feature_code ='PBT') and  a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code";
+			}
+			
+
 		}
 		if($profileid  == 50) {
 			if($reportFor == 'ALL'){
@@ -42,14 +64,38 @@
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no order by date_time desc ";
+				if($type == 'PBT' || $type == 'PTV' || $type == 'PED' || $type == 'PEB'){
+					
+					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,l.bp_payant_service_category_name order by date_time desc ";
+					
+					
+				}else {
+				
+					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no order by date_time desc ";
+				}
 			}
-			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no order by date_time desc ";
+			else{
+				if($type == 'PBT' || $type == 'PTV' || $type == 'PED' || $type == 'PEB'){
+					
+					$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,l.bp_payant_service_category_name order by date_time desc ";
+
+				}
+				else{
+					
+					$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no order by date_time desc ";
+				}
+				
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.bp_service_order_no = $orderNo group by a.bp_service_order_no order by a.bp_service_order_no";
+			if($type <> 'PBT' || $type <> 'PTV' || $type <> 'PED' || $type <> 'PEB'){
+				$query .= " and a.bp_service_order_no = $orderNo group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no order by a.bp_service_order_no";
+			}
+			else{
+				$query .= " and a.bp_service_order_no = $orderNo group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,N.bp_opay_service_provider_name order by a.bp_service_order_no";
+				
+			}
+			
 		}
 		if($creteria == "C") { 
 			if($championCode == "ALL") {
