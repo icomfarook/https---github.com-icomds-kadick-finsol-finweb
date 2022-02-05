@@ -88,7 +88,7 @@ define("SERVICE_CHARGE_RATE", "Service Charge Rate");
 
 define("INDEX_PARTNER", "Partner");
 define("INDEX_PARTNER_TYPE", "Partner Type");
-define("INDEX_PARTNER_CATEGORY", "partner Category");
+define("INDEX_PARTNER_CATEGORY", "Party Category");
 
 
 define("INDEX_CONTROL", "Control");

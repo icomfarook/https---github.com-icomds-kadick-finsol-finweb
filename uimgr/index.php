@@ -278,6 +278,8 @@
 							<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+							<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
+							<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -425,6 +427,8 @@
 							<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
 							<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+							<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
+							<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -769,6 +773,8 @@
 						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+						<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
+						<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
 					</ul>
 				</li>
 				

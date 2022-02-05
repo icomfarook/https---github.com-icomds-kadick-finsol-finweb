@@ -9,7 +9,7 @@
 		error_log("inside mailsend");
 		$mail = new PHPMailer;
 		$mail->ClearAddresses();
-		//$mail->isSMTP();                                      
+		$mail->isSMTP();                                      
 		$mail->Host = SMTPHOST;  
 		$mail->SMTPAuth = true;                               
 		$mail->Username = USERNAME;                 
@@ -31,9 +31,9 @@
 		$mail->addBCC(BCC2_EMAIL);	
 		$mail->isHTML(true);
 		$mail->Timeout = SMTPTIMEOUT;  
-		$Mail->Priority  = 1;       
+		$mail->Priority  = 1;       
 		$mail->addAttachment($attachment);
-		$Mail->ContentType = 'text/html; charset=utf-8\r\n';   	
+		$mail->ContentType = 'text/html; charset=utf-8\r\n';   	
 		$mail->Subject = $subject;
 		$mail->Body    = $body;
 		if(!$mail->send()) {
@@ -52,7 +52,7 @@
 		error_log("inside mailsend");
 		$mail = new PHPMailer;
 		$mail->ClearAddresses();
-		//$mail->isSMTP();                                      
+		$mail->isSMTP();                                      
 		$mail->Host = SMTPHOST;  
 		$mail->SMTPAuth = true;                               
 		$mail->Username = USERNAME;                 
@@ -82,7 +82,7 @@
 			echo 'Message could not be sent.';
 			echo 'Mailer Error: ' . $mail->ErrorInfo;
 		} else {	
-			echo '';
+			echo 'Mail send successfully';
 			error_log("Mail send successfully");
 		}
 		$mail->ClearAddresses();

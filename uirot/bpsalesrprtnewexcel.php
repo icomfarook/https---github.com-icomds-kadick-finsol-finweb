@@ -7,6 +7,7 @@ include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
+	$championCode		=  $_POST['championCode'];
 	$startDate		=  $_POST['startDate'];
 	$endDate	=  $_POST['endDate'];
 	$creteria 	= $_POST['creteria'];
@@ -33,8 +34,7 @@ if($creteria =="BT"){
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			
-			$query = "SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,a.date_time as date_time ,c.update_time,c.account_no,c.account_name,a.agent_charge,a.ams_charge, group_concat(p.charge_value ORDER BY p.service_charge_party_name) as charges FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_service_order_comm p WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.bp_service_order_no = p.bp_service_order_no";
+			$query = " SELECT a.bp_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user ,  a.request_amount,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount,a.date_time as date_time ,c.update_time,c.account_no,c.account_name,a.agent_charge,a.ams_charge, group_concat(p.charge_value ORDER BY p.service_charge_party_name) as charges FROM bp_service_order a, agent_info b, bp_request c, service_feature d,bp_service_order_comm p WHERE a.bp_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.bp_service_order_no = p.bp_service_order_no";
 		}
 			if($profileid  == 50) {
 			if($reportFor == 'ALL'){
@@ -59,14 +59,30 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group by service_feature_code, a.bp_service_order_no, a.request_amount, a.total_amount, a.date_time,c.update_time,c.account_no,c.account_name, user, a.agent_charge, a.ams_charge, c.service_charge order by date_time desc";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
 			}
-			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate' group by a.bp_service_order_no order by a.date_time desc ";
+			else{
+					$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time  order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.bp_service_order_no = $orderNo group by a.bp_service_order_no order by a.bp_service_order_no";
+			$query .= " and a.bp_service_order_no = $orderNo ggroup by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by a.bp_service_order_no";
+		}
+		if($creteria == "C") { 
+			if($championCode == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
+			}
+		}
+		if($creteria == "S") { 
+			if($state == "ALL") {
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
+			}
+			else{ 
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
+			}
 		}
 		
 			
@@ -77,7 +93,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type","Sub Product", "Agent Name", "Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Date Time","Update Time",  "Account Number","Account Name","Agent Charges","Ams Charge","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
+		$heading = array("Order No","Order Type","Agent Name","Request Amount","Stamp Charge","Partner Charge","Other Charge","Total Amount","Date Time","Update Time",  "Account Number","Account Name","Agent Charges","Ams Charge","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
 		$headcount = 18;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						

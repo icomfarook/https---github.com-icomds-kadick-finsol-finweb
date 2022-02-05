@@ -90,7 +90,9 @@
 				$sanef_seq_no =$requestId ;
 				if ( $sanef_seq_no > 0 ) {							
 					$sanefreqsend['requestId'] = $sanef_seq_no;
-					$sanefreqsend['superAgentCode'] = $superAgentCode;
+					//$sanefreqsend['superAgentCode'] = $superAgentCode;
+					$sanefreqsend['agentCode'] = $superAgentCode;
+					$sanefreqsend['id'] = 2;
 					$sanefreqsend['userName'] = $userName;
 					$sanefreqsend['countryId'] = $country;	
 						

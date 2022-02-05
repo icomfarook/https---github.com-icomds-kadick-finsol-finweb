@@ -318,4 +318,12 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/posvasapi.php",
 		controller: "PosvasapiCtrl"
 	})
+	.when("/agntmnth", {
+		templateUrl : "../core/agentMonth.php",
+		controller: "AgentMonthCtrl"
+	})
+	.when("/agntdaily", {
+		templateUrl : "../core/agentDaily.php",
+		controller: "AgentDailyCtrl"
+	})
 });

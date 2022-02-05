@@ -43,33 +43,33 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount, a.date_time,c.update_time, reference, user, a.agent_charge, a.ams_charge, c.service_charge order by date_time desc";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.fin_service_order_no = $orderNo order by a.fin_service_order_no";
+			$query .= " and a.fin_service_order_no = $orderNo  group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by a.fin_service_order_no";
 		}
 		if($creteria == "C") { 
 			if($championCode == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate'  group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "S") { 
 			if($state == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "T") { 
-			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc";
+			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc";
 		}
 	
 			

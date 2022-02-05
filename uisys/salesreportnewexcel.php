@@ -26,6 +26,8 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
+//error_log($ba);
+//error_log($endDate);
 $msg = "Deatiled Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
@@ -41,33 +43,33 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.fin_service_order_no, a.request_amount, a.total_amount, a.date_time,c.update_time, reference, user, a.agent_charge, a.ams_charge, c.service_charge order by date_time desc";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.fin_service_order_no = $orderNo order by a.fin_service_order_no";
+			$query .= " and a.fin_service_order_no = $orderNo  group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by a.fin_service_order_no";
 		}
 		if($creteria == "C") { 
 			if($championCode == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate'  group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "S") { 
 			if($state == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc ";
 			}
 		}
 		if($creteria == "T") { 
-			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc";
+			$query .= " and e.terminal_id = '$Terminal' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge order by date_time desc";
 		}
 	
 			
@@ -83,21 +85,21 @@ $objPHPExcel = new PHPExcel();
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
-			error_log("agentrow['10']_slit  ==".$row['12']);
+			//error_log("agentrow['10']_slit  ==".$row['12']);
 			$split_charges = explode(",",$row['13']);
 			$agent_slit = $split_charges[0] ;
 			$row['14'] = $agent_slit;
 			
-			error_log("agent_slit  ==".$agent_slit);
-			error_log("agent_slit1  ==".$row['14'] );
-			error_log("split_charges  ==".$split_charges );
+			//error_log("agent_slit  ==".$agent_slit);
+			//error_log("agent_slit1  ==".$row['14'] );
+			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
 			$row['15'] = $champion_slit;
 			$kadick_slit = $split_charges[2];
 			$row['16'] = $kadick_slit;
 			//$row['10'] = null;
 			
-			error_log("agent_Charge  ==".$row['15']);
+			//error_log("agent_Charge  ==".$row['15']);
 			generateExcel ($i, $row,$objPHPExcel,$headcount);
 			$i++;
 			$lastrow = $objPHPExcel->getActiveSheet()->getHighestRow();			

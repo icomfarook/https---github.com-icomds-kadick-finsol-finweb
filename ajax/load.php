@@ -1208,4 +1208,39 @@ echo json_encode($data);
 			echo json_encode($data);
 		}
 	}
+	else if ($for == 'partytargetcombo'){
+		if ($action == 'active'){
+			//$query = "select distinct a.party_target_combo_name from party_target_combo a left join party_category_target b on a.party_target_combo_name = b.party_target_combo_name where b.party_target_combo_name IS NULL and a.active = 'Y' order by a.party_target_combo_id desc";
+			$query = "select distinct a.party_target_combo_name from party_target_combo a where a.active = 'Y' order by a.party_target_combo_id desc";
+			////error_log("partytargetcombo Load query - Active only = ".$query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("name"=>$row['party_target_combo_name']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
+	if ($action == 'EditCategory'){
+		$query = "select party_target_combo_id, party_target_combo_name from party_target_combo where active='Y'";
+		//error_log("Authorization Load query - Active only ".$query);
+		$result = mysqli_query($con,$query);
+		if (!$result) {
+			printf("Error: %s\n". mysqli_error($con));
+			exit();
+		}
+		$data = array();
+		while ($row = mysqli_fetch_array($result)) {
+			$data[] = array("id"=>$row['party_target_combo_id'],"name"=>$row['party_target_combo_name']);          
+		}
+		////error_log(json_encode($data));
+		echo json_encode($data);
+	}
+}
+
  ?>

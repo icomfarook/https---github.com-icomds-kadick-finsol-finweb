@@ -18,7 +18,7 @@
     $endDate = date("Y-m-d", strtotime($endDate));
     	
 	if($action == "query") {
-		if($profile == 1 || $profile == 10 || $profile == 24 || $profile == 26) {
+		if($profile == 1 || $profile == 10 || $profile == 24 || $profile == 26 || $profile == 23) {
 			$app_view_query = " SELECT a.application_id, if(a.application_category='N','New',if(a.application_category = 'C', 'Change',if(a.application_category = 'T','Transfer','Cancel'))) as category, b.outlet_name, if(a.applier_type='A','Agent',if(a.applier_type='P','Personal',if(a.applier_type='S','Sub Agent','Champion'))) as applier_type, ifNull(a.parent_code,'-') as parent_code, a.create_time, a.status as stat, if(a.status='P','Pending',if(a.status='A','Approved',if(a.status='R','Rejected',if(a.status='C','Cancelled','Authorized')))) as status FROM application_main a, application_info b WHERE a.application_id = b.application_id";
 			if($creteria == "BI") {
 				$app_view_query .= " and a.application_id = '$id'";
@@ -289,7 +289,7 @@
 		echo json_encode($data);
 	}
 	else if($action == "edit") {
-		if($profile == 1 ||  $profile == 10 || $profile == 24 || $profile == 26) {
+		if($profile == 1 ||  $profile == 10 || $profile == 24 || $profile == 26 ) {
 			$app_view_view_query = "SELECT b.state_id as state, a.application_id, a.application_category as category, b.outlet_name, a.applier_type as applier_type, a.parent_code as parent_code, a.create_time, b.country_id, b.address1 as address1, IF(b.address2='undefined','',b.address2) as address2, b.local_govt_id as local_govt,b.country_id, IF(b.zip_code='null','',b.zip_code) as zip_code, IF(b.tax_number='undefined','',b.tax_number) as tax_number, b.email, b.mobile_no, IF(b.work_no='undefined','',b.work_no) as work_no, b.contact_person_name, IF(b.contact_person_mobile='undefined','',b.contact_person_mobile) as contact_person_mobile, a.login_name as login_name,a.comments as comments,b.language_id as language_name, a.parent_code,b.loc_latitude, b.loc_longitude,b.bvn,(SELECT attachment_name from application_attachment where application_id = '$id' and file='I') as id_attachment_name, (SELECT attachment_name from application_attachment where application_id = '$id' and file='C') as business_attachment_name, IFNULL((SELECT attachment_name from application_attachment where application_id = '$id' and file='C'),'N') as compDocExist,b.dob,b.gender,b. business_type FROM application_main a, application_info b WHERE a.application_id = b.application_id and a.application_id = '$id'";
 		}
 		else {

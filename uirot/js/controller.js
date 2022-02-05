@@ -1,3 +1,349 @@
+app.controller('TerminalBondCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.isHideexcel = true;
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.vendor = "All";
+$scope.terid = "";
+$scope.terslno = "";
+}
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:'vendors',action:'active'
+},
+}).then(function successCallback(response) {
+$scope.vendors = response.data;
+});
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/termbondajax.php',
+data: {
+action: 'list',
+action: 'list',
+vendor:$scope.vendor,
+terid:$scope.terid,
+terslno:$scope.terslno
+},
+}).then(function successCallback(response) {
+$scope.Inventory_list = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
+
+app.controller('CatTargetCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partycatype' }
+}).then(function successCallback(response) {
+$scope.partycatypes = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partytargetcombo' }
+}).then(function successCallback(response) {
+$scope.partytarget = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'EditCategory', for: 'partytargetcombo' }
+}).then(function successCallback(response) {
+$scope.partytargets = response.data;
+//window.location.reload();
+});
+
+
+ $scope.refresh = function () {
+   window.location.reload();
+   };
+
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.categorylist = response.data;
+});
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.name = response.data[0].party_category_target_name;
+$scope.ComboName = response.data[0].party_target_combo_name;
+$scope.partycatype = response.data[0].party_category_type_id;
+$scope.Count = response.data[0].count_value;
+$scope.amount = response.data[0].amount_value;
+$scope.Condition = response.data[0].rule_value;
+$scope.id = response.data[0].id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+ComboName: $scope.ComboName,
+partycatype: $scope.partycatype,
+Counts: $scope.Count,
+amount: $scope.amount,
+Condition: $scope.Condition,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#TargetCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+ComboName: $scope.ComboName,
+partycatype: $scope.partycatype,
+Counts: $scope.Count,
+amount: $scope.amount,
+Condition: $scope.Condition,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#countryBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+});
+
+
+app.controller('TargetComboCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.combolist = response.data;
+});
+
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.active = response.data[0].Active;
+$scope.name = response.data[0].party_target_combo_name;
+$scope.serfet = response.data[0].service_feature;
+$scope.id = response.data[0].id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: {
+id: $scope.id,
+active: $scope.active,
+name: $scope.name,
+serfet: $scope.serfet,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#TargetCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+active: $scope.active,
+serfet: $scope.serfet,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#countryBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+ $scope.refresh = function () {
+        window.location.reload();
+        };
+
+});
+
+
+app.controller('AgentDailyCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "";
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/agentDailyajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+MonthDate: $scope.MonthDate,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
+
+app.controller('AgentMonthCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "";
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/agentMonthajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+MonthDate: $scope.MonthDate,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
+
 app.controller('ParentTransCtrl', function ($scope, $http) {
 $scope.Listbox =true;
 $scope.isResDiv = true;

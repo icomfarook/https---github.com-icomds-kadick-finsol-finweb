@@ -508,4 +508,24 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/posvasapi.php",
 		controller: "PosvasapiCtrl"
 	})
+	.when("/agntmnth", {
+		templateUrl : "../core/agentMonth.php",
+		controller: "AgentMonthCtrl"
+	})
+	.when("/agntdaily", {
+		templateUrl : "../core/agentDaily.php",
+		controller: "AgentDailyCtrl"
+	})
+	.when("/mastarg", {
+		templateUrl : "../core/targetcombo.php",
+		controller: "TargetComboCtrl"
+	})
+	.when("/mascatar", {
+		templateUrl : "../core/catgtarget.php",
+		controller: "CatTargetCtrl"
+	})
+	.when("/ascterbond", {
+		templateUrl : "../core/terminalbond.php",
+		controller: "TerminalBondCtrl"
+	})
 });

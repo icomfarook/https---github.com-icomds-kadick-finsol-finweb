@@ -191,6 +191,9 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!mstsgp"><?php echo INDEX_SERVICE_GROUP; ?></a></li>
 						<li><a class="ajax-link" href="#!mstsfm"><?php echo INDEX_SERVICE_FEATURE_MENU; ?></a></li>
 						<li><a class="ajax-link" href="#!mstctl">Control Flag</a></li>
+						<li><a class="ajax-link" href="#!ptncat"><?php echo INDEX_PARTNER_CATEGORY; ?></a></li>
+						<li><a class="ajax-link" href="#!mastarg">Party Target Combo</a></li>
+						<li><a class="ajax-link" href="#!mascatar">Party Category Target</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -227,6 +230,8 @@ if($(this).val() != "")
 						<li><a class="ajax-link"  style="color:orange" href="#!asctervend"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Vendor</a></li>
 						<li><a class="ajax-link"  style="color:orange" href="#!ascterinvn"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Inventory</a></li>
 						<li><a class="ajax-link"  style="color:orange" href="#!ascteralloc"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Allocation</a></li>
+						<li><a class="ajax-link"  style="color:orange" href="#!ascterbond"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Bound</a></li>
+
 						</ul>
 						</li>
 						
@@ -338,6 +343,8 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyrac"><?php echo INDEX_PARTY_RECEIVABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptytss"><?php echo INDEX_PARTY_TSS_ACCOUNT; ?></a></li>
+						<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
+						<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>
 					</ul>
 				</li>
 				<li class="dropdown">
@@ -486,7 +493,6 @@ if($(this).val() != "")
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!ptnptn"><?php echo INDEX_PARTNER; ?></a></li>
 						<li><a class="ajax-link" href="#!ptntyp"><?php echo INDEX_PARTNER_TYPE; ?></a></li>
-						<li><a class="ajax-link" href="#!ptncat"><?php echo INDEX_PARTNER_CATEGORY; ?></a></li>
 					</ul>
 				</li>	
 				<li class="dropdown">

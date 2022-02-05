@@ -1,3 +1,91 @@
+app.controller('AgentDailyCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "";
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/agentDailyajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+MonthDate: $scope.MonthDate,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
+
+app.controller('AgentMonthCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "";
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/agentMonthajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+MonthDate: $scope.MonthDate,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
 app.controller('ParentTransCtrl', function ($scope, $http) {
 $scope.Listbox =true;
 $scope.isResDiv = true;
