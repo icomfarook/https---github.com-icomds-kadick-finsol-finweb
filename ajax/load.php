@@ -1226,7 +1226,7 @@ echo json_encode($data);
 			echo json_encode($data);
 		}
 	}
-	if ($action == 'EditCategory'){
+	else if ($action == 'EditCategory'){
 		$query = "select party_target_combo_id, party_target_combo_name from party_target_combo where active='Y'";
 		//error_log("Authorization Load query - Active only ".$query);
 		$result = mysqli_query($con,$query);
@@ -1241,6 +1241,5 @@ echo json_encode($data);
 		////error_log(json_encode($data));
 		echo json_encode($data);
 	}
-}
 
  ?>
