@@ -153,14 +153,14 @@
 																	error_log("new_available_balance for userId [".$userId."] = ".$new_available_balance);
                                             											
 																	$response["result"] = "Success";
-																	$response["message"] = "Your Payout Request #".$payout_request_id." is submitted";
+																	$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." is submitted";
 																	$response["statusCode"] = 0;
 																	$response["signature"] = $server_signature;
 																	$response["availableBalance"] = $new_available_balance;
 																	$response["payOutRequestId"] = $payout_request_id;
 																}else {
 																	$response["result"] = "Error";
-																	$response["message"] = "Your Payout Request #".$payout_request_id." encountered error. Contact Kadick Admin";
+																	$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error. Contact Kadick Admin";
 																	$response["statusCode"] = 100;
 																	$response["signature"] = $server_signature;
 																	$response["availableBalance"] = 0;
@@ -168,7 +168,7 @@
 																}
                                             										}else {
                                             											$response["result"] = "Error";
-																$response["message"] = "Your Payout Request #".$payout_request_id." encountered error. Contact Kadick Admin";
+																$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error. Contact Kadick Admin";
 																$response["statusCode"] = 110;
 																$response["signature"] = $server_signature;
 																$response["availableBalance"] = 0;
@@ -176,7 +176,7 @@
                                             										}
                                             									}else {
                                             										$response["result"] = "Error";
-															$response["message"] = "Your Payout Request #".$payout_request_id." encountered error in acc code2. Contact Kadick Admin.";
+															$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error in acc code2. Contact Kadick Admin.";
 															$response["statusCode"] = 120;
 															$response["signature"] = $server_signature;
 															$response["availableBalance"] = 0;
@@ -184,7 +184,7 @@
                                             									}
                                             								}else {
                                             									$response["result"] = "Error";
-														$response["message"] = "Your Payout Request #".$payout_request_id." encountered error in journal entry. Contact Kadick Admin.";
+														$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error in journal entry. Contact Kadick Admin.";
 														$response["statusCode"] = 130;
 														$response["signature"] = $server_signature;
 														$response["availableBalance"] = 0;
@@ -192,7 +192,7 @@
                                             								}
                                             							}else {
                                             								$response["result"] = "Error";
-													$response["message"] = "Your Payout Request #".$payout_request_id." encountered error. Contact Kadick Admin.";
+													$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error. Contact Kadick Admin.";
 													$response["statusCode"] = 140;
 													$response["signature"] = $server_signature;
 													$response["availableBalance"] = 0;
@@ -200,7 +200,7 @@
                                             							}
                                             						}else {
                                             							$response["result"] = "Error";
-												$response["message"] = "Your Payout Request #".$payout_request_id." encountered error in acc code1. Contact Kadick Admin.";
+												$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error in acc code1. Contact Kadick Admin.";
 												$response["statusCode"] = 150;
 												$response["signature"] = $server_signature;
 												$response["availableBalance"] = 0;
@@ -208,7 +208,7 @@
                                             						}
                                             					}else{
                                             						$response["result"] = "Error";
-											$response["message"] = "Your Payout Request #".$payout_request_id." encountered error in journal entry. Contact Kadick Admin.";
+											$response["message"] = "Your Withdraw Commission Request #".$payout_request_id." encountered error in journal entry. Contact Kadick Admin.";
 											$response["statusCode"] = 160;
 											$response["signature"] = $server_signature;
 											$response["availableBalance"] = 0;
@@ -216,7 +216,7 @@
                                             					}
                                     					}else {
 						    				$response["result"] = "Error";
-										$response["message"] = "Error in updating Payout Request Status";
+										$response["message"] = "Error in updating Withdraw Commission Request Status";
 										$response["statusCode"] = 170;
 										$response["signature"] = $server_signature;
 										$response["availableBalance"] = 0;
@@ -241,7 +241,7 @@
 						}
 						else {
 						    $response["result"] = "Error";
-						    $response["message"] = "Error in submitting your Payout Request";
+						    $response["message"] = "Error in submitting your Withdraw Commission Request";
 						    $response["statusCode"] = "100";
 						    $response["signature"] = $server_signature;
 						    $response["availableBalance"] = 0;
@@ -252,7 +252,7 @@
 						// DB failure
 						$response["result"] = "Error";
 						$response["statusCode"] = "200";
-						$response["message"] = "Failure: Error in getting Payout Request no";
+						$response["message"] = "Failure: Error in getting Withdraw Commission Request no";
 						$response["signature"] = $server_signature;
 					}
 				}else {
@@ -435,7 +435,7 @@
 					}
 					else {
 						$response["result"] = "Error";
-						$response["message"] = "Error in find your payout details";
+						$response["message"] = "Error in find your Withdraw Commission details";
 						$response["statusCode"] = "100";
 						$response["signature"] = $server_signature;
                     			}

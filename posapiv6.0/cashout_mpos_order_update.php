@@ -78,7 +78,7 @@
 			if ( $local_signature == $signature ){	
 
                 		if ( "Cash-Out (Card)" == $orderType ) {
-					$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type, date(b.create_time) as create_date FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = ".$orderNo;
+					$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type, date(b.create_time) as create_date, b.all_in FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = ".$orderNo;
                     			error_log("select query: ".$query);
                    			$result = mysqli_query($con, $query);
                     			if (!$result) {
@@ -106,6 +106,7 @@
 						    	$parentCode = $row['parent_code'];
 						    	$parentType = $row['parent_type'];
 						    	$order_create_date = $row['create_date'];
+						    	$cashoutAllIn = $row['all_in'];
 						    	$acc_trans_type = "PAYMT";
 						    	$productId = 90;
 						    	$partnerId = 2;
@@ -148,6 +149,13 @@
                                 					//Insert into Payment Receipt Table                                					
                                 					$reference_no = "COU-".$acc_trans_type."#".$fin_service_order_no;
 									$p_receipt_id = generate_seq_num(1100, $con);
+									error_log("before requestAmount = ".$requestAmount.", cashoutAllIn = ".$cashoutAllIn);
+									if ( "Y" == $cashoutAllIn ) {
+										$serviceChargeAlone = $totalAmount - $requestAmount;
+										error_log("serviceChargeAlone = ".$serviceChargeAlone.", cashoutAllIn = ".$cashoutAllIn);
+										$requestAmount = $requestAmount - $serviceChargeAlone;
+									}
+									error_log("after requestAmount = ".$requestAmount.", cashoutAllIn = ".$cashoutAllIn);
 									$insertDepositQuery = "INSERT INTO payment_receipt(p_receipt_id, country_id, payment_date, party_code, party_type, payment_reference_no, payment_type, payment_amount, payment_approved_amount, payment_approved_date, payment_source, payment_status, create_user, create_time, comments, approver_comments) VALUES($p_receipt_id, $countryId, now(), '$partyCode', '$partyType', '$reference_no', 'CP', $requestAmount, $requestAmount, now(), 'C', 'E', $user_id, now(), '$glComment', 'Cash-out Auto Approved by System')";
 									error_log("payment_receipt insert_query: ".$insertDepositQuery);
 									$insertDepositResult = mysqli_query($con, $insertDepositQuery);

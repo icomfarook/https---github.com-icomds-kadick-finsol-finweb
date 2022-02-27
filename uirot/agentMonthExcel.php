@@ -7,8 +7,8 @@ include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$agentCode	= $_POST['agentCode'];
 	$MonthDate	= $_POST['MonthDate'];	
-	$MonthDate = date("Y-m-d", strtotime($MonthDate));
-		
+	error_log("MonthDate ==".$MonthDate);
+	$MonthDate = date("Y-m", strtotime($MonthDate));
 $title = "KadickMoni";
  
 $msg = "Agent Ranking Monthly Report For Party Code $agentCode between $MonthDate ";
@@ -16,7 +16,7 @@ $objPHPExcel = new PHPExcel();
 
 			$heading = array("ID","Party Type","Party Code","Run Month","Date Time","Assigned Rank","Monthly Rank");
 							$headcount = 7;
-		$query = "select a.party_rank_month_id,if(a.party_type='A','A-Agent','-') as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  date(date_time) = '$MonthDate' and a.party_code = '$agentCode'";
+		$query = "select a.party_rank_month_id,if(a.party_type='A','A-Agent','-') as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  date(date_time) like '%$MonthDate%' and a.party_code = '$agentCode'";
 	
 					
 		$result =  mysqli_query($con,$query);

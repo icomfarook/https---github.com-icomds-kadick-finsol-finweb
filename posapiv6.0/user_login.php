@@ -342,7 +342,7 @@
 																		
 																		//Get POS Configuration
 																		//$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model from user_pos a, terminal_inventory b, terminal_vendor c where a.terminal_id = b.terminal_id and b.vendor_id = c.terminal_vendor_id and a.user_id = ".$user_id;
-																		$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model, ifnull(a.ptsp_type,'') as ptsp_type, ifnull(b.terminal_serial_no, '') as terminal_serial_no, ifnull(a.logcat_debug_flag, 'N') as logcat_debug_flag from user_pos a left join terminal_inventory b on a.terminal_id = b.terminal_id left join terminal_vendor c on b.vendor_id = c.terminal_vendor_id where a.user_id = ".$user_id;
+																		$user_pos_config_query = "select ifnull(a.terminal_id, '') as terminal_id, a.nibss_key1, a.nibss_key2, a.nibss_server_ip, a.nibss_server_port, a.app_timeout, a.imei, a.status, ifnull(a.debug_flag, 'N') as debug_flag, ifnull(a.mpos_simulate, 'N') as mpos_simulate, ifnull(a.control_field1, 'N') as control_field1, ifnull(a.control_field2, 'N') as control_field2, ifnull(a.control_field3, 'N') as control_field3, ifnull(a.control_field4, 'N') as control_field4, ifnull(a.control_field5, 'N') as control_field5, ifnull(a.control_field6, 'N') as control_field6, ifnull(a.pos_pin, '') as pos_pin, ifnull(a.pay_min_limit, 0) as pay_min_limit, ifnull(a.pay_max_limit, 1000000) as pay_max_limit, ifnull(a.cashin_min_limit, 0) as cashin_min_limit, ifnull(a.cashin_max_limit, 500000) as cashin_max_limit, ifnull(a.cashout_min_limit, 0) as cashout_min_limit, ifnull(a.cashout_max_limit, 500000) as cashout_max_limit, ifnull(a.recharge_min_limit, 0) as recharge_min_limit, ifnull(a.recharge_max_limit, 10000) as recharge_max_limit, ifnull(a.flexi_rate,'N') as flexi_rate, ifnull(c.terminal_model,'') as terminal_model, ifnull(a.ptsp_type,'') as ptsp_type, ifnull(b.terminal_serial_no, '') as terminal_serial_no, ifnull(a.logcat_debug_flag, 'N') as logcat_debug_flag, ifnull(cash_out_config, 0) as cash_out_config from user_pos a left join terminal_inventory b on a.terminal_id = b.terminal_id left join terminal_vendor c on b.vendor_id = c.terminal_vendor_id where a.user_id = ".$user_id;
 																		error_log("user_pos_config_query = ".$user_pos_config_query);
 																		$user_pos_config_result = mysqli_query($con, $user_pos_config_query);
 																		$user_pos_config_ready = "N";
@@ -401,6 +401,7 @@
 																				$user_pos_config_ready = "Y";
 																				$db_user_ptsp_flag = $row3['ptsp_type'];
 																				$terminal_serial_no = $row3['terminal_serial_no'];
+																				$cash_out_config = $row3['cash_out_config'];
 																			}
 																		}
 																		
@@ -506,6 +507,7 @@
 																					$userLogin->keyValidityInDays = PTSP_POSVAS_KEY_VALIDITY;
 																					$userLogin->callHomeValidityInHours = PTSP_POSVAS_CALLHOME_VALIDITY_HOUR;
 																					$userLogin->terminalSerialNo = $terminal_serial_no;
+																					$userLogin->cashOutConfig = $cash_out_config;
 																					$response["user"] = $userLogin;
 																					//error_log(json_encode($response));
 																				}else {
@@ -606,6 +608,7 @@
 																				$userLogin->keyValidityInDays = PTSP_POSVAS_KEY_VALIDITY;
 																				$userLogin->callHomeValidityInHours = PTSP_POSVAS_CALLHOME_VALIDITY_HOUR;
 																				$userLogin->terminalSerialNo = $terminal_serial_no;
+																				$userLogin->cashOutConfig = $cash_out_config;
 																				$response["user"] = $userLogin;
 																				//error_log(json_encode($response));
 																			} else if ($pos_status == "X") {

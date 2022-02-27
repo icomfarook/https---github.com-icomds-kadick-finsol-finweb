@@ -52,6 +52,7 @@
 				$stampCharge = $data->stampCharge;
 				$flexiRate = $data->flexiRate;
 				$agentCharge = $data->agentCharge;
+				$cashoutAllIn = $data->allIn;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 
 				if ( $partnerId == 1 ) {
@@ -184,9 +185,9 @@
 									$senderName = mysqli_real_escape_string($con, $senderName);
 									if ( $txType == "F" ) {
 										$newAmsCharge = $amsCharge + $agentCharge;
-                                						$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, comments, create_time) VALUES ($fin_request_id, $fin_trans_log_id, 'MP0', $countryId, $stateId, $requestedAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', 'Card Type: $cardType', now())";
+                                						$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, comments, create_time, all_in) VALUES ($fin_request_id, $fin_trans_log_id, 'MP0', $countryId, $stateId, $requestedAmount, $userId, $newAmsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', 'Card Type: $cardType', now(), '$cashoutAllIn')";
                                 					}else {
-                                						$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, comments, create_time) VALUES ($fin_request_id, $fin_trans_log_id, 'MP0', $countryId, $stateId, $requestedAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', 'Card Type: $cardType', now())";
+                                						$fin_request_query = "INSERT INTO fin_request (fin_request_id, fin_trans_log_id1, service_feature_code, country_id, state_id, request_amount, user_id, service_charge, partner_charge, other_charge, total_amount, sender_name, mobile_no, status, comments, create_time, all_in) VALUES ($fin_request_id, $fin_trans_log_id, 'MP0', $countryId, $stateId, $requestedAmount, $userId, $amsCharge, $partnerCharge, $otherCharge, $totalAmount, '$senderName', '$mobileNo', 'I', 'Card Type: $cardType', now(), '$cashoutAllIn')";
                                 					}
                                 					error_log("fin_request_query = ".$fin_request_query);
                                 					$fin_request_result = mysqli_query($con, $fin_request_query);
@@ -210,7 +211,7 @@
 												}
 												$response["statusCode"] = "0";		
 												$response["result"] = "Success";															
-												$response["message"] = "Your mPos Cash-Out Order# $fin_service_order_no for NGN $requestedAmount is about to be triggered.";
+												$response["message"] = "Your mPos Cash Withdraw Order# $fin_service_order_no for NGN $requestedAmount is about to be triggered.";
 												$response["partnerId"] = $partnerId;
 												$response["orderNo"] = $fin_service_order_no;
 												$response["transactionId"] = $fin_request_id;

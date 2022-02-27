@@ -9,10 +9,11 @@
 	$action		=  $data->action;
 	$MonthDate		=  $data->MonthDate;
 	$agentCode		=  $data->agentCode;
-	$MonthDate = date("Y-m-d", strtotime($MonthDate. "+1 days"));
+	//error_log("MonthDate ==".$MonthDate);
+	$MonthDate = date("Y-m", strtotime($MonthDate."+1 months"));
 	if($action == "getreport") {
 		
-		$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  date(date_time) = '$MonthDate' and a.party_code = '$agentCode'";
+		$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  date(date_time) like '%$MonthDate%' and a.party_code = '$agentCode'";
 				
 		
 		error_log("qyetr".$query);

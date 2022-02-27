@@ -107,7 +107,7 @@
 							$response["chargeDetail"] = $row['result']; 
 							$response["statusCode"] = "0";
 							$response["signature"] = $server_signature;
-							$response["message"] = "CashIn Service Charge responded successfuly";
+							$response["message"] = "Deposit Service Charge responded successfuly";
 							$response["result"] = "Success";
 							$response["partnerId"] = $partnerId;
 							$response["txtType"] = $txtType;

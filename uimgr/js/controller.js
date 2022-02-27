@@ -1,3 +1,48 @@
+app.controller('TerminalBondCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.isHideexcel = true;
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.vendor = "All";
+$scope.terid = "";
+$scope.terslno = "";
+}
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:'vendors',action:'active'
+},
+}).then(function successCallback(response) {
+$scope.vendors = response.data;
+});
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/termbondajax.php',
+data: {
+action: 'list',
+action: 'list',
+vendor:$scope.vendor,
+terid:$scope.terid,
+terslno:$scope.terslno
+},
+}).then(function successCallback(response) {
+$scope.Inventory_list = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
+
+
 app.controller('AgentDailyCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.tablerow = true;

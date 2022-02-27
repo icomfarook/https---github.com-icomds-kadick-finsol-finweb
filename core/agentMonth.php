@@ -83,7 +83,7 @@
 								</div>
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Month<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
-								<input  ng-model="MonthDate" type='date' id='MonthDate' name='MonthDate' required class='form-control'/>
+								<input  ng-model="MonthDate"  date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
 							</div>			
 							 
 						</div>	<div class='clearfix'></div>

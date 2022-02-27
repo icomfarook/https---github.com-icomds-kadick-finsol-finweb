@@ -226,7 +226,7 @@
 													else {
 														$secondpartytype = substr($secondpartycode,0);
 													}
-													$glComment = "Cash-In (Account) Order #".$fin_service_order_no;
+													$glComment = "Deposit Order #".$fin_service_order_no;
 													$journal_entry_id = process_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $secondpartycode, $secondpartytype, $glComment, $totalAmount, $userId, $con);
 													if($journal_entry_id > 0) {
 														$journal_entry_error = "N";	
@@ -364,7 +364,7 @@
 
 																				$response["result"] = "Success";
 																				$response["statusCode"] = $statusCode;																	
-																				$response["message"] = "Your Cash-In Order# $fin_service_order_no for NGN $requestedAmount submitted.";
+																				$response["message"] = "Your Deposit Order# $fin_service_order_no for NGN $requestedAmount submitted.";
 																				$response["partnerId"] = $partnerId;
 																				$response["sessionId"] = $api_response['sessionId'];
 																				$response["paymentReference"] = $api_response['paymentReference'];
@@ -483,7 +483,7 @@
 																	//Inside not success wallet update	
 																	$fin_order_rollback = "Y";		
 																	error_log("inside not able to update wallet for $fin_service_order_no");
-																	$msg = "Error: Live Cashin [$description] Order $fin_service_order_no due to failure in account update. Contact Kadick Admin.";
+																	$msg = "Error: Deposit [$description] Order $fin_service_order_no due to failure in account update. Contact Kadick Admin.";
 																	
 																	$journal_reverse_query = "select gl_reverse($journal_entry_id) as gl_reverse_result";
 																	$journal_reverse_result = mysqli_query($con, $journal_reverse_query);

@@ -265,12 +265,12 @@
 																$response["cpResponseMessage"] = $api_response['cpResponseMessage'];
 																$response["signature"] = $server_signature;
 																$response["partnerId"] = $partnerId;
-																$response["message"] = "CashOut USSD with Order # ".$fin_service_order_no." is trigerred. Use Short Code & Reference No to initiate USSD from Customer registered mobile";
+																$response["message"] = "CoralPay USSD with Order # ".$fin_service_order_no." is trigerred. Use Short Code & Reference No to initiate USSD from Customer registered mobile";
 															}
 															else {
 																$response["result"] = "Failure";
 																$response["statusCode"] = 230;																	
-																$response["message"] = "Error in fin_service_order for CashOut USSD order # ".$fin_service_order_no;
+																$response["message"] = "Error in fin_service_order for CoralPay USSD order # ".$fin_service_order_no;
 																$response["partnerId"] = $partnerId;
 																$response["signature"] = $server_signature;
 															}
@@ -282,7 +282,7 @@
 															$response["message"] = "Error in creating Service Order No";
 															$response["partnerId"] = $partnerId;
 															$response["signature"] = $server_signature;
-															$response["message"] = "Error in getting fin_service_order_no for CashOut Phone order # ".$fin_service_order_no;
+															$response["message"] = "Error in getting fin_service_order_no for CoralPay USSD order # ".$fin_service_order_no;
 														}
 													}
 													else {

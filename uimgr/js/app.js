@@ -326,4 +326,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/agentDaily.php",
 		controller: "AgentDailyCtrl"
 	})
+	.when("/ascterbond", {
+		templateUrl : "../core/terminalbond.php",
+		controller: "TerminalBondCtrl"
+	})
 });

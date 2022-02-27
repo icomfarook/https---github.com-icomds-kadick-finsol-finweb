@@ -269,7 +269,7 @@
 															error_log("fin_service_order_query = ".$fin_service_order_query);
 															$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
 															if( $fin_service_order_result ) {
-																$glComment = "Cash-Out Phone Order #".$fin_service_order_no;
+																$glComment = "PayAttitude USSD Order #".$fin_service_order_no;
 																$journal_entry_id = process_glentry($acc_trans_type, $fin_service_order_no, $partyCode, $partyType, $parentCode, $parentType, $glComment, $requestAmount, $userId, $con);
 																error_log("select_journal_entry = ".$journal_entry_id);
 																if($journal_entry_id > 0) {
@@ -361,7 +361,7 @@
 																			$response["signature"] = $server_signature;
 																			$response["partnerId"] = $partnerId;
 																			$response["newAvailableBalance"] = $new_available_balance;
-																			$response["message"] = "CashOut Phone order confirmed for Order # ".$fin_service_order_no;
+																			$response["message"] = "PayAttitude USSD order confirmed for Order # ".$fin_service_order_no;
 																		}
 																		else {
 																			$response["result"] = "Failure";
@@ -369,7 +369,7 @@
 																			$response["signature"] = $server_signature;
 																			$response["partnerId"] = $partnerId;
 																			$response["newAvailableBalance"] = $new_available_balance;
-																			$response["message"] = "Error in updating wallet for CashOut Phone order # ".$fin_service_order_no;
+																			$response["message"] = "Error in updating wallet for PayAttitude USSD order # ".$fin_service_order_no;
 																		}
 																	}
 																	else {
@@ -379,7 +379,7 @@
 																		$response["newAvailableBalance"] = $new_available_balance;
 																		$response["partnerId"] = $partnerId;
 																		$response["signature"] = $server_signature;
-																		$response["message"] = "Error in getting acc_trans_typet for CashOut Phone order # ".$fin_service_order_no;
+																		$response["message"] = "Error in getting acc_trans_typet for PayAttitude USSD order # ".$fin_service_order_no;
 																	}
 																}
 																else {
@@ -393,7 +393,7 @@
 															else {
 																$response["result"] = "Failure";
 																$response["statusCode"] = 230;																	
-																$response["message"] = "Error in fin_service_order for CashOut Phone order # ".$fin_service_order_no;
+																$response["message"] = "Error in fin_service_order for PayAttitude USSD order # ".$fin_service_order_no;
 																$response["partnerId"] = $partnerId;
 																$response["signature"] = $server_signature;
 															}
@@ -405,7 +405,7 @@
 															$response["message"] = "Error in creating Service Order No";
 															$response["partnerId"] = $partnerId;
 															$response["signature"] = $server_signature;
-															$response["message"] = "Error in getting fin_service_order_no for CashOut Phone order # ".$fin_service_order_no;
+															$response["message"] = "Error in getting fin_service_order_no for PayAttitude USSD order # ".$fin_service_order_no;
 														}
 													}
 													else {
