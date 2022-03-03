@@ -12,6 +12,7 @@
 	$championCode 	= $data->championCode;
 	$Terminal 	= $data->Terminal;	
 	$state 	= $data->state;	
+	$local_govt_id 	= $data->local_govt_id;
 	$creteria 	= $data->creteria;
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));	
@@ -67,7 +68,7 @@
 				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
 			}
 		}
 			

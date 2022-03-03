@@ -1670,6 +1670,7 @@ endDate: $scope.endDate,
 creteria: $scope.creteria,
 championCode: $scope.championCode,
 Terminal: $scope.Terminal,
+local_govt_id: $scope.local_govt_id,
 state: $scope.state
 },
 }).then(function successCallback(response) {
@@ -1690,6 +1691,7 @@ $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 $scope.championCode = "ALL";
 $scope.state = "ALL";
+$scope.local_govt_id = "--Select--";
 $scope.Terminal = "Select";
 $scope.Terminal_id = true;
 $scope.isstate = true;
@@ -1715,6 +1717,7 @@ $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.championCode="ALL";
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 }
 if(clickra == "BO") {
 $scope.tablerow = false;
@@ -1729,6 +1732,7 @@ $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.championCode="ALL";
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 }
 if(clickra == "C") {
 $scope.tablerow = false;
@@ -1744,6 +1748,7 @@ $scope.ischampionCode = false;
 $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 $scope.orderNo = "";
 }
 if(clickra == "S") {
@@ -1930,6 +1935,7 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 Terminal: $scope.Terminal,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
@@ -1989,6 +1995,7 @@ $scope.agent_charge = "";
 $scope.stamp_charge = "";
 $scope.country = "";
 $scope.state = "";
+$scope.local_govt_id = "";
 $scope.local = "";
 $scope.user = "";
 $scope.first_name = "";
@@ -2015,7 +2022,6 @@ $scope.utime = "";
 
 }
 });
-
 
 
 app.controller('AcctrReportCtrl', function ($scope, $http, $filter) {
@@ -2721,6 +2727,15 @@ $scope.states = response.data;
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
 $http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
@@ -2749,7 +2764,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -2786,6 +2801,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -2856,6 +2872,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -2941,6 +2958,7 @@ close();
 
 });
 
+
    app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
    $scope.tablerow=true;
    $scope.query = function () {
@@ -3025,6 +3043,15 @@ $scope.states = response.data;
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
 $http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
@@ -3053,7 +3080,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -3090,6 +3117,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -3160,6 +3188,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -3575,6 +3604,555 @@ close();
 }
 });
 
+
+app.controller('BPsalesReportCtrl', function ($scope, $http, $filter) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.ischampionCode = true;
+$scope.isstate = true;
+$scope.tablerow = true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'servfeaforcode',action:'active' },
+}).then(function successCallback(response) {
+$scope.types = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/24/60/60/1000;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays > 31) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+$scope.impor =function () {
+     $scope.tablerow = false;
+}
+$scope.viewcomm = function (no) {
+$http({
+method: 'post',
+url: '../ajax/bpsalesrprtajax.php',
+data: {
+                action: 'viewcomm',
+                orderNo: no
+            },
+}).then(function successCallback(response) {
+$scope.no =no;
+$scope.rescomms = response.data;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (no,code) {
+$http({
+method: 'post',
+url: '../ajax/bpsalesrprtajax.php',
+data: {
+                action: 'view',
+                orderNo: no,
+code: code
+            },
+}).then(function successCallback(response) {
+$scope.no = response.data[0].no;
+$scope.code = response.data[0].code;
+$scope.transLogId1 = response.data[0].transLogId1;
+$scope.transLogId2 = response.data[0].transLogId2;
+$scope.transLogId3 = response.data[0].transLogId3;
+$scope.toamount = response.data[0].toamount;
+$scope.rmount = response.data[0].rmount;
+$scope.Biller = response.data[0].Biller;
+$scope.Product = response.data[0].Product;
+$scope.account_no = response.data[0].account_no;
+$scope.account_name = response.data[0].account_name;
+$scope.bp_account_no = response.data[0].bp_account_no;
+$scope.bp_account_name = response.data[0].bp_account_name;
+$scope.bp_bank_code = response.data[0].bp_bank_code;
+$scope.session_id = response.data[0].session_id;
+$scope.user = response.data[0].user;
+$scope.amscharge = response.data[0].amscharge;
+$scope.parcharge = response.data[0].parcharge;
+$scope.ocharge = response.data[0].ocharge;
+$scope.name = response.data[0].name;
+$scope.mobile = response.data[0].mobile;
+$scope.sts = response.data[0].sts;
+$scope.scharge = response.data[0].scharge;
+$scope.refNo = response.data[0].refNo;
+$scope.fincomment = response.data[0].fincomment;
+$scope.dtime = response.data[0].dtime;
+$scope.pstatus = response.data[0].pstatus;
+$scope.ptime = response.data[0].ptime;
+$scope.sconfid = response.data[0].sconfid;
+$scope.bank = response.data[0].bank;
+$scope.partner = response.data[0].partner;
+$scope.sender_name = response.data[0].sender_name;
+$scope.appcmt = response.data[0].appcmt;
+$scope.bp_transaction_id = response.data[0].bp_transaction_id;
+$scope.payment_fee = response.data[0].payment_fee;
+$scope.agent_charge = response.data[0].agent_charge;
+$scope.stamp_charge = response.data[0].stamp_charge;
+$scope.create_time = response.data[0].create_time;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.query = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays > 31) {
+alert("Date Range should between 31 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/bpsalesrprtajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+orderNo: $scope.orderNo,
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+creteria: $scope.creteria,
+championCode: $scope.championCode,
+local_govt_id: $scope.local_govt_id,
+state: $scope.state
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.type = "ALL";
+$scope.orderNo = "";
+$scope.creteria = "BT";
+$scope.isOrderTypeDi = false;
+$scope.isOrderNoDi = true;
+$scope.championCode = "ALL";
+$scope.state = "ALL";
+$scope.local_govt_id = "--Select--";
+$scope.isstate = true;
+$scope.ischampionCode = true;
+}
+$scope.clickra = function (clickra) {
+$scope.orderno = "";
+$scope.type = "";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+if(clickra == "BT") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = "";
+$scope.isOrderTypeDi = false;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+$scope.ischampionCode = true;
+$scope.isstate = true;
+}
+if(clickra == "BO") {
+$scope.isOrderNoDi = false;
+$scope.isStartDateDi = true;
+$scope.isEndDateDi = true;
+$scope.isOrderTypeDi = true
+$scope.startDate = "";
+$scope.endDate = "";
+$scope.ischampionCode = true;
+$scope.isstate = true;
+}
+if(clickra == "C") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = true;
+$scope.isOrderTypeDi = true;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+$scope.ischampionCode = false;
+$scope.isstate = true;
+$scope.Terminal_id = true;
+}
+if(clickra == "S") {
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.orderno = true;
+$scope.isOrderTypeDi = true;
+$scope.startDate = new Date();
+$scope.type = "ALL";
+$scope.endDate = new Date();
+$scope.ischampionCode = true;
+$scope.isstate = false;
+$scope.Terminal_id = true;
+}
+
+}
+$scope.print = function (no,code) {
+$http({
+method: 'post',
+url: '../ajax/bpsalesrprtajax.php',
+data: {
+action: 'view',
+                orderNo: no,
+code: code
+},
+}).then(function successCallback(response) {
+//alert(response.data[0].sts);
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var creteria = $scope.creteria;
+var id = $scope.id;
+var statusa = $scope.statusa;
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var m = new Date();
+var datetime =
+m.getUTCFullYear() + "-" +
+("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+("0" + m.getUTCDate()).slice(-2) + " " +
+("0" + m.getUTCHours()).slice(-2) + ":" +
+("0" + m.getUTCMinutes()).slice(-2) + ":" +
+("0" + m.getUTCSeconds()).slice(-2);
+var text = "";
+var valu = "";
+text = "By Date";
+valu = "From: " + startDate + " to " + endDate;
+
+var PEB = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Bill Payment - TV Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+
+if(response.data[0].code =='PTV'){
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID </td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
+"<tr><td class='name'>Bundle Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>SmartCard</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
+"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - TV </td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+else if(response.data[0].code =='PEB'){
+
+
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Receipt No</td><td class='result'>" + response.data[0].bp_bank_code +"</td></tr>" +
+"<tr><td class='name'>Biller Name</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>Customer Acc</td><td class='result'>" + response.data[0].account_no + "</td></tr>" +
+"<tr><td class='name'>Token</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
+"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+
+else if(response.data[0].code =='PED'){
+var PED = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Education Payment (Web) for PED Service Code</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].account_name +"</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>Serial</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
+"<tr><td class='name'>Pin Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
+"<tr><td class='name'>Vend Status</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Education</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PED + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+else if(response.data[0].code =='PBT'){
+var PBT = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Bill - Payment Betting (web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+
+if(response.data[0].sts=='Error'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
+ +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
+"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].bp_opay_service_name + "</td></tr>" +
+"<tr><td class='name'>Provider</td><td class='result'>" + response.data[0].appcmt + "</td></tr>" +
+"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
+"<tr><td class='name'>Customer ID</td><td class='result'>" + response.data[0].account_no + "</td></tr>" +
+"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Betting</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(PBT + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}
+
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.printAll = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>31) {
+alert("Date Range should between 31 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/bpsalesrprtajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+orderNo: $scope.orderNo,
+state: $scope.state,
+local_govt_id: $scope.local_govt_id,
+championCode: $scope.championCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+creteria: $scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var rerows = "";
+for(var i=0;i < response.data.length;i++) {
+
+rerows += "<td>"+ response.data[i].no +"</td>"+
+"<td>"+ response.data[i].code +"</td>"+
+"<td>"+ response.data[i].reqmount +"</td>"+
+"<td>"+ response.data[i].toamount +"</td>"+
+"<td>"+ response.data[i].user +"</td>"+
+"<td>"+ response.data[i].account_no +"</td>"+
+"<td>"+ response.data[i].dtime +"</td>"+
+"</tr>"
+}
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var text = "";
+var valu = "";
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+'<h2 style="text-align:center;margin-top:30px"> Bill Payment Sales Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+var responsetablehead ="<table width='100%'><thead>" +
+"<tr><th>Order #</th>" +
+"<th>Order Type</th>" +
+"<th>Request Amount</th>" +
+"<th>Total Amount</th>" +
+"<th>Agent Name</th>" +
+"<th>Account Number</th>" +
+"<th>Date and Time</th>" +
+"</tr></thead>" +
+"<tbody>"+rerows+"</tbody></table>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.clear = function () {
+$scope.no = "";
+$scope.code = "";
+$scope.toamount = "";
+$scope.rmount = "";
+$scope.amscharge = "";
+$scope.parcharge = "";
+$scope.ocharge = "";
+$scope.name = "";
+$scope.mobile = "";
+$scope.auth = "";
+$scope.refNo = "";
+$scope.fincomment = "";
+$scope.dtime = "";
+$scope.pstatus = "";
+$scope.ptime = "";
+$scope.user = "";
+$scope.transLogId = "";
+$scope.sconfid = "";
+$scope.bank = "";
+$scope.partner = "";
+
+}
+});
 
 
 app.controller('BPtrReportCtrl', function ($scope, $http, $filter) {
@@ -3993,551 +4571,7 @@ $scope.sender_name = "";
 }
 });
 
-app.controller('BPsalesReportCtrl', function ($scope, $http, $filter) {
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.isOrderNoDi = true;
-$scope.isStartDateDi = false;
-$scope.isEndDateDi = false;
-$scope.ischampionCode = true;
-$scope.isstate = true;
-$scope.tablerow = true;
 
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'champion' }
-}).then(function successCallback(response) {
-$scope.champions = response.data;
-//window.location.reload();
-});
-$scope.countrychange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": 566, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.statechange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'servfeaforcode',action:'active' },
-}).then(function successCallback(response) {
-$scope.types = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-$scope.checkdate = function (startDate,endDate){
-var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-var currdate = new Date();
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/24/60/60/1000;
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays > 31) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.isQueryDi = false;
-}
-}
-$scope.impor =function () {
-     $scope.tablerow = false;
-}
-$scope.viewcomm = function (no) {
-$http({
-method: 'post',
-url: '../ajax/bpsalesrprtajax.php',
-data: {
-                action: 'viewcomm',
-                orderNo: no
-            },
-}).then(function successCallback(response) {
-$scope.no =no;
-$scope.rescomms = response.data;
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (no,code) {
-$http({
-method: 'post',
-url: '../ajax/bpsalesrprtajax.php',
-data: {
-                action: 'view',
-                orderNo: no,
-code: code
-            },
-}).then(function successCallback(response) {
-$scope.no = response.data[0].no;
-$scope.code = response.data[0].code;
-$scope.transLogId1 = response.data[0].transLogId1;
-$scope.transLogId2 = response.data[0].transLogId2;
-$scope.transLogId3 = response.data[0].transLogId3;
-$scope.toamount = response.data[0].toamount;
-$scope.rmount = response.data[0].rmount;
-$scope.Biller = response.data[0].Biller;
-$scope.Product = response.data[0].Product;
-$scope.account_no = response.data[0].account_no;
-$scope.account_name = response.data[0].account_name;
-$scope.bp_account_no = response.data[0].bp_account_no;
-$scope.bp_account_name = response.data[0].bp_account_name;
-$scope.bp_bank_code = response.data[0].bp_bank_code;
-$scope.session_id = response.data[0].session_id;
-$scope.user = response.data[0].user;
-$scope.amscharge = response.data[0].amscharge;
-$scope.parcharge = response.data[0].parcharge;
-$scope.ocharge = response.data[0].ocharge;
-$scope.name = response.data[0].name;
-$scope.mobile = response.data[0].mobile;
-$scope.sts = response.data[0].sts;
-$scope.scharge = response.data[0].scharge;
-$scope.refNo = response.data[0].refNo;
-$scope.fincomment = response.data[0].fincomment;
-$scope.dtime = response.data[0].dtime;
-$scope.pstatus = response.data[0].pstatus;
-$scope.ptime = response.data[0].ptime;
-$scope.sconfid = response.data[0].sconfid;
-$scope.bank = response.data[0].bank;
-$scope.partner = response.data[0].partner;
-$scope.sender_name = response.data[0].sender_name;
-$scope.appcmt = response.data[0].appcmt;
-$scope.bp_transaction_id = response.data[0].bp_transaction_id;
-$scope.payment_fee = response.data[0].payment_fee;
-$scope.agent_charge = response.data[0].agent_charge;
-$scope.stamp_charge = response.data[0].stamp_charge;
-$scope.create_time = response.data[0].create_time;
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.query = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays > 31) {
-alert("Date Range should between 31 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.dateerr ="";
-$http({
-method: 'post',
-url: '../ajax/bpsalesrprtajax.php',
-data: {
-action: 'getreport',
-type: $scope.type,
-orderNo: $scope.orderNo,
-startDate: $scope.startDate,
-endDate: $scope.endDate,
-creteria: $scope.creteria,
-championCode: $scope.championCode,
-state: $scope.state
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-}
-$scope.reset = function () {
-$scope.tablerow = false;
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.type = "ALL";
-$scope.orderNo = "";
-$scope.creteria = "BT";
-$scope.isOrderTypeDi = false;
-$scope.isOrderNoDi = true;
-$scope.championCode = "ALL";
-$scope.state = "ALL";
-$scope.isstate = true;
-$scope.ischampionCode = true;
-}
-$scope.clickra = function (clickra) {
-$scope.orderno = "";
-$scope.type = "";
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-if(clickra == "BT") {
-$scope.isOrderNoDi = true;
-$scope.isStartDateDi = false;
-$scope.isEndDateDi = false;
-$scope.orderno = "";
-$scope.isOrderTypeDi = false;
-$scope.startDate = new Date();
-$scope.type = "ALL";
-$scope.endDate = new Date();
-$scope.ischampionCode = true;
-$scope.isstate = true;
-}
-if(clickra == "BO") {
-$scope.isOrderNoDi = false;
-$scope.isStartDateDi = true;
-$scope.isEndDateDi = true;
-$scope.isOrderTypeDi = true
-$scope.startDate = "";
-$scope.endDate = "";
-$scope.ischampionCode = true;
-$scope.isstate = true;
-}
-if(clickra == "C") {
-$scope.isOrderNoDi = true;
-$scope.isStartDateDi = false;
-$scope.isEndDateDi = false;
-$scope.orderno = true;
-$scope.isOrderTypeDi = true;
-$scope.startDate = new Date();
-$scope.type = "ALL";
-$scope.endDate = new Date();
-$scope.ischampionCode = false;
-$scope.isstate = true;
-$scope.Terminal_id = true;
-}
-if(clickra == "S") {
-$scope.isOrderNoDi = true;
-$scope.isStartDateDi = false;
-$scope.isEndDateDi = false;
-$scope.orderno = true;
-$scope.isOrderTypeDi = true;
-$scope.startDate = new Date();
-$scope.type = "ALL";
-$scope.endDate = new Date();
-$scope.ischampionCode = true;
-$scope.isstate = false;
-$scope.Terminal_id = true;
-}
-
-}
-$scope.print = function (no,code) {
-$http({
-method: 'post',
-url: '../ajax/bpsalesrprtajax.php',
-data: {
-action: 'view',
-                orderNo: no,
-code: code
-},
-}).then(function successCallback(response) {
-//alert(response.data[0].sts);
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-var creteria = $scope.creteria;
-var id = $scope.id;
-var statusa = $scope.statusa;
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var m = new Date();
-var datetime =
-m.getUTCFullYear() + "-" +
-("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
-("0" + m.getUTCDate()).slice(-2) + " " +
-("0" + m.getUTCHours()).slice(-2) + ":" +
-("0" + m.getUTCMinutes()).slice(-2) + ":" +
-("0" + m.getUTCSeconds()).slice(-2);
-var text = "";
-var valu = "";
-text = "By Date";
-valu = "From: " + startDate + " to " + endDate;
-
-var PEB = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Bill Payment - TV Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-
-if(response.data[0].code =='PTV'){
-if(response.data[0].sts=='Error'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-}
-var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
- +statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
-"<tr><td class='name'>Transaction ID </td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
-"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
-"<tr><td class='name'>Bundle Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
-"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
-"<tr><td class='name'>SmartCard</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
-"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - TV </td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}
-else if(response.data[0].code =='PEB'){
-
-
-if(response.data[0].sts=='Error'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-}
-
-var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
- +statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
-"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
-"<tr><td class='name'>Receipt No</td><td class='result'>" + response.data[0].bp_bank_code +"</td></tr>" +
-"<tr><td class='name'>Biller Name</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
-"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
-"<tr><td class='name'>Customer Acc</td><td class='result'>" + response.data[0].account_no + "</td></tr>" +
-"<tr><td class='name'>Token</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
-"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(PEB + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}
-
-else if(response.data[0].code =='PED'){
-var PED = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Education Payment (Web) for PED Service Code</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-
-if(response.data[0].sts=='Error'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-}
-
-var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
- +statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
-"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
-"<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].account_name +"</td></tr>" +
-"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].date_time1 + "</td></tr>" +
-"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
-"<tr><td class='name'>Serial</td><td class='result'>" + response.data[0].bp_bank_code + "</td></tr>" +
-"<tr><td class='name'>Pin Code</td><td class='result'>" + response.data[0].comments + "</td></tr>" +
-"<tr><td class='name'>Vend Status</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Education</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(PED + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}
-else if(response.data[0].code =='PBT'){
-var PBT = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Bill - Payment Betting (web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-
-if(response.data[0].sts=='Error'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-}
-
-var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colspan='12'><b style='text-align:center;font-size:32px;'>" + response.data[0].Agent_code + "</b></td>"
- +statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].bp_account_no + "</td></tr>" +
-"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].bp_transaction_id + "</td></tr>" +
-"<tr><td class='name'>Biller</td><td class='result'>" + response.data[0].bp_opay_service_name + "</td></tr>" +
-"<tr><td class='name'>Provider</td><td class='result'>" + response.data[0].appcmt + "</td></tr>" +
-"<tr><td class='name'>Transaction Time</td><td class='result'>" + response.data[0].session_id + "</td></tr>" +
-"<tr><td class='name'>Customer ID</td><td class='result'>" + response.data[0].account_no + "</td></tr>" +
-"<tr><td class='name'>Account Name</td><td class='result'>" + response.data[0].bp_account_name + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount </td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>Bill Payment - Betting</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(PBT + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}
-
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.printAll = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>31) {
-alert("Date Range should between 31 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.dateerr ="";
-$http({
-method: 'post',
-url: '../ajax/bpsalesrprtajax.php',
-data: {
-action: 'getreport',
-type: $scope.type,
-orderNo: $scope.orderNo,
-state: $scope.state,
-championCode: $scope.championCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate,
-creteria: $scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-var rerows = "";
-for(var i=0;i < response.data.length;i++) {
-
-rerows += "<td>"+ response.data[i].no +"</td>"+
-"<td>"+ response.data[i].code +"</td>"+
-"<td>"+ response.data[i].reqmount +"</td>"+
-"<td>"+ response.data[i].toamount +"</td>"+
-"<td>"+ response.data[i].user +"</td>"+
-"<td>"+ response.data[i].account_no +"</td>"+
-"<td>"+ response.data[i].dtime +"</td>"+
-"</tr>"
-}
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
-
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px"> Bill Payment Sales Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-var responsetablehead ="<table width='100%'><thead>" +
-"<tr><th>Order #</th>" +
-"<th>Order Type</th>" +
-"<th>Request Amount</th>" +
-"<th>Total Amount</th>" +
-"<th>Agent Name</th>" +
-"<th>Account Number</th>" +
-"<th>Date and Time</th>" +
-"</tr></thead>" +
-"<tbody>"+rerows+"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-}
-$scope.clear = function () {
-$scope.no = "";
-$scope.code = "";
-$scope.toamount = "";
-$scope.rmount = "";
-$scope.amscharge = "";
-$scope.parcharge = "";
-$scope.ocharge = "";
-$scope.name = "";
-$scope.mobile = "";
-$scope.auth = "";
-$scope.refNo = "";
-$scope.fincomment = "";
-$scope.dtime = "";
-$scope.pstatus = "";
-$scope.ptime = "";
-$scope.user = "";
-$scope.transLogId = "";
-$scope.sconfid = "";
-$scope.bank = "";
-$scope.partner = "";
-
-}
-});
 
 app.controller('GroupListCtrl', function ($scope, $http, $filter) {
 $scope.isHideOk = true;
@@ -6354,6 +6388,7 @@ $scope.endDate = new Date();
 $scope.isOrderNoDi = true;
 $scope.isStartDateDi = false;
 $scope.isEndDateDi = false;
+$scope.isstate = true;
 $scope.tablerow = true;
 $http({
 method: 'post',
@@ -6364,6 +6399,29 @@ $scope.operators = response.data;
 }, function errorCallback(response) {
 // console.log(response);
 });
+
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
 $scope.checkdate = function (startDate,endDate){
 var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
 var currdate = new Date();
@@ -6451,6 +6509,8 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
+state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -6468,11 +6528,15 @@ $scope.type = "ALL";
 $scope.orderNo = "";
 $scope.creteria = "BT";
 $scope.isOrderTypeDi = false;
-$scope.isOrderNoDi = true;
+$scope.isstate = false;
+$scope.state="ALL";
+$scope.local_govt_id="--Select--";
 }
 $scope.clickra = function (clickra) {
 $scope.orderno = "";
 $scope.type = "";
+$scope.type = "";
+$scope.state="";
 $scope.startDate = new Date();
 $scope.endDate = new Date();
 if(clickra == "BT") {
@@ -6483,6 +6547,8 @@ $scope.orderno = "";
 $scope.isOrderTypeDi = false;
 $scope.startDate = new Date();
 $scope.type = "ALL";
+$scope.state = "ALL";
+$scope.isstate = true;
 $scope.endDate = new Date();
 }
 if(clickra == "BO") {
@@ -6491,7 +6557,21 @@ $scope.isStartDateDi = true;
 $scope.isEndDateDi = true;
 $scope.isOrderTypeDi = true
 $scope.startDate = "";
+$scope.type = "ALL";
 $scope.endDate = "";
+$scope.state = "ALL";
+$scope.isstate = true;
+}
+if(clickra == "S") {
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isstate = false;
+$scope.isOrderNoDi = true;
+$scope.isOrderTypeDi = true
+$scope.type = "ALL";
+$scope.state = "ALL";
 }
 }
 
@@ -6593,6 +6673,8 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
+state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -6664,6 +6746,7 @@ $scope.sender_name = "";
 
 }
 });
+
 
 
 app.controller('CardAllocCtrl', function ($scope, $http) {
@@ -7288,7 +7371,8 @@ endDate: $scope.endDate,
 creteria: $scope.creteria,
 championCode: $scope.championCode,
 Terminal: $scope.Terminal,
-state: $scope.state
+state: $scope.state,
+local_govt_id: $scope.local_govt_id
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -7308,6 +7392,7 @@ $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 $scope.championCode = "ALL";
 $scope.state = "ALL";
+$scope.local_govt_id = "-Select--";
 $scope.Terminal = "Select";
 $scope.Terminal_id = true;
 $scope.isstate = true;
@@ -7628,6 +7713,7 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 Terminal: $scope.Terminal,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
@@ -7731,6 +7817,15 @@ $scope.states = response.data;
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
 $http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
@@ -7759,7 +7854,7 @@ $scope.agentdetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -7797,6 +7892,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -7865,6 +7961,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -7949,7 +8046,6 @@ close();
 }
 
 });
-
 
 app.controller('evdFnReportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
@@ -19596,7 +19692,17 @@ $scope.states = response.data;
 });
 }
 $scope.statechange = function (id) {
+
 $scope.agentName="ALL";
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -19626,7 +19732,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -19663,6 +19769,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -19733,6 +19840,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {

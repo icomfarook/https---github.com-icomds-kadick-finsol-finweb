@@ -27,7 +27,7 @@
 			
 				
 				$data[] = array("agentCode"=>$row['agent_code'],"sanefAgentCode"=>$row['sanef_agent_code'],"sanefRequestId"=>$row['sanef_request_id'],
-								"accTransLogId"=>$row['acc_trans_log_id'],"status"=>$row['status'],"createTime"=>$row['create_time'],"update_time"=>$row['updateTime']);           
+								"accTransLogId"=>$row['acc_trans_log_id'],"status"=>$row['status'],"createTime"=>$row['create_time'],"update_time"=>$row['update_time']);           
 			}
 			if (!$agent_select_result) {
 				echo "Error: %s\n", mysqli_error($con);

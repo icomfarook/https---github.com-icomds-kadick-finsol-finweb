@@ -77,14 +77,7 @@
 									</span>	<span class = 'err' ng-show=" creteria=='BO'&& trReportForm.orderNo.$invalid && trReportForm.orderNo.$error.required"><?php echo REQUIRED;?>.</span></label>
 								<input ng-disabled="isOrderNoDi" ng-model="orderNo" numbers-only id='orderNo' maxlength='10'  name='orderNo' required class='form-control'/>
 							</div>
-							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-								<label><input value='C' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>
-								<label>Champion</label>
-								<select ng-init = 'championCode="ALL"'  ng-model='championCode' ng-disabled="ischampionCode" class='form-control' name='championCode' required>
-									<option value='ALL'>--ALL--</option>
-										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>		
-								</select>
-							</div>
+							
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><input value='S' ng-click='clickra(creteria)' type='radio' name='creteria' ng-model='creteria' /></label>
 								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
@@ -98,8 +91,33 @@
 									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
 								</select>
 							</div>
+								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label>Local Goverment<span class='spanre'>*</span><span ng-show="editINFOForm.local_govt_id.$touched ||editINFOForm.local_govt_id.$dirty && editINFOForm.local_govt_id.$invalid">
+								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="editINFOForm.local_govt_id.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select ng-disabled="isstate" ng-model="local_govt_id"   class='form-control' name = 'local_govt_id' id='LocalGoverment'>											
+									<option value=''><?php echo APPLICATION_ENTRY_SELECT_LOCAL_GOVT; ?></option>
+									<option ng-repeat="localgvt in localgvts" value="{{localgvt.id}}">{{localgvt.name}}</option>
+								</select>
+							</div>
 							</div>
 							<div class='row appcont' style='margin-top:0%'>
+							
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><input value='C' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>
+								<label>Champion</label>
+								<select ng-init = 'championCode="ALL"'  ng-model='championCode' ng-disabled="ischampionCode" class='form-control' name='championCode' required>
+									<option value='ALL'>--ALL--</option>
+										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>		
+								</select>
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><input value='T' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;
+								<label>Terminal ID</label>
+								<select  ng-model='Terminal' ng-disabled="Terminal_id" id='selUser' class='form-control' name='Terminal' required>
+									<option value=''>--Select--</option>
+										<option ng-repeat="terminal in terminalid"  value="{{terminal.terminal_id}}">{{terminal.terminal_id}}</option>		
+								</select>
+							</div>
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							
 						    	<label><?php echo TRANSACTION_REPORT_MAIN_START_DATE; ?></label>
@@ -110,14 +128,6 @@
 								<label><?php echo TRANSACTION_REPORT_MAIN_END_DATE; ?></label>
 								<span class = 'err' ng-show="dateerr">{{dateerr}}</span>
 								<input  datetime="yyyy-MM-dd"  ng-blur='checkdate(startDate,endDate)'  ng-disabled="isEndDateDi"  ng-model="endDate" type='date' id='endDate' name='endDate' required class='form-control'/>
-							</div>
-							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-								<label><input value='T' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;
-								<label>Terminal ID</label>
-								<select  ng-model='Terminal' ng-disabled="Terminal_id" id='selUser' class='form-control' name='Terminal' required>
-									<option value=''>--Select--</option>
-										<option ng-repeat="terminal in terminalid"  value="{{terminal.terminal_id}}">{{terminal.terminal_id}}</option>		
-								</select>
 							</div>
 						</div>	
 						

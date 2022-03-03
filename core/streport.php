@@ -47,44 +47,53 @@
 			  <div style='text-align:center' ng-hide='isMainLoader' class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="../common/img/gif1.gif" /></div></div>			
 				<form name='stateReportForm'  action='statreportexcel.php' method='POST' novalidate>	
 					<div class='row appcont'>
-						<div class='row appcont' ng-init="creteria='BT'" style="margin-left:120px;">
-						 <div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
+						<div class='row appcont' ng-init="creteria='BT'" >
+						 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
 									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
 								</select>
 								<label>State
 								<span ng-show="infoViewForm.partyType.$dirty && infoViewForm.partyType.$invalid">
 								<span class = 'err' ng-show="infoViewForm.partyType.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<select  ng-model="state" style="margin-top: 2px;" ng-change='statechange(this.state)' ng-init="state='ALL'" class='form-control' name = 'state' id='state' required>											
+								<select  ng-model="state"  ng-change='statechange(this.state)' ng-init="state='ALL'" class='form-control' name = 'state' id='state' required>											
 									<option value='ALL'>ALL</option>
 									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
 								</select>
 								
 							</div>
-							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label>Local Goverment<span class='spanre'>*</span><span ng-show="editINFOForm.local_govt_id.$touched ||editINFOForm.local_govt_id.$dirty && editINFOForm.local_govt_id.$invalid">
+								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="editINFOForm.local_govt_id.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select ng-disabled="isstate" ng-model="local_govt_id"   class='form-control' name = 'local_govt_id' id='LocalGoverment'>											
+									<option value=''><?php echo APPLICATION_ENTRY_SELECT_LOCAL_GOVT; ?></option>
+									<option ng-repeat="localgvt in localgvts" value="{{localgvt.id}}">{{localgvt.name}}</option>
+								</select>
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo STATISTICAL_REPORT_MAIN_ORDER_TYPE; ?>&nbsp;&nbsp;<input name='typeDetail' type='checkbox' value='Y' ng-model='orderdetail'/></label>
 								<select ng-init = 'type="ALL"' ng-disabled="isOrderTypeDi" ng-model='type' class='form-control' name='type' required>
 									<option value='ALL'><?php echo STATISTICAL_REPORT_MAIN_ALL; ?></option>
 									<option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
 								</select>
 							</div>	
-							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input  name='agentDetail' type='checkbox' value='Y' ng-model='agentDetail'/></label>
 								<select ng-init='agentName = "ALL"'  id='selUser' ng-disabled="isAgentDi" ng-model='agentName' class='form-control' name='agentName' required>
 									<option value='ALL'><?php echo STATISTICAL_REPORT_MAIN_AGENT_ALL; ?></option>
 									<option ng-if="state=='ALL'" ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
 									<option ng-if="state!='ALL'" ng-repeat="agent in agents" value="{{agent.code}}">{{agent.name}}</option>
 								</select>
-							</div>					
-												
-							 <div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
+							</div>		
+						</div>								
+								<div class='row appcont' style='margin-top:0%'>	
+							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 						    	<label><?php echo STATISTICAL_REPORT_MAIN_START_DATE; ?></label>
-								<input ng-disabled="isStartDateDi" ng-model="startDate" type='date' id='startDate' style="cursor: auto;width: 150px;" name='startDate' required class='form-control'/>
+								<input ng-disabled="isStartDateDi" ng-model="startDate" type='date' id='startDate'  name='startDate' required class='form-control'/>
 							</div>
-							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>							
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>							
 								<label><?php echo STATISTICAL_REPORT_MAIN_END_DATE; ?></label>
 								<span class = 'err' ng-show="dateerr">{{dateerr}}</span>
-								<input  datetime="yyyy-MM-dd"  ng-blur='checkdate(startDate,endDate)' style="cursor: auto;width: 150px;"  ng-disabled="isEndDateDi"  ng-model="endDate" type='date' id='endDate' name='endDate' required class='form-control'/>
+								<input  datetime="yyyy-MM-dd"  ng-blur='checkdate(startDate,endDate)'   ng-disabled="isEndDateDi"  ng-model="endDate" type='date' id='endDate' name='endDate' required class='form-control'/>
 							</div>
 						</div>	
 						<div class='row appcont'>

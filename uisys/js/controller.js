@@ -1575,6 +1575,7 @@ endDate: $scope.endDate,
 creteria: $scope.creteria,
 championCode: $scope.championCode,
 Terminal: $scope.Terminal,
+local_govt_id: $scope.local_govt_id,
 state: $scope.state
 },
 }).then(function successCallback(response) {
@@ -1595,6 +1596,7 @@ $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 $scope.championCode = "ALL";
 $scope.state = "ALL";
+$scope.local_govt_id = "--Select--";
 $scope.Terminal = "Select";
 $scope.Terminal_id = true;
 $scope.isstate = true;
@@ -1620,6 +1622,7 @@ $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.championCode="ALL";
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 }
 if(clickra == "BO") {
 $scope.tablerow = false;
@@ -1634,6 +1637,7 @@ $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.championCode="ALL";
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 }
 if(clickra == "C") {
 $scope.tablerow = false;
@@ -1649,6 +1653,7 @@ $scope.ischampionCode = false;
 $scope.isstate = true;
 $scope.Terminal_id = true;
 $scope.state="ALL";
+$scope.local_govt_id = "--Select--";
 $scope.orderNo = "";
 }
 if(clickra == "S") {
@@ -1835,6 +1840,7 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 Terminal: $scope.Terminal,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
@@ -1894,6 +1900,7 @@ $scope.agent_charge = "";
 $scope.stamp_charge = "";
 $scope.country = "";
 $scope.state = "";
+$scope.local_govt_id = "";
 $scope.local = "";
 $scope.user = "";
 $scope.first_name = "";
@@ -2626,6 +2633,15 @@ $scope.states = response.data;
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
 $http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
@@ -2654,7 +2670,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -2691,6 +2707,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -2761,6 +2778,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -2847,6 +2865,7 @@ close();
 });
 
 
+
    app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
    $scope.tablerow=true;
    $scope.query = function () {
@@ -2931,6 +2950,15 @@ $scope.states = response.data;
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
 $http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
@@ -2959,7 +2987,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -2996,6 +3024,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -3066,6 +3095,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -4076,6 +4106,7 @@ startDate: $scope.startDate,
 endDate: $scope.endDate,
 creteria: $scope.creteria,
 championCode: $scope.championCode,
+local_govt_id: $scope.local_govt_id,
 state: $scope.state
 },
 }).then(function successCallback(response) {
@@ -4096,6 +4127,7 @@ $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 $scope.championCode = "ALL";
 $scope.state = "ALL";
+$scope.local_govt_id = "--Select--";
 $scope.isstate = true;
 $scope.ischampionCode = true;
 }
@@ -4369,6 +4401,7 @@ action: 'getreport',
 type: $scope.type,
 orderNo: $scope.orderNo,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
@@ -6978,6 +7011,7 @@ $scope.endDate = new Date();
 $scope.isOrderNoDi = true;
 $scope.isStartDateDi = false;
 $scope.isEndDateDi = false;
+$scope.isstate = true;
 $scope.tablerow = true;
 $http({
 method: 'post',
@@ -6988,6 +7022,29 @@ $scope.operators = response.data;
 }, function errorCallback(response) {
 // console.log(response);
 });
+
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
 $scope.checkdate = function (startDate,endDate){
 var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
 var currdate = new Date();
@@ -7075,6 +7132,8 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
+state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -7092,11 +7151,15 @@ $scope.type = "ALL";
 $scope.orderNo = "";
 $scope.creteria = "BT";
 $scope.isOrderTypeDi = false;
-$scope.isOrderNoDi = true;
+$scope.isstate = false;
+$scope.state="ALL";
+$scope.local_govt_id="--Select--";
 }
 $scope.clickra = function (clickra) {
 $scope.orderno = "";
 $scope.type = "";
+$scope.type = "";
+$scope.state="";
 $scope.startDate = new Date();
 $scope.endDate = new Date();
 if(clickra == "BT") {
@@ -7107,6 +7170,8 @@ $scope.orderno = "";
 $scope.isOrderTypeDi = false;
 $scope.startDate = new Date();
 $scope.type = "ALL";
+$scope.state = "ALL";
+$scope.isstate = true;
 $scope.endDate = new Date();
 }
 if(clickra == "BO") {
@@ -7115,7 +7180,21 @@ $scope.isStartDateDi = true;
 $scope.isEndDateDi = true;
 $scope.isOrderTypeDi = true
 $scope.startDate = "";
+$scope.type = "ALL";
 $scope.endDate = "";
+$scope.state = "ALL";
+$scope.isstate = true;
+}
+if(clickra == "S") {
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isstate = false;
+$scope.isOrderNoDi = true;
+$scope.isOrderTypeDi = true
+$scope.type = "ALL";
+$scope.state = "ALL";
 }
 }
 
@@ -7217,6 +7296,8 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
+state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -7288,6 +7369,8 @@ $scope.sender_name = "";
 
 }
 });
+
+
 
 app.controller('CardAllocCtrl', function ($scope, $http) {
 $scope.isLoader = true;
@@ -7800,7 +7883,8 @@ endDate: $scope.endDate,
 creteria: $scope.creteria,
 championCode: $scope.championCode,
 Terminal: $scope.Terminal,
-state: $scope.state
+state: $scope.state,
+local_govt_id: $scope.local_govt_id
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -7820,6 +7904,7 @@ $scope.isOrderTypeDi = false;
 $scope.isOrderNoDi = true;
 $scope.championCode = "ALL";
 $scope.state = "ALL";
+$scope.local_govt_id = "-Select--";
 $scope.Terminal = "Select";
 $scope.Terminal_id = true;
 $scope.isstate = true;
@@ -8140,6 +8225,7 @@ type: $scope.type,
 orderNo: $scope.orderNo,
 Terminal: $scope.Terminal,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 championCode: $scope.championCode,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
@@ -8215,6 +8301,7 @@ $scope.partner = "";
 }
 });
 
+
 app.controller('evdstatreportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -8242,6 +8329,15 @@ $scope.states = response.data;
 }
 $scope.statechange = function (id) {
 $scope.agentName="ALL";
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -8271,7 +8367,7 @@ $scope.agentdetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -8309,6 +8405,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -8377,6 +8474,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {
@@ -18043,7 +18141,17 @@ $scope.states = response.data;
 });
 }
 $scope.statechange = function (id) {
+
 $scope.agentName="ALL";
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -18073,7 +18181,7 @@ $scope.agentDetail = false;
 $scope.agentName = "ALL";
 $scope.type = "ALL";
 $scope.state = "ALL";
-
+$scope.local_govt_id = "--Select--";
 }
 
 $scope.query = function () {
@@ -18110,6 +18218,7 @@ subAgentDetail:$scope.subAgentDetail,
 typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 endDate: $scope.endDate,
 creteria: $scope.creteria
 },
@@ -18180,6 +18289,7 @@ typeDetail: $scope.orderdetail,
 startDate: $scope.startDate,
 endDate: $scope.endDate,
 state: $scope.state,
+local_govt_id: $scope.local_govt_id,
 creteria: $scope.creteria
 },
 }).then(function successCallback(response) {

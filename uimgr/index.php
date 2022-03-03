@@ -149,17 +149,7 @@
 							<li><a class="ajax-link" style="color:orange" href="#!acsact"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Activity</a></li>
 							</ul>
 							</li>
-							<li class="dropdown">
-							<a href="#" class="dropdown-toggle">
-							<i class="fa fa-mobile"></i>
-							<span style="color:white" class="hidden-xs"  >Terminal</span>
-							</a>
-							<ul class="dropdown-menu">
 							<li><a class="ajax-link" href="#!ascteralloc">Terminal Allocation </a></li>
-							<li><a class="ajax-link"  style="color:orange" href="#!ascterbond"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Bound</a></li>
-
-							</ul>
-							</li>
 							<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 							<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
@@ -175,6 +165,15 @@
 						<li><a class="ajax-link" href="#!adjviw"><?php echo INDEX_ADJUSTMENT_VIEW; ?></a></li>
 					</ul>
 				</li>
+				<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-mobile"></i>
+						<span style="color:white" class="hidden-xs"  >Sanef Service</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link"  style="color:orange" href="#!sadeta"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Agent Details</a></li>
+					</ul>
+						</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-bar-chart-o"></i>
@@ -274,6 +273,7 @@
 							 <span class="hidden-xs"><?php echo INDEX_AUDIT; ?></span>
 						</a>
 						<ul class="dropdown-menu">		
+						<li><a class="ajax-link" href="#!rptloa">Agent List</a></li>
 							<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>	
 						<li><a class="ajax-link" href="#!rptdup">Duplicate Order</a></li>
 						</ul>
@@ -312,16 +312,6 @@
 						<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 					</ul>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">
-						<i class="fa fa-mobile"></i>
-						<span style="color:white" class="hidden-xs"  >Terminal</span>
-						</a>
-						<ul class="dropdown-menu">
-						<li><a class="ajax-link"  style="color:orange" href="#!ascterbond"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Bound</a></li>
-
-						</ul>
-						</li>
 				</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
@@ -525,8 +515,6 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
-							<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
-							<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
 						</ul>
 					</li>
 					<li class="dropdown">
@@ -696,8 +684,6 @@
 					<ul class="dropdown-menu">
 					<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
-						<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
-						<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
 					</ul>
 				</li>
 						<li class="dropdown">
