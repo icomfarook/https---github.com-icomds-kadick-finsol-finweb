@@ -3,11 +3,8 @@
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
@@ -24,8 +21,6 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
 $msg = "EVD Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
@@ -51,6 +46,19 @@ $objPHPExcel = new PHPExcel();
 		if($creteria == "BO") {
 			$query .= " and a.e_transaction_id = $orderNo order by a.e_transaction_id";
 		}
+		if($creteria == "S"){
+				if($state == "ALL"){
+					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+					
+				}else{
+					 if($local_govt_id ==""){
+						$query .= " and b.state_id = '$state'  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+						
+					}else{
+					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+				}
+			}
+		}
 			
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
@@ -70,7 +78,7 @@ $objPHPExcel = new PHPExcel();
 		$row = $objPHPExcel->getActiveSheet()->getHighestRow();
 		$objPHPExcel->getActiveSheet()->getStyle( 'A'.($row+1) )->getFont()->setBold( true );
 		$objPHPExcel->getActiveSheet()->SetCellValue('A'.($row+1), "Row Count: ".($row -1));
-	  ////error_log($query);
+	  	//error_log($query);
 		
 	
 		$objPHPExcel->getProperties()

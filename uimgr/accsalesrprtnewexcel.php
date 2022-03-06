@@ -62,9 +62,15 @@ $objPHPExcel = new PHPExcel();
 				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,b.state_id,b.local_govt_id order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'  and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				if($local_govt_id == ""){
+					$query .= " and b.state_id = '$state'   and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				}
+				else{
+				  $query .= " and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'  and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
 			}
+				
 		}
+	}
 		
 			
 		$result =  mysqli_query($con,$query);

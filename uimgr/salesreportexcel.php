@@ -61,7 +61,11 @@ $objPHPExcel = new PHPExcel();
 				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.state_id = '$state' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				if($local_govt_id == ""){
+					$query .= " and b.state_id = '$state'  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				}else{
+					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
+				}
 			}
 		}
 		if($creteria == "T") { 

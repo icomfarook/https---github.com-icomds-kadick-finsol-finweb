@@ -46,6 +46,19 @@ $objPHPExcel = new PHPExcel();
 		if($creteria == "BO") {
 			$query .= " and a.e_transaction_id = $orderNo order by a.e_transaction_id";
 		}
+		if($creteria == "S"){
+				if($state == "ALL"){
+					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+					
+				}else{
+					 if($local_govt_id ==""){
+						$query .= " and b.state_id = '$state'  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+						
+					}else{
+					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+				}
+			}
+		}
 			
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
