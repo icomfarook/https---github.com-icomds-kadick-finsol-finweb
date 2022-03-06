@@ -59,37 +59,57 @@
 						echo json_encode($response);
 						return;
 					}
+					$summaryTransaction = array();
+					$agent_rank_query = "select a.agent_code, b.party_category_type_name, i_format(c.amount_value) as amount_value, format(c.count_value,0) as count_value from agent_info a, party_category_type b, party_category_target c where a.party_category_type_id = b.party_category_type_id and a.party_category_type_id = c.party_category_type_id and c.party_target_combo_name = 'MONTHLY_RANK_GROUP' and a.agent_code = '$partyCode'";
+					error_log("agent_rank_query = ".$agent_rank_query);
+					$agent_rank_result = mysqli_query($con, $agent_rank_query);
+					$party_category_type_name = "Not Available";
+					$monthly_target_amount = "0.00";
+					$monthly_target_count = "0";
+					if (!empty($agent_rank_result) && mysqli_num_rows($agent_rank_result) > 0 ) {
+						while ($row0 = mysqli_fetch_array($agent_rank_result)) {
+							$party_category_type_name = $row0["party_category_type_name"];
+							$monthly_target_amount = $row0["amount_value"];
+							$monthly_target_count = $row0["count_value"];
+						}
+					}	
+					
 					$transaction_previous_query = "select b.party_category_type_name as 'ranked_category' from party_rank_month a, party_category_type b where a.ranked_party_category_id = b.party_category_type_id and a.party_code = '$partyCode' and a.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) limit 1";
 					error_log("transaction_previous_query = ".$transaction_previous_query);
 					$transaction_previous_result = mysqli_query($con, $transaction_previous_query);
 					$previous_month_rank = "Not Available";
 					if (!empty($transaction_previous_result) && mysqli_num_rows($transaction_previous_result) > 0 ) {
-						while ($row0 = mysqli_fetch_array($transaction_previous_result)) {
-							$previous_month_rank = $row0["ranked_category"];
+						while ($row1 = mysqli_fetch_array($transaction_previous_result)) {
+							$previous_month_rank = $row1["ranked_category"];
 						}
 					}
-					
+					$summaryTransaction["previousMonthRank"] = $previous_month_rank;
+					$summaryTransaction["targetAmount"] = $monthly_target_amount;
+					$summaryTransaction["targetCount"] = $monthly_target_count;
+					$summaryTransaction["rank"] = $party_category_type_name;
+					$summaryTransaction["agentCode"] = $partyCode;
+					$summaryTransaction["actualAmount"] = "Not Available";
+					$summaryTransaction["actualCount"] = "-";
+					$summaryTransaction["month"] = "None";
+					$summaryTransaction["rankingDailyTransactions"] = array();
+										
+					$response["result"] = "Success";
+					$response["message"] = "Successfull Operation";
+					$response["statusCode"] = "0";
+					$response["signature"] = $server_signature;
+						
 					$transaction_query = "select a.party_code, b.party_category_type_name, date_format(a.run_date, '%Y-%b')as month, a.run_date, i_format(a.target_daily_amount) as target_daily_amount, format(a.target_daily_count, 0) as target_daily_count, format(a.actual_cum_daily_count, 0) as actual_cum_daily_count, i_format(a.actual_cum_daily_amount) as actual_cum_daily_amount, format(a.actual_iso_daily_count, 0) as actual_iso_daily_count, i_format(a.actual_iso_daily_amount) as actual_iso_daily_amount, a.daily_trend from party_rank_day a, agent_info c, party_category_type b where c.agent_code = a.party_code and c.party_category_type_id = b.party_category_type_id and c.agent_code = '$partyCode' and a.run_date between date_sub(current_date(), INTERVAL DAYOFMONTH(current_date())-1 DAY) and current_date() order by a.run_date";
                     			error_log("agent_ranking_query = ".$transaction_query);
 					$transaction_result = mysqli_query($con, $transaction_query);
 					if($transaction_result) {
-						$summaryTransction = array();
-						$summaryTransction["previousMonthRank"] = $previous_month_rank;
-						$summaryTransction["rankingDailyTransactions"] = array();
-                        			$transaction = array();
-                        			if (!empty($transaction_result) && mysqli_num_rows($transaction_result) > 0 ) {
-							$response["result"] = "Success";
-							$response["message"] = "Successfull Operation";
-                            				$response["statusCode"] = "0";
-                            				$response["signature"] = $server_signature;
-                            				while ($row = mysqli_fetch_array($transaction_result)) {
-								$summaryTransction["agentCode"] = $row["party_code"];
-								$summaryTransction["rank"] = $row["party_category_type_name"];
-								$summaryTransction["month"] = $row["month"];
-								$summaryTransction["targetAmount"] = $row["target_daily_amount"];
-								$summaryTransction["targetCount"] = $row["target_daily_count"];
-								$summaryTransction["actualAmount"] = $row["actual_cum_daily_amount"];
-								$summaryTransction["actualCount"] = $row["actual_iso_daily_count"];
+						error_log("1");
+						if (!empty($transaction_result) && mysqli_num_rows($transaction_result) > 0 ) {
+							error_log("2");
+		            				while ($row = mysqli_fetch_array($transaction_result)) {
+		            					error_log("3");
+								$summaryTransaction["month"] = $row["month"];
+								$summaryTransaction["actualAmount"] = $row["actual_cum_daily_amount"];
+								$summaryTransaction["actualCount"] = $row["actual_iso_daily_count"];
 								$dailyTransaction = array();
 								$dailyTransaction["cumulativeTotal"] = $row["actual_cum_daily_amount"];
 								$dailyTransaction["cumulativeCount"] = $row["actual_cum_daily_count"];
@@ -97,24 +117,11 @@
 								$dailyTransaction["isolatedCount"] = $row["actual_iso_daily_count"];
 								$dailyTransaction["date"] = $row["run_date"];
 								$dailyTransaction["trend"] = $row["daily_trend"];
-								array_push($summaryTransction["rankingDailyTransactions"], $dailyTransaction);
+								array_push($summaryTransaction["rankingDailyTransactions"], $dailyTransaction);
 							}
-							$response["transaction"] = $summaryTransction;
-						}else {
-							// No Data
-							$response["result"] = "Success";
-							$response["message"] = "No Data found";
-                            				$response["statusCode"] = "100";
-                            				$response["signature"] = $server_signature;
 						}
 					}
-					else {
-						// DB failure
-						$response["result"] = "Error";
-						$response["statusCode"] = "200";
-                        			$response["message"] = "Failure: Error in reading query from DB";
-                        			$response["signature"] = $server_signature;
-					}
+					$response["transaction"] = $summaryTransaction;
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
