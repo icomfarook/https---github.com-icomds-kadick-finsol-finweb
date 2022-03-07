@@ -2700,6 +2700,7 @@ close();
 }
 });
 
+
 app.controller('AccstatReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -2957,6 +2958,7 @@ close();
 }
 
 });
+
 
 
    app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
@@ -6748,7 +6750,6 @@ $scope.sender_name = "";
 });
 
 
-
 app.controller('CardAllocCtrl', function ($scope, $http) {
  $scope.isLoader = true;
 $scope.isMainLoader = true;
@@ -8046,6 +8047,7 @@ close();
 }
 
 });
+
 
 app.controller('evdFnReportCtrl', function ($scope, $http) {
 $scope.startDate = new Date();

@@ -65,14 +65,8 @@ $objPHPExcel = new PHPExcel();
 			if($state == "ALL") {
 				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge,state,local order by date_time desc ";
 			}
-			else{
-				if($local_govt_id == ""){
-					$query .= " and b.state_id = '$state'  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge,state,local order by date_time desc";
-						
-				}
-				else{
-					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge,state,local order by date_time desc";
-				}				
+			else{ 
+				$query .= " and b.state_id = '$state' and b.local_govt_id = '$local_govt_id' and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.fin_service_order_no,b.agent_name,b.parent_code,c.rrn,c.update_time,c.service_charge,state,local order by date_time desc ";
 			}
 		}
 		if($creteria == "T") { 
