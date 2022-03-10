@@ -61,14 +61,14 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time,state,local order by date_time desc ";
 			}
 			else{
-					$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time  order by date_time desc ";
+					$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time,state,local  order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.bp_service_order_no = $orderNo ggroup by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time order by a.bp_service_order_no";
+			$query .= " and a.bp_service_order_no = $orderNo ggroup by a.bp_service_order_no,b.agent_name,b.parent_code,c.account_no,c.account_name,d.feature_description,c.update_time,state,local order by a.bp_service_order_no";
 		}
 		if($creteria == "C") { 
 			if($championCode == "ALL") {

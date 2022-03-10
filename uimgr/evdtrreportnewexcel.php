@@ -38,7 +38,7 @@ $objPHPExcel = new PHPExcel();
 		
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge,state,local order by a.date_time desc ";
 			}
 			else{ 
 				

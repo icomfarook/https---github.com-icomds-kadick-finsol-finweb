@@ -38,7 +38,7 @@ $objPHPExcel = new PHPExcel();
 		
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge order by a.date_time desc ";
+				$query .= " and date(a.date_time) >= '$startDate' and  date(a.date_time) <= '$endDate'  group by service_feature_code, a.e_transaction_id, a.request_amount, a.total_amount, a.date_time,b.agent_name,b.parent_code, user, a.ams_charge,state,local order by a.date_time desc ";
 			}
 			else{ 
 				
@@ -54,7 +54,11 @@ $objPHPExcel = new PHPExcel();
 					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.e_transaction_id,b.agent_name,b.parent_code,state,local order by date_time desc ";
 					
 				}else{
+					if($local_govt_id == ""){
+						$query .= " and b.state_id = '$state' and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.e_transaction_id,b.agent_name,b.parent_code,state,local order by date_time desc ";
+					}else{
 					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.e_transaction_id,b.agent_name,b.parent_code,state,local order by date_time desc ";
+					}
 				}
 			}
 			

@@ -40,7 +40,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.acc_service_order_no,  a.total_amount, a.date_time,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,user, a.agent_charge, a.ams_charge order by date_time desc";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.acc_service_order_no,  a.total_amount, a.date_time,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,user, a.agent_charge, a.ams_charge,state,local order by date_time desc";
 			}
 			else{ 
 				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
