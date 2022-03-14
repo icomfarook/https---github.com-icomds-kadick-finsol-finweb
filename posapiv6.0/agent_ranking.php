@@ -98,18 +98,18 @@
 					$response["statusCode"] = "0";
 					$response["signature"] = $server_signature;
 						
-					$transaction_query = "select a.party_code, b.party_category_type_name, date_format(a.run_date, '%Y-%b')as month, a.run_date, i_format(a.target_daily_amount) as target_daily_amount, format(a.target_daily_count, 0) as target_daily_count, format(a.actual_cum_daily_count, 0) as actual_cum_daily_count, i_format(a.actual_cum_daily_amount) as actual_cum_daily_amount, format(a.actual_iso_daily_count, 0) as actual_iso_daily_count, i_format(a.actual_iso_daily_amount) as actual_iso_daily_amount, a.daily_trend from party_rank_day a, agent_info c, party_category_type b where c.agent_code = a.party_code and c.party_category_type_id = b.party_category_type_id and c.agent_code = '$partyCode' and a.run_date between date_sub(current_date(), INTERVAL DAYOFMONTH(current_date())-1 DAY) and current_date() order by a.run_date";
+					$transaction_query = "select a.party_code, b.party_category_type_name, date_format(a.run_date, '%Y-%b')as month, a.run_date, i_format(a.target_monthly_amount) as target_monthly_amount, format(a.target_monthly_count, 0) as target_monthly_count, format(a.actual_cum_daily_count, 0) as actual_cum_daily_count, i_format(a.actual_cum_daily_amount) as actual_cum_daily_amount, format(a.actual_iso_daily_count, 0) as actual_iso_daily_count, i_format(a.actual_iso_daily_amount) as actual_iso_daily_amount, a.daily_trend from party_rank_day a, agent_info c, party_category_type b where c.agent_code = a.party_code and c.party_category_type_id = b.party_category_type_id and c.agent_code = '$partyCode' and a.run_date between date_sub(current_date(), INTERVAL DAYOFMONTH(current_date())-1 DAY) and current_date() order by a.run_date";
                     			error_log("agent_ranking_query = ".$transaction_query);
 					$transaction_result = mysqli_query($con, $transaction_query);
 					if($transaction_result) {
-						error_log("1");
+						//error_log("1");
 						if (!empty($transaction_result) && mysqli_num_rows($transaction_result) > 0 ) {
-							error_log("2");
+							//error_log("2");
 		            				while ($row = mysqli_fetch_array($transaction_result)) {
-		            					error_log("3");
+		            					//error_log("3");
 								$summaryTransaction["month"] = $row["month"];
 								$summaryTransaction["actualAmount"] = $row["actual_cum_daily_amount"];
-								$summaryTransaction["actualCount"] = $row["actual_iso_daily_count"];
+								$summaryTransaction["actualCount"] = $row["actual_cum_daily_count"];
 								$dailyTransaction = array();
 								$dailyTransaction["cumulativeTotal"] = $row["actual_cum_daily_amount"];
 								$dailyTransaction["cumulativeCount"] = $row["actual_cum_daily_count"];
