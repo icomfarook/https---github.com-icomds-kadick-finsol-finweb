@@ -110,7 +110,7 @@
 							<thead>
 								<tr> 
 									<th><?php echo STATISTICAL_REPORT_MAIN_TABLE_DATE; ?></th>
-									<th ng-show="td && ad || td || ad"><?php echo STATISTICAL_REPORT_MAIN_TABLE_ORDER_TYPE; ?></th>
+									<th ng-show="td"><?php echo STATISTICAL_REPORT_MAIN_TABLE_ORDER_TYPE; ?></th>
 									<th ng-show="ad"><?php echo STATISTICAL_REPORT_MAIN_TABLE_AGENT; ?></th>
 									<th >State</th>
 									<th><?php echo STATISTICAL_REPORT_MAIN_TABLE_COUNT; ?></th>

@@ -146,52 +146,52 @@ $objPHPExcel = new PHPExcel();
 							if($typeDetail == false) {
 								if($agentName == "ALL"){
 									if($agentDetail == false) {
-										$heading = array("Date","Count","State");
-										$headcount = 3;
-										$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  d.state_id=$state and date(b.date_time) between '$startDate' and '$endDate' group by  State, date(b.date_time) order by date(b.date_time)";
+										$heading = array("Date","Count","State","Local Government");
+										$headcount = 4;
+										$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  d.state_id=$state and date(b.date_time) between '$startDate' and '$endDate' group by  State,local, date(b.date_time) order by date(b.date_time)";
 									}
 							else {
-							$heading = array("Date","Count","Agent","State");
-							$headcount = 4;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State  FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State,b.parent_code, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
+							$heading = array("Date","Count","Agent","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local  FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
 							}
 						}
 						else {
 							if($agentDetail == false) {
-							$heading = array("Date","Count","State");
-							$headcount = 3;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and   b.agent_code = '$agentName' and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State, date(c.date_time) order by date(c.date_time)";
+							$heading = array("Date","Count","State","Local Government");
+							$headcount = 4;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and   b.agent_code = '$agentName' and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State,local, date(c.date_time) order by date(c.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Agent","State");
-							$headcount = 4;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  b.agent_code = '$agentName'  and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State, b.parent_code, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
+							$heading = array("Date","Count","Agent","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  b.agent_code = '$agentName'  and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' group by  State, b.parent_code,local, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
 							}
 						}
 					}
 					else {
 						if($agentName == "ALL"){
 							if($agentDetail == false) {
-							$heading = array("Date","Count","Operator","State");
-							$headcount = 4;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State  FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and b.operator_id = c.operator_id and  e.state_id=$state and  date(b.date_time) between '$startDate' and '$endDate' group by  State, b.operator_id, date(b.date_time) order by b.operator_id, date(b.date_time)";
+							$heading = array("Date","Count","Operator","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local  FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and b.operator_id = c.operator_id and  e.state_id=$state and  date(b.date_time) between '$startDate' and '$endDate' group by  State,local, b.operator_id, date(b.date_time) order by b.operator_id, date(b.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Operator","Agent","State");
+							$heading = array("Date","Count","Operator","Agent","State","Local Government");
 							$headcount = 5;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate'   group by  State,b.parent_code, d.operator_id, agent, date(d.date_time) order by d.operator_id, agent, date(d.date_time)";
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate'   group by  State,local,b.parent_code, d.operator_id, agent, date(d.date_time) order by d.operator_id, agent, date(d.date_time)";
 							}
 						}
 						else {
-						$heading = array("Date","Count","Operator","State");
-							$headcount = 4;
+						$heading = array("Date","Count","Operator","State","Local Government");
+							$headcount = 5;
 							if($agentDetail == false) {
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id andb.agent_code = '$agentName'   e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate' group by  State, d.operator_id, date(d.date_time) order by d.operator_id,date(d.date_time)";
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id andb.agent_code = '$agentName'   e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate' group by  State,local, d.operator_id, date(d.date_time) order by d.operator_id,date(d.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Operator","Agent","State");
-							$headcount = 5;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State  FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate' and b.agent_code = '$agentName'  group by  State,b.parent_code, d.operator_id, b.agent_name, date(d.date_time) order by d.operator_id,b.agent_name, date(d.date_time)";
+							$heading = array("Date","Count","Operator","Agent","State","Local Government");
+							$headcount = 6;
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local  FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and  date(d.date_time) between '$startDate' and '$endDate' and b.agent_code = '$agentName'  group by  State,local,b.parent_code, d.operator_id, b.agent_name, date(d.date_time) order by d.operator_id,b.agent_name, date(d.date_time)";
 							}
 						}
 					}
@@ -200,52 +200,52 @@ $objPHPExcel = new PHPExcel();
 					if($typeDetail == false) {
 						if($agentName == "ALL"){
 							if($agentDetail == false) {
-							$heading = array("Date","Count","State");
-							$headcount = 3;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and b.operator_id = '$type'  and d.state_id=$state and  date(b.date_time) between '$startDate' and '$endDate'group by  State, date(b.date_time) order by date(b.date_time)";
+							$heading = array("Date","Count","State","Local Government");
+							$headcount = 4;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and b.operator_id = '$type'  and d.state_id=$state and  date(b.date_time) between '$startDate' and '$endDate'group by  State,local, date(b.date_time) order by date(b.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Agent","State");
-							$headcount = 4;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list dWHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type' group by  State,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
+							$heading = array("Date","Count","Agent","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list dWHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type' group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
 							}
 						}
 						else {
 							if($agentDetail == false) {
-							$heading = array("Date","Count","State");
-							$headcount = 3;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State  FROM  agent_info b, evd_transaction c, state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and b.agent_code = '$agentName' and c.operator_id = '$type' and d.state_id=$state and date(c.date_time) between '$startDate' and '$endDate'group by  State,b.parent_code, date(c.date_time) order by date(c.date_time)";
+							$heading = array("Date","Count","State","Local Government");
+							$headcount = 4;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local  FROM  agent_info b, evd_transaction c, state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and b.agent_code = '$agentName' and c.operator_id = '$type' and d.state_id=$state and date(c.date_time) between '$startDate' and '$endDate'group by  State,local,b.parent_code, date(c.date_time) order by date(c.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Agent","State");
-							$headcount = 4;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and date(c.date_time) between '$startDate' and '$endDate' and b.agent_code = '$agentName' and c.operator_id = '$type'  group by  State,b.parent_code, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
+							$heading = array("Date","Count","Agent","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and date(c.date_time) between '$startDate' and '$endDate' and b.agent_code = '$agentName' and c.operator_id = '$type'  group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by b.agent_name, date(c.date_time)";
 							}
 						}
 					}
 					else {
 						if($agentName == "ALL"){
 							if($agentDetail == false) {
-							$heading = array("Date","Count","Operator","State");
-							$headcount = 4;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State   FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and b.operator_id = '$type' and date(b.date_time) between '$startDate' and '$endDate' group by  State, b.operator_id, date(b.date_time) order by b.operator_id, date(b.date_time)";
+							$heading = array("Date","Count","Operator","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local   FROM  agent_info b, operator c, evd_transaction d,state_list e  WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and b.operator_id = '$type' and date(b.date_time) between '$startDate' and '$endDate' group by  State,local, b.operator_id, date(b.date_time) order by b.operator_id, date(b.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Operator","Agent","State");
-							$headcount = 5;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State  FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and   e.state_id=$state and   date(d.date_time) between '$startDate' and '$endDate' and d.operator_id = '$type' group by  State,b.parent_code, d.operator_id, b.agent_name, date(d.date_time) order by d.operator_id, b.agent_name, date(d.date_time)";
+							$heading = array("Date","Count","Operator","Agent","State","Local Government");
+							$headcount = 6;
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local  FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and   e.state_id=$state and   date(d.date_time) between '$startDate' and '$endDate' and d.operator_id = '$type' group by  State,local,b.parent_code, d.operator_id, b.agent_name, date(d.date_time) order by d.operator_id, b.agent_name, date(d.date_time)";
 							}
 						}
 						else {
 							if($agentDetail == false) {
-							$heading = array("Date","Count","Operator","State");
-							$headcount = 4;
-								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  b.agent_code = '$agentName' and  e.state_id=$state and d.operator_id  = '$type' and date(d.date_time) between '$startDate' and '$endDate' group by  State, d.operator_id, date(d.date_time) order by d.operator_id,date(d.date_time)";
+							$heading = array("Date","Count","Operator","State","Local Government");
+							$headcount = 5;
+								$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator',concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  b.agent_code = '$agentName' and  e.state_id=$state and d.operator_id  = '$type' and date(d.date_time) between '$startDate' and '$endDate' group by  State,local, d.operator_id, date(d.date_time) order by d.operator_id,date(d.date_time)";
 							}
 							else {
-							$heading = array("Date","Count","Operator","Agent","State");
-							$headcount = 5;
-							$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and  c.operator_id = d.operator_id and date(d.date_time) between '$startDate' and '$endDate' and d.operator_id  = '$type' and b.agent_code = '$agentName' group by  State,b.parent_code ,d.operator_id, b.agent_name, date(d.date_time) order by  d.operator_id,b.agent_name, date(d.date_time)";
+							$heading = array("Date","Count","Operator","Agent","State","Local Government");
+							$headcount = 6;
+							$query ="SELECT date(d.date_time) as Date, count(*) as Count, concat(c.operator_code, ' - ', c.operator_description) as 'Operator', concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(e.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, operator c, evd_transaction d,state_list e WHERE b.user_id = d.user_id and c.operator_id = d.operator_id and b.state_id = e.state_id and  e.state_id=$state and  c.operator_id = d.operator_id and date(d.date_time) between '$startDate' and '$endDate' and d.operator_id  = '$type' and b.agent_code = '$agentName' group by  State,local,b.parent_code ,d.operator_id, b.agent_name, date(d.date_time) order by  d.operator_id,b.agent_name, date(d.date_time)";
 							}
 						}
 					}

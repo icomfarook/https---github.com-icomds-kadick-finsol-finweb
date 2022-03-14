@@ -149,7 +149,17 @@
 							<li><a class="ajax-link" style="color:orange" href="#!acsact"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;POS Activity</a></li>
 							</ul>
 							</li>
-							<li><a class="ajax-link" href="#!ascteralloc">Terminal Allocation </a></li>
+								<li class="dropdown">
+								<a href="#" class="dropdown-toggle">
+								<i class="fa fa-mobile"></i>
+								<span style="color:white" class="hidden-xs"  >Terminal</span>
+								</a>
+								<ul class="dropdown-menu">
+								<li><a class="ajax-link"  style="color:orange" href="#!ascteralloc"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Allocation</a></li>
+								<li><a class="ajax-link"  style="color:orange" href="#!ascterbond"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Terminal Bound</a></li>
+
+								</ul>
+							</li>
 							<li><a class="ajax-link" href="#!bankacc">Payment Bank</a></li>
 							<li><a class="ajax-link" href="#!waltblnce">Wallet Balance</a></li>
 							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
