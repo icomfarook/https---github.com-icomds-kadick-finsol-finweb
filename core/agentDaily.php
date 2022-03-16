@@ -82,7 +82,7 @@
 									
 								</div>
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Month<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
+								<label>Date<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
 								<input  ng-model="MonthDate" type='date' id='MonthDate' name='MonthDate' required class='form-control'/>
 							</div>			
 							 
@@ -101,23 +101,20 @@
 									<th>Run Date</th>
 									<th>Target Daily Count</th>
 									<th>Target Daily Amount</th>
-									<th>Actual Daily Count</th>
-									<th>Actual Daily Amount</th>
-									<th>Daily Trend</th>
+									<th>Detail</th>
 								</tr>
 							</thead>
 							<tbody>
 								 <tr ng-show='tablerow' ng-repeat="x in res">
 									<td>{{ x.agent_name }}</td>
 									<td>{{ x.run_date }}</td>
-									<td>{{ x.target_daily_count }}</td>
-									<td>{{ x.target_daily_amount }}</td>
-									<td>{{ x.actual_daily_count }}</td>
-									<td>{{ x.actual_daily_amount }}</td>
-									<td>{{ x.daily_trend }}</td>
+									<td>{{ x.target_monthly_count }}</td>
+									<td>{{ x.target_monthly_amount }}</td>
+								<td><a id={{x.id}} class='editpro' ng-click='detail($index,x.id)' data-toggle='modal' data-target='#ServiceDialogue'>
+								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
 								</tr>
 								<tr ng-show="res.length==0">
-									<td style='text-align:center' colspan='7' >
+									<td style='text-align:center' colspan='5' >
 										<?php echo JOUNRAL_ENTRY_COMMI_MAIN_NO_DATA_FOUND; ?>            
 									</td>
 								</tr>
@@ -126,10 +123,72 @@
 					</div>
 				</form>
 			</div>
-		</div>
+		
+
+	
+			 <div id='ServiceDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" >
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'>Agent Rank Daily - Details - {{id}}</h2>
+					</div>	
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					<div class='modal-body'  ng-hide='isLoader'>
+					<form action="" method="POST" name='ApplicatioViewDialgoue' id="ApplicatioViewDialgoue">
+						<div id='ApplicationViewBody'>
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label><span >ID : </span><span class='labspa'>{{id}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label><span >Party Type :</span><span class='labspa'>{{party_type}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Party Code :<span class='labspa'>{{agent_name }}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Run Date :<span class='labspa'>{{run_date }}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Date Time :<span class='labspa'>{{date_time }}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Target Monthly Count :<span class='labspa'>{{target_monthly_count}}</span></label>
+							</div>
+							
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Target Monthly Amount:<span class='labspafin'>{{target_monthly_amount}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual Cum Daily Count :<span class='labspa'>{{actual_cum_daily_count}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual Cum Daily Amount :<span class='labspafin'>{{actual_cum_daily_amount}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual ISO Daily Count :<span class='labspa'>{{actual_iso_daily_count}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual ISO Daily Amount:<span class='labspafin'>{{actual_iso_daily_amount}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Daily Trend :<span class='labspa'>{{daily_trend}}</span></label>
+							</div>
+							
+							<div class='clearfix'></div>
+						</div>
+						 </form>	
+					</div>				
+					<div class='modal-footer'>					
+						
+					</div>
+				
+			</div>
+		</div>	
+	</div>	
+
 	</div>
-	  
-</div>
+														
 </div>
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings

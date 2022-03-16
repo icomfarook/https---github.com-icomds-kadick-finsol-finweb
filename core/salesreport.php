@@ -296,6 +296,9 @@
 								</tr>	<tr>
 									<td colspan='2'>Additional Comments : {{appcmt}}</td>
 								</tr>
+								</tr>	<tr>
+									<td colspan='2'>Cash : {{cash}}</td>
+								</tr>
 							</table>
 						</div>
 					</div>				

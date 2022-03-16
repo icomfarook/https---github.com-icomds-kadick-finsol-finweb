@@ -33,7 +33,7 @@ $msg = "Deatiled Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = " SELECT a.fin_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local, a.request_amount, a.total_amount,IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,'-'))) as reference,  a.date_time as date_time,c.update_time,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge,ifNULL(c.service_charge,'-') as service_charge, group_concat(f.charge_value ORDER BY f.service_charge_party_name) as charges  FROM fin_service_order a, agent_info b, fin_request c, service_feature d, user_pos e, fin_service_order_comm f WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id and a.fin_service_order_no = f.fin_service_order_no";
+			$query = " SELECT a.fin_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local, a.request_amount, a.total_amount,IF(a.service_feature_code='CIN',a.auth_code , IF(a.service_feature_code='COU',a.auth_code, IF(a.service_feature_code='MP0',c.rrn,'-'))) as reference,  a.date_time as date_time,c.update_time,ifNULL(a.ams_charge,'-') as ams_charge,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge,ifNULL(c.service_charge,'-') as service_charge, group_concat(f.charge_value ORDER BY f.service_charge_party_name) as charges,if(c.all_in = 'Y',IFNULL(c.total_amount,0.00) - (c.request_amount),'0') as cash   FROM fin_service_order a, agent_info b, fin_request c, service_feature d, user_pos e, fin_service_order_comm f WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id and a.fin_service_order_no = f.fin_service_order_no";
 		}
 	
 		if($profileid  == 51) {
@@ -87,8 +87,8 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type","Agent","State","Local Government","Request Amount","Total Amount", "Reference","Date Time","Update Time","Ams Charge","Stamp Charge","Partner Charge","Other Charge","Total Charge","Total Splited Charges","Agent Charges","Champion Charges","Kadick Charges");
-		$headcount = 19;
+		$heading = array("Order No","Order Type","Agent","State","Local Government","Request Amount","Total Amount", "Reference","Date Time","Update Time","Ams Charge","Stamp Charge","Partner Charge","Other Charge","Total Charge","Total Splited Charges","Agent Charges","Champion Charges","Kadick Charges","Cash");
+		$headcount = 20;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
@@ -105,6 +105,8 @@ $objPHPExcel = new PHPExcel();
 			$kadick_slit = $split_charges[2];
 			$row['18'] = $kadick_slit;
 			//$row['10'] = null;
+			$cash = -($row['cash']);
+			$row['19'] = $cash;
 			
 			//error_log("agent_Charge  ==".$row['15']);
 			generateExcel ($i, $row,$objPHPExcel,$headcount);

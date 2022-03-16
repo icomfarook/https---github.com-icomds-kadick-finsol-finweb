@@ -14,9 +14,9 @@ $title = "KadickMoni";
 $msg = "Agent Ranking - Daily Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
-			$heading = array("ID","Party Type","Party Code","Run Date","Date Time","Target Daily Count","Target Daily Amount","Actual Daily Count","Actual Daily Amount","Daily Trend");
-							$headcount = 10;
-		$query = "select a.party_rank_day_id,if(a.party_type='A','A-Agent','-') as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_daily_count,a.target_daily_amount,a.actual_daily_count,a.actual_daily_amount,a.actual_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(date_time) = '$MonthDate' and a.party_code = '$agentCode'";
+			$heading = array("ID","Party Type","Party Code","Run Date","Date Time","Target Monthly Count","Target Monthly Amount","Actual Daily Count","Actual Daily Amount","Actual ISO Daily Count","Actual ISO Daily Amount","Daily Trend");
+							$headcount = 12;
+		$query = "select a.party_rank_day_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(date_time) = '$MonthDate' and a.party_code = '$agentCode'";
 	
 					
 		$result =  mysqli_query($con,$query);

@@ -101,6 +101,7 @@
 									<th>Run Month</th>
 									<th>Assigned Rank</th>
 									<th>Monthly Rank</th>
+									<th>Details</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -109,9 +110,11 @@
 									<td>{{ x.run_month }}</td>
 									<td>{{ x.assigned_rank }}</td>
 									<td>{{ x.monthly_rank }}</td>
+									<td><a id={{x.id}} class='editpro' ng-click='detail($index,x.id)' data-toggle='modal' data-target='#ServiceDialogue'>
+								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
 								</tr>
 								<tr ng-show="res.length==0">
-									<td style='text-align:center' colspan='4' >
+									<td style='text-align:center' colspan='5' >
 										<?php echo JOUNRAL_ENTRY_COMMI_MAIN_NO_DATA_FOUND; ?>            
 									</td>
 								</tr>
@@ -120,8 +123,64 @@
 					</div>
 				</form>
 			</div>
-		</div>
-	</div>
+		
+			 <div id='ServiceDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content" >
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'>Agent Rank Monthly - Details - {{id}}</h2>
+					</div>	
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					<div class='modal-body'  ng-hide='isLoader'>
+					<form action="" method="POST" name='ApplicatioViewDialgoue' id="ApplicatioViewDialgoue">
+						<div id='ApplicationViewBody'>
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label><span >ID : </span><span class='labspa'>{{id}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label><span >Party Type :</span><span class='labspa'>{{party_type}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Party Code :<span class='labspa'>{{agent_name }}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Run Month :<span class='labspa'>{{run_month}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Date Time :<span class='labspa'>{{date_time }}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Target Monthly Count :<span class='labspa'>{{target_monthly_count}}</span></label>
+							</div>
+							
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Target Monthly Amount:<span class='labspafin'>{{target_monthly_amount}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual ISO Daily Count :<span class='labspa'>{{actual_iso_daily_count}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Actual ISO Daily Amount:<span class='labspafin'>{{actual_iso_daily_amount}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Assigned Party Category ID:<span class='labspa'>{{assigned_rank}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Ranked Party Category ID:<span class='labspa'>{{monthly_rank}}</span></label>
+							</div>
+							
+							<div class='clearfix'></div>
+						</div>
+						 </form>	
+					</div>				
+					<div class='modal-footer'>					
+						
+					</div>
+				
+			</div>
+		</div>	
+	</div>	
 	  
 </div>
 </div>
