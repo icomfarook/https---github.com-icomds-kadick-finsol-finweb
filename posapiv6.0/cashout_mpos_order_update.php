@@ -77,7 +77,7 @@
 			
 			if ( $local_signature == $signature ){	
 
-                		if ( "Cash-Out (Card)" == $orderType ) {
+                		if ( "Cash-Out (Card)" == $orderType || "Cash-Out (Card)." == $orderType ) {
 					$query = "SELECT a.fin_service_order_no, b.fin_request_id, a.user_id, a.request_amount, a.total_amount, b.sender_name, b.mobile_no, c.agent_code, c.country_id, c.state_id, c.local_govt_id, ifnull(c.parent_code, '') as parent_code, ifnull(c.parent_type, '') as parent_type, date(b.create_time) as create_date, ifnull(b.all_in, 1) as all_in FROM fin_service_order a, fin_request b, agent_info c WHERE a.user_id = c.user_id and a.fin_service_order_no = b.order_no and a.fin_service_order_no = ".$orderNo;
                     			error_log("select query: ".$query);
                    			$result = mysqli_query($con, $query);
@@ -204,7 +204,7 @@
 													    error_log("Error in purchase fin_request status update for: fin_service_order_no = ".$fin_service_order_no);
 													}
 
-													$update_query2 = "UPDATE fin_service_order set auth_code = '$authCode', comment = '$comment', reference_no = '$transactionId' WHERE fin_service_order_no = $orderNo";
+													$update_query2 = "UPDATE fin_service_order set auth_code = '$authCode', reference_no = '$transactionId' WHERE fin_service_order_no = $orderNo";
 													error_log("update_query2 = ".$update_query2);
 													$update_result2 = mysqli_query($con, $update_query2);
 													if ( $update_result2 ) {
