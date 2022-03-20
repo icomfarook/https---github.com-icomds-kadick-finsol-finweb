@@ -14,9 +14,9 @@ $title = "KadickMoni";
 $msg = "Agent Ranking Monthly Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
-			$heading = array("ID","Party Type","Party Code","Run Month","Date Time","Target Monthly Count","Target Monthly Amount","Actual ISO Daily Count","Actual ISO Daily Amount","Assigned Rank","Monthly Rank");
+			$heading = array("ID","Party Type","Party Code","Run Month","Date Time","Target Monthly Count","Target Monthly Amount","Actual ISO Monthly Count","Actual ISO Monthly Amount","Assigned Rank","Monthly Rank");
 							$headcount = 11;
-		$query = "select a.party_rank_month_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date(date_time) like '%$MonthDate%' and a.party_code = '$agentCode'";
+		$query = "select a.party_rank_month_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_monthly_count,a.actual_iso_monthly_amount,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date(date_time) like '%$MonthDate%' and a.party_code = '$agentCode'";
 	
 					
 		$result =  mysqli_query($con,$query);

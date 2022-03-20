@@ -270,13 +270,11 @@ $scope.agents = response.data;
 //window.location.reload();
 });
 
-
 $scope.reset = function () {
 $scope.tablerow = false;
 $scope.MonthDate = "";
 $scope.agentCode = "";
 }
-
 
 $scope.query = function () {
 $scope.tablerow = true;
@@ -298,8 +296,36 @@ $scope.res = response.data;
 });
 
 }
-});
 
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/agentDailyajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.party_type = response.data[0].party_type;
+$scope.agent_name = response.data[0].agent_name;
+$scope.run_date = response.data[0].run_date;
+$scope.date_time = response.data[0].date_time;
+$scope.target_monthly_count = response.data[0].target_monthly_count;
+$scope.target_monthly_amount = response.data[0].target_monthly_amount;
+$scope.actual_cum_daily_count = response.data[0].actual_cum_daily_count;
+$scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
+$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
+$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
+$scope.daily_trend = response.data[0].daily_trend;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
 
 
 app.controller('AgentMonthCtrl', function ($scope, $http) {
@@ -343,6 +369,33 @@ $scope.res = response.data;
 // console.log(response);
 });
 
+}
+
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/agentMonthajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.party_type = response.data[0].party_type;
+$scope.agent_name = response.data[0].agent_name;
+$scope.run_month = response.data[0].run_month;
+$scope.date_time = response.data[0].date_time;
+$scope.target_monthly_count = response.data[0].target_monthly_count;
+$scope.target_monthly_amount = response.data[0].target_monthly_amount;
+$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
+$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
+$scope.assigned_rank = response.data[0].assigned_rank;
+$scope.monthly_rank = response.data[0].monthly_rank;
+}, function errorCallback(response) {
+// console.log(response);
+});
 }
 });
 
@@ -7712,6 +7765,7 @@ $scope.update_time = response.data[0].update_time;
 
 });
 
+
 app.controller('salesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -7844,6 +7898,7 @@ $scope.bank = response.data[0].bank;
 $scope.partner = response.data[0].partner;
 $scope.sender_name = response.data[0].sender_name;
 $scope.appcmt = response.data[0].appcmt;
+$scope.cash = response.data[0].cash;
 
 }, function errorCallback(response) {
 // console.log(response);
@@ -7885,8 +7940,11 @@ championCode: $scope.championCode,
 Terminal: $scope.Terminal,
 state: $scope.state,
 local_govt_id: $scope.local_govt_id
+
+
 },
 }).then(function successCallback(response) {
+
 $scope.res = response.data;
 }, function errorCallback(response) {
 // console.log(response);
@@ -8038,6 +8096,7 @@ var response = "<table style='margin-top:50px' width='90%'><tbody>" + "<td colsp
 "</tbody></table><br />"+
 "<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
 }else if(response.data[0].code =='COU'){
+
 if(response.data[0].sts=='TRIGGERED'){
 var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
 }else if(response.data[0].sts=='SUCCESS'){
@@ -8147,6 +8206,16 @@ var hourTime = postTime.substring(11);
 var rcValue = RC.substring(0, 2);
 var APKVERS = '2.34 20210124';
 
+if(response.data[0].all_in == 'Y'){
+
+var SVCCASH = "Svc Charge Cash";
+var VATCASH = "VAT Cash";
+
+}else{
+var SVCCASH = "Service Charge";
+var VATCASH = "Other Charge(VAT)";
+}
+
 if(rcValue.trim() ==00){
 var transacStatus = "Transaction Successful";
 }else{
@@ -8169,8 +8238,8 @@ statushead +
 "<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
 "<tr><td class='name'>Date</td><td class='result'>" + Time +"</td></tr>" +
 "<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>" + SVCCASH + "</td><td class='result'>" + response.data[0].scharge + "</td></tr>" +
+"<tr><td class='name'>" +VATCASH+ "</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
 "<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
 "<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
 "<tr><td class='name'>info 1</td><td class='result'>Card No: " + PAN + "</td></tr>" +
@@ -8300,6 +8369,7 @@ $scope.partner = "";
 
 }
 });
+
 
 
 app.controller('evdstatreportCtrl', function ($scope, $http) {
