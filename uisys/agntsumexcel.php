@@ -7,19 +7,20 @@ include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$agentCode	= $_POST['agentCode'];
 	$MonthDate	= $_POST['MonthDate'];	
-	$MonthDate = date("Y-m-d", strtotime($MonthDate));
-		
+	//error_log("MonthDate ==".$MonthDate);
+	$MonthDate = date("Y-m", strtotime($MonthDate));
+	error_log("MonthDate ==".$MonthDate);
+	//$MonthDate = date("Y-m", strtotime($MonthDates));
 $title = "KadickMoni";
  
-$msg = "Agent Ranking - Daily Report For Party Code $agentCode between $MonthDate ";
+$msg = "Agent Ranking Summary Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
-			if($agentCode == "ALL"){
-				$query = "select a.party_rank_day_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(run_date) = '$MonthDate'";
-			}else{
-				$query = "select a.party_rank_day_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(run_date) = '$MonthDate' and a.party_code = '$agentCode'";
-				
-			}
+		if($agentCode == "ALL"){
+			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_count, c.target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and date_format(c.run_month,'%Y-%m') = '$MonthDate' order by a.agent_code ;";
+		}else{
+			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_count, c.target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and date_format(c.run_month,'%Y-%m') = '$MonthDate'  and c.party_code='$agentCode' order by a.agent_code";
+		}
 	
 					
 		$result =  mysqli_query($con,$query);
@@ -29,8 +30,8 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("ID","Party Type","Party Code","Run Date","Date Time","Target Monthly Count","Target Monthly Amount","Actual Daily Count","Actual Daily Amount","Actual ISO Daily Count","Actual ISO Daily Amount","Daily Trend");
-		$headcount = 12;
+		$heading = array("Agent Code","Assigend Category","Ranked Category","Target Monthly Count","Target Monthly Amount","Run Month");
+		$headcount = 6;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{

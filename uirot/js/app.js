@@ -528,4 +528,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/terminalbond.php",
 		controller: "TerminalBondCtrl"
 	})
+	.when("/agntsum", {
+		templateUrl : "../core/agntsum.php",
+		controller: "AgentSummCtrl"
+	})
 });

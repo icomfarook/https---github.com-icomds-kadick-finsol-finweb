@@ -74,8 +74,8 @@
 				<form name='infoViewForm'  action ='agentMonthExcel.php' method='POST'>	
 					<div class='row appcont' >									
 					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>				<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
-								<select  ng-init='agentCode = ""' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
-									<option value=''>--Select--</option>
+								<select  ng-init='agentCode = "ALL"' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
+									<option value='ALL'>--ALL--</option>
 									<option ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
 									<option  ng-repeat="agent in agents" value="{{agent.code}}">{{agent.name}}</option>
 								</select>
@@ -83,13 +83,13 @@
 								</div>
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Month<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
-								<input  ng-model="MonthDate"  date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
+								<input  ng-model="MonthDate"   date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
 							</div>			
 							 
 						</div>	<div class='clearfix'></div>
 							<div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
-								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Reset">Reset</button>
+								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Refresh">Reset</button>
 								<button type="submit" class="btn btn-primary"   id="excel"  ng-hide='isHideexcel;'>Excel</button>
 							</div>
 						</div>	<div class='clearfix'></div><br />	
@@ -129,7 +129,7 @@
 			<div class="modal-content" >
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>Agent Rank Monthly - Details - {{id}}</h2>
+						<h2 style='text-align:center'>Agent Rank Monthly - Details - {{agent_name}}</h2>
 					</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 					<div class='modal-body'  ng-hide='isLoader'>

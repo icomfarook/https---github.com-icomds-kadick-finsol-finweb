@@ -10,13 +10,19 @@
 	$MonthDate		=  $data->MonthDate;
 	$agentCode		=  $data->agentCode;
 	//error_log("MonthDate ==".$MonthDate);
-	$MonthDate = date("Y-m", strtotime($MonthDate."+1 months"));
+	$MonthDates = date("Y-m-d", strtotime($MonthDate."+28 days"));
+	
+	$MonthDate = date("Y-m", strtotime($MonthDates));
+	//error_log("MonthDates = ".$MonthDate);
 	if($action == "getreport") {
 		
-		$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_monthly_count,a.actual_iso_monthly_amount,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  date(date_time) like '%$MonthDate%' and a.party_code = '$agentCode'";
-				
+		if($agentCode == "ALL"){
+			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate'";
+		}else{
+			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate' and a.party_code = '$agentCode'";
+		}
 		
-		error_log("qyetr".$query);
+		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
 			printf("Error: %s\n".mysqli_error($con));
@@ -29,9 +35,9 @@
 		echo json_encode($data);
 	}
 	
-		if($action == "view") {
+	else if($action == "view") {
 		$id = $data->id;
-		$app_view_view_query = "select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_monthly_count,a.actual_iso_monthly_amount,a.assigned_party_category_id,a.ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  a.party_rank_month_id =  '$id'";
+		$app_view_view_query = "select a.party_rank_month_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and  a.party_rank_month_id =  '$id'";
 		error_log($app_view_view_query);
 		$app_view_view_result =  mysqli_query($con,$app_view_view_query);
 		if(!$app_view_view_result) {
