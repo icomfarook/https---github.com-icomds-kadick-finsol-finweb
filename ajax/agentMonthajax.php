@@ -7,19 +7,16 @@
 	$profileId = $_SESSION['profile_id'];
 	$partyCode = $_SESSION['party_code'];
 	$action		=  $data->action;
-	$MonthDate		=  $data->MonthDate;
 	$agentCode		=  $data->agentCode;
-	//error_log("MonthDate ==".$MonthDate);
-	$MonthDates = date("Y-m-d", strtotime($MonthDate."+28 days"));
-	
-	$MonthDate = date("Y-m", strtotime($MonthDates));
-	//error_log("MonthDates = ".$MonthDate);
+	$MonthAndYear = $data->MonthAndYear;
+		
+	error_log("MonthAndYear = ".$MonthAndYear);
 	if($action == "getreport") {
 		
 		if($agentCode == "ALL"){
-			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate'";
+			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthAndYear'";
 		}else{
-			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate' and a.party_code = '$agentCode'";
+			$query ="select a.party_rank_month_id,a.party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthAndYear' and a.party_code = '$agentCode'";
 		}
 		
 		error_log("query = ".$query);

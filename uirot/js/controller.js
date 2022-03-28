@@ -1,7 +1,36 @@
 app.controller('AgentSummCtrl', function ($scope, $http) {
+detectBrowser();
 $scope.startDate = new Date();
 $scope.tablerow = true;
 $scope.isHideexcel= true;
+
+
+function detectBrowser() {
+  if (navigator.userAgent.includes("Chrome")) {
+  $(".MonthPicker").show();
+   $(".MonthDropDown").hide();
+    return "chrome"
+  }
+  if (navigator.userAgent.includes("Firefox")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+
+    return "firefox"
+  }
+  if (navigator.userAgent.includes("Safari")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+    return "safari"
+  }
+}
+const d = new Date();
+let year = d.getFullYear();
+var years = [];
+for (var i = year; i >= 1990; i--) {
+   years.push(i);
+}
+console.log(years);
+$scope.yearList = years;
 
 $http({
 url: '../ajax/load.php',
@@ -23,13 +52,23 @@ $scope.agentCode = "--ALL--";
 $scope.query = function () {
 $scope.tablerow = true;
 $scope.isHideexcel= false;
+var MonthAndYear;
+
+if (detectBrowser() == "chrome"){
+var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+}else{
+MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+}
+
+
 $http({
 method: 'post',
 url: '../ajax/agntsumajax.php',
 data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
-MonthDate: $scope.MonthDate,
+MonthAndYear: MonthAndYear,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -60,6 +99,7 @@ $scope.view = response.data;
 
 }
 });
+
 
 app.controller('TerminalBondCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
@@ -391,11 +431,40 @@ $scope.daily_trend = response.data[0].daily_trend;
 });
 
 
-
 app.controller('AgentMonthCtrl', function ($scope, $http) {
+detectBrowser();
 $scope.startDate = new Date();
 $scope.tablerow = true;
 $scope.isHideexcel= true;
+
+function detectBrowser() {
+  if (navigator.userAgent.includes("Chrome")) {
+  $(".MonthPicker").show();
+   $(".MonthDropDown").hide();
+    return "chrome"
+  }
+  if (navigator.userAgent.includes("Firefox")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+
+    return "firefox"
+  }
+  if (navigator.userAgent.includes("Safari")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+    return "safari"
+  }
+}
+
+
+const d = new Date();
+let year = d.getFullYear();
+var years = [];
+for (var i = year; i >= 1990; i--) {
+   years.push(i);
+}
+console.log(years);
+$scope.yearList = years;
 
 $http({
 url: '../ajax/load.php',
@@ -409,12 +478,24 @@ $scope.agents = response.data;
 
 
 $scope.reset = function () {
+
 $scope.tablerow = false;
 $scope.MonthDate = "";
 $scope.agentCode = "";
 }
 
 $scope.query = function () {
+
+var MonthAndYear;
+
+if (detectBrowser() == "chrome"){
+var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+}else{
+MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+}
+
+
 $scope.tablerow = true;
 $scope.isHideexcel= false;
 $http({
@@ -423,7 +504,7 @@ url: '../ajax/agentMonthajax.php',
 data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
-MonthDate: $scope.MonthDate,
+MonthAndYear: MonthAndYear,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -462,6 +543,7 @@ $scope.monthly_rank = response.data[0].monthly_rank;
 });
 }
 });
+
 
 app.controller('AgentDailyCtrl', function ($scope, $http) {
 $scope.startDate = new Date();

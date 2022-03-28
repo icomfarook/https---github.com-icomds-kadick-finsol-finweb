@@ -71,7 +71,7 @@
 			
 			<div class="box-content no-padding">	
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
-				<form name='infoViewForm'  action ='agentMonthExcel.php' method='POST'>	
+				<form name='AgentMonthForm'  action ='agentMonthExcel.php' method='POST'>	
 					<div class='row appcont' >									
 					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>				<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
 								<select  ng-init='agentCode = "ALL"' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
@@ -81,18 +81,53 @@
 								</select>
 									
 								</div>
-						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Month<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
-								<input  ng-model="MonthDate"   date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
-							</div>			
+								
+								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 MonthPicker'>
+								<label>Month<span class='spanre'>*</span><span ng-show=" AgentMonthForm.MonthDate.$touched || AgentMonthForm.MonthDate.$dirty &&  AgentMonthForm.MonthDate.$invalid">
+									</span>	<span class = 'err' ng-show="AgentMonthForm.MonthDate.$invalid && AgentMonthForm.MonthDate.$error.required"></span></label>
+								<input  ng-model="MonthDate"  date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
+							</div>		
+							
+							
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 MonthDropDown' >
+						<label>Month<span class='spanre'>*</span><span ng-show=" AgentMonthForm.MonthDrop.$touched || AgentMonthForm.MonthDrop.$dirty &&  AgentMonthForm.MonthDrop.$invalid">
+									</span>	<span class = 'err' ng-show="AgentMonthForm.MonthDrop.$invalid && AgentMonthForm.MonthDrop.$error.required"></span></label>
+								<select id="MonthDrop" class='form-control' ng-model="MonthDrop" name="MonthDrop">
+									<option value="" >Select Month</option>
+									<option value="01">January</option>
+									<option value="02">February</option>
+									<option value="03">March</option>
+									<option value="04">April</option>
+									<option value="05">May</option>
+									<option value="06">June</option>
+									<option value="07">July</option>
+									<option value="08">August</option>
+									<option value="09">September</option>
+									<option value="10">October</option>
+									<option value="11">November</option>
+									<option value="12">December</option>
+								</select>
+
+							</div>		
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12 MonthDropDown' >
+								<label>Year<span class='spanre'>*</span><span ng-show=" AgentMonthForm.YearDrop.$touched || AgentMonthForm.YearDrop.$dirty &&  AgentMonthForm.YearDrop.$invalid">
+									</span>	<span class = 'err' ng-show="AgentMonthForm.YearDrop.$invalid && AgentMonthForm.YearDrop.$error.required"></span></label>
+								<select class='form-control' id="YearDrop" name="YearDrop" ng-model="YearDrop" >
+									<option value="" >Select Year</option>
+									<option value="{{year}}" ng-repeat="year in yearList">{{year}}</option>
+								</select>
+
+
+
+							</div>									
 							 
 						</div>	<div class='clearfix'></div>
 							<div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
-								<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
+								<button type="button" class="btn btn-primary enableOnInput"  ng-click='query()' ng-hide='isHide' ng-disabled = 'AgentMonthForm.$invalid' disabled='disabled'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
 								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Refresh">Reset</button>
-								<button type="submit" class="btn btn-primary"   id="excel"  ng-hide='isHideexcel;'>Excel</button>
+								<button type="submit"  class="btn btn-primary"   id="excel"   ng-hide='isHideexcel;'>Excel</button>
 							</div>
-						</div>	<div class='clearfix'></div><br />	
+						<div class='clearfix'></div><br />	
 																	
 					<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>
@@ -122,10 +157,11 @@
 						</table>
 					</div>
 				</form>
+					</div>
 			</div>
 		
 			 <div id='ServiceDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-lg" style="width: fit-content;">
 			<div class="modal-content" >
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
@@ -155,19 +191,19 @@
 							</div>
 							
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Target Monthly Amount:<span class='labspafin'>{{target_monthly_amount}}</span></label>
+								<label>Target Monthly Amount :<span class='labspafin'>{{target_monthly_amount}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Actual ISO Daily Count :<span class='labspa'>{{actual_iso_daily_count}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Actual ISO Daily Amount:<span class='labspafin'>{{actual_iso_daily_amount}}</span></label>
+								<label>Actual ISO Daily Amount :<span class='labspafin'>{{actual_iso_daily_amount}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Assigned Party Category ID:<span class='labspa'>{{assigned_rank}}</span></label>
+								<label>Assigned Party Category :<span class='labspa'>{{assigned_rank}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Ranked Party Category ID:<span class='labspa'>{{monthly_rank}}</span></label>
+								<label>Ranked Party Category :<span class='labspa'>{{monthly_rank}}</span></label>
 							</div>
 							
 							<div class='clearfix'></div>
@@ -193,6 +229,8 @@ function AllTables(){
 	//LoadSelect2Script();
 }
 $(document).ready(function() {
+
+	
 	$("#Query").click(function() {				
 	$('.dataTables_info').css("display","block"); 	
 		$('#datatable-1_paginate').css("display","block");	
@@ -221,5 +259,18 @@ $(document).ready(function() {
 		$('#datatable-1_paginate').css("display","none");
  
 		});	
+		
+ 
+ 	$(function() {
+  $('#MonthDrop, #YearDrop').on('keyup change',function() {
+    if ($('#MonthDrop').val() == '' ||  $('#YearDrop').val() == '') {
+      $('.enableOnInput').prop('disabled', true);
+    } else {
+      $('.enableOnInput').prop('disabled', false);
+    }
+  });
+})
+
+
 });
 </script>

@@ -75,9 +75,9 @@
 			
 			<div class="box-content no-padding">	
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
-				<form name='infoViewForm'  action ='agntsumexcel.php' method='POST'>	
+				<form name='AgentSumForm'  action ='agntsumexcel.php' method='POST'>	
 					<div class='row appcont' >									
-					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>				<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
+					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>					<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
 								<select  ng-init='agentCode = "ALL"' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
 									<option value='ALL'>--ALL--</option>
 									<option ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
@@ -85,14 +85,10 @@
 								</select>
 									
 								</div>
-						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Month<span class='spanre'></span><span class='err' ng-show="paymentApproveForm.MonthDate.$error.required && paymentApproveForm.MonthDate.$invalid"><?php echo REQUIRED;?></span></label></label>
-								<input  ng-model="MonthDate"  date-format="yyyy-MM" type='month' id='MonthDate' name='MonthDate' required class='form-control'/>
-							</div>			
-							 
-						</div>	<div class='clearfix'></div>
-							<div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
-								<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
+							
+						<div class='clearfix'></div>
+							<div  style = 'text-align:Center;margin-top: inherit;' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
+								<button type="button" class="btn btn-primary enableOnInput"  ng-disabled = 'AgentSumForm.$invalid'  ng-click='AgentSumForm.$invalid=true;query()' disabled='disabled' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>
 								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Refresh">Reset</button>
 								<button type="submit" class="btn btn-primary"   id="excel"  ng-hide='isHideexcel;'>Excel</button>
 							</div>
@@ -219,5 +215,15 @@ $(document).ready(function() {
 		$('#datatable-1_paginate').css("display","none");
  
 		});	
+		
+		$(function() {
+  $('#MonthDrop, #YearDrop').on('keyup change',function() {
+    if ($('#MonthDrop').val() == '' ||  $('#YearDrop').val() == '') {
+      $('.enableOnInput').prop('disabled', true);
+    } else {
+      $('.enableOnInput').prop('disabled', false);
+    }
+  });
+})
 });
 </script>
