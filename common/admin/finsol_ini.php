@@ -199,6 +199,7 @@ define ("APP_ENTRY_ATTACHMENT_LOCATION1","D:/vlapos/finweb/app/id/");
 define ("APP_ENTRY_ATTACHMENT_LOCATION2","D:/vlapos/finweb/app/business/");
 
 define("AGENT_SESSION_VALID_TIME", "00:59:59");
+define("AGENT_FULL_DAY_SESSION_VALID_TIME", "23:59:59");
 #define("AGENT_SESSION_VALID_TIME", "00:30:00");
 define ("PAY_MIN_LIMIT","10000");
 define ("PAY_MAX_LIMIT","100000");
@@ -245,6 +246,9 @@ define ("PTSP_POSVAS_HOME_URI","api/callhome_posvas");
 //define ("PTSP_POSVAS_HOME_URI","api/callhome_posvas.php");
 define ("PTSP_POSVAS_PREP_URI","/nibss/api/prep_posvas");
 define ("PTSP_POSVAS_TRANSACTION_URI","/nibss/api/transaction_posvas");
+
+define ("FCM_URL","https://fcm.googleapis.com/fcm/send");
+define ("FCM_API_KEY","AAAAIC3ieAs:APA91bEslZGxZ4CKxcl0C6bu2Tzfog3Y6K5VX-9useLkij2HYzXMqZ57_NZjAbHU6WuQI-NzdxQ_ip6h-FWOC8mUBmtEgcqAFIaawJI5iqULoYlaZ43zpbEafs07ZPMCcK61WD-T2ZzH");
 
 
 ?>

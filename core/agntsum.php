@@ -72,12 +72,12 @@
 				</div>
 				<div class="no-move"></div> 
 			</div>
-			
+			<div >
 			<div class="box-content no-padding">	
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
 				<form name='AgentSumForm'  action ='agntsumexcel.php' method='POST'>	
 					<div class='row appcont' >									
-					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>					<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
+					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12' style="width:28%;margin-left:35%">					<label style="text-align:center;margin-left: 30%;" ><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
 								<select  ng-init='agentCode = "ALL"' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
 									<option value='ALL'>--ALL--</option>
 									<option ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
@@ -92,7 +92,7 @@
 								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Refresh">Reset</button>
 								<button type="submit" class="btn btn-primary"   id="excel"  ng-hide='isHideexcel;'>Excel</button>
 							</div>
-						</div>	<div class='clearfix'></div><br />	
+						</div></div></div>
 																	
 					<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>
@@ -148,7 +148,7 @@
 							</thead>
 							<tbody>
 								 <tr ng-show='tablerow' ng-repeat="x in view">
-									<td>{{ x.Date }}</td>
+									<td>{{ x.run_date }}</td>
 									<td>₦ {{ x.DailyAmount }} / {{ x.DailyCount }}</td>
 									<td>₦ {{ x.IsoAmount }} / {{ x.IsoCount }}</td>
 									<td ng-if="x.DailyTrend =='U-UP'"  class='labspagreen'>{{ x.DailyTrend }}<img style='height:22px;width:22px' src='../common/img/sort-asc.png' /></td>
@@ -173,9 +173,9 @@
 				
 			</div>
 		</div>	
-	</div>	
+	
 	  
-</div>
+
 </div>
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings

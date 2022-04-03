@@ -329,7 +329,7 @@
 																		$db_state_ptsp_flag = "E";
 																		$ini_ptsp_flag = PTSP_FLAG;
 																		$terminal_serial_no = "";
-																		$db_state_ptsp_query = "select ifnull(ptsp_type, 'E') as ptsp_type from state_ptsp_switch where active = 'Y' and ((state_id = ".$state_id." and local_govt_id is null) or (state_id = ".$state_id." and local_govt_id = ".$local_govt_id.")) and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) > current_date())) limit 1";
+																		$db_state_ptsp_query = "select ifnull(ptsp_type, 'P') as ptsp_type from state_ptsp_switch where active = 'Y' and ((state_id = ".$state_id." and local_govt_id is null) or (state_id = ".$state_id." and local_govt_id = ".$local_govt_id.")) and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) > current_date())) limit 1";
 																		error_log("db_state_ptsp_query = ".$db_state_ptsp_query);
 																		$db_state_ptsp_result = mysqli_query($con, $db_state_ptsp_query);
 																		if ( $db_state_ptsp_result ) {

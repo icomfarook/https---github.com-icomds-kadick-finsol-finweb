@@ -343,8 +343,17 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyrac"><?php echo INDEX_PARTY_RECEIVABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptytss"><?php echo INDEX_PARTY_TSS_ACCOUNT; ?></a></li>
-						<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
-						<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+							<i class="fa fa-newspaper-o"></i>
+							<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
+							</a>
+							<ul class="dropdown-menu">
+							<li><a class="ajax-link" style="color:orange" href="#!agntmnth"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Monthly</a></li>
+							<li><a class="ajax-link" style="color:orange" href="#!agntdaily"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Daily</a></li>
+							<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
+							</ul>
+						</li>
 					</ul>
 				</li>
 				<li class="dropdown">

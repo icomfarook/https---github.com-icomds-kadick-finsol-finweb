@@ -6,20 +6,21 @@ require('../common/sessioncheck.php');
 include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$agentCode	= $_POST['agentCode'];
-	$MonthDate	= $_POST['MonthDate'];	
-	//error_log("MonthDate ==".$MonthDate);
-	$MonthDate = date("Y-m", strtotime($MonthDate));
-	error_log("MonthDate ==".$MonthDate);
-	//$MonthDate = date("Y-m", strtotime($MonthDates));
+	
 $title = "KadickMoni";
  
 $msg = "Agent Ranking Summary Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
 		if($agentCode == "ALL"){
-			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_count, c.target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and date_format(c.run_month,'%Y-%m') = '$MonthDate' order by a.agent_code ;";
+			$heading = array("Agent Code","Assigend Category","Ranked Category","Target Monthly Count","Target Monthly Amount","Run Month");
+			$headcount = 6;
+			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_count,c.target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and c.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))  order by a.agent_code";
 		}else{
-			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_count, c.target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and date_format(c.run_month,'%Y-%m') = '$MonthDate'  and c.party_code='$agentCode' order by a.agent_code";
+			$heading = array("Agent Code","Assigend Category","Ranked Category","Current Month Target Amount","Current Month Target Count","Run Month","Run Date","Cumulative Amount","Cumulative Count","IsoAmount Amount","Isolated Count","Daily Trend");
+			$headcount = 12;
+			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, c.target_monthly_amount ,c.target_monthly_count ,c.run_month, d.run_date, d.actual_cum_daily_amount, d.actual_cum_daily_count as Cumulative,d.actual_iso_daily_amount,d.actual_iso_daily_count as IsoAmount, if(d.daily_trend = 'U','U-UP',if(d.daily_trend = 'D','D-Down',if(d.daily_trend = 'N','N-No-Change','-'))) as DailyTrend from agent_info a, party_category_type b, party_rank_month c,party_rank_day d where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and c.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))  and c.party_code = d.party_code and c.party_code='$agentCode' and date_format(current_date(),'%Y-%m') = date_format(d.run_date, '%Y-%m')   order by d.run_date desc,a.agent_code  limit 1
+";
 		}
 	
 					
@@ -30,8 +31,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Agent Code","Assigend Category","Ranked Category","Target Monthly Count","Target Monthly Amount","Run Month");
-		$headcount = 6;
+		
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
