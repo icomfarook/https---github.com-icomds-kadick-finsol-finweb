@@ -1241,5 +1241,21 @@ echo json_encode($data);
 		////error_log(json_encode($data));
 		echo json_encode($data);
 	}
+	else if ($for == 'agentsWithToken'){
+		if ($action == 'active'){
+			$query = "SELECT b.agent_code, b.agent_name FROM installed_user a, agent_info b WHERE a.user_id = b.user_id and b.active = 'Y' order by b.agent_name desc";
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				printf("Error: %s\n". mysqli_error($con));
+				exit();
+			}
+			$data = array();
+			while ($row = mysqli_fetch_array($result)) {
+				$data[] = array("agent_code"=>$row['agent_code'], "agent_name"=>$row['agent_name']);          
+			}
+			////error_log(json_encode($data));
+			echo json_encode($data);
+		}
+	}
 
- ?>
+?>

@@ -351,6 +351,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyrac"><?php echo INDEX_PARTY_RECEIVABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptytss"><?php echo INDEX_PARTY_TSS_ACCOUNT; ?></a></li>
+						<li><a class="ajax-link" href="#!fcmnoti">Notification</a></li>	
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 						<i class="fa fa-newspaper-o"></i>

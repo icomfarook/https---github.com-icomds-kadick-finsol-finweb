@@ -532,4 +532,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/agntsum.php",
 		controller: "AgentSummCtrl"
 	})
+	.when("/fcmnoti", {
+		templateUrl : "../core/notification.php",
+		controller: "notificationCtrl"
+	})
 });

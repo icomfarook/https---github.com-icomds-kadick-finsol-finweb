@@ -1,3 +1,108 @@
+app.controller('notificationCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.creteria = "A";
+$scope.agentCode = [];
+$scope.countTable = false;
+$scope.title = "";
+$scope.body = "";
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agentsWithToken' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/fcmajax.php',
+data: {
+action: 'query',
+agent: $scope.agentCode,
+user_type: $scope.userType,
+state:$scope.state,
+local_govt_id:$scope.local_govt_id,
+creteria: $scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.countTable = true;
+$scope.count = response.data;
+
+}, function errorCallback(response) {
+console.log(response.data);
+});
+}
+
+$scope.send = function (title,body) {
+
+	if(title == "" ){
+		alert("Please Enter Title");
+		return false;
+	}else if(body == "" ){
+		alert("Please Enter Content");
+		return false;
+	}else{
+		var result = confirm("Are you sure to send notification?");
+		if (result) {
+			$http({
+				method: 'post',
+				url: '../ajax/fcmajax.php',
+				data: {
+				action: 'send_notification',
+				title: title,
+				body: body,
+				agent: $scope.agentCode,
+				user_type: $scope.userType,
+				creteria: $scope.creteria,
+				state: $scope.state,
+				local_govt_id: $scope.local_govt_id
+				},
+				}).then(function successCallback(response) {
+					alert(JSON.parse(response.data));
+					window.location.reload();
+				$scope.isHide = true;
+				$scope.isHideOk = false;
+				$scope.isLoader = false;
+
+				}, function errorCallback(response) {
+				console.log(response.data);
+				});
+		}else{
+			return false;
+		}
+
+	}
+
+}
+
+});
+
 app.controller('AgentSummCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.tablerow = true;
