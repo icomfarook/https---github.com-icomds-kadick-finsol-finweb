@@ -777,7 +777,7 @@ echo json_encode($data);
 
 else if ($for == 'agents'){
 if ($action == 'active'){
-$query = "select agent_code, agent_name from agent_info where active='Y'";
+$query = "select agent_code, agent_name,user_id from agent_info where active='Y'";
 ////error_log("Authorization Load query - Active only ".$query);
 $result = mysqli_query($con,$query);
 if (!$result) {
@@ -786,7 +786,7 @@ exit();
 }
 $data = array();
 while ($row = mysqli_fetch_array($result)) {
-$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name']);          
+$data[] = array("agent_code"=>$row['agent_code'],"agent_name"=>$row['agent_name'],"user_id"=>$row['user_id']);          
 }
 ////error_log(json_encode($data));
 echo json_encode($data);

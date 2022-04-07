@@ -536,4 +536,20 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/notification.php",
 		controller: "notificationCtrl"
 	})
+	.when("/clntlist", {
+		templateUrl : "../core/clientlist.php",
+		controller: "ClientListCtrl"
+	})
+	.when("/clnttop", {
+		templateUrl : "../core/clienttop.php",
+		controller: "ClientTopicCtrl"
+	})
+	.when("/topsub", {
+		templateUrl : "../core/topsubs.php",
+		controller: "TopicSubCtrl"
+	})
+	.when("/nothis", {
+		templateUrl : "../core/notifyhistory.php",
+		controller: "NotifyHistoryCtrl"
+	})
 });

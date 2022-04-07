@@ -351,7 +351,19 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyrac"><?php echo INDEX_PARTY_RECEIVABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptytss"><?php echo INDEX_PARTY_TSS_ACCOUNT; ?></a></li>
-						<li><a class="ajax-link" href="#!fcmnoti">Notification</a></li>	
+						<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
+						<i class="fa fa-laptop"></i>
+						<span style="color:white" class="hidden-xs" href="">Notification</span>
+						</a>
+						<ul class="dropdown-menu">
+						<li><a class="ajax-link" style="color:orange" href="#!fcmnoti"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Send Notification</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!clntlist"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Client List</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!clnttop"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Client Topic</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!topsub"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Topic Subscription</a></li>
+						<li><a class="ajax-link" style="color:orange" href="#!nothis"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Notification History</a></li>
+						</ul>
+						</li>
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 						<i class="fa fa-newspaper-o"></i>

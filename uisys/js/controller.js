@@ -1,3 +1,256 @@
+app.controller('NotifyHistoryCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/notifyhistajax.php',
+	data: {
+	action: 'getreport',
+	Date: $scope.Date,
+	Title: $scope.Title,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/notifyhistajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.agent = response.data[0].agent;
+	$scope.agent_selection = response.data[0].agent_selection;
+	$scope.state_selection = response.data[0].state_selection;
+	$scope.local_govt_selection = response.data[0].local_govt_selection;
+	$scope.user_selection = response.data[0].user_selection;
+	$scope.title = response.data[0].title;
+	$scope.content = response.data[0].content;
+	$scope.count = response.data[0].count;
+	$scope.response = response.data[0].response;
+	$scope.date = response.data[0].date;
+
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+
+app.controller('TopicSubCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'agents' }
+		}).then(function successCallback(response) {
+		$scope.agents = response.data;
+		//window.location.reload();
+		});
+
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/topsubajax.php',
+	data: {
+	action: 'getreport',
+	IMEI: $scope.IMEI,
+	Topic: $scope.Topic,
+	agentCode: $scope.agentCode,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/topsubajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.imei = response.data[0].imei;
+	$scope.topic = response.data[0].topic;
+	$scope.agent = response.data[0].agent;
+	$scope.subscripe = response.data[0].subscripe;
+	$scope.status = response.data[0].status;
+	$scope.create_time = response.data[0].create_time;
+	$scope.update_time = response.data[0].update_time;
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+
+app.controller('ClientTopicCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/clienttopajax.php',
+	data: {
+	action: 'getreport',
+	IMEI: $scope.IMEI,
+	Topic: $scope.Topic,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/clienttopajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.imei = response.data[0].imei;
+	$scope.topic = response.data[0].topic;
+	$scope.agent = response.data[0].agent;
+	$scope.create_time = response.data[0].create_time;
+	$scope.update_time = response.data[0].update_time;
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+app.controller('ClientListCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+
+
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'agents' }
+		}).then(function successCallback(response) {
+		$scope.agents = response.data;
+		//window.location.reload();
+		});
+   
+	$scope.query = function () {
+		$scope.tablerow = true;
+	 $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+		UserType: $scope.UserType,
+		agentCode: $scope.agentCode,
+		IMEI: $scope.IMEI,
+	    action: 'query'
+	  },
+	 }).then(function successCallback(response) {
+		 $scope.infoss = response.data;
+		 $scope.agent = response.data[0].agent;
+		 $scope.id = response.data[0].id;
+	});
+	}
+
+	$scope.refresh = function () {
+		window.location.reload();
+		};
+   
+	  $scope.Delete = function (index, id,name) {
+	//$scope.id = id;
+   $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+	   id: id,
+	   action: 'Delete',
+	   },
+	  }).then(function successCallback(response) {
+	 $scope.id=response.data[0].id;
+	   $("#DeleteBody").html("<h3>"+response.data+"</h3>");
+	   $scope.isHideOk = false;
+	   $scope.isHide = true;
+   });
+	 }
+   
+	$scope.view = function (index, id) {
+	 $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+	   id: id,
+	   action: 'view'
+	  },
+	 }).then(function successCallback(response) {
+	  // $scope.isHide = true;
+	  // $scope.isHideOk = false;
+	  $scope.id = response.data[0].id;
+	  $scope.imei = response.data[0].imei;
+	  $scope.topic = response.data[0].topic;
+	  $scope.firebase_token = response.data[0].firebase_token;
+	  $scope.agent = response.data[0].agent;
+	  $scope.status = response.data[0].status;
+	  $scope.create_time = response.data[0].create_time;
+	  $scope.update_time = response.data[0].update_time;
+	 }, function errorCallback(response) {
+	  // console.log(response);
+	 });
+	}
+   });
+
+
 app.controller('notificationCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $scope.creteria = "A";
