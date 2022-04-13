@@ -9736,6 +9736,56 @@ $scope.expdate="";
 // console.log(response);
 });
 }
+
+$scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
+	
+	$http({
+		method: 'post',
+		url: '../ajax/userposajax.php',
+		data: {
+			user_pos_menu_id: user_pos_menu_id,
+			action: 'MenuMessage'
+		},
+		}).then(function successCallback(response) {
+		$scope.message = response.data[0].message;
+		$scope.user_pos_menu_id = response.data[0].user_pos_menu_id;
+		$scope.user_id = response.data[0].user_id;
+		$scope.active = response.data[0].active;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+
+}
+
+
+$scope.reject = function (user_pos_menu_id,user_id) {
+//alert(user_id);
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/userposajax.php',
+data: {
+	id: user_id,
+	user_pos_menu_id: user_pos_menu_id,
+comments :$scope.comments,
+active: $scope.active,
+action: 'ChangeStatus'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
 $scope.create = function () {
 $scope.isLoader = true;
 $scope.isMainLoader = true;

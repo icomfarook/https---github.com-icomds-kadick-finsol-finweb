@@ -11808,150 +11808,198 @@ $scope.isMainLoader = false;
 
 
 app.controller('posmenuCtrl', function ($scope, $http) {
-$scope.isHideOk = true;
-
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: { action: 'list' },
-}).then(function successCallback(response) {
-$scope.usrposmenulist = response.data;
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'servfea' }
-}).then(function successCallback(response) {
-$scope.servicefeature = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'userposmenu' }
-}).then(function successCallback(response) {
-$scope.userpos = response.data;
-//window.location.reload();
-});
-$scope.edit = function (index, code, id, servicefeatureid) {
-//alert(servicefeatureid);
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: { code: code,
-id: id,
-service_feature_id: servicefeatureid,
-action: 'edit'
-},
-}).then(function successCallback(response) {
-$scope.userposmenu = response.data[0].id;
-//$scope.servfea = response.data[0].menu;
-$scope.active = response.data[0].active;
-$scope.startdate = new Date(response.data[0].startDate);
-
-$scope.expdate = new Date(response.data[0].expDate);
-$scope.code = response.data[0].code;
-$scope.servfea = response.data[0].service_feature_id;
-$scope.servfeaold = response.data[0].service_feature_id;
-if(response.data[0].startDate==null){
-$scope.startdate="";
-}
-if(response.data[0].expDate==null){
-$scope.expdate="";
-}
-//$scope.menu = response.data[0].menu;
-//alert( response.data[0].menu);
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.create = function () {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: $scope.userposmenu,
-menu: $scope.servfea,
-active: $scope.active,
-startDate: $scope.startdate,
-expDate: $scope.expdate,
-action: 'create'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.refresh = function (id, type) {
-window.location.reload();
-}
-$scope.update = function (id) {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: $scope.userposmenu,
-servfeaold :$scope.servfeaold,
-menu: $scope.servfea,
-active: $scope.active,
-startDate: $scope.startdate,
-expDate: $scope.expdate,
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#usrposEditBody").html("<h3>" + response.data + "</h3>");
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-$scope.refresh = function (id, type) {
-window.location.reload();
-}
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.code = response.data[0].code;
- $scope.id = response.data[0].id;
-$scope.username = response.data[0].username;
-$scope.menu = response.data[0].menu;
-$scope.active = response.data[0].active;
-$scope.startDate = response.data[0].startDate;
-$scope.expDate = response.data[0].expDate;
-$scope.cretime = response.data[0].cretime;
-$scope.updateuser = response.data[0].updateuser;
-$scope.updatetime = response.data[0].updatetime;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-
-});
+    $scope.isHideOk = true;
+    
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: { action: 'list' },
+    }).then(function successCallback(response) {
+    $scope.usrposmenulist = response.data;
+    });
+    $http({
+    url: '../ajax/load.php',
+    method: "POST",
+    //Content-Type: 'application/json',
+    params: { action: 'active', for: 'servfea' }
+    }).then(function successCallback(response) {
+    $scope.servicefeature = response.data;
+    //window.location.reload();
+    });
+    $http({
+    url: '../ajax/load.php',
+    method: "POST",
+    //Content-Type: 'application/json',
+    params: { action: 'active', for: 'userposmenu' }
+    }).then(function successCallback(response) {
+    $scope.userpos = response.data;
+    //window.location.reload();
+    });
+    $scope.edit = function (index, code, id, servicefeatureid) {
+    //alert(servicefeatureid);
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: { code: code,
+    id: id,
+    service_feature_id: servicefeatureid,
+    action: 'edit'
+    },
+    }).then(function successCallback(response) {
+    $scope.userposmenu = response.data[0].id;
+    //$scope.servfea = response.data[0].menu;
+    $scope.active = response.data[0].active;
+    $scope.startdate = new Date(response.data[0].startDate);
+    
+    $scope.expdate = new Date(response.data[0].expDate);
+    $scope.code = response.data[0].code;
+    $scope.servfea = response.data[0].service_feature_id;
+    $scope.servfeaold = response.data[0].service_feature_id;
+    if(response.data[0].startDate==null){
+    $scope.startdate="";
+    }
+    if(response.data[0].expDate==null){
+    $scope.expdate="";
+    }
+    //$scope.menu = response.data[0].menu;
+    //alert( response.data[0].menu);
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    
+    $scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
+        
+        $http({
+            method: 'post',
+            url: '../ajax/userposajax.php',
+            data: {
+                user_pos_menu_id: user_pos_menu_id,
+                action: 'MenuMessage'
+            },
+            }).then(function successCallback(response) {
+            $scope.message = response.data[0].message;
+            $scope.user_pos_menu_id = response.data[0].user_pos_menu_id;
+            $scope.user_id = response.data[0].user_id;
+            $scope.active = response.data[0].active;
+            }, function errorCallback(response) {
+            // console.log(response);
+            });
+    
+    }
+        
+    $scope.reject = function (user_pos_menu_id,user_id) {
+    //alert(user_id);
+    
+    $scope.isLoader = true;
+    $scope.isMainLoader = true;
+    $scope.isHideOk = true;
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: {
+    id: user_id,
+    user_pos_menu_id: user_pos_menu_id,
+    comments :$scope.comments,
+    active: $scope.active,
+    action: 'ChangeStatus'
+    },
+    }).then(function successCallback(response) {
+    $scope.isHide = true;
+    $scope.isHideOk = false;
+    $scope.isLoader = false;
+    $scope.isMainLoader = false;
+    $("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
+    
+    }, function errorCallback(response) {
+    console.log(response);
+    });
+    }
+    
+    $scope.create = function () {
+    $scope.isLoader = true;
+    $scope.isMainLoader = true;
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: {
+    id: $scope.userposmenu,
+    menu: $scope.servfea,
+    active: $scope.active,
+    startDate: $scope.startdate,
+    expDate: $scope.expdate,
+    action: 'create'
+    },
+    }).then(function successCallback(response) {
+    $scope.isHide = true;
+    $scope.isHideOk = false;
+    $scope.isLoader = false;
+    $scope.isMainLoader = false;
+    $("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.refresh = function (id, type) {
+    window.location.reload();
+    }
+    $scope.update = function (id) {
+    $scope.isLoader = true;
+    $scope.isMainLoader = true;
+    $scope.isHideOk = true;
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: {
+    id: $scope.userposmenu,
+    servfeaold :$scope.servfeaold,
+    menu: $scope.servfea,
+    active: $scope.active,
+    startDate: $scope.startdate,
+    expDate: $scope.expdate,
+    action: 'update'
+    },
+    }).then(function successCallback(response) {
+    $scope.isHide = true;
+    $scope.isHideOk = false;
+    $scope.isLoader = false;
+    $scope.isMainLoader = false;
+    $("#usrposEditBody").html("<h3>" + response.data + "</h3>");
+    
+    }, function errorCallback(response) {
+    console.log(response);
+    });
+    }
+    $scope.refresh = function (id, type) {
+    window.location.reload();
+    }
+    $scope.detail = function (index, id) {
+    $http({
+    method: 'post',
+    url: '../ajax/userposajax.php',
+    data: {
+    id: id,
+    action: 'view'
+    },
+    }).then(function successCallback(response) {
+  
+    $scope.code = response.data[0].code;
+     $scope.id = response.data[0].id;
+    $scope.username = response.data[0].username;
+    $scope.menu = response.data[0].menu;
+    $scope.active = response.data[0].active;
+    $scope.startDate = response.data[0].startDate;
+    $scope.expDate = response.data[0].expDate;
+    $scope.cretime = response.data[0].cretime;
+    $scope.updateuser = response.data[0].updateuser;
+    $scope.updatetime = response.data[0].updatetime;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    
+    
+    });
 
 
 app.controller('posaccactCtrl', function ($scope, $http) {

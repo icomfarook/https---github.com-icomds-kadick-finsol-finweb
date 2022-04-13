@@ -73,7 +73,12 @@
 							<td>{{ x.agentname }}</td>
 							<td>{{ x.parent }}</td>
 							<td>{{ x.menu }}</td>
-							<td>{{ x.active }}</td>
+							<td ng-if="x.active === 'Y'"><a id={{x.id}} class='icoimg' ng-click='Active($index,x.code,x.id,x.service_feature_id,x.user_pos_menu_id)'  data-toggle='modal' data-target='#ApplicationRejectDialogue' >
+							<button class='icoimg'><img class='icoimg' style="height:22px;width:22px;" src='../common/images/tick.png'/></button></a>
+							</td>
+							<td ng-if="x.active === 'N'"><a id={{x.id}} class='icoimg' ng-click='Active($index,x.code,x.id,x.service_feature_id,x.user_pos_menu_id)'  data-toggle='modal' data-target='#ApplicationRejectDialogue'>
+								<button class='icoimg'><img class='icoimg' style='height:15px;width:15px' src='../common/images/error.png'/></button></a>
+							</td>
 							<td><a id={{x.code}} class='editpro' ng-click='edit($index,x.code,x.id,x.service_feature_id)' data-toggle='modal' data-target='#EditusrposDialogue'>
 								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
 								<td><a id={{x.id}} class='detail' ng-click='detail($index,x.id)' data-toggle='modal' data-target='#DetailViewDialogue'>
@@ -87,6 +92,7 @@
 		</div>
 	</div>
 	</div>
+	
 		<div id='AddusrposmenuDialogue' class='modal ' role='dialog' data-backdrop="static" data-keyboard="false" >
 			<div class="modal-dialog modal-md">
 			<div class="modal-content">
@@ -148,6 +154,55 @@
 		</div>
 	</div>	
 	</div>
+	<div id='ApplicationRejectDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'>Edit Status Form - #{{user_pos_menu_id}} </h2>
+					</div>		
+						<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					<div class='modal-body' >
+					<div id='usrposStatusBody' ng-hide='isLoader'>
+					   <form action="" method="POST" name='applicationRejectForm' id="applicationRejectForm">
+						
+							
+							<div class='row' >
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' style='margin-left: 27%;'>
+						<label style='margin-left: inherit;'><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="applicationRejectForm.active.$touched ||applicationRejectForm.active.$dirty && applicationRejectForm.active.$invalid">
+								<span class = 'err' ng-show="applicationRejectForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
+								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
+									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
+									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
+									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
+								</select>
+						</div>
+						<div class='clearfix'></div><br />
+								<div class='col-xs-12 col-lg-12 col-md-12 col-sm-12'>
+									<label>Previous Message<span ng-show="applicationRejectForm.message.$dirty && applicationRejectForm.message.$invalid">
+									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
+									<textarea rows='4'  ng-disabled='true' ng-model='message' name='message' class='form-control' />
+								</div>
+							</div>
+							<div class='clearfix'></div><br />
+							<div class='col-xs-12 col-lg-12 col-md-12 col-sm-12' style="padding: unset;">
+									<label><?php echo APPLICATION_APPROVE_APPROVE_COMMENTS; ?><span class='spanre'>*</span><span ng-show="applicationRejectForm.comments.$dirty && applicationRejectForm.comments.$invalid">
+									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
+									<textarea rows='4' ng-model='comments' name='comments' class='form-control'  required />
+								</div>
+							</div>
+							<div class='clearfix'></div>
+							
+					</div>				
+					<div class='modal-footer' ng-hide='isLoader'>	
+						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-click='refresh()' id='Ok' ng-hide='isHideOk' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_OK; ?></button>
+						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_CANCEL; ?></button>
+					   <button type='button' class='btn btn-primary' ng-confirm-click="Are you sure do You Want Change the Status of this User"   ng-hide='isHide'  ng-disabled="applicationRejectForm.$invalid"  confirmed-click="applicationRejectForm.$invalid=true;reject(user_pos_menu_id,user_id)" id="Reject">Update</button>
+					</div>
+					</form>	</div>
+						</div>
+			</div>
+			
 	
 	
 <div id='DetailViewDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
@@ -225,8 +280,9 @@
 									<option ng-repeat="userposmenu in userpos" value="{{userposmenu.id}}">{{userposmenu.code}} - {{userposmenu.name}}</option>
 								</select>
 					</div>	
+					<div class='clearfix'></div><br />
 					<input type='text' name="servfeaold"  ng-hide="hide='true'" />
-					<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+					<div class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<label>Service Feature Description<span class='spanre'>*</span><span ng-show="editusrposForm.country.$touched ||editusrposForm.country.$dirty && editusrposForm.country.$invalid">
 								<span class = 'err' ng-show="editusrposForm.country.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<select ng-model="servfea"  class='form-control' name = 'servfea' id='servfea' required>											
@@ -234,15 +290,7 @@
 									<option ng-repeat="servfea in servicefeature"  value="{{servfea.id}}">{{servfea.name}}</option>
 								</select>
 							</div>	
-							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
-						<label><?php echo STATE_CREATE_ACTIVE; ?><span ng-show="editusrposForm.active.$touched ||editusrposForm.active.$dirty && editusrposForm.active.$invalid">
-								<span class = 'err' ng-show="editusrposForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
-									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
-									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
-									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
-								</select>
-						</div>
+					
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 							<label><?php echo APPLICATION_APPROVE_START_DATE; ?>
 							<span class = 'err' ng-show="applicationApproveForm.startdate.$error.required"><?php echo REQUIRED;?></span></span></label>
@@ -270,6 +318,8 @@
 	
 	
 	</div>		
+
+	
 	
 </div>
 </div>

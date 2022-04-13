@@ -29,7 +29,7 @@
    
 		
 	if($action == "list") {
-		$statequery = "SELECT a.agent_code,a.agent_name,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, ifNull((SELECT CONCAT(champion_code,' - ',champion_name)  FROM champion_info WHERE champion_code = a.parent_code),'Self') as parent, a.parent_code as parent, b.service_feature_id FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id and b.service_feature_id = c.service_feature_id;";
+		$statequery = "SELECT a.agent_code,a.agent_name,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, ifNull((SELECT CONCAT(champion_code,' - ',champion_name)  FROM champion_info WHERE champion_code = a.parent_code),'Self') as parent, a.parent_code as parent, b.service_feature_id,b.user_pos_menu_id FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id and b.service_feature_id = c.service_feature_id;";
 		//error_log($statequery);
 		$stateresult =  mysqli_query($con,$statequery);
 		if (!$stateresult) {
@@ -38,18 +38,18 @@
 		}
 		$data = array();
 		while ($row = mysqli_fetch_array($stateresult)) {
-			$data[] = array("code"=>$row['agent_code'],"agentname"=>$row['agent_name'],"id"=>$row['user_id'],"menu"=>$row['name'],"startdate"=>$row['start_date'],"expdate"=>$row['expiry_date'],"active"=>$row['active'],"service_feature_id"=>$row['service_feature_id'],"parent"=>$row['parent']);           
+			$data[] = array("code"=>$row['agent_code'],"agentname"=>$row['agent_name'],"id"=>$row['user_id'],"menu"=>$row['name'],"startdate"=>$row['start_date'],"expdate"=>$row['expiry_date'],"active"=>$row['active'],"service_feature_id"=>$row['service_feature_id'],"parent"=>$row['parent'],"user_pos_menu_id"=>$row['user_pos_menu_id']);           
 		}
 		echo json_encode($data);
 	}
 		else if($action == "edit") {
 			$service_feature_id =  $data->service_feature_id;
-		$query = "SELECT a.agent_code,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, b.service_feature_id  FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id  and b.service_feature_id = c.service_feature_id and b.service_feature_id= '$service_feature_id' and b.user_id =".$id;
+		$query = "SELECT a.agent_code,a.user_id, b.start_date, b.expiry_date, b.active, concat(c.feature_code,' - ',c.feature_description) as name, b.service_feature_id,b.user_pos_menu_id  FROM agent_info a, user_pos_menu b,service_feature c WHERE a.user_id = b.user_id  and b.service_feature_id = c.service_feature_id and b.service_feature_id= '$service_feature_id' and b.user_id =".$id;
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("code"=>$row['agent_code'],"id"=>$row['user_id'],"menu"=>$row['name'],"startDate"=>$row['start_date'],"expDate"=>$row['expiry_date'],"active"=>$row['active'],"service_feature_id"=>$row['service_feature_id']);             
+			$data[] = array("code"=>$row['agent_code'],"id"=>$row['user_id'],"menu"=>$row['name'],"startDate"=>$row['start_date'],"expDate"=>$row['expiry_date'],"active"=>$row['active'],"service_feature_id"=>$row['service_feature_id'],"user_pos_menu_id"=>$row['user_pos_menu_id']);             
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -57,6 +57,60 @@
 			exit();
 		}
 	}
+	else if($action == "MenuMessage") {
+		$user_pos_menu_id = $data->user_pos_menu_id;
+		
+	$query = "select a.user_pos_menu_message_id, b.user_pos_menu_id, ifNull(a.message,'-') as message,change_action, a.create_user, a.create_time,b.active,b.user_id from user_pos_menu b  LEFT JOIN user_pos_menu_message a  on  b.user_pos_menu_id = a.user_pos_menu_id where  b.user_pos_menu_id = $user_pos_menu_id order by a.create_time desc limit 1";
+	error_log($query);
+	$result = mysqli_query($con,$query);
+	$data = array();
+	while ($row = mysqli_fetch_array($result)) {
+		$data[] = array("user_pos_menu_message_id"=>$row['user_pos_menu_message_id'],"user_pos_menu_id"=>$row['user_pos_menu_id'],"message"=>$row['message'],"change_action"=>$row['change_action'],"create_user"=>$row['create_user'],"create_time"=>$row['create_time'],"active"=>$row['active'],"user_id"=>$row['user_id']);             
+	}
+	echo json_encode($data);
+	if (!$result) {
+		echo "Error: %s\n", mysqli_error($con);
+		exit();
+	}
+}
+else if ($action == "ChangeStatus"){
+	$active = $data->active;
+	$comments = $data->comments;
+	$user_pos_menu_id = $data->user_pos_menu_id;
+	$id = $data->id;
+	
+	if($active == "Y")
+	{
+      $ChangeAction = 'A';
+	}
+	else if($active == "N")
+	{
+      $ChangeAction = 'D';
+	}else{
+	  $ChangeAction = 'O';
+	}
+	$Message = str_replace("'", '"', $comments);
+
+
+	$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id,message,change_action,create_user,create_time) VALUES ($user_pos_menu_id,'$Message','$ChangeAction','$id',now())";
+	$InsertResult = mysqli_query($con,$InsertQuery);
+	error_log($InsertQuery);
+
+	if($InsertResult){
+	$updateActive = "update user_pos_menu set active = '$active' where user_pos_menu_id= '$user_pos_menu_id'";
+	error_log($updateActive);
+	$updateActiveResult = mysqli_query($con,$updateActive);
+
+}
+	if($InsertResult && $updateActiveResult){
+		echo "User Pos Menu  Status & Message Changed successfully";
+		
+	}else {
+		echo "Error: %s\n".mysqli_error($con);
+		exit();
+	}
+}
+
 	else if($action == "create") {
 		
 	
