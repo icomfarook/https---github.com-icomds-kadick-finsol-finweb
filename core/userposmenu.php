@@ -188,7 +188,7 @@
 							<div class='col-xs-12 col-lg-12 col-md-12 col-sm-12' style="padding: unset;">
 									<label><?php echo APPLICATION_APPROVE_APPROVE_COMMENTS; ?><span class='spanre'>*</span><span ng-show="applicationRejectForm.comments.$dirty && applicationRejectForm.comments.$invalid">
 									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
-									<textarea rows='4' ng-model='comments' name='comments' class='form-control'  required />
+									<textarea rows='4'  maxlength='150' ng-model='comments' name='comments' class='form-control'  required />
 								</div>
 							</div>
 							<div class='clearfix'></div>
@@ -196,7 +196,7 @@
 					</div>				
 					<div class='modal-footer' ng-hide='isLoader'>	
 						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-click='refresh()' id='Ok' ng-hide='isHideOk' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_OK; ?></button>
-						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_CANCEL; ?></button>
+						<button type='button' class='btn btn-primary' ng-click='refresh()' data-dismiss='modal' ng-hide='isHide' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_CANCEL; ?></button>
 					   <button type='button' class='btn btn-primary' ng-confirm-click="Are you sure do You Want Change the Status of this User"   ng-hide='isHide'  ng-disabled="applicationRejectForm.$invalid"  confirmed-click="applicationRejectForm.$invalid=true;reject(user_pos_menu_id,user_id)" id="Reject">Update</button>
 					</div>
 					</form>	</div>

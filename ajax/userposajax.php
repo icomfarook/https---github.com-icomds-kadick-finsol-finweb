@@ -92,7 +92,7 @@ else if ($action == "ChangeStatus"){
 	$Message = str_replace("'", '"', $comments);
 
 
-	$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id,message,change_action,create_user,create_time) VALUES ($user_pos_menu_id,'$Message','$ChangeAction','$id',now())";
+	$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id,message,change_action,create_user,create_time) VALUES ($user_pos_menu_id,'$Message','$ChangeAction','$user_id',now())";
 	$InsertResult = mysqli_query($con,$InsertQuery);
 	error_log($InsertQuery);
 
