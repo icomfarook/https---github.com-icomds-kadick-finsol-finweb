@@ -150,13 +150,14 @@
                                 					$reference_no = "COU-".$acc_trans_type."#".$fin_service_order_no;
 									$p_receipt_id = generate_seq_num(1100, $con);
 									error_log("before requestAmount = ".$requestAmount.", cashoutAllIn = ".$cashoutAllIn);
+									$originalRequestAmount = $requestAmount;
 									if ( "Y" == $cashoutAllIn ) {
 										$serviceChargeAlone = $totalAmount - $requestAmount;
 										error_log("serviceChargeAlone = ".$serviceChargeAlone.", cashoutAllIn = ".$cashoutAllIn);
 										$requestAmount = $requestAmount - $serviceChargeAlone;
 										$reference_no = "COU-AI".$acc_trans_type."#".$fin_service_order_no;
 									}
-									error_log("after requestAmount = ".$requestAmount.", cashoutAllIn = ".$cashoutAllIn);
+									error_log("after requestAmount = ".$requestAmount.", originalRequestAmount = ".$originalRequestAmount.", cashoutAllIn = ".$cashoutAllIn);
 									$insertDepositQuery = "INSERT INTO payment_receipt(p_receipt_id, country_id, payment_date, party_code, party_type, payment_reference_no, payment_type, payment_amount, payment_approved_amount, payment_approved_date, payment_source, payment_status, create_user, create_time, comments, approver_comments) VALUES($p_receipt_id, $countryId, now(), '$partyCode', '$partyType', '$reference_no', 'CP', $requestAmount, $requestAmount, now(), 'C', 'E', $user_id, now(), '$glComment', 'Cash-out Auto Approved by System')";
 									error_log("payment_receipt insert_query: ".$insertDepositQuery);
 									$insertDepositResult = mysqli_query($con, $insertDepositQuery);
@@ -219,7 +220,7 @@
 													}else {
 													    error_log("Error in purchase post_finorder for: ".$fin_service_order_no);
 													}
-													$check_feature_value_result = check_feature_value($user_id, $countryId, $stateId, $partyCount, $productId, $partnerId, $requestAmount, $txType, $con);
+													$check_feature_value_result = check_feature_value($user_id, $countryId, $stateId, $partyCount, $productId, $partnerId, $originalRequestAmount, $txType, $con);
 													error_log("check_feature_value_result = ".$check_feature_value_result);
 													$check_feature_value_result_split = explode("#",$check_feature_value_result);
 													$charges_details = $check_feature_value_result_split[0];
