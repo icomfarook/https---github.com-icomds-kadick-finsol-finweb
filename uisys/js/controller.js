@@ -1,3 +1,256 @@
+app.controller('NotifyHistoryCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/notifyhistajax.php',
+	data: {
+	action: 'getreport',
+	Date: $scope.Date,
+	Title: $scope.Title,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/notifyhistajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.agent = response.data[0].agent;
+	$scope.agent_selection = response.data[0].agent_selection;
+	$scope.state_selection = response.data[0].state_selection;
+	$scope.local_govt_selection = response.data[0].local_govt_selection;
+	$scope.user_selection = response.data[0].user_selection;
+	$scope.title = response.data[0].title;
+	$scope.content = response.data[0].content;
+	$scope.count = response.data[0].count;
+	$scope.response = response.data[0].response;
+	$scope.date = response.data[0].date;
+
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+
+app.controller('TopicSubCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'agents' }
+		}).then(function successCallback(response) {
+		$scope.agents = response.data;
+		//window.location.reload();
+		});
+
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/topsubajax.php',
+	data: {
+	action: 'getreport',
+	IMEI: $scope.IMEI,
+	Topic: $scope.Topic,
+	agentCode: $scope.agentCode,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/topsubajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.imei = response.data[0].imei;
+	$scope.topic = response.data[0].topic;
+	$scope.agent = response.data[0].agent;
+	$scope.subscripe = response.data[0].subscripe;
+	$scope.status = response.data[0].status;
+	$scope.create_time = response.data[0].create_time;
+	$scope.update_time = response.data[0].update_time;
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+
+app.controller('ClientTopicCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/clienttopajax.php',
+	data: {
+	action: 'getreport',
+	IMEI: $scope.IMEI,
+	Topic: $scope.Topic,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/clienttopajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.imei = response.data[0].imei;
+	$scope.topic = response.data[0].topic;
+	$scope.agent = response.data[0].agent;
+	$scope.create_time = response.data[0].create_time;
+	$scope.update_time = response.data[0].update_time;
+	
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
+
+app.controller('ClientListCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+
+
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'agents' }
+		}).then(function successCallback(response) {
+		$scope.agents = response.data;
+		//window.location.reload();
+		});
+   
+	$scope.query = function () {
+		$scope.tablerow = true;
+	 $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+		UserType: $scope.UserType,
+		agentCode: $scope.agentCode,
+		IMEI: $scope.IMEI,
+	    action: 'query'
+	  },
+	 }).then(function successCallback(response) {
+		 $scope.infoss = response.data;
+		 $scope.agent = response.data[0].agent;
+		 $scope.id = response.data[0].id;
+	});
+	}
+
+	$scope.refresh = function () {
+		window.location.reload();
+		};
+   
+	  $scope.Delete = function (index, id,name) {
+	//$scope.id = id;
+   $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+	   id: id,
+	   action: 'Delete',
+	   },
+	  }).then(function successCallback(response) {
+	 $scope.id=response.data[0].id;
+	   $("#DeleteBody").html("<h3>"+response.data+"</h3>");
+	   $scope.isHideOk = false;
+	   $scope.isHide = true;
+   });
+	 }
+   
+	$scope.view = function (index, id) {
+	 $http({
+	  method: 'post',
+	  url: '../ajax/clntlistajax.php',
+	  data: {
+	   id: id,
+	   action: 'view'
+	  },
+	 }).then(function successCallback(response) {
+	  // $scope.isHide = true;
+	  // $scope.isHideOk = false;
+	  $scope.id = response.data[0].id;
+	  $scope.imei = response.data[0].imei;
+	  $scope.topic = response.data[0].topic;
+	  $scope.firebase_token = response.data[0].firebase_token;
+	  $scope.agent = response.data[0].agent;
+	  $scope.status = response.data[0].status;
+	  $scope.create_time = response.data[0].create_time;
+	  $scope.update_time = response.data[0].update_time;
+	 }, function errorCallback(response) {
+	  // console.log(response);
+	 });
+	}
+   });
+
+
 app.controller('notificationCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $scope.creteria = "A";
@@ -9247,150 +9500,200 @@ $scope.ad =response.data[0].ad;
 
 
 app.controller('posmenuCtrl', function ($scope, $http) {
-$scope.isHideOk = true;
-
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: { action: 'list' },
-}).then(function successCallback(response) {
-$scope.usrposmenulist = response.data;
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'servfea' }
-}).then(function successCallback(response) {
-$scope.servicefeature = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'userposmenu' }
-}).then(function successCallback(response) {
-$scope.userpos = response.data;
-//window.location.reload();
-});
-$scope.edit = function (index, code, id, servicefeatureid) {
-//alert(servicefeatureid);
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: { code: code,
-id: id,
-service_feature_id: servicefeatureid,
-action: 'edit'
-},
-}).then(function successCallback(response) {
-$scope.userposmenu = response.data[0].id;
-//$scope.servfea = response.data[0].menu;
-$scope.active = response.data[0].active;
-$scope.startdate = new Date(response.data[0].startDate);
-
-$scope.expdate = new Date(response.data[0].expDate);
-$scope.code = response.data[0].code;
-$scope.servfea = response.data[0].service_feature_id;
-$scope.servfeaold = response.data[0].service_feature_id;
-if(response.data[0].startDate==null){
-$scope.startdate="";
-}
-if(response.data[0].expDate==null){
-$scope.expdate="";
-}
-//$scope.menu = response.data[0].menu;
-//alert( response.data[0].menu);
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.create = function () {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: $scope.userposmenu,
-menu: $scope.servfea,
-active: $scope.active,
-startDate: $scope.startdate,
-expDate: $scope.expdate,
-action: 'create'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.refresh = function (id, type) {
-window.location.reload();
-}
-$scope.update = function (id) {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: $scope.userposmenu,
-servfeaold :$scope.servfeaold,
-menu: $scope.servfea,
-active: $scope.active,
-startDate: $scope.startdate,
-expDate: $scope.expdate,
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#usrposEditBody").html("<h3>" + response.data + "</h3>");
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-$scope.refresh = function (id, type) {
-window.location.reload();
-}
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/userposajax.php',
-data: {
-id: id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.code = response.data[0].code;
- $scope.id = response.data[0].id;
-$scope.username = response.data[0].username;
-$scope.menu = response.data[0].menu;
-$scope.active = response.data[0].active;
-$scope.startDate = response.data[0].startDate;
-$scope.expDate = response.data[0].expDate;
-$scope.cretime = response.data[0].cretime;
-$scope.updateuser = response.data[0].updateuser;
-$scope.updatetime = response.data[0].updatetime;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-
-});
+	$scope.isHideOk = true;
+	
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: { action: 'list' },
+	}).then(function successCallback(response) {
+	$scope.usrposmenulist = response.data;
+	});
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'servfea' }
+	}).then(function successCallback(response) {
+	$scope.servicefeature = response.data;
+	//window.location.reload();
+	});
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'userposmenu' }
+	}).then(function successCallback(response) {
+	$scope.userpos = response.data;
+	//window.location.reload();
+	});
+	$scope.edit = function (index, code, id, servicefeatureid) {
+	//alert(servicefeatureid);
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: { code: code,
+	id: id,
+	service_feature_id: servicefeatureid,
+	action: 'edit'
+	},
+	}).then(function successCallback(response) {
+	$scope.userposmenu = response.data[0].id;
+	//$scope.servfea = response.data[0].menu;
+	$scope.active = response.data[0].active;
+	$scope.startdate = new Date(response.data[0].startDate);
+	
+	$scope.expdate = new Date(response.data[0].expDate);
+	$scope.code = response.data[0].code;
+	$scope.servfea = response.data[0].service_feature_id;
+	$scope.servfeaold = response.data[0].service_feature_id;
+	if(response.data[0].startDate==null){
+	$scope.startdate="";
+	}
+	if(response.data[0].expDate==null){
+	$scope.expdate="";
+	}
+	//$scope.menu = response.data[0].menu;
+	//alert( response.data[0].menu);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	$scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
+		
+		$http({
+			method: 'post',
+			url: '../ajax/userposajax.php',
+			data: {
+				user_pos_menu_id: user_pos_menu_id,
+				action: 'MenuMessage'
+			},
+			}).then(function successCallback(response) {
+			$scope.message = response.data[0].message;
+			$scope.user_pos_menu_id = response.data[0].user_pos_menu_id;
+			$scope.user_id = response.data[0].user_id;
+			$scope.active = response.data[0].active;
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
+	
+	}
+	
+	
+	$scope.reject = function (user_pos_menu_id,user_id) {
+	//alert(user_id);
+	
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$scope.isHideOk = true;
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: {
+	id: user_id,
+	user_pos_menu_id: user_pos_menu_id,
+	comments :$scope.comments,
+	active: $scope.active,
+	action: 'ChangeStatus'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	$scope.isMainLoader = false;
+	$("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
+	
+	}, function errorCallback(response) {
+	console.log(response);
+	});
+	}
+	
+	$scope.create = function () {
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: {
+	id: $scope.userposmenu,
+	menu: $scope.servfea,
+	active: $scope.active,
+	startDate: $scope.startdate,
+	expDate: $scope.expdate,
+	action: 'create'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	$scope.isMainLoader = false;
+	$("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.refresh = function (id, type) {
+	window.location.reload();
+	}
+	$scope.update = function (id) {
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$scope.isHideOk = true;
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: {
+	id: $scope.userposmenu,
+	servfeaold :$scope.servfeaold,
+	menu: $scope.servfea,
+	active: $scope.active,
+	startDate: $scope.startdate,
+	expDate: $scope.expdate,
+	action: 'update'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	$scope.isMainLoader = false;
+	$("#usrposEditBody").html("<h3>" + response.data + "</h3>");
+	
+	}, function errorCallback(response) {
+	console.log(response);
+	});
+	}
+	$scope.refresh = function (id, type) {
+	window.location.reload();
+	}
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/userposajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.code = response.data[0].code;
+	 $scope.id = response.data[0].id;
+	$scope.username = response.data[0].username;
+	$scope.menu = response.data[0].menu;
+	$scope.active = response.data[0].active;
+	$scope.startDate = response.data[0].startDate;
+	$scope.expDate = response.data[0].expDate;
+	$scope.cretime = response.data[0].cretime;
+	$scope.updateuser = response.data[0].updateuser;
+	$scope.updatetime = response.data[0].updatetime;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	
+	});
 
 app.controller('changeLangCtrl', function ($scope, $http) {
 	$scope.englang = function (index, id,) {
