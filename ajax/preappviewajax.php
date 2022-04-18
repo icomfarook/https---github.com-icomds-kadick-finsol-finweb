@@ -1,6 +1,9 @@
 <?php
 	include('../common/admin/configmysql.php');
 	include('../common/sessioncheck.php');
+	require '../api/get_prime.php';
+	require '../api/security.php';
+	require '../common/gh/autoload.php';
 	$data = json_decode(file_get_contents("php://input")); 
 	$id   = $data->id;
 	$status    = $data->crestatus;
@@ -17,7 +20,7 @@
     	
 	if($action == "query") {
 		if($profile == 1 || $profile == 10 || $profile == 24 || $profile_id == 26) {
-			$app_view_query = " SELECT pre_application_info_id, outlet_name, create_time, status as stat, if(status='E','Entered',if(status='R','Rejected',if(status='T','Transfer','Others'))) as status , contact_person_name ,state_id, local_govt_id FROM pre_application_info ";
+			$app_view_query = " SELECT pre_application_info_id, outlet_name, create_time, status as stat, if(status='E','Entered',if(status='R','Rejected',if(status='T','Transfer','Others'))) as status , contact_person_name ,state_id, local_govt_id,bvn_validated FROM pre_application_info ";
 			if($creteria == "BI") {
 				$app_view_query .= "WHERE pre_application_info_id = '$id'";
 			}
@@ -34,7 +37,7 @@
 			}
 		}
 		else {
-			$app_view_query = " SELECT pre_application_info_id, status as stat, outlet_name, create_time, if(status='E','Entered',if(status='R','Rejected',if(status='T','Transfer','Others'))) as status, contact_person_name  FROM pre_application_info WHERE create_user = $cuser ";
+			$app_view_query = " SELECT pre_application_info_id, status as stat, outlet_name, create_time, if(status='E','Entered',if(status='R','Rejected',if(status='T','Transfer','Others'))) as status, contact_person_name,bvn_validated  FROM pre_application_info WHERE create_user = $cuser ";
 			if($creteria == "BI") {
 				$app_view_query .= " and pre_application_info_id = '$id'";
 			}
@@ -59,7 +62,7 @@
 		else {
 			$data = array();
 			while ($row = mysqli_fetch_array($app_view_result)) {
-				$data[] = array("id"=>$row['pre_application_info_id'],"name"=>$row['outlet_name'],"time"=>$row['create_time'],"status"=>$row['status'],"cpn"=>$row['contact_person_name'],"stat"=>$row['stat'],"state"=>$row['state_id'],"localgvt"=>$row['local_govt_id']);           
+				$data[] = array("id"=>$row['pre_application_info_id'],"name"=>$row['outlet_name'],"time"=>$row['create_time'],"status"=>$row['status'],"cpn"=>$row['contact_person_name'],"stat"=>$row['stat'],"state"=>$row['state_id'],"localgvt"=>$row['local_govt_id'],"bvn_validated"=>$row['bvn_validated']);           
 			}
 			echo json_encode($data);
 		}
@@ -98,12 +101,12 @@
 		$localgvt = $data->localgvt;
 		$state = $data->state;
 		
-		$query="select state_id,local_govt_id from pre_application_info where  pre_application_info_id=".$id;
+		$query="select state_id,local_govt_id,bvn_validated from pre_application_info where  pre_application_info_id=".$id;
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("state"=>$row['state_id'],"localgvt"=>$row['local_govt_id']);          
+			$data[] = array("state"=>$row['state_id'],"localgvt"=>$row['local_govt_id'],"bvn_validated"=>$row['bvn_validated']);          
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -350,4 +353,121 @@
 		echo "Registration Deleted  successfully";
 		}
 	}
+
+
+	if($action == "getbvn") {		
+
+		$Preid = $data->id;
+		$userId = $_SESSION['user_id'];
+		$dob = date("Y-m-d", strtotime($dob));	
+
+
+		$PreAppQuery = "SELECT pre_application_info_id,first_name,last_name, country_id, outlet_name, bvn, tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile,loc_latitude, loc_longitude, comments,dob,gender,business_type FROM pre_application_info WHERE pre_application_info_id = $Preid and status = 'E'";
+		$selectresult =  mysqli_query($con,$PreAppQuery);
+			$row = mysqli_fetch_assoc($selectresult);
+		    $pre_application_id = $row['pre_application_info_id'];
+			$firstName = $row['first_name'];
+	    	$lastName= $row['last_name'];
+			$countryid = $row['country_id'];
+			$dob = $row['dob'];
+			$localgovernmentid = $row['local_govt_id'];
+			$stateid = $row['state_id'];
+			$phone = $row['mobile_no'];
+			$bvn = $row['bvn'];
+       if($selectresult){
+			$create_user = $_SESSION['user_id'];
+			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
+			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
+			if(!$get_sequence_number_result) {
+				error_log('Get sequnce number 2 failed: ' . mysqli_error($con));
+				echo "GETSEQ - Failed";				
+		}	
+		else {
+			$get_sequence_num_row = mysqli_fetch_assoc($get_sequence_number_result);
+			$id = $get_sequence_num_row['id'];
+			$reqMsg = "{bvn: ".$bvn.", firstName: ".$firstName.",lastname: ".$lastName.",dob:".$dob.",phone:".$mobileno."}";
+			$query =  "INSERT INTO fin_non_trans_log (fin_non_trans_log_id, service_feature_id, bank_id,source,message_send_time, create_user, create_time, request_message ) VALUES ($id, 19,NULL,'F', now(), $create_user, now(), '$reqMsg')";
+			error_log($query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				echo "Error: %s\n". mysqli_error($con);
+			}
+			else {
+				$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid);
+				$api_response = json_decode($res, true);
+				$response_code = $api_response['responseCode'];
+				$res_description = $api_response['responseDescription'];
+				$description = $api_response['description'];
+				$query1 = "UPDATE fin_non_trans_log SET response_message ='$res', message_receive_time = now(), response_received = 'Y', error_code = '$response_code', error_description = '$res_description' where fin_non_trans_log_id = $id ";                 
+				$result = mysqli_query($con,$query1);
+				error_log("After Success Response Update Que".$query1);
+
+				 if($result) {
+                    $SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
+					error_log("SelectQuery ==".$SelectQuery);
+					$Selectresult =  mysqli_query($con,$SelectQuery);
+					$count = mysqli_num_rows($Selectresult);
+						error_log($count);
+						if($count > 0) { 
+							$updateQuery ="update pre_application_info set bvn_validated='Y',trans_log_id=$id where pre_application_info_id = $Preid";
+							error_log("updateQuery ==".$updateQuery);
+							$UpdateResult = mysqli_query($con,$updateQuery);
+							echo $res;
+							
+						}
+						error_log("Error in Select Fin Non Trans Log  Statment");
+				  }
+				  error_log("Error in After Success Response Update Query");
+				
+
+			}
+			error_log("Error in Sending Request");
+		}
+			
+		
+		error_log("respnse = ".$res);		
+	}	
+	error_log("Error in Select Pre Application Info Statment");
+}
+		
+	function sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid) {	
+		error_log("entering sendRequest");
+		date_default_timezone_set('Africa/Lagos');
+		$nday = date('z')+1;
+		$nyear = date('Y');
+		$nth_day_prime = get_prime($nday);
+		$nth_year_day_prime = get_prime($nday+$nyear);
+		$signature = $nday + $nth_day_prime;
+		$tsec = time();
+		$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
+		$key1 = base64_encode($raw_data1);
+		error_log("before calling post");
+		error_log("url = ".BVN_CHECK_URL);		
+		$body['countryId'] = $countryid;
+		$body['stateId'] =  $stateid;
+		$body['localGovtId'] =  $localgovernmentid;
+		$body['userId'] = $userId;
+		$body['firstName'] = $firstName;
+        $body['lastName'] = $lastName;
+        $body['phone'] = $phone;
+        $body['dob'] = $dob;
+        $body['bvn'] = $bvn;
+		$body['key1'] = $key1;
+		$body['signature'] = $signature;
+		error_log("request sent ==> ".json_encode($body));
+		$ch = curl_init(BVN_CHECK_URL);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, FINAPI_SERVER_CONNECT_TIMEOUT);
+		curl_setopt($ch, CURLOPT_TIMEOUT, FINAPI_SERVER_REQUEST_TIMEOUT);
+		$response = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		error_log("response received <== ".$response);
+		error_log("code ".$httpcode);
+		error_log("exiting sendRequest");
+      	return $response;
+	}
+
 ?>	

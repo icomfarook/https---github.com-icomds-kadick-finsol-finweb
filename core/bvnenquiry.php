@@ -22,7 +22,7 @@
 		</a>
 		<ol class="breadcrumb pull-left">
 			<li><a href="#!bnkbvn"><?php echo BVN_ENQUIRY_MAIN_HEADING1; ?></a></li>
-			<li><a href="#!bnkbvn"><?php echo BVN_ENQUIRY_MAIN_HEADING2; ?></a></li>
+			<li><a href="#!bnkbvn">BVN Check</a></li>
 		</ol>
 		
 	</div>
@@ -34,7 +34,7 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">					
-					<span><?php echo BVN_ENQUIRY_MAIN_HEADING3; ?></span>
+					<span>BVN Check</span>
 				</div>
 				<div class="box-icons">
 					<a class="expand-link">
@@ -47,7 +47,9 @@
 			<div class="box-content no-padding"  data-backdrop="static" data-keyboard="false" >	
 			<div  style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
 				<form name='bvnEnqForm ' method='POST'>	
-					<div class='row appcont'>	
+
+				<!-- Bank val Screen Coding Below -->
+					<!--- <div class='row appcont'>	
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>										
 							<label><?php echo BVN_ENQUIRY_MAIN_BVN; ?><span class='spanre'>*</span>
 							<span ng-show="bvnEnqForm.refno.$dirty && bvnEnqForm.refno.$invalid">
@@ -61,15 +63,83 @@
 								<option value=''><?php echo FINANCE_SEVICE_ORDER_CASH_IN_SELECT_PARTNER; ?></option>
 								<option ng-repeat="par in partners" lab='{{par.name}}' value="{{par.id}}">{{par.name}}</option>
 							</select>
-						</div>						
+						</div>	 --->
+
+					<div class='row appcont'>	
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>										
+							<label><?php echo BVN_ENQUIRY_MAIN_BVN; ?><span class='spanre'>*</span>
+							<span ng-show="bvnEnqForm.BVN.$dirty && bvnEnqForm.BVN.$invalid">
+							<span class = 'err' ng-show="bvnEnqForm.BVN.$error.required"><?php echo REQUIRED;?></span></span></label>	
+							<input type='text' name='BVN' ng-model='BVN' maxlength="11" placeholder='<?php echo BVN_ENQUIRY_MAIN_PLACE_HOLDER_BANK_VER_NO; ?>' class='form-control'/>										
+						</div>
+						
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>First Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.FirstName.$touched ||bvnEnqForm.FirstName.$dirty && bvnEnqForm.FirstName.$invalid">
+								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="bvnEnqForm.FirstName.$error.required"><?php echo REQUIRED;?><span style="color:Red" ng-show="bvnEnqForm.FirstName.$dirty && bvnEnqForm.FirstName.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></span></label>
+								<input  ng-model="FirstName" spl-char-not type='text' ng-disabled='isInputDisabled' id='FirstName' maxlength='50' name='FirstName' ng-minlength="4" required class='form-control'/>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Last Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.LastName.$touched ||bvnEnqForm.LastName.$dirty && bvnEnqForm.LastName.$invalid">
+								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="bvnEnqForm.LastName.$error.required"><?php echo REQUIRED;?><span style="color:Red" ng-show="bvnEnqForm.LastName.$dirty && bvnEnqForm.LastName.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></span></label>
+								<input  ng-model="LastName" spl-char-not type='text' ng-disabled='isInputDisabled' id='LastName' maxlength='50' name='LastName' ng-minlength="4" required class='form-control'/>
+							</div>
+							</div>
+							<div class='row appcont'>	
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label><?php echo APPLICATION_ENTRY_MOBILE_NO; ?><span class='spanre'>*</span><span ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$invalid">
+									</span></label><span style="color:Red" ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$error.minlength && bvnEnqForm.mobileno.$error.pattern"> <?php echo MIN_11_NUMBERS_REQUIRED; ?> & Starting Number Want to be 0 </span>
+									
+								<input ng-model="mobileno" numbers-only type='text' ng-disabled='isInputDisabled' id='Mobile No' ng-minlength="11" maxlength='11' name='mobileno' ng-pattern="/(^0$)|(^[1-9]\d{0,8}$)/"  required class='form-control'/>
+							</div>	
+						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Date of Birth<span class='spanre'>*</span><span ng-show="bvnEnqForm.dob.$touched ||bvnEnqForm.dob.$dirty && bvnEnqForm.dob.$invalid">
+								<span class = 'err'   ng-show="bvnEnqForm.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<input  ng-model="dob" ng-disabled='isInputDisabled' type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
+						</div>
 						 <div  class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 						 <br />
-							<button type="button" class="btn btn-primary" ng-click='bvnEnqForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo BVN_ENQUIRY_MAIN_BUTTON_QUERY; ?></button>
+							<button type="button" class="btn btn-primary"  ng-disabled='bvnEnqForm.$invalid' ng-click='bvnEnqForm.$invalid=true;findlist()' ng-hide='isHide'  id="Query"><?php echo BVN_ENQUIRY_MAIN_BUTTON_QUERY; ?></button>
 							<button type="button" class="btn btn-primary"   id="Refresh"><?php echo BVN_ENQUIRY_MAIN_BUTTON_REFRESH; ?></button>
 						</div>
 					</div>		
-				
-					<div class='row appcont' style='text-align:center' ng-hide='tabeHide'>	
+</div>
+<div>
+					<div class='row appcont'>					
+						<table class="table maintable table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+							<thead>
+								<tr> 
+									<th>Request Status</th>
+									<th>BVN</th>
+									<th>Validity</th>
+									<th>Signature</th>
+									<th>ResponseCode</th>
+									<th>ResponseDescription</th>
+									<th>ProcessingStartTime</th>
+								</tr>
+							</thead>
+							<tbody ng-hide="tablerow" >
+								 <tr>
+									<td>{{requestStatus}}</td>
+									<td>{{bvn}}</td>
+									<td>{{validity}}</td>
+									<td>{{signature}}</td>
+									<td>{{responseCode}}</td>
+									<td>{{responseDescription}}</td>	
+									<td>{{processingStartTime}}</td>						
+								</tr>
+								<tr ng-show="res.length==0">
+									<td colspan='8' >
+										<?php echo NO_DATA_FOUND; ?>              
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+					
+
+<!-- Bank val Screen Coding Below -->
+					<!---  
+			<div class='row appcont' style='text-align:center' ng-hide='tabeHide'>	
 					
 						<table  class='table table-bordered' style='background-color:black;color:white'>
 							<tr>
@@ -151,7 +221,8 @@
 							</tr>
 							</table>
 						</div>
-					
+
+					--->
 					</form>
 					</div>
 					</div>

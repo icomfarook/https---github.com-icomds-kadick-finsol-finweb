@@ -171,7 +171,7 @@
 							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' style='margin-left: 27%;'>
 						<label style='margin-left: inherit;'><?php echo STATE_CREATE_ACTIVE; ?><span class='spanre'>*</span><span ng-show="applicationRejectForm.active.$touched ||applicationRejectForm.active.$dirty && applicationRejectForm.active.$invalid">
 								<span class = 'err' ng-show="applicationRejectForm.active.$error.required"><?php echo REQUIRED;?>.</span></span></label>
-								<select ng-model="active" class='form-control' name = 'active' id='Active' required >											
+								<select  onchange='enableButton()' ng-model="active" class='form-control' name = 'active' id='ActiveUpdate' required >											
 									<option value=''><?php echo STATE_CREATE_ACTIVE_SELECT; ?></option>
 									<option value='Y'><?php echo STATE_CREATE_ACTIVE_YES; ?></option>
 									<option value='N'><?php echo STATE_CREATE_ACTIVE_NO; ?></option>
@@ -197,7 +197,7 @@
 					<div class='modal-footer' ng-hide='isLoader'>	
 						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-click='refresh()' id='Ok' ng-hide='isHideOk' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_OK; ?></button>
 						<button type='button' class='btn btn-primary' ng-click='refresh()' data-dismiss='modal' ng-hide='isHide' ><?php echo APPLICATION_APPROVE_APPROVE_BUTTON_CANCEL; ?></button>
-					   <button type='button' class='btn btn-primary' ng-confirm-click="Are you sure do You Want Change the Status of this User"   ng-hide='isHide'  ng-disabled="applicationRejectForm.$invalid"  confirmed-click="applicationRejectForm.$invalid=true;reject(user_pos_menu_id,user_id)" id="Reject">Update</button>
+					   <button type='button' class='btn btn-primary' ng-confirm-click="Are you sure do You Want Change the Status of this User"   ng-hide='isHide'  ng-disabled='applicationRejectForm.$invalid' confirmed-click="applicationRejectForm.$invalid=true;reject(user_pos_menu_id,user_id)" id="RejectUpdate">Update</button>
 					</div>
 					</form>	</div>
 						</div>
@@ -331,6 +331,16 @@ function AllTables(){
 	TestTable3();
 	//LoadSelect2Script();
 }
+/* function enableButton()
+		{
+			alert("inside");
+			var selectelem = document.getElementById('ActiveUpdate');
+			//var Comment = document.getElementById('Comments');
+			var btnelem = document.getElementById('RejectUpdate');
+			btnelem.disabled = !selectelem.value;
+			
+		} */
+		
 
 $(document).ready(function() {
 	// Load Datatables and run plugin on tables 
@@ -350,6 +360,13 @@ $(document).ready(function() {
  	});
 		
 	$("['#userposmenu']").select2();
+	
 		
+	$('#ActiveComment').change(function(){
+  if ($(this).val())
+  {
+    $("input[name='submit']").removeAttr('disabled');
+  }
+});
 });
 </script>

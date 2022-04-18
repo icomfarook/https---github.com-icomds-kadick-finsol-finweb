@@ -74,16 +74,16 @@
 	}
 }
 else if ($action == "ChangeStatus"){
-	$active = $data->active;
+	$actived = $data->active;
 	$comments = $data->comments;
 	$user_pos_menu_id = $data->user_pos_menu_id;
 	$id = $data->id;
 	
-	if($active == "Y")
+	if($actived == "Y")
 	{
       $ChangeAction = 'A';
 	}
-	else if($active == "N")
+	else if($actived == "N")
 	{
       $ChangeAction = 'D';
 	}else{
@@ -91,13 +91,21 @@ else if ($action == "ChangeStatus"){
 	}
 	$Message = str_replace("'", '"', $comments);
 
+ $select_query = "Select active from user_pos_menu where user_pos_menu_id= $user_pos_menu_id and active='$actived'";
+ error_log("select_query ==".$select_query);
+ $selectActiveResult = mysqli_query($con,$select_query);
+ $count = mysqli_num_rows($selectActiveResult);
+
+		if ($count != 0 ){
+			echo "The Active Status is Already exist for  this User";
+			}else{
 
 	$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id,message,change_action,create_user,create_time) VALUES ($user_pos_menu_id,'$Message','$ChangeAction','$user_id',now())";
 	$InsertResult = mysqli_query($con,$InsertQuery);
 	error_log($InsertQuery);
 
 	if($InsertResult){
-	$updateActive = "update user_pos_menu set active = '$active' where user_pos_menu_id= '$user_pos_menu_id'";
+	$updateActive = "update user_pos_menu set active = '$actived' where user_pos_menu_id= '$user_pos_menu_id'";
 	error_log($updateActive);
 	$updateActiveResult = mysqli_query($con,$updateActive);
 
@@ -111,7 +119,7 @@ else if ($action == "ChangeStatus"){
 	}
 }
 
-	else if($action == "create") {
+	 if($action == "create") {
 		
 	
 		$selectquery="select service_feature_id, user_id from user_pos_menu where user_id=$id and service_feature_id='$menu'";
@@ -133,6 +141,7 @@ else if ($action == "ChangeStatus"){
 		else {
 			echo "User Pos Menu   Inserted Successfully";
 		}
+	}
 	}}
 	
 	else if($action == "update") {	

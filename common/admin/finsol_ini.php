@@ -51,6 +51,9 @@ define ("FINAPI_SERVER_TIER_AC1_URL","http://localhost:8989/finweb/api/t1accstat
 define ("FINAPI_SERVER_TIER_AC1_CREATE_URL","http://localhost:8989/finweb/api/createt1accpost.php");
 define ("FINAPI_SERVER_FLEXI_API_URL","http://localhost:8989/flexiapi/ws.api/flexisale");
 define ("FINAPI_SERVER_NAME_ENQUIRY_URL","http://localhost:8989/finweb/api/nnenquiry.php");
+define ("BVN_CHECK_URL","http://localhost/kadick-finsol-finweb/api/bvn_check.php");
+
+
 
 //PayAttitude Cashout Phone
 define ("FINAPI_SERVER_CASHOUT_PHONE_URL","http://localhost:8989/finweb/api/cashoutphonepost.php");

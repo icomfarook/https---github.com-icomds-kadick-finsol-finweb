@@ -155,16 +155,19 @@ $profile_id  = $_SESSION['profile_id'];
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h2 style='text-align:center'><?php echo PRE_APPLICATION_VIEW_HEADING1; ?> - {{name}}</h2>
+					<h2 style='text-align:center'><?php echo PRE_APPLICATION_VIEW_HEADING1; ?> -  {{name}} </h2>
 				</div>	
 				<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 				<div class='modal-body'  ng-hide='isLoader'>
 					<div id="TransferBody">	
 						<form action="" method="POST" name='ApplicatioTransferDForm' id="ApplicatioTransferDForm">
-							<div class='row appcont'>				
+						<div ng-show="bvn_validated" class='row appcont'>
+							<div style="border-style: ridge;width: fit-content;border-radius: 15%;margin-left: 38%;"  class='col-lg-12 col-xs-12 col-sm-12 col-md-12' ><label ng-model="bvn_validated">BVN Check :</label><button  id='prospects_form' ng-click='Getbvn(id)' class='icoimg'><img style='height:22px;width:22px' src='../common/images/password.png' /></button><label ng-show="Success"   style="color: green;" >BVN Validate Successfully</label><label style="color: red;"    ng-show="Failure">BVN Validate Failure</label></div>
+						</div><br />
+							<div  class='row appcont'>				
 								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 									<label><?php echo PRE_APPLICATION_VIEW_APPLIER_TYPE; ?><span class='spanre'>*</span><span ng-show="ApplicatioTransferDForm.appliertype.$touched ||ApplicatioTransferDForm.appliertype.$dirty && ApplicatioTransferDForm.appliertype.$invalid">
-									<span class = 'err'  ng-hide = "isMsgSpan" ng-show="ApplicatioTransferDForm.appliertype.$error.required"><?php echo REQUIRED;?></span></span></label>
+									<span class = 'err'  ng-hide = "isMsgSpan" ng-show="ApplicatioTransferDForm.appliertype.$error.required"> </span></span></label>
 									<select ng-disabled = 'isSelectDisabledType' ng-model="appliertype"  name='appliertype' id='ApplierType' required class='form-control'>
 										<option value=''><?php echo PRE_APPLICATION_VIEW_SELECT_TYPE; ?></option>									
 										<?php if($profile_id == 1 || $profile_id == 10 || $profile_id == 24 || $profile_id == 26) { ?>
@@ -230,7 +233,7 @@ $profile_id  = $_SESSION['profile_id'];
 								</div>	
 								<?php } ?>
 							</div>
-							<div class='row appcont'>
+							<div   class='row appcont'>
 								<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 									<label><?php echo PRE_APPLICATION_VIEW_USER_NAME; ?><span ng-hide = "isMsgSpanD" ng-if="msguser == 'User Name is Available'" style='color:#24b212;padding-left: 10px;'>{{msguser}}</span><span ng-hide = "isMsgSpanD" ng-if="msguser != 'User Name is Available'" style='color:red;padding-left: 10px;'>{{msguser}}</span><span class='spanre'>*</span><span ng-show="ApplicatioTransferDForm.userName.$touched ||ApplicatioTransferDForm.userName.$dirty && ApplicatioTransferDForm.userName.$invalid">
 									<span class = 'err'  ng-hide = "isMsgSpan" ng-show="ApplicatioTransferDForm.userName.$error.required"><?php echo REQUIRED;?></span><span style="color:Red" ng-show="ApplicatioTransferDForm.userName.$dirty && ApplicatioTransferDForm.userName.$error.minlength"> <?php echo MIN_10_CHARACTERS_REQUIRED; ?> </span></span></label>
@@ -462,11 +465,10 @@ $profile_id  = $_SESSION['profile_id'];
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
-	//TestTable1();
-	//$("#datatable-1_filter, #datatable-1_length, .maintable box-content").hide();
-	//$(".box-content").css("padding","0px");
-	//TestTable2();
-	//TestTable3();
+	TestTable1();
+	TestTable2();
+	TestTable3();
+	LoadSelect2Script();
 }
 function AvoidSpace(event) {
     var k = event ? event.which : window.event.keyCode;
@@ -478,7 +480,7 @@ function AvoidSpace(event) {
 		$("#StartDate, #EndDate").val(curDate);
 $(document).ready(function() {
 	$("#Query").click(function() {				
-		//LoadDataTablesScripts(AllTables);
+		LoadDataTablesScripts(AllTables);
 		
 	});
 	$("#Refresh").click(function() {
@@ -489,5 +491,7 @@ $(document).ready(function() {
 		window.location.reload();
 
 	});
+
+
 });
 </script>
