@@ -309,8 +309,8 @@
 							<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
 							</ul>
 							</li>
-						</ul>
-					</li>
+							</ul>
+							</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-gear"></i>
@@ -456,7 +456,7 @@
 							<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
 							<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
-								<li class="dropdown">
+							<li class="dropdown">
 							<a href="#" class="dropdown-toggle">
 							<i class="fa fa-newspaper-o"></i>
 							<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
@@ -543,7 +543,17 @@
 						</a>
 						<ul class="dropdown-menu">
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+							<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+							<i class="fa fa-newspaper-o"></i>
+							<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
+							</a>
+							<ul class="dropdown-menu">
+							<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
+							</ul>
+							</li>
 						</ul>
+						
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
@@ -711,18 +721,16 @@
 					</a>
 					<ul class="dropdown-menu">
 					<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
-						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
-						<li class="dropdown">
-						<a href="#" class="dropdown-toggle">
-						<i class="fa fa-newspaper-o"></i>
-						<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
-						</a>
-						<ul class="dropdown-menu">
-						<li><a class="ajax-link" style="color:orange" href="#!agntmnth"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Monthly</a></li>
-						<li><a class="ajax-link" style="color:orange" href="#!agntdaily"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Daily</a></li>
-						<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
-						</ul>
-						</li>
+					<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+					<li class="dropdown">
+					<a href="#" class="dropdown-toggle">
+					<i class="fa fa-newspaper-o"></i>
+					<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
+					</a>
+					<ul class="dropdown-menu">
+					<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
+					</ul>
+					</li>
 					</ul>
 				</li>
 						<li class="dropdown">
@@ -770,6 +778,25 @@
 					</li>
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-users"></i>
+						 	<span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle">
+									<i class="fa fa-newspaper-o"></i>
+									<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a class="ajax-link" style="color:orange" href="#!agntmnth"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Monthly</a></li>
+									<li><a class="ajax-link" style="color:orange" href="#!agntdaily"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Daily</a></li>
+									<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle">
 							<i class="fa fa-line-chart"></i>
 							 <span class="hidden-xs"><?php echo INDEX_AUDIT; ?></span>
 						</a>
@@ -813,19 +840,28 @@
 						</ul>
 					</li>
 					<li class="dropdown">
-					<a href="#" class="dropdown-toggle">
-						<i class="fa fa-users"></i>
-						 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
-					</a>
-					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
-						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
-						<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
-						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
-						<li><a class="ajax-link" href="#!agntmnth">Agent Rank - Monthly</a></li>
-						<li><a class="ajax-link" href="#!agntdaily">Agent Rank - Daily</a></li>	
-					</ul>
-				</li>
+						<a href="#" class="dropdown-toggle">
+							<i class="fa fa-users"></i>
+						 	<span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
+							<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
+							<li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
+							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+							<li class="dropdown">
+								<a href="#" class="dropdown-toggle">
+									<i class="fa fa-newspaper-o"></i>
+									<span style="color:white" class="hidden-xs" href="">Agent Ranking</span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a class="ajax-link" style="color:orange" href="#!agntmnth"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Monthly</a></li>
+									<li><a class="ajax-link" style="color:orange" href="#!agntdaily"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Daily</a></li>
+									<li><a class="ajax-link" style="color:orange" href="#!agntsum"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Agent Rank - Summary</a></li>
+								</ul>
+							</li>
+						</ul>
+					</li>
 				
 					<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
@@ -858,15 +894,6 @@
 							<li><a class="ajax-link" href="#!rptwab">Wallet/Account balance</a></li>
 							<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>		
 							<li><a class="ajax-link" href="#!rpttraaud">Transaction Audit</a></li>
-						</ul>
-					</li>
-					<li class="dropdown">
-						<a href="#" class="dropdown-toggle">
-							<i class="fa fa-users"></i>
-							 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
-						</a>
-						<ul class="dropdown-menu">
-							<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						</ul>
 					</li>
 					<li class="dropdown">
