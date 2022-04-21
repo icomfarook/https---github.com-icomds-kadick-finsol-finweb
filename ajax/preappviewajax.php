@@ -367,14 +367,14 @@
 			$row = mysqli_fetch_assoc($selectresult);
 		    $pre_application_id = $row['pre_application_info_id'];
 			$firstName = $row['first_name'];
-	    	$lastName= $row['last_name'];
+	    		$lastName= $row['last_name'];
 			$countryid = $row['country_id'];
 			$dob = $row['dob'];
 			$localgovernmentid = $row['local_govt_id'];
 			$stateid = $row['state_id'];
 			$phone = $row['mobile_no'];
 			$bvn = $row['bvn'];
-       if($selectresult){
+       		if($selectresult){
 			$create_user = $_SESSION['user_id'];
 			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
 			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
@@ -403,7 +403,7 @@
 				error_log("After Success Response Update Que".$query1);
 
 				 if($result) {
-                    $SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
+                    			$SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
 					error_log("SelectQuery ==".$SelectQuery);
 					$Selectresult =  mysqli_query($con,$SelectQuery);
 					$count = mysqli_num_rows($Selectresult);
@@ -442,20 +442,20 @@
 		$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
 		$key1 = base64_encode($raw_data1);
 		error_log("before calling post");
-		error_log("url = ".BVN_CHECK_URL);		
+		error_log("url = ".FINAPI_SERVER_BVN_CHECK_URL);		
 		$body['countryId'] = $countryid;
 		$body['stateId'] =  $stateid;
 		$body['localGovtId'] =  $localgovernmentid;
 		$body['userId'] = $userId;
 		$body['firstName'] = $firstName;
-        $body['lastName'] = $lastName;
-        $body['phone'] = $phone;
-        $body['dob'] = $dob;
-        $body['bvn'] = $bvn;
+        	$body['lastName'] = $lastName;
+        	$body['phone'] = $phone;
+        	$body['dob'] = $dob;
+        	$body['bvn'] = $bvn;
 		$body['key1'] = $key1;
 		$body['signature'] = $signature;
 		error_log("request sent ==> ".json_encode($body));
-		$ch = curl_init(BVN_CHECK_URL);
+		$ch = curl_init(FINAPI_SERVER_BVN_CHECK_URL);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);

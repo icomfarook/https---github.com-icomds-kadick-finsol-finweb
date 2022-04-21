@@ -6,11 +6,11 @@
 	require '../api/security.php';
 	require '../common/gh/autoload.php';	
 	$action =$data->action;
-    $firstName = $data->FirstName;
-    $lastName = $data->LastName;
-    $phone = $data->mobileno;
-    $dob = $data->dob;
-    $bvn = $data->BVN;
+    	$firstName = $data->FirstName;
+    	$lastName = $data->LastName;
+    	$phone = $data->mobileno;
+    	$dob = $data->dob;
+    	$bvn = $data->BVN;
 	$userId = $_SESSION['user_id'];
 	date_default_timezone_set("Africa/Lagos");
 	$CurrentDate = date("Y-m-d H:i:s");
@@ -21,21 +21,18 @@
 		$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn);
 		$api_response = json_decode($res, true);
 		$response = array();
-
-            $response["requestStatus"] = $api_response['requestStatus'];
-			$response["bvn"] = $bvn;
-			$response["validity"] = $api_response['validity'];
-			$response["signature"] = $api_response['signature'];
-			$response["responseCode"] = $api_response['responseCode'];
-			$response["responseDescription"] = $api_response['responseDescription'];
-			$response["processingStartTime"] = $CurrentDate;
-
+            	$response["requestStatus"] = $api_response['requestStatus'];
+		$response["bvn"] = $bvn;
+		$response["validity"] = $api_response['validity'];
+		$response["signature"] = $api_response['signature'];
+		$response["responseCode"] = $api_response['responseCode'];
+		$response["responseDescription"] = $api_response['responseDescription'];
+		$response["processingStartTime"] = $CurrentDate;
 		echo json_encode($response);
 	}
 	
 	function sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn){
-        
-	
+        	
 		error_log("entering SendBvnCheckReqeust");
 		date_default_timezone_set('Africa/Lagos');
 		$nday = date('z')+1;
@@ -47,21 +44,21 @@
 		$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
 		$key1 = base64_encode($raw_data1);
 		error_log("before calling post");
-		error_log("url = ".BVN_CHECK_URL);		
+		error_log("url = ".FINAPI_SERVER_BVN_CHECK_URL);		
 		$body['countryId'] = ADMIN_COUNTRY_ID;
-    	$body['stateId'] = ADMIN_STATE_ID;
+    		$body['stateId'] = ADMIN_STATE_ID;
 		$body['localGovtId'] = ADMIN_LOCAL_GOVT_ID;
        
 		$body['userId'] = $userId;
 		$body['key1'] = $key1;
 		$body['signature'] = $signature;
-        $body['firstName'] = $firstName;
-        $body['lastName'] = $lastName;
-        $body['phone'] = $phone;
-        $body['dob'] = $dob;
-        $body['bvn'] = $bvn;
+        	$body['firstName'] = $firstName;
+        	$body['lastName'] = $lastName;
+        	$body['phone'] = $phone;
+        	$body['dob'] = $dob;
+        	$body['bvn'] = $bvn;
 		error_log("request sent ==> ".json_encode($body));
-		$ch = curl_init(BVN_CHECK_URL);
+		$ch = curl_init(FINAPI_SERVER_BVN_CHECK_URL);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
 		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
 		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
