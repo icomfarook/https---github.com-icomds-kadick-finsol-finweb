@@ -47,7 +47,7 @@
 
 				error_log("inside all inputs are set correctly");
 				$firstName = $data->registration->firstName;
-				$LastName = $data->registration->lastName;
+				$lastName = $data->registration->lastName;
 				$bvn = $data->registration->bvn;
 				$dob = $data->registration->dob;
 				$gender = $data->registration->gender;
@@ -151,7 +151,7 @@
 								$outletName = mysqli_real_escape_string($con, $outletName);
 								$address = mysqli_real_escape_string($con, $address);
 								$contactName = mysqli_real_escape_string($con, $contactName);
-                                				$insert_main_query = "INSERT into pre_application_info (pre_application_info_id, country_id, bvn, dob, gender, outlet_name, business_type, address1, local_govt_id, state_id, mobile_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) values ($pre_application_id, $countryId, '$bvn', '$dob', '$gender', '$outletName', '$businessType', '$address', $localGovtId, $stateId, '$mobile', '$email', $language_id, '$contactName', '$mobile', left('$latitude', 10), left('$longitude', 10), '$comments', 'E', 6, now())";
+                                				$insert_main_query = "INSERT into pre_application_info (pre_application_info_id, country_id, bvn, dob, gender, outlet_name, first_name, last_name, business_type, address1, local_govt_id, state_id, mobile_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) values ($pre_application_id, $countryId, '$bvn', '$dob', '$gender', '$outletName', '$firstName', '$lastName', '$businessType', '$address', $localGovtId, $stateId, '$mobile', '$email', $language_id, '$contactName', '$mobile', left('$latitude', 10), left('$longitude', 10), '$comments', 'E', 6, now())";
                                 				error_log("insert_main_query = ".$insert_main_query);
                                 				$insert_main_result = mysqli_query($con, $insert_main_query);
                                 				if($insert_main_result) {

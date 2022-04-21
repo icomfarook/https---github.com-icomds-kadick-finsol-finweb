@@ -87,7 +87,7 @@
 			 if ($select_bvn_result) {
              $select_bvn_count = mysqli_num_rows($select_bvn_result);
            	if ( $select_bvn_count == 0 ) {
-			$pre_application_query = "INSERT INTO pre_application_info (pre_application_info_id, country_id, bvn,dob,gender, outlet_name, business_type,tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) VALUES ($application_id, $countryid,'$bvn','$dob','$gender', '$outletname',$BusinessType, '$taxnumber', '$address1', '$address2', $localgovernmentid, $stateid, '$mobileno', '$workno', '$email', $langpref, '$cname', '$cmobile','$Latitude', '$Longitude', '$comment','E', $createuser, now())";
+			$pre_application_query = "INSERT INTO pre_application_info (pre_application_info_id, country_id,first_name,last_name, bvn,dob,gender, outlet_name, business_type,tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) VALUES ($application_id, $countryid,'$firstName','$lastName','$bvn','$dob','$gender', '$outletname',$BusinessType, '$taxnumber', '$address1', '$address2', $localgovernmentid, $stateid, '$mobileno', '$workno', '$email', $langpref, '$cname', '$cmobile','$Latitude', '$Longitude', '$comment','E', $createuser, now())";
 			error_log("pre_application_query ".$pre_application_query);
 			$pre_application_result =  mysqli_query($con,$pre_application_query);
 			if(!$pre_application_result) {
@@ -112,7 +112,7 @@
 				}
 				else {				
 					$email_array = array();
-					error_log($email_array);
+					error_log("Email".$email_array);
 					array_push($email_array, $email);
 					$current_time = date('Y-m-d H:i:s');
 					$subject = 'Kadick Monei: Pre Application ID: '.$application_id.' For - '.$firstName." ".$lastName;

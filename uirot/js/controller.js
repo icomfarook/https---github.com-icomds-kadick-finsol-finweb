@@ -13544,7 +13544,7 @@ $scope.localgvts = response.data;
 // console.log(response);
 });
 }
- $scope.transfer = function (index, id, name) {
+ $scope.transfer = function (index, id, name) { 
 
   $scope.name = name;
   $scope.transferbtn = true;
@@ -13578,9 +13578,20 @@ $scope.localgvts = response.data;
 });
   $scope.state = response.data[0].state;
   $scope.localgovernment = response.data[0].localgvt;
-  //alert(response.data[0].localgvt);
-// $scope.isHide = true;
-// $scope.isHideOk = false;
+    $scope.bvn_validated = response.data[0].bvn_validated;
+
+  //alert(response.data[0].bvn_validated);
+  if($scope.bvn_validated !="Y")
+  {
+$scope.bvn_validated = true;
+$scope.isSelectDisabledType = true;
+$scope.isSelectDisabled = true;
+  }else{
+	$scope.bvn_validated = false;
+	$scope.isSelectDisabledType = false;
+	$scope.isSelectDisabled = false;
+  }
+
 $scope.isLoader = false;
     $scope.isMainLoader = false;
 $scope.TransferBody = response.data;
@@ -13618,11 +13629,13 @@ $scope.TransferBody = response.data;
     $scope.isGoDisbled = true;
    }
   }
-  $scope.cancel = function(){
+  $scope.cancel = function(){ 
    $scope.appliertype = "";
    $scope.parentcode = "";
    $scope.userName = "";
    $scope.msguser = "";
+   $scope.Success = false;
+   $scope.Failure = false;
    $scope.ApplicatioTransferDForm.$setUntouched();
    $scope.ApplicatioTransferDForm.$setPristine();
   }
@@ -13710,6 +13723,55 @@ $scope.isSelectDisabled = false;
 
   }
  }
+ $scope.Getbvn = function(id){
+	$scope.isSelectDisabledType = false;
+	$scope.isSelectDisabled = false;
+	alert("Plese Wait for The Response");
+
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: {
+			action: 'getbvn',
+			id:id,
+		},
+	}).then(function successCallback(response) {
+		$scope.resc = response.data.responseCode;
+		//alert($scope.resc);
+		if(parseInt($scope.resc) == 0) {
+			$scope.isSelectDisabledType = false;
+           $scope.isSelectDisabled = false;
+		   $scope.Success = true;
+		   $scope.Failure = false;
+			/* $scope.tabeHide = false;
+			$scope.tabeHide2 = true;
+			$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+		else {
+			$scope.isSelectDisabledType = true;
+	         $scope.isSelectDisabled = true;
+			 $scope.Success = false;
+		   $scope.Failure = true;
+		/* 	$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+	});
+
+ }
+
  $scope.preappviewreject = function (index, id,name) {
   $scope.id =id;
   $scope.name = name;
@@ -17973,8 +18035,7 @@ app.controller('traEnCtrl', function ($scope, $http) {
     }
 });
 app.controller('bvnCtrl', function ($scope, $http) {
-	$scope.tabeHide = true;
-	$scope.tabeHide2 = true;
+	$scope.tablerow = true;
     $http({
         url: '../ajax/load.php',
         method: "POST",
@@ -17984,6 +18045,33 @@ app.controller('bvnCtrl', function ($scope, $http) {
             $scope.partners = response.data;
             $scope.isMainDiv = false;
     });
+	$scope.findlist = function () {
+		$scope.tablerow = false;
+	 $http({
+		 method: 'post',
+		 url: '../ajax/bvncheckajax.php',
+		 data: {
+			BVN: $scope.BVN,
+			FirstName: $scope.FirstName,
+			LastName: $scope.LastName,
+			mobileno: $scope.mobileno,
+			dob: $scope.dob,
+		    action: 'query'
+		 
+		 },
+		 }).then(function successCallback(response) {
+		 $scope.res = response.data;
+		 $scope.requestStatus = response.data.requestStatus;
+		 $scope.bvn = response.data.bvn;
+		 $scope.validity = response.data.validity;
+		 $scope.signature = response.data.signature;
+		 $scope.responseCode = response.data.responseCode;
+		 $scope.responseDescription = response.data.responseDescription;
+		 $scope.processingStartTime = response.data.processingStartTime;
+		 }, function errorCallback(response) {
+		 // console.log(response);
+		 });
+	   }
 	$scope.query = function () {
         $http({
             method: 'post',

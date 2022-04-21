@@ -71,6 +71,56 @@
 		$user_pos_menu_id = $data->user_pos_menu_id;
 		$id = $data->id;
 		
+<<<<<<< HEAD
+	$query = "select a.user_pos_menu_message_id, b.user_pos_menu_id, ifNull(a.message,'-') as message,change_action, a.create_user, a.create_time,b.active,b.user_id from user_pos_menu b  LEFT JOIN user_pos_menu_message a  on  b.user_pos_menu_id = a.user_pos_menu_id where  b.user_pos_menu_id = $user_pos_menu_id order by a.create_time desc limit 1";
+	error_log($query);
+	$result = mysqli_query($con,$query);
+	$data = array();
+	while ($row = mysqli_fetch_array($result)) {
+		$data[] = array("user_pos_menu_message_id"=>$row['user_pos_menu_message_id'],"user_pos_menu_id"=>$row['user_pos_menu_id'],"message"=>$row['message'],"change_action"=>$row['change_action'],"create_user"=>$row['create_user'],"create_time"=>$row['create_time'],"active"=>$row['active'],"user_id"=>$row['user_id']);             
+	}
+	echo json_encode($data);
+	if (!$result) {
+		echo "Error: %s\n", mysqli_error($con);
+		exit();
+	}
+}
+else if ($action == "ChangeStatus"){
+	$actived = $data->active;
+	$comments = $data->comments;
+	$user_pos_menu_id = $data->user_pos_menu_id;
+	$id = $data->id;
+	
+	if($actived == "Y")
+	{
+      $ChangeAction = 'A';
+	}
+	else if($actived == "N")
+	{
+      $ChangeAction = 'D';
+	}else{
+	  $ChangeAction = 'O';
+	}
+	$Message = str_replace("'", '"', $comments);
+
+ $select_query = "Select active from user_pos_menu where user_pos_menu_id= $user_pos_menu_id and active='$actived'";
+ error_log("select_query ==".$select_query);
+ $selectActiveResult = mysqli_query($con,$select_query);
+ $count = mysqli_num_rows($selectActiveResult);
+
+		if ($count != 0 ){
+			echo "The Active Status is Already exist for  this User";
+			}else{
+
+	$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id,message,change_action,create_user,create_time) VALUES ($user_pos_menu_id,'$Message','$ChangeAction','$user_id',now())";
+	$InsertResult = mysqli_query($con,$InsertQuery);
+	error_log($InsertQuery);
+
+	if($InsertResult){
+	$updateActive = "update user_pos_menu set active = '$actived' where user_pos_menu_id= '$user_pos_menu_id'";
+	error_log($updateActive);
+	$updateActiveResult = mysqli_query($con,$updateActive);
+=======
 		if($active == "Y") {
       			$ChangeAction = 'A';
 		}
@@ -84,6 +134,7 @@
 		$InsertQuery = "INSERT INTO user_pos_menu_message (user_pos_menu_id ,message, change_action, create_user, create_time) VALUES ($user_pos_menu_id, left('$Message', 150), '$ChangeAction', $user_id, now())";
 		$InsertResult = mysqli_query($con,$InsertQuery);
 		error_log($InsertQuery);
+>>>>>>> 32f92d8c5c310353b8a6e1c80b4f94f4893bdb5e
 
 		if($InsertResult){
 			$updateActive = "update user_pos_menu set active = '$active' where user_pos_menu_id= '$user_pos_menu_id'";
@@ -97,8 +148,14 @@
 			exit();
 		}
 
+<<<<<<< HEAD
+	 if($action == "create") {
+		
+	
+=======
 	}else if($action == "create") {
 			
+>>>>>>> 32f92d8c5c310353b8a6e1c80b4f94f4893bdb5e
 		$selectquery="select service_feature_id, user_id from user_pos_menu where user_id=$id and service_feature_id='$menu'";
 		error_log($selectquery);
 		$selectresult = mysqli_query($con,$selectquery);
@@ -118,11 +175,22 @@
 				echo "User Pos Menu   Inserted Successfully";
 			}
 		}
+<<<<<<< HEAD
+	}
+	}}
+	
+	else if($action == "update") {	
+	$servfeaold = $data->servfeaold;	
+	$active = $data->active;	
+	$startDate = $data->startDate;	
+	$expDate = $data->expDate;
+=======
 	}else if($action == "update") {	
 		$servfeaold = $data->servfeaold;	
 		$active = $data->active;	
 		$startDate = $data->startDate;	
 		$expDate = $data->expDate;
+>>>>>>> 32f92d8c5c310353b8a6e1c80b4f94f4893bdb5e
 	
 		if(!empty($expDate)){
 			$startDate = date("'Y-m-d'", strtotime($startDate));
