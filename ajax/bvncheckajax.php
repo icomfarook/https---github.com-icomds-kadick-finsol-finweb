@@ -6,22 +6,24 @@
 	require '../api/security.php';
 	require '../common/gh/autoload.php';	
 	$action =$data->action;
-    	$firstName = $data->FirstName;
-    	$lastName = $data->LastName;
-    	$phone = $data->mobileno;
-    	$dob = $data->dob;
-    	$bvn = $data->BVN;
+	$firstName = $data->FirstName;
+	$lastName = $data->LastName;
+	$phone = $data->mobileno;
+	//error_log("Phone ==".$phone);
+	$dob = $data->dob;
+	$bvn = $data->BVN;
 	$userId = $_SESSION['user_id'];
 	date_default_timezone_set("Africa/Lagos");
 	$CurrentDate = date("Y-m-d H:i:s");
-	$dob = date("Y-m-d", strtotime($dob));	
+	$dob = date("Y-m-d", strtotime($dob. "+1 days"));	
+	error_log("DOB ==".$dob);
 
 	if($action == "query") {
 
 		$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn);
 		$api_response = json_decode($res, true);
 		$response = array();
-            	$response["requestStatus"] = $api_response['requestStatus'];
+        $response["requestStatus"] = $api_response['requestStatus'];
 		$response["bvn"] = $bvn;
 		$response["validity"] = $api_response['validity'];
 		$response["signature"] = $api_response['signature'];
@@ -46,17 +48,16 @@
 		error_log("before calling post");
 		error_log("url = ".FINAPI_SERVER_BVN_CHECK_URL);		
 		$body['countryId'] = ADMIN_COUNTRY_ID;
-    		$body['stateId'] = ADMIN_STATE_ID;
+    	$body['stateId'] = ADMIN_STATE_ID;
 		$body['localGovtId'] = ADMIN_LOCAL_GOVT_ID;
-       
-		$body['userId'] = $userId;
+    	$body['userId'] = $userId;
 		$body['key1'] = $key1;
 		$body['signature'] = $signature;
-        	$body['firstName'] = $firstName;
-        	$body['lastName'] = $lastName;
-        	$body['phone'] = $phone;
-        	$body['dob'] = $dob;
-        	$body['bvn'] = $bvn;
+		$body['firstName'] = $firstName;
+		$body['lastName'] = $lastName;
+		$body['phone'] = $phone;
+		$body['dob'] = $dob;
+		$body['bvn'] = $bvn;
 		error_log("request sent ==> ".json_encode($body));
 		$ch = curl_init(FINAPI_SERVER_BVN_CHECK_URL);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));

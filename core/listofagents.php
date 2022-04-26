@@ -102,7 +102,7 @@
 								<?php } ?>
 																		
 						</div>
-					 		 <div class='col-lg-2 col-xs-12 col-sm-12 col-md-12' >
+					 		 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >
 								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
 									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
 								</select>
@@ -114,7 +114,7 @@
 									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
 								</select>
 								</div>
-							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12' >										
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >										
 								<label>Local Government
 								<span ng-show="infoViewForm.partyCode.$dirty && infoViewForm.partyCode.$invalid">
 								<span class = 'err' ng-show="infoViewForm.partyCode.$error.required"><?php echo REQUIRED;?></span></span></label>	
@@ -123,7 +123,9 @@
 									<option ng-repeat="localgvt in localgvts" value="{{localgvt.id}}">{{localgvt.name}}</option>
 								</select>										
 							</div>
-							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12' >										
+								</div>
+								<div class='row appcont'>	
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >										
 								<label>Agent Status
 								<span ng-show="infoViewForm.partyCode.$dirty && infoViewForm.partyCode.$invalid">
 								<span class = 'err' ng-show="infoViewForm.partyCode.$error.required"><?php echo REQUIRED;?></span></span></label>	
@@ -131,6 +133,16 @@
 									<option value="ALL">ALL</option>	
 									<option value="Y">Yes</option>
 									<option value="N">No</option>									
+								</select>										
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12' >										
+								<label>BVN Check
+								<span ng-show="infoViewForm.bvn.$dirty && infoViewForm.bvn.$invalid">
+								<span class = 'err' ng-show="infoViewForm.bvn.$error.required"><?php echo REQUIRED;?></span></span></label>	
+								<select  ng-model='bvn' class='form-control' ng-init="bvn='ALL'" name='bvn' required >
+									<option value="ALL">ALL</option>	
+									<option value="Y">Y-Yes</option>
+									<option value="N">N-No</option>									
 								</select>										
 							</div>
 
@@ -159,9 +171,9 @@
 									<th>Agent Name</th>
 									<th>Parent</th>
 									<th>Contact Person Mobile</th>
-									<th>Email</th>
 									<th>State</th>
 									<th>Local Government</th>
+									<th>Bvn Validate</th>
 									<th>View</th>
 									
 								</tr>
@@ -172,9 +184,17 @@
 									<td>{{ x.agent_name }}</td>
 									<td>{{ x.parent_code }}</td>
 									<td>{{ x.contact_person_mobile }}</td>
-									<td>{{ x.email }}</td>
 									<td>{{ x.state }}</td>
 									<td>{{ x.local_govt }}</td>
+									<td ng-show="x.bvn==='Y-Yes'"><a id={{x.id}} class='reject' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
+									</td>
+									<td ng-show="x.bvn==='N-No'"><a id={{x.id}} class='reject'  data-toggle='modal' data-target='#RejectBody'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
+									</td>
+									<td ng-show="x.bvn==='-'"><a id={{x.id}} class='reject'  data-toggle='modal' data-target='#RejectBody'>
+										<button class='icoimg'><img style="height: 26px;width: 26px;" src='../common/images/question.png' /></button></a>
+									</td>
 									<td><a id='{{x.agent_code}}' class='ApplicationViewDialogue' ng-click='view($index,x.agent_code)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
 								</tr>

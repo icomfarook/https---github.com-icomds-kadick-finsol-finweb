@@ -154,7 +154,7 @@ $profile_id  = $_SESSION['profile_id'];
 		<div class="modal-dialog modal-lg" style='width:100%'>
 			<div class="modal-content">
 				<div class="modal-header">
-					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<button type="button" ng-click='cancel()' class="close" data-dismiss="modal">&times;</button>
 					<h2 style='text-align:center'><?php echo PRE_APPLICATION_VIEW_HEADING1; ?> -  {{name}} </h2>
 				</div>	
 				<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
@@ -162,7 +162,8 @@ $profile_id  = $_SESSION['profile_id'];
 					<div id="TransferBody">	
 						<form action="" method="POST" name='ApplicatioTransferDForm' id="ApplicatioTransferDForm">
 						<div ng-show="bvn_validated" class='row appcont'>
-							<div style="border-style: ridge;width: fit-content;border-radius: 15%;margin-left: 38%;"  class='col-lg-12 col-xs-12 col-sm-12 col-md-12' ><label ng-model="bvn_validated">BVN Check :</label><button  id='prospects_form' ng-click='Getbvn(id)' class='icoimg'><img style='height:22px;width:22px' src='../common/images/password.png' /></button><label ng-show="Success"   style="color: green;" >BVN Validate Successfully</label><label style="color: red;"    ng-show="Failure">BVN Validate Failure</label></div>
+							<div style="border-style: ridge;width: fit-content;border-radius: 15%;margin-left: 45%;"  class='col-lg-12 col-xs-12 col-sm-12 col-md-12' ><label ng-model="bvn_validated">BVN Check : </label> <label  ng-hide='labelHide' style="color: red;"    ng-show="bvn_validated">BVN Check is not done</label><label ng-show="Success"   style="color: green;" >BVN Validate Successfully</label><label style="color: red;"    ng-show="Failure">BVN Validate Failure</label><br />
+							<button type='button' ng-disabled='BVNBtn' class='btn btn-primary'  id='prospects_form' ng-click='Getbvn(id)'>BVN Check</button></div>
 						</div><br />
 							<div  class='row appcont'>				
 								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
@@ -492,6 +493,10 @@ $(document).ready(function() {
 
 	});
 
-
+	/* $('#prospects_form').on('click', function(e) {
+ e.preventDefault();
+$(this).prop('disabled',true); //disable further clicks
+	}); */
+	
 });
 </script>

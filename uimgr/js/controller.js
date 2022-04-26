@@ -9784,6 +9784,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
       $scope.msguser = "";
       $scope.Success = false;
       $scope.Failure = false;
+      $scope.BVNBtn = false;
       $scope.ApplicatioTransferDForm.$setUntouched();
       $scope.ApplicatioTransferDForm.$setPristine();
      }
@@ -9871,10 +9872,11 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    
      }
     }
-    $scope.Getbvn = function(id){
+    $scope.Getbvn = function(id){  
+       $scope.BVNBtn = false;
        $scope.isSelectDisabledType = false;
        $scope.isSelectDisabled = false;
-       alert("Plese Wait for The Response");
+       alert("Please wait, while we validate the BVN");
    
        $http({
            method: 'post',
@@ -9887,10 +9889,12 @@ app.controller('preappviewCtrl', function ($scope, $http) {
            $scope.resc = response.data.responseCode;
            //alert($scope.resc);
            if(parseInt($scope.resc) == 0) {
+               $scope.BVNBtn = true;
                $scope.isSelectDisabledType = false;
               $scope.isSelectDisabled = false;
               $scope.Success = true;
               $scope.Failure = false;
+              $scope.labelHide = true;
                /* $scope.tabeHide = false;
                $scope.tabeHide2 = true;
                $scope.res = response.data;
@@ -9903,10 +9907,12 @@ app.controller('preappviewCtrl', function ($scope, $http) {
                $scope.processingStartTime = response.data.processingStartTime; */
            }
            else {
+               $scope.BVNBtn = true;
                $scope.isSelectDisabledType = true;
                 $scope.isSelectDisabled = true;
                 $scope.Success = false;
-              $scope.Failure = true;
+                  $scope.Failure = true;
+                  $scope.labelHide = true;
            /* 	$scope.res = response.data;
                $scope.requestStatus = response.data.requestStatus;
                $scope.bvn = response.data.bvn;
@@ -10760,260 +10766,316 @@ app.controller('userCtrl', function ($scope, $http) {
 });
 
 app.controller('infoCtrl', function ($scope, $http) {
-$scope.isHideOk = true;
-$scope.countrychange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": 566, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-$scope.statechange = function (id) {
-// alert(id);
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.fn_load = function (partyType,partyCode) {
-if(partyType == 'C' || partyType == 'A') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { partyType:partyType,
-partyCode:partyCode,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-}
-$scope.partyload = function (partyType) {
-var action = "";var fora="";
-if(partyType == "MA") {
-fora = "agent";
-type = "N";
-}
-if(partyType == "SA") {
-fora = "agent";
-type = "Y";
-}
-if(partyType == "C") {
-fora = "champion";
-type = "";
-}
-if(partyType == "P") {
-fora = "personal";
-type = "";
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora,
-   type: type
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-
-}
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/infoajax.php',
-data: {
-action: 'findlist',
-partyCode: $scope.partyCode,
-partyType: $scope.partyType,
-topartyCode:$scope.topartyCode,
-creteria:$scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.infoss = response.data;
-}, function errorCallback(response) {
-console.log(response.data);
-});
-}
-$scope.edit = function (index, partyCode, partyType, creteria) {
-$http({
-method: 'post',
-url: '../ajax/infoajax.php',
-data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
-}).then(function successCallback(response) {
-
-// alert(id);
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-$scope.active = response.data[0].active;
-$scope.application_id = response.data[0].application_id;
-$scope.block_date = response.data[0].block_date;
-$scope.block_reason_id = response.data[0].block_reason_id;
-$scope.block_status = response.data[0].block_status;
-$scope.partyCode = response.data[0].code;
-$scope.contact_person_mobile = response.data[0].contact_person_mobile;
-$scope.contact_person_name = response.data[0].contact_person_name;
-$scope.country = response.data[0].country;
-$scope.create_time = response.data[0].create_time;
-$scope.create_user = response.data[0].create_user;
-$scope.email = response.data[0].email;
-$scope.expiry_date = response.data[0].expiry_date;
-$scope.gvtname = response.data[0].gvtname;
-$scope.lname = response.data[0].lname;
-$scope.atype = response.data[0].atype;
-$scope.mobile_no = response.data[0].mobile_no;
-$scope.name = response.data[0].name;
-$scope.code = response.data[0].code;
-$scope.outlet_name = response.data[0].outlet_name;
-$scope.parenroutletname = response.data[0].parenroutletname;
-$scope.partytype = response.data[0].partytype;
-$scope.pcode = response.data[0].pcode;
-$scope.ptype = response.data[0].ptype;
-$scope.start_date = response.data[0].start_date;
-$scope.state = response.data[0].state;
-$scope.sub_agent = response.data[0].sub_agent;
-$scope.tax_number = response.data[0].tax_number;
-$scope.update_time = response.data[0].update_time;
-$scope.update_user = response.data[0].update_user;
-$scope.user = response.data[0].user;
-$scope.work_no = response.data[0].work_no;
-$scope.zip_code = response.data[0].zip_code;
-$scope.address1 = response.data[0].address1;
-$scope.address2 = response.data[0].address2;
-$scope.local_govt_id = response.data[0].local_govt_id;
-$scope.state_id = response.data[0].state_id;
-$scope.loc_latitude = response.data[0].loc_latitude;
-$scope.loc_longitude = response.data[0].loc_longitude;
-$scope.gender = response.data[0].gender;
-$scope.BusinessType = response.data[0].BusinessType;
-$scope.dob = new Date(response.data[0].dob);
-
-if(response.data[0].dob==null){
-$scope.dob="";
-}
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (index, partyCode, partyType, creteria) {
-$http({
-method: 'post',
-url: '../ajax/infoajax.php',
-data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
-}).then(function successCallback(response) {
-
-// alert(id);
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-$scope.active = response.data[0].active;
-$scope.application_id = response.data[0].application_id;
-$scope.block_date = response.data[0].block_date;
-$scope.block_reason_id = response.data[0].block_reason_id;
-$scope.block_status = response.data[0].block_status;
-$scope.partyCode = response.data[0].code;
-$scope.contact_person_mobile = response.data[0].contact_person_mobile;
-$scope.contact_person_name = response.data[0].contact_person_name;
-$scope.country = response.data[0].country;
-$scope.create_time = response.data[0].create_time;
-$scope.create_user = response.data[0].create_user;
-$scope.email = response.data[0].email;
-$scope.expiry_date = response.data[0].expiry_date;
-$scope.gvtname = response.data[0].gvtname;
-$scope.lname = response.data[0].lname;
-$scope.atype = response.data[0].atype;
-$scope.mobile_no = response.data[0].mobile_no;
-$scope.name = response.data[0].name;
-$scope.code = response.data[0].code;
-$scope.outlet_name = response.data[0].outlet_name;
-$scope.parenroutletname = response.data[0].parenroutletname;
-$scope.partytype = response.data[0].partytype;
-$scope.pcode = response.data[0].pcode;
-$scope.ptype = response.data[0].ptype;
-$scope.start_date = response.data[0].start_date;
-$scope.state = response.data[0].state;
-$scope.sub_agent = response.data[0].sub_agent;
-$scope.tax_number = response.data[0].tax_number;
-$scope.update_time = response.data[0].update_time;
-$scope.update_user = response.data[0].update_user;
-$scope.user = response.data[0].user;
-$scope.work_no = response.data[0].work_no;
-$scope.zip_code = response.data[0].zip_code;
-$scope.address1 = response.data[0].address1;
-$scope.address2 = response.data[0].address2;
-$scope.local_govt_id = response.data[0].local_govt_id;
-$scope.state_id = response.data[0].state_id;
-$scope.loc_latitude = response.data[0].loc_latitude;
-$scope.loc_longitude = response.data[0].loc_longitude;
-$scope.gender = response.data[0].gender;
-$scope.BusinessType = response.data[0].BusinessType;
-$scope.dob = response.data[0].dob;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.update = function (code) {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/infoajax.php',
-data: {
-mobile: $scope.mobile_no,
-email: $scope.email,
-cpname: $scope.contact_person_name,
-cpmobile: $scope.contact_person_mobile,
-partyCode: code,
-address1: $scope.address1,
-address2: $scope.address2,
-loc_latitude: $scope.loc_latitude,
-loc_longitude: $scope.loc_longitude,
-state_id:  $scope.state_id,
-local_govt_id: $scope.local_govt_id,
-gender: $scope.gender,
-dob:  $scope.dob,
-BusinessType: $scope.BusinessType,
-active: $scope.active,
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-$("#infoBody").html("<h3>" + response.data + "</h3>");
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-});
+    $scope.isHideOk = true;
+    $scope.countrychange = function (id) {
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'statelist', "id": 566, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.states = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    
+    $scope.statechange = function (id) {
+    // alert(id);
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'localgvtlist', "id": id, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.localgvts = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.fn_load = function (partyType,partyCode) {
+    if(partyType == 'C' || partyType == 'A') {
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { partyType:partyType,
+    partyCode:partyCode,
+    action: 'infolist'
+    },
+    }).then(function successCallback(response) {
+    $scope.infos = response.data;
+    });
+    }
+    }
+    $scope.partyload = function (partyType) {
+    var action = "";var fora="";
+    if(partyType == "MA") {
+    fora = "agent";
+    type = "N";
+    }
+    if(partyType == "SA") {
+    fora = "agent";
+    type = "Y";
+    }
+    if(partyType == "C") {
+    fora = "champion";
+    type = "";
+    }
+    if(partyType == "P") {
+    fora = "personal";
+    type = "";
+    }
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for:fora,
+       type: type
+    },
+    }).then(function successCallback(response) {
+    $scope.infos = response.data;
+    });
+    
+    }
+    $scope.query = function () {
+    $http({
+    method: 'post',
+    url: '../ajax/infoajax.php',
+    data: {
+    action: 'findlist',
+    partyCode: $scope.partyCode,
+    partyType: $scope.partyType,
+    topartyCode:$scope.topartyCode,
+    creteria:$scope.creteria
+    },
+    }).then(function successCallback(response) {
+    $scope.infoss = response.data;
+    $scope.bvn = response.data[0].bvn;
+    
+    }, function errorCallback(response) {
+    console.log(response.data);
+    });
+    }
+    $scope.edit = function (index, partyCode, partyType, creteria) {
+    $http({
+    method: 'post',
+    url: '../ajax/infoajax.php',
+    data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
+    }).then(function successCallback(response) {
+    
+    // alert(id);
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.localgvts = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    
+    $scope.active = response.data[0].active;
+    $scope.application_id = response.data[0].application_id;
+    $scope.block_date = response.data[0].block_date;
+    $scope.block_reason_id = response.data[0].block_reason_id;
+    $scope.block_status = response.data[0].block_status;
+    $scope.partyCode = response.data[0].code;
+    $scope.contact_person_mobile = response.data[0].contact_person_mobile;
+    $scope.contact_person_name = response.data[0].contact_person_name;
+    $scope.country = response.data[0].country;
+    $scope.create_time = response.data[0].create_time;
+    $scope.create_user = response.data[0].create_user;
+    $scope.email = response.data[0].email;
+    $scope.expiry_date = response.data[0].expiry_date;
+    $scope.gvtname = response.data[0].gvtname;
+    $scope.lname = response.data[0].lname;
+    $scope.atype = response.data[0].atype;
+    $scope.mobile_no = response.data[0].mobile_no;
+    $scope.name = response.data[0].name;
+    $scope.code = response.data[0].code;
+    $scope.outlet_name = response.data[0].outlet_name;
+    $scope.parenroutletname = response.data[0].parenroutletname;
+    $scope.partytype = response.data[0].partytype;
+    $scope.pcode = response.data[0].pcode;
+    $scope.ptype = response.data[0].ptype;
+    $scope.start_date = response.data[0].start_date;
+    $scope.state = response.data[0].state;
+    $scope.sub_agent = response.data[0].sub_agent;
+    $scope.tax_number = response.data[0].tax_number;
+    $scope.update_time = response.data[0].update_time;
+    $scope.update_user = response.data[0].update_user;
+    $scope.user = response.data[0].user;
+    $scope.work_no = response.data[0].work_no;
+    $scope.zip_code = response.data[0].zip_code;
+    $scope.address1 = response.data[0].address1;
+    $scope.address2 = response.data[0].address2;
+    $scope.local_govt_id = response.data[0].local_govt_id;
+    $scope.state_id = response.data[0].state_id;
+    $scope.loc_latitude = response.data[0].loc_latitude;
+    $scope.loc_longitude = response.data[0].loc_longitude;
+    $scope.gender = response.data[0].gender;
+    $scope.BusinessType = response.data[0].BusinessType;
+    $scope.dob = new Date(response.data[0].dob);
+    
+    if(response.data[0].dob==null){
+    $scope.dob="";
+    }
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.view = function (index, partyCode, partyType, creteria) {
+    $http({
+    method: 'post',
+    url: '../ajax/infoajax.php',
+    data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
+    }).then(function successCallback(response) {
+    
+    // alert(id);
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.localgvts = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    
+    $scope.active = response.data[0].active;
+    $scope.application_id = response.data[0].application_id;
+    $scope.block_date = response.data[0].block_date;
+    $scope.block_reason_id = response.data[0].block_reason_id;
+    $scope.block_status = response.data[0].block_status;
+    $scope.partyCode = response.data[0].code;
+    $scope.contact_person_mobile = response.data[0].contact_person_mobile;
+    $scope.contact_person_name = response.data[0].contact_person_name;
+    $scope.country = response.data[0].country;
+    $scope.create_time = response.data[0].create_time;
+    $scope.create_user = response.data[0].create_user;
+    $scope.email = response.data[0].email;
+    $scope.expiry_date = response.data[0].expiry_date;
+    $scope.gvtname = response.data[0].gvtname;
+    $scope.lname = response.data[0].lname;
+    $scope.atype = response.data[0].atype;
+    $scope.mobile_no = response.data[0].mobile_no;
+    $scope.name = response.data[0].name;
+    $scope.code = response.data[0].code;
+    $scope.outlet_name = response.data[0].outlet_name;
+    $scope.parenroutletname = response.data[0].parenroutletname;
+    $scope.partytype = response.data[0].partytype;
+    $scope.pcode = response.data[0].pcode;
+    $scope.ptype = response.data[0].ptype;
+    $scope.start_date = response.data[0].start_date;
+    $scope.state = response.data[0].state;
+    $scope.sub_agent = response.data[0].sub_agent;
+    $scope.tax_number = response.data[0].tax_number;
+    $scope.update_time = response.data[0].update_time;
+    $scope.update_user = response.data[0].update_user;
+    $scope.user = response.data[0].user;
+    $scope.work_no = response.data[0].work_no;
+    $scope.zip_code = response.data[0].zip_code;
+    $scope.address1 = response.data[0].address1;
+    $scope.address2 = response.data[0].address2;
+    $scope.local_govt_id = response.data[0].local_govt_id;
+    $scope.state_id = response.data[0].state_id;
+    $scope.loc_latitude = response.data[0].loc_latitude;
+    $scope.loc_longitude = response.data[0].loc_longitude;
+    $scope.gender = response.data[0].gender;
+    $scope.BusinessType = response.data[0].BusinessType;
+    $scope.dob = response.data[0].dob;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.update = function (code) {
+    $scope.isLoader = true;
+    $scope.isMainLoader = true;
+    $scope.isHideOk = true;
+    $http({
+    method: 'post',
+    url: '../ajax/infoajax.php',
+    data: {
+    mobile: $scope.mobile_no,
+    email: $scope.email,
+    cpname: $scope.contact_person_name,
+    cpmobile: $scope.contact_person_mobile,
+    partyCode: code,
+    address1: $scope.address1,
+    address2: $scope.address2,
+    loc_latitude: $scope.loc_latitude,
+    loc_longitude: $scope.loc_longitude,
+    state_id:  $scope.state_id,
+    local_govt_id: $scope.local_govt_id,
+    gender: $scope.gender,
+    dob:  $scope.dob,
+    BusinessType: $scope.BusinessType,
+    active: $scope.active,
+    action: 'update'
+    },
+    }).then(function successCallback(response) {
+    $scope.isHide = true;
+    $scope.isHideOk = false;
+    $scope.isLoader = false;
+        $scope.isMainLoader = false;
+    $("#infoBody").html("<h3>" + response.data + "</h3>");
+    
+    }, function errorCallback(response) {
+    console.log(response);
+    });
+    }
+    
+    $scope.Getbvn = function(index, partyCode, partyType, creteria){  
+        
+        alert("Please wait, while we validate the BVN");
+    
+        $http({
+            method: 'post',
+            url: '../ajax/infoajax.php',
+            data: {
+                action: 'getbvn',
+                partyCode:partyCode,
+            },
+        }).then(function successCallback(response) {
+            
+            $scope.resc = response.data.responseCode;
+            $scope.resd = response.data.responseDescription;
+    
+            
+            if(parseInt($scope.resc) == 0) {
+                
+                if(!alert('BVN Validated Successfully!')){window.location.reload();}
+    
+                //$scope.resd = response.data.responseDescription;
+            
+                /* $scope.tabeHide = false;
+                $scope.tabeHide2 = true;
+                $scope.res = response.data;
+                $scope.requestStatus = response.data.requestStatus;
+                $scope.bvn = response.data.bvn;
+                $scope.validity = response.data.validity;
+                $scope.signature = response.data.signature;
+                $scope.responseCode = response.data.responseCode;
+                $scope.responseDescription = response.data.responseDescription;
+                $scope.processingStartTime = response.data.processingStartTime; */
+            }
+            else {
+    
+                if(!alert('BVN Validated Failed Due to '+ $scope.resd)){window.location.reload();}
+    
+                //alert($scope.resd);
+                
+            /* 	$scope.res = response.data;
+                $scope.requestStatus = response.data.requestStatus;
+                $scope.bvn = response.data.bvn;
+                $scope.validity = response.data.validity;
+                $scope.signature = response.data.signature;
+                $scope.responseCode = response.data.responseCode;
+                $scope.responseDescription = response.data.responseDescription;
+                $scope.processingStartTime = response.data.processingStartTime; */
+            }
+        });
+    
+     }
+     
+    });
 
 app.controller('appViewCtrl', function ($scope, $http) {
 $scope.isLoader = true;
@@ -19724,8 +19786,8 @@ app.controller('traEnCtrl', function ($scope, $http) {
     }
 });
 app.controller('bvnCtrl', function ($scope, $http) {
-	$scope.tabeHide = true;
-	$scope.tabeHide2 = true;
+	
+	$scope.tablerow = true;
     $http({
         url: '../ajax/load.php',
         method: "POST",
@@ -19735,6 +19797,35 @@ app.controller('bvnCtrl', function ($scope, $http) {
             $scope.partners = response.data;
             $scope.isMainDiv = false;
     });
+	$scope.findlist = function () {
+		$scope.tablerow = false;
+	
+	 $http({
+		 method: 'post',
+		 url: '../ajax/bvncheckajax.php',
+		 data: {
+			BVN: $scope.BVN,
+			FirstName: $scope.FirstName,
+			LastName: $scope.LastName,
+			mobileno: $scope.mobileno,
+			dob: $scope.dob,
+		    action: 'query'
+		 
+		 },
+		 }).then(function successCallback(response) {
+		 $scope.res = response.data;
+		 $scope.requestStatus = response.data.requestStatus;
+		 $scope.bvn = response.data.bvn;
+		 $scope.validity = response.data.validity;
+		 $scope.signature = response.data.signature;
+		 $scope.responseCode = response.data.responseCode;
+		 $scope.responseDescription = response.data.responseDescription;
+		 $scope.processingStartTime = response.data.processingStartTime;
+		 
+		 }, function errorCallback(response) {
+		 // console.log(response);
+		 });
+	   }
 	$scope.query = function () {
         $http({
             method: 'post',
@@ -22024,115 +22115,116 @@ app.controller('agentlistCtrl', function ($scope, $http) {
 });
 
 app.controller('listofagentsCtrl', function ($scope, $http) {
-$scope.startDate = new Date();
-$scope.tablerow = true;
-$scope.endDate = new Date();
-
-$scope.radiochange = function () {
-$scope.tablerow = false;
-}
-$scope.impor =function () {
-     $scope.tablerow = false;
-}
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'champion' }
-}).then(function successCallback(response) {
-$scope.champions = response.data;
-//window.location.reload();
-});
-
-$scope.reset = function () {
-$scope.tablerow = false;
-$scope.orderdetail = true;
-$scope.agentdetail = false;
-$scope.agentName = "ALL";
-$scope.type = "ALL";
-$scope.ba = 'ra';
-}
-$scope.query = function () {
-$scope.tablerow = true;
-$http({
-method: 'post',
-url: '../ajax/listofagentsajax.php',
-data: {
-action: 'getreport',
-state: $scope.state,
-localgovernment: $scope.localgovernment,
-active: $scope.active,
-agentCode: $scope.agentCode,
-championCode: $scope.championCode,
-rpartytype: $scope.rpartytype,
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-var rpartytype = response.data[0].rpartytype;
-$scope.agent_code = response.data[0].agent_code;
-$scope.champion_code =response.data[0].champion_code;
-$scope.champion_name =response.data[0].champion_name;
-
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-
-$scope.countrychange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": 566, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.statechange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (index, agent_code) {
-$http({
-method: 'post',
-url: '../ajax/listofagentsajax.php',
-data: {
-agent_code: agent_code,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.resview = response.data;
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-});
+    $scope.startDate = new Date();
+    $scope.tablerow = true;
+    $scope.endDate = new Date();
+    
+    $scope.radiochange = function () {
+    $scope.tablerow = false;
+    }
+    $scope.impor =function () {
+         $scope.tablerow = false;
+    }
+    
+    $http({
+    url: '../ajax/load.php',
+    method: "POST",
+    //Content-Type: 'application/json',
+    params: { action: 'active', for: 'agents' }
+    }).then(function successCallback(response) {
+    $scope.agents = response.data;
+    //window.location.reload();
+    });
+    
+    $http({
+    url: '../ajax/load.php',
+    method: "POST",
+    //Content-Type: 'application/json',
+    params: { action: 'active', for: 'champion' }
+    }).then(function successCallback(response) {
+    $scope.champions = response.data;
+    //window.location.reload();
+    });
+    
+    $scope.reset = function () {
+    $scope.tablerow = false;
+    $scope.orderdetail = true;
+    $scope.agentdetail = false;
+    $scope.agentName = "ALL";
+    $scope.type = "ALL";
+    $scope.ba = 'ra';
+    }
+    $scope.query = function () {
+    $scope.tablerow = true;
+    $http({
+    method: 'post',
+    url: '../ajax/listofagentsajax.php',
+    data: {
+    action: 'getreport',
+    state: $scope.state,
+    localgovernment: $scope.localgovernment,
+    active: $scope.active,
+    agentCode: $scope.agentCode,
+    championCode: $scope.championCode,
+    rpartytype: $scope.rpartytype,
+    bvn: $scope.bvn,
+    },
+    }).then(function successCallback(response) {
+    $scope.res = response.data;
+    var rpartytype = response.data[0].rpartytype;
+    $scope.agent_code = response.data[0].agent_code;
+    $scope.champion_code =response.data[0].champion_code;
+    $scope.champion_name =response.data[0].champion_name;
+    
+    
+    //alert(code);
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    
+    }
+    
+    $scope.countrychange = function (id) {
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'statelist', "id": 566, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.states = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.statechange = function (id) {
+    $http({
+    method: 'post',
+    url: '../ajax/load.php',
+    params: { for: 'localgvtlist', "id": id, "action": "active" },
+    }).then(function successCallback(response) {
+    $scope.localgvts = response.data;
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    $scope.view = function (index, agent_code) {
+    $http({
+    method: 'post',
+    url: '../ajax/listofagentsajax.php',
+    data: {
+    agent_code: agent_code,
+    action: 'view'
+    },
+    }).then(function successCallback(response) {
+    // $scope.isHide = true;
+    // $scope.isHideOk = false;
+    $scope.resview = response.data;
+    
+    }, function errorCallback(response) {
+    // console.log(response);
+    });
+    }
+    
+    });
 
 app.controller('agentlistCtrl', function ($scope, $http) {
  $scope.startDate = new Date();

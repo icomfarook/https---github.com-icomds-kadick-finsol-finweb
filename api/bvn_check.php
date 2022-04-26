@@ -25,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response["bvn"] = $data->bvn;
 			$response["validity"] = "VALID";
 			$response["signature"] = 100;
-			$response["responseCode"] = "00";
+			$response["responseCode"] = 0;
 			$response["responseDescription"] = "Successful";
 			$response["processingStartTime"] = date('Y-m-d h:i:s');
 		}else {

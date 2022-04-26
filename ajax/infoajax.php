@@ -2,6 +2,9 @@
 	include('../common/sessioncheck.php');
 	include('../common/admin/configmysql.php');
 	include('functions.php');	
+	require '../api/get_prime.php';
+	require '../api/security.php';
+	require '../common/gh/autoload.php';
 	$data = json_decode(file_get_contents("php://input"));
 	$action = $data->action;
 	$profile_id = $_SESSION['profile_id'];	
@@ -25,22 +28,22 @@
 			} 
 			if($partyType == "C") {
 				if($creteria == "SP") {				
-					$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name FROM champion_info a, application_info b WHERE a.application_id = b.application_id and a.champion_code = '$partyCode'";
+					$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.champion_code = '$partyCode'";
 				}				
 				if($creteria == "TP") {				
-					$query = "SELECT a.agent_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name FROM agent_info a, application_info b WHERE a.application_id = b.application_id and a.agent_code = '$partyCode' and a.parent_code = '$sesion_party_code' ";
+					$query = "SELECT a.agent_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.agent_code = '$partyCode' and a.parent_code = '$sesion_party_code' ";
 					if($partyCode == "ALL"){
-					$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name  FROM agent_info a,application_info b WHERE  a.application_id = b.application_id and a.parent_code = '$sesion_party_code'";
+					$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.parent_code = '$sesion_party_code'";
 					
 				}
 				} 
 			}
 			if($partyType == "P") {
-				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name FROM personal_info a, application_info b WHERE a.application_id = b.application_id and a.personal_code = '$partyCode'";
+				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.personal_code = '$partyCode'";
 			}
 			if($partyType == "A") {
 				
-				$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name  FROM agent_info a,application_info b WHERE  a.application_id = b.application_id and a.agent_code = '$partyCode'";
+				$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.agent_code = '$partyCode'";
 				if($creteria == "TP") {
 					$partyType = "S";
 					$query .=" and a.sub_agent = 'Y' and a.parent_code = '$sesion_party_code' ";
@@ -51,16 +54,17 @@
 		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 21 || $profile_id == 22 || $profile_id == 23 || $profile_id == 24 || $profile_id == 25 || $profile_id == 26 || $profile_id == 30) {
 			$partyCode = $data->partyCode;
 			$partyType = $data->partyType;
+			$bvn = $data->bvn;
 			
 			
 			if($partyType == "C") {
-				$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name FROM champion_info a, application_info b WHERE a.application_id = b.application_id and a.champion_code = '$partyCode'";
+				$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.champion_code = '$partyCode'";
 			}
 			if($partyType == "P") {
-				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name FROM personal_info a, application_info b WHERE a.application_id = b.application_id and a.personal_code = '$partyCode'";
+				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.personal_code = '$partyCode'";
 			}
 			if($partyType == "MA" || $partyType == "SA") {
-				$query = "SELECT a.agent_code as party_code,b.outlet_name as party_name, a.login_name FROM agent_info a,application_info b WHERE  a.application_id = b.application_id and a.agent_code = '$partyCode'";
+				$query = "SELECT a.agent_code as party_code,b.outlet_name as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.agent_code = '$partyCode'";
 				if($partyType == "SA") {
 					$query .=" and sub_agent = 'Y'";					
 				}
@@ -82,7 +86,7 @@
 		}
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("partyCode"=>$row['party_code'],"name"=>$row['party_name'],"lname"=>$row['login_name'],"partyType"=>$partyType);           
+			$data[] = array("partyCode"=>$row['party_code'],"name"=>$row['party_name'],"lname"=>$row['login_name'],"bvn"=>$row['Bvn'],"partyType"=>$partyType);           
 		}
 		echo json_encode($data);
 	}
@@ -246,5 +250,129 @@
 		else {
 			 echo "Updated successfully";
 		}
+	}
+
+
+
+	if($action == "getbvn") {		
+
+		$partyCode = $data->partyCode;
+		error_log("partyCode ==".$partyCode);
+		$userId = $_SESSION['user_id'];
+		$dob = date("Y-m-d", strtotime($dob));	
+
+
+		$PreAppQuery = "SELECT a.pre_application_info_id,c.first_name,c.last_name, a.country_id, a.outlet_name, a.bvn, a.tax_number, a.address1, a.address2, a.local_govt_id, a.state_id, a.mobile_no, a.work_no, a.email, a.language_id, a.contact_person_name, a.contact_person_mobile,a.loc_latitude, a.loc_longitude, a.comments,a.dob,a.gender,a.business_type FROM pre_application_info a,agent_info b,user c WHERE a.application_id = b.application_id   and b.user_id = c.user_id and b.agent_code = '$partyCode'";
+		error_log("PreAppQuery ==".$PreAppQuery);
+		$selectresult =  mysqli_query($con,$PreAppQuery);
+			$row = mysqli_fetch_assoc($selectresult);
+		    $Preid = $row['pre_application_info_id'];
+			$firstName = $row['first_name'];
+	    	$lastName= $row['last_name'];
+			$countryid = $row['country_id'];
+			$dob = $row['dob'];
+			$localgovernmentid = $row['local_govt_id'];
+			$stateid = $row['state_id'];
+			$phone = $row['mobile_no'];
+			$bvn = $row['bvn'];
+       		if($selectresult){
+			$create_user = $_SESSION['user_id'];
+			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
+			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
+			if(!$get_sequence_number_result) {
+				error_log('Get sequnce number 2 failed: ' . mysqli_error($con));
+				echo "GETSEQ - Failed";				
+		}	
+		else {
+			$get_sequence_num_row = mysqli_fetch_assoc($get_sequence_number_result);
+			$id = $get_sequence_num_row['id'];
+			$reqMsg = "{bvn: ".$bvn.", firstName: ".$firstName.",lastname: ".$lastName.",dob:".$dob.",phone:".$phone."}";
+			$query =  "INSERT INTO fin_non_trans_log (fin_non_trans_log_id, service_feature_id, bank_id,source,message_send_time, create_user, create_time, request_message ) VALUES ($id, 19,NULL,'F', now(), $create_user, now(), '$reqMsg')";
+			error_log($query);
+			$result = mysqli_query($con,$query);
+			if (!$result) {
+				echo "Error: %s\n". mysqli_error($con);
+			}
+			else {
+				$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid);
+				$api_response = json_decode($res, true);
+				$response_code = $api_response['responseCode'];
+				$res_description = $api_response['responseDescription'];
+				$description = $api_response['description'];
+				$query1 = "UPDATE fin_non_trans_log SET response_message ='$res', message_receive_time = now(), response_received = 'Y', error_code = '$response_code', error_description = '$res_description' where fin_non_trans_log_id = $id ";                 
+				$result = mysqli_query($con,$query1);
+				error_log("After Success Response Update Que".$query1);
+
+				 if($result) {
+                    $SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
+					error_log("SelectQuery ==".$SelectQuery);
+					$Selectresult =  mysqli_query($con,$SelectQuery);
+					$count = mysqli_num_rows($Selectresult);
+						error_log($count);
+						if($count > 0) { 
+							$updateQuery ="update pre_application_info set bvn_validated='Y',trans_log_id=$id where pre_application_info_id = $Preid";
+							error_log("updateQuery ==".$updateQuery);
+							$UpdateResult = mysqli_query($con,$updateQuery);
+							
+							
+							
+						}
+						error_log("Error in Select Fin Non Trans Log  Statment");
+						
+				  }
+				  error_log("Error in After Success Response Update Query");
+				 
+
+			}
+			error_log("Error in Sending Request");
+		
+		}
+			
+		
+		error_log("respnse = ".$res);		
+	}	
+	echo $res;
+	//error_log("Error in Select Pre Application Info Statment".$PreAppQuery);
+}
+		
+	function sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid) {	
+		error_log("entering sendRequest");
+		date_default_timezone_set('Africa/Lagos');
+		$nday = date('z')+1;
+		$nyear = date('Y');
+		$nth_day_prime = get_prime($nday);
+		$nth_year_day_prime = get_prime($nday+$nyear);
+		$signature = $nday + $nth_day_prime;
+		$tsec = time();
+		$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
+		error_log("raw_data1 = ".$raw_data1);	
+		$key1 = base64_encode($raw_data1);
+		error_log("before calling post");
+		error_log("url = ".FINAPI_SERVER_BVN_CHECK_URL);		
+		$body['countryId'] = $countryid;
+		$body['stateId'] =  $stateid;
+		$body['localGovtId'] =  $localgovernmentid;
+		$body['userId'] = $userId;
+		$body['firstName'] = $firstName;
+		$body['lastName'] = $lastName;
+		$body['phone'] = $phone;
+		$body['dob'] = $dob;
+		$body['bvn'] = $bvn;
+		$body['key1'] = $key1;
+		$body['signature'] = $signature;
+		error_log("request sent ==> ".json_encode($body));
+		$ch = curl_init(FINAPI_SERVER_BVN_CHECK_URL);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
+		curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type:application/json'));
+		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+		curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, FINAPI_SERVER_CONNECT_TIMEOUT);
+		curl_setopt($ch, CURLOPT_TIMEOUT, FINAPI_SERVER_REQUEST_TIMEOUT);
+		$response = curl_exec($ch);
+		$httpcode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+		curl_close($ch);
+		error_log("response received <== ".$response);
+		error_log("code ".$httpcode);
+		error_log("exiting sendRequest");
+      	return $response;
 	}
 ?>	

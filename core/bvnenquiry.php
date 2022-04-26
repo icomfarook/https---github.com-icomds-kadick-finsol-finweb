@@ -46,8 +46,8 @@
 			
 			<div class="box-content no-padding"  data-backdrop="static" data-keyboard="false" >	
 			<div  style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
-				<form name='bvnEnqForm ' method='POST'>	
-
+				<form name='bvnEnqForm' id="bvnEnqForm" method='POST'>	
+				<div class='row appcont'>	
 				<!-- Bank val Screen Coding Below -->
 					<!--- <div class='row appcont'>	
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>										
@@ -65,40 +65,39 @@
 							</select>
 						</div>	 --->
 
-					<div class='row appcont'>	
+				
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>										
 							<label><?php echo BVN_ENQUIRY_MAIN_BVN; ?><span class='spanre'>*</span>
 							<span ng-show="bvnEnqForm.BVN.$dirty && bvnEnqForm.BVN.$invalid">
-							<span class = 'err' ng-show="bvnEnqForm.BVN.$error.required"><?php echo REQUIRED;?></span></span></label>	
-							<input type='text' name='BVN' ng-model='BVN' maxlength="11" placeholder='<?php echo BVN_ENQUIRY_MAIN_PLACE_HOLDER_BANK_VER_NO; ?>' class='form-control'/>										
+								<span class = 'err'  ng-show="bvnEnqForm.BVN.$error.required"><?php echo REQUIRED;?></span></span></label>	
+							<input type='text' name='BVN' ng-model='BVN' id='BVN' maxlength="11" placeholder='<?php echo BVN_ENQUIRY_MAIN_PLACE_HOLDER_BANK_VER_NO; ?>' class='form-control'/>										
 						</div>
 						
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>First Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.FirstName.$touched ||bvnEnqForm.FirstName.$dirty && bvnEnqForm.FirstName.$invalid">
-								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="bvnEnqForm.FirstName.$error.required"><?php echo REQUIRED;?><span style="color:Red" ng-show="bvnEnqForm.FirstName.$dirty && bvnEnqForm.FirstName.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></span></label>
-								<input  ng-model="FirstName" spl-char-not type='text' ng-disabled='isInputDisabled' id='FirstName' maxlength='50' name='FirstName' ng-minlength="4" required class='form-control'/>
+								<label>First Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.FirstName.$dirty && bvnEnqForm.FirstName.$invalid">
+								<span class = 'err'  ng-show="bvnEnqForm.FirstName.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<input  ng-model="FirstName" spl-char-not type='text'  id='FirstName' maxlength='50' name='FirstName' ng-minlength="4" required class='form-control'/>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Last Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.LastName.$touched ||bvnEnqForm.LastName.$dirty && bvnEnqForm.LastName.$invalid">
-								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="bvnEnqForm.LastName.$error.required"><?php echo REQUIRED;?><span style="color:Red" ng-show="bvnEnqForm.LastName.$dirty && bvnEnqForm.LastName.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></span></label>
-								<input  ng-model="LastName" spl-char-not type='text' ng-disabled='isInputDisabled' id='LastName' maxlength='50' name='LastName' ng-minlength="4" required class='form-control'/>
+								<label>Last Name<span class='spanre'>*</span><span ng-show="bvnEnqForm.LastName.$dirty && bvnEnqForm.LastName.$invalid">
+								<span class = 'err'  ng-show="bvnEnqForm.LastName.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<input  ng-model="LastName" spl-char-not type='text'  id='LastName' maxlength='50' name='LastName' ng-minlength="4" required class='form-control'/>
 							</div>
 							</div>
 							<div class='row appcont'>	
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label><?php echo APPLICATION_ENTRY_MOBILE_NO; ?><span class='spanre'>*</span><span ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$invalid">
-									</span></label><span style="color:Red" ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$error.minlength && bvnEnqForm.mobileno.$error.pattern"> <?php echo MIN_11_NUMBERS_REQUIRED; ?> & Starting Number Want to be 0 </span>
+								<label><?php echo APPLICATION_ENTRY_MOBILE_NO; ?><span class='spanre'>*</span><span ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$invalid"><span class = 'err'  ng-hide = "isMsgSpan" ng-message="required"></span></span></label><span style="color:Red" ng-show="bvnEnqForm.mobileno.$dirty && bvnEnqForm.mobileno.$error.minlength"> <?php echo MIN_11_NUMBERS_REQUIRED; ?>,Starting Number Want to be 0 </span>
 									
-								<input ng-model="mobileno" numbers-only type='text' ng-disabled='isInputDisabled' id='Mobile No' ng-minlength="11" maxlength='11' name='mobileno' ng-pattern="/(^0$)|(^[1-9]\d{0,8}$)/"  required class='form-control'/>
+								<input ng-model="mobileno" numbers-only type='text'  id='mobileno' ng-minlength="11" maxlength='11' name='mobileno'   required class='form-control'/>
 							</div>	
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Date of Birth<span class='spanre'>*</span><span ng-show="bvnEnqForm.dob.$touched ||bvnEnqForm.dob.$dirty && bvnEnqForm.dob.$invalid">
-								<span class = 'err'   ng-show="bvnEnqForm.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input  ng-model="dob" ng-disabled='isInputDisabled' type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
+								<label>Date of Birth<span class='spanre'>*</span><span ng-show="bvnEnqForm.dob.$dirty && bvnEnqForm.dob.$invalid">
+								<span class = 'err'  ng-show="bvnEnqForm.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<input  ng-model="dob"  type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
 						</div>
 						 <div  class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 						 <br />
-							<button type="button" class="btn btn-primary"  ng-disabled='bvnEnqForm.$invalid' ng-click='bvnEnqForm.$invalid=true;findlist()' ng-hide='isHide'  id="Query"><?php echo BVN_ENQUIRY_MAIN_BUTTON_QUERY; ?></button>
+							<button type="button" class="btn btn-primary"  disabled ng-click='bvnEnqForm.$invalid=true;findlist()' ng-hide='isHide'  id="Query"><?php echo BVN_ENQUIRY_MAIN_BUTTON_QUERY; ?></button>
 							<button type="button" class="btn btn-primary"   id="Refresh"><?php echo BVN_ENQUIRY_MAIN_BUTTON_REFRESH; ?></button>
 						</div>
 					</div>		
@@ -236,7 +235,46 @@
 // Run Datables plugin and create 3 variants of settings
 
 $(document).ready(function() {
+
+
+	{
+  const btn = document.getElementById("Query");
+  const BVN = document.getElementById("BVN");
+  const FirstName = document.getElementById("FirstName");
+  const LastName = document.getElementById("LastName");
+  const mobileno = document.getElementById("mobileno");
+  const dob = document.getElementById("dob");
  
+  deactivate()
+  
+  function activate() {
+    btn.disabled = false;
+  }
+  
+  function deactivate() {
+    btn.disabled = true;
+  }
+
+  function check() {
+    if (BVN.value != '' && FirstName.value != '' && LastName.value != '' && mobileno.value != '' && dob.value != '') {
+      activate()
+    } else {
+      deactivate()
+    }
+  }
+  
+  btn.addEventListener('click', function(e) {
+    
+  })
+  
+  
+  BVN.addEventListener('input', check)
+  FirstName.addEventListener('input', check)
+  LastName.addEventListener('input', check)
+  mobileno.addEventListener('input', check)
+  dob.addEventListener('input', check)
+  
+}
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});

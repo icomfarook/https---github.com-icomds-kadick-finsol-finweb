@@ -13636,6 +13636,7 @@ $scope.TransferBody = response.data;
    $scope.msguser = "";
    $scope.Success = false;
    $scope.Failure = false;
+   $scope.BVNBtn = false;
    $scope.ApplicatioTransferDForm.$setUntouched();
    $scope.ApplicatioTransferDForm.$setPristine();
   }
@@ -13723,10 +13724,11 @@ $scope.isSelectDisabled = false;
 
   }
  }
- $scope.Getbvn = function(id){
+ $scope.Getbvn = function(id){  
+	$scope.BVNBtn = false;
 	$scope.isSelectDisabledType = false;
 	$scope.isSelectDisabled = false;
-	alert("Plese Wait for The Response");
+	alert("Please wait, while we validate the BVN");
 
 	$http({
 		method: 'post',
@@ -13739,10 +13741,12 @@ $scope.isSelectDisabled = false;
 		$scope.resc = response.data.responseCode;
 		//alert($scope.resc);
 		if(parseInt($scope.resc) == 0) {
+			$scope.BVNBtn = true;
 			$scope.isSelectDisabledType = false;
            $scope.isSelectDisabled = false;
 		   $scope.Success = true;
 		   $scope.Failure = false;
+		   $scope.labelHide = true;
 			/* $scope.tabeHide = false;
 			$scope.tabeHide2 = true;
 			$scope.res = response.data;
@@ -13755,10 +13759,12 @@ $scope.isSelectDisabled = false;
 			$scope.processingStartTime = response.data.processingStartTime; */
 		}
 		else {
+			$scope.BVNBtn = true;
 			$scope.isSelectDisabledType = true;
 	         $scope.isSelectDisabled = true;
 			 $scope.Success = false;
-		   $scope.Failure = true;
+		  	 $scope.Failure = true;
+		   	$scope.labelHide = true;
 		/* 	$scope.res = response.data;
 			$scope.requestStatus = response.data.requestStatus;
 			$scope.bvn = response.data.bvn;
@@ -14353,6 +14359,8 @@ creteria:$scope.creteria
 },
 }).then(function successCallback(response) {
 $scope.infoss = response.data;
+$scope.bvn = response.data[0].bvn;
+
 }, function errorCallback(response) {
 console.log(response.data);
 });
@@ -14525,6 +14533,60 @@ $("#infoBody").html("<h3>" + response.data + "</h3>");
 console.log(response);
 });
 }
+
+$scope.Getbvn = function(index, partyCode, partyType, creteria){  
+	
+	alert("Please wait, while we validate the BVN");
+
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: {
+			action: 'getbvn',
+			partyCode:partyCode,
+		},
+	}).then(function successCallback(response) {
+		
+		$scope.resc = response.data.responseCode;
+		$scope.resd = response.data.responseDescription;
+
+		
+		if(parseInt($scope.resc) == 0) {
+			
+			if(!alert('BVN Validated Successfully!')){window.location.reload();}
+
+			//$scope.resd = response.data.responseDescription;
+		
+			/* $scope.tabeHide = false;
+			$scope.tabeHide2 = true;
+			$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+		else {
+
+			if(!alert('BVN Validated Failed Due to '+ $scope.resd)){window.location.reload();}
+
+			//alert($scope.resd);
+			
+		/* 	$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+	});
+
+ }
+ 
 });
 
 
@@ -18035,6 +18097,7 @@ app.controller('traEnCtrl', function ($scope, $http) {
     }
 });
 app.controller('bvnCtrl', function ($scope, $http) {
+	
 	$scope.tablerow = true;
     $http({
         url: '../ajax/load.php',
@@ -18047,6 +18110,7 @@ app.controller('bvnCtrl', function ($scope, $http) {
     });
 	$scope.findlist = function () {
 		$scope.tablerow = false;
+	
 	 $http({
 		 method: 'post',
 		 url: '../ajax/bvncheckajax.php',
@@ -18068,6 +18132,7 @@ app.controller('bvnCtrl', function ($scope, $http) {
 		 $scope.responseCode = response.data.responseCode;
 		 $scope.responseDescription = response.data.responseDescription;
 		 $scope.processingStartTime = response.data.processingStartTime;
+		 
 		 }, function errorCallback(response) {
 		 // console.log(response);
 		 });
@@ -21312,6 +21377,7 @@ active: $scope.active,
 agentCode: $scope.agentCode,
 championCode: $scope.championCode,
 rpartytype: $scope.rpartytype,
+bvn: $scope.bvn,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
