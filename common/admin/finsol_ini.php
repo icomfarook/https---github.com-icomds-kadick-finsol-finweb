@@ -197,9 +197,10 @@ define ("MPOS_NIBSS_CONNECT_COMP1", "BF862532E057460B0823F1FD944C08D5");
 define ("MPOS_NIBSS_CONNECT_COMP2", "0D3B01DAD0A26E58EAC4EF8662ADD6F2");
 define ("MPOS_NIBSS_CONNECT_TIMEOUT", "60000");
 
-define ("PRE_APP_ENTRY_ATTACHMENT_LOCATION","D:/vlapos/finweb/pre/");
-define ("APP_ENTRY_ATTACHMENT_LOCATION1","D:/vlapos/finweb/app/id/");
-define ("APP_ENTRY_ATTACHMENT_LOCATION2","D:/vlapos/finweb/app/business/");
+define ("PRE_APP_ENTRY_ATTACHMENT_LOCATION","C:/vlapos/finweb/pre/");
+define ("APP_ENTRY_ATTACHMENT_LOCATION1","C:/vlapos/finweb/app/id/");
+define ("APP_ENTRY_ATTACHMENT_LOCATION2","C:/vlapos/finweb/app/business/");
+define ("APP_ENTRY_ATTACHMENT_LOCATION3","C:/vlapos/finweb/app/signature/");
 
 define("AGENT_SESSION_VALID_TIME", "00:59:59");
 define("AGENT_FULL_DAY_SESSION_VALID_TIME", "23:59:59");

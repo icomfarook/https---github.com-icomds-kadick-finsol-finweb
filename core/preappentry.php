@@ -179,11 +179,19 @@
 								<input ng-model="mobileno" numbers-only type='text'  id='Mobile No' ng-minlength="11" maxlength='11' name='mobileno' required class='form-control'/>
 							</div>	
 					
-							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo PRE_APPLICATION_ENTRY_EMAIL; ?><span class='spanre'>*</span><span ng-show="PreApplicationEntryForm.email.$touched ||PreApplicationEntryForm.email.$dirty && PreApplicationEntryForm.email.$invalid">
 								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="PreApplicationEntryForm.email.$error.required"><?php echo REQUIRED;?></span></span>
 								<span   style="color:Red" ng-show="PreApplicationEntryForm.email.$dirty&&PreApplicationEntryForm.email.$error.pattern"><?php echo PRE_APPLICATION_ENTRY_EMAIL_PLEASE_ENTER_VALID_EMAIL;?>.</span></label>
 								<input  ng-model="email" type='email' ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" id='Email' maxlength='75' required name='email' class='form-control'/>
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label><?php echo APPLICATION_ENTRY_LANGUAGE_PREFRENCE; ?><span class='spanre'>*</span><span ng-show="PreApplicationEntryForm.langpref.$touched ||PreApplicationEntryForm.langpref.$dirty && PreApplicationEntryForm.langpref.$invalid">
+								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="PreApplicationEntryForm.langpref.$error.required"><?php echo REQUIRED;?></span></span><span style="color:Red" ng-show="PreApplicationEntryForm.langpref.$dirty && applicationEntryForm.langpref.$error.minlength">  </span></label>
+								<select ng-disabled='isInputDisabled' ng-model="langpref"   class='form-control' name = 'langpref' id='langpref' required class='form-control'>											
+									<option value=''><?php echo APPLICATION_ENTRY_LANGUAGE_PREFRENCE_SELECT; ?></option>	
+									<option ng-repeat="lang in langs" value="{{lang.id}}">{{lang.name}}</option>									
+								</select>
 							</div>
 							
 						</div>
@@ -249,19 +257,22 @@
 						</div>
 						
 						<div class='row appcont' style='margin-top: -20px;'>
-							<div class='col-lg-9 col-xs-12 col-sm-12 col-md-12'>
+						<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
+							<label><?php echo "Signature Document"; ?></label>
+							<div style='display:flex;'>
+								<input id="signatureDocument"  placeholder="Choose File"  disabled="disabled" class='form-control' />
+								<div ng-disabled='isInputDisabled'  class="fileUpload btn btn-primary" style='bottom:8px;' >
+									<span>Upload</span>
+									<input type="file" accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'   ng-model="attachment3" class="upload" id="attachment3">
+								</div>
+								</div>
+								</div>
+							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo APPLICATION_ENTRY_COMMENT; ?></label>
 								<input  ng-model="comment" type='text' ng-disabled='isInputDisabled' id='Comment' maxlength='256' name='comment' class='form-control'/>
 							</div>
 							
-							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-								<label><?php echo APPLICATION_ENTRY_LANGUAGE_PREFRENCE; ?><span class='spanre'>*</span><span ng-show="PreApplicationEntryForm.langpref.$touched ||PreApplicationEntryForm.langpref.$dirty && PreApplicationEntryForm.langpref.$invalid">
-								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="PreApplicationEntryForm.langpref.$error.required"><?php echo REQUIRED;?></span></span><span style="color:Red" ng-show="PreApplicationEntryForm.langpref.$dirty && applicationEntryForm.langpref.$error.minlength">  </span></label>
-								<select ng-disabled='isInputDisabled' ng-model="langpref"   class='form-control' name = 'langpref' id='langpref' required class='form-control'>											
-									<option value=''><?php echo APPLICATION_ENTRY_LANGUAGE_PREFRENCE_SELECT; ?></option>	
-									<option ng-repeat="lang in langs" value="{{lang.id}}">{{lang.name}}</option>									
-								</select>
-							</div>
+							
 						</div>
 						
 						</div>
@@ -314,6 +325,13 @@ document.getElementById("attachment2").onchange = function () {
     document.getElementById("CompanyDocument").value =username+ '_BD_'+n+ '.' + ext;
 	document.getElementById("attachment2").value =username+ '_BD_'+n+ '.' + ext;
 };
+
+document.getElementById("attachment3").onchange = function () {
+	var ext = $('#attachment3').val().split('.').pop();
+    document.getElementById("signatureDocument").value =username+ '_SIG_'+n+ '.' + ext;
+	document.getElementById("attachment3").value =username+ '_SIG_'+n+ '.' + ext;
+};
+
     $('#attachment').change(function(e){
 		 var fileInput = $('#attachment');
 		 var maxSize = fileInput.data('max-size');
@@ -338,4 +356,18 @@ document.getElementById("attachment2").onchange = function () {
                 return false;
             }
     });
+	$('#attachment3').change(function(e){
+		 var fileInput = $('#attachment3');
+		 var maxSize = fileInput.data('max-size');
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+            if(fileSize>maxSize){
+                alert('file size is more than ' + 2 + ' mb');
+				document.getElementById("attachment3").value ="";
+				document.getElementById("signatureDocument").value ="";
+
+                return false;
+            }
+    });
+
+	
 </script>

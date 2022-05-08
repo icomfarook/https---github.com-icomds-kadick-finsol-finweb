@@ -28,22 +28,22 @@
 			} 
 			if($partyType == "C") {
 				if($creteria == "SP") {				
-					$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.champion_code = '$partyCode'";
+					$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b  WHERE    a.application_id = b.application_id and a.champion_code = '$partyCode'";
 				}				
 				if($creteria == "TP") {				
-					$query = "SELECT a.agent_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.agent_code = '$partyCode' and a.parent_code = '$sesion_party_code' ";
+					$query = "SELECT a.agent_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a, application_info b  WHERE    a.application_id = b.application_id and a.agent_code = '$partyCode' and a.parent_code = '$sesion_party_code' ";
 					if($partyCode == "ALL"){
-					$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.parent_code = '$sesion_party_code'";
+					$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b  WHERE     a.application_id = b.application_id and a.parent_code = '$sesion_party_code'";
 					
 				}
 				} 
 			}
 			if($partyType == "P") {
-				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.personal_code = '$partyCode'";
+				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b  WHERE    a.application_id = b.application_id and a.personal_code = '$partyCode'";
 			}
 			if($partyType == "A") {
 				
-				$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.agent_code = '$partyCode'";
+				$query = "SELECT a.agent_code as party_code,if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn  FROM agent_info a,application_info b  WHERE     a.application_id = b.application_id and a.agent_code = '$partyCode'";
 				if($creteria == "TP") {
 					$partyType = "S";
 					$query .=" and a.sub_agent = 'Y' and a.parent_code = '$sesion_party_code' ";
@@ -58,13 +58,13 @@
 			
 			
 			if($partyType == "C") {
-				$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.champion_code = '$partyCode'";
+				$query = "SELECT a.champion_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM champion_info a, application_info b  WHERE    a.application_id = b.application_id and a.champion_code = '$partyCode'";
 			}
 			if($partyType == "P") {
-				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b,pre_application_info p WHERE a.application_id = p.application_id and a.application_id = b.application_id and a.personal_code = '$partyCode'";
+				$query = "SELECT a.personal_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM personal_info a, application_info b  WHERE    a.application_id = b.application_id and a.personal_code = '$partyCode'";
 			}
 			if($partyType == "MA" || $partyType == "SA") {
-				$query = "SELECT a.agent_code as party_code,b.outlet_name as party_name, a.login_name,ifNULL(if(p.bvn_validated = 'Y','Y-Yes',if(p.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a,application_info b,pre_application_info p WHERE a.application_id = p.application_id and  a.application_id = b.application_id and a.agent_code = '$partyCode'";
+				$query = "SELECT a.agent_code as party_code,b.outlet_name as party_name, a.login_name,ifNULL(if(b.bvn_validated = 'Y','Y-Yes',if(b.bvn_validated ='N','N-No','-')),'-') as Bvn FROM agent_info a,application_info b  WHERE     a.application_id = b.application_id and a.agent_code = '$partyCode'";
 				if($partyType == "SA") {
 					$query .=" and sub_agent = 'Y'";					
 				}
@@ -262,7 +262,7 @@
 		$dob = date("Y-m-d", strtotime($dob));	
 
 
-		$PreAppQuery = "SELECT a.pre_application_info_id,c.first_name,c.last_name, a.country_id, a.outlet_name, a.bvn, a.tax_number, a.address1, a.address2, a.local_govt_id, a.state_id, a.mobile_no, a.work_no, a.email, a.language_id, a.contact_person_name, a.contact_person_mobile,a.loc_latitude, a.loc_longitude, a.comments,a.dob,a.gender,a.business_type FROM pre_application_info a,agent_info b,user c WHERE a.application_id = b.application_id   and b.user_id = c.user_id and b.agent_code = '$partyCode'";
+		$PreAppQuery = "SELECT d.pre_application_info_id,a.application_id,a.first_name,a.last_name, a.country_id, a.outlet_name, a.bvn, a.tax_number, a.address1, a.address2, a.local_govt_id, a.state_id, a.mobile_no, a.work_no, a.email, a.language_id, a.contact_person_name, a.contact_person_mobile,a.loc_latitude, a.loc_longitude,a.dob,a.gender,a.business_type FROM application_info a,agent_info b,user c,pre_application_info d WHERE a.application_id = b.application_id   and b.user_id = c.user_id  and a.application_id = d.application_id and b.agent_code ='$partyCode'";
 		error_log("PreAppQuery ==".$PreAppQuery);
 		$selectresult =  mysqli_query($con,$PreAppQuery);
 			$row = mysqli_fetch_assoc($selectresult);

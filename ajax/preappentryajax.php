@@ -1,17 +1,23 @@
 <?php
 	include('../common/admin/configmysql.php');
 	include('../common/sessioncheck.php');
+	require '../api/get_prime.php';
+	require '../api/security.php';
+	require '../common/gh/autoload.php';
+	
 	$data = json_decode(file_get_contents("php://input"));		
 	$location = PRE_APP_ENTRY_ATTACHMENT_LOCATION;
 	$action = $_POST['action'];
+
 	$countfiles = count($_FILES['file']['name']);
 	//$filename_arr = array(); 
 	$filename = $_FILES['file']['name'][0];  
 	$filename2 = $_FILES['file2']['name'][0];
-     	$currentTime = date('Ymdhis',time());
+	$filename3 = $_FILES['file3']['name'][0];
+    $currentTime = date('Ymdhis',time());
 	 error_log("file : ".$_FILES['file']['name'][0]);	
 	//$check = filesize ($filename); 
-	$createuser = $_SESSION['user_id'];
+	$userId = $_SESSION['user_id'];
 	$countryid    = $_POST['country'];
 	$outletname =mysqli_real_escape_string($con,$_POST['outletname']);
 	$taxnumber= $_POST['taxnumber'];
@@ -38,6 +44,7 @@
 	$lastName = $_POST['lastName'];
 	$attachment = $_POST['attachment'];
 	$attachment2 = $_POST['attachment2'];
+	$attachment3 = $_POST['attachment3'];
 	$version = 1;
 	$dob = date("Y-m-d", strtotime($dob. "+1 days"));
 	
@@ -55,21 +62,32 @@
 	if (!in_array($filetype2, $allowed)) {
 		$filetype2 =	'oth';
 	}
+	$filetype3 =  mysqli_real_escape_string($con,pathinfo($location.$filetype3, PATHINFO_EXTENSION));
+	//error_log("filetype = ".$filetype2);
+	$allowed = array('pdf','png','jpg');
+
+	if (!in_array($filetype3, $allowed)) {
+		$filetype3 =	'oth';
+	}
 	$filename = $_SESSION['user_name']."_ID_".$currentTime.".".$filetype;
 	$filename2 = $_SESSION['user_name']."_BD_".$currentTime.".".$filetype2;
+	$filename3 = $_SESSION['user_name']."_SIG_".$currentTime.".".$filetype3;
 
  	//$check = filesize ($filename);   
     	//error_log("filename1".$filename);
 	//error_log("filename2".$filename2);
 	move_uploaded_file($_FILES['file']['tmp_name'][0],$location.$filename);  
 	move_uploaded_file($_FILES['file2']['tmp_name'][0],$location.$filename2);
+	move_uploaded_file($_FILES['file3']['tmp_name'][0],$location.$filename3);
     	$content = file_get_contents($location.$filename);	
 	$content = base64_encode($content);	
 	//error_log("conten1".$content);	
 	$content2 = file_get_contents($location.$filename2);
 	$content2 = base64_encode($content2);
 	//error_log("content2".$content2);
-	
+	$content3 = file_get_contents($location.$filename3);
+	$content3 = base64_encode($content3);
+	error_log("content3".$content2);
 	if($action == "create") {		
 		require_once("mailfunction.php");
 		$get_sequence_number_query = "SELECT get_sequence_num(2100) as application_id";
@@ -87,7 +105,7 @@
 			 if ($select_bvn_result) {
              $select_bvn_count = mysqli_num_rows($select_bvn_result);
            	if ( $select_bvn_count == 0 ) {
-			$pre_application_query = "INSERT INTO pre_application_info (pre_application_info_id, country_id,first_name,last_name, bvn,dob,gender, outlet_name, business_type,tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) VALUES ($application_id, $countryid,'$firstName','$lastName','$bvn','$dob','$gender', '$outletname',$BusinessType, '$taxnumber', '$address1', '$address2', $localgovernmentid, $stateid, '$mobileno', '$workno', '$email', $langpref, '$cname', '$cmobile','$Latitude', '$Longitude', '$comment','E', $createuser, now())";
+			$pre_application_query = "INSERT INTO pre_application_info (pre_application_info_id, country_id,first_name,last_name, bvn,dob,gender, outlet_name, business_type,tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) VALUES ($application_id, $countryid,'$firstName','$lastName','$bvn','$dob','$gender', '$outletname',$BusinessType, '$taxnumber', '$address1', '$address2', $localgovernmentid, $stateid, '$mobileno', '$workno', '$email', $langpref, '$cname', '$cmobile','$Latitude', '$Longitude', '$comment','E', $userId, now())";
 			error_log("pre_application_query ".$pre_application_query);
 			$pre_application_result =  mysqli_query($con,$pre_application_query);
 			if(!$pre_application_result) {
@@ -105,7 +123,14 @@
 				$query2 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename2','$filetype2','$content2', 'C')";
 				error_log("Company query2 =".$query2);
 				$result2 = mysqli_query($con,$query2);
+				$content3 = mysqli_real_escape_string($con,$content3);
 				}
+				
+				if($content3 != ''){
+					$query3 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename3','$filetype3','$content3', 'S')";
+					error_log("Signature query3 =".$query3);
+					$result3 = mysqli_query($con,$query3);
+					}
                 		if(!$result1) {
 					echo "FILE-ATTACHMENT - Failed";				
 					die('Pre Application file attachment failed: ' . mysqli_error($con));
@@ -134,4 +159,87 @@
 			 }
 		}
 	}
+
+	else if($action =="Uploadattachment"){
+		$pre_application_attachment_id1 = $_POST['pre_application_attachment_id1'];
+		$pre_application_info_id1 = $_POST['pre_application_info_id1'];
+		$pre_application_attachment_id2 = $_POST['pre_application_attachment_id2'];
+		$pre_application_info_id2 = $_POST['pre_application_info_id2'];
+		$pre_application_attachment_id3 = $_POST['pre_application_attachment_id3'];
+		$pre_application_info_id3 = $_POST['pre_application_info_id3'];
+
+		error_log("inside");
+		error_log("pre_application_info_id1 =".$pre_application_info_id1);
+		error_log("pre_application_attachment_id1 =".$pre_application_attachment_id1);
+		error_log("pre_application_info_id2 =".$pre_application_info_id2);
+		error_log("pre_application_attachment_id2 =".$pre_application_attachment_id2);
+		error_log("pre_application_info_id3 =".$pre_application_info_id3);
+		error_log("pre_application_attachment_id3 =".$pre_application_attachment_id3);
+		
+		$selectquery ="select file from pre_application_attachment where pre_application_attachment_id='$pre_application_attachment_id1'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		$row = mysqli_fetch_assoc($select_result);
+		$file = $row['file'];
+		error_log("file".$file);
+		if($file == "I"){
+			$content = mysqli_real_escape_string($con,$content);
+			//error_log("content".$content);
+			$query1 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id1, '$filename','$filetype','$content','I')";
+			error_log("ID doc =".$query1);
+			$result1 = mysqli_query($con,$query1);
+			if($result1){
+				$DeletePreAttach ="Delete from pre_application_attachment where file='I' and  pre_application_attachment_id='$pre_application_attachment_id1'";
+				$DeletePreAttachresult = mysqli_query($con,$DeletePreAttach);
+				error_log("DeletePreAttach =".$DeletePreAttach);
+			}
+		}
+
+		$selectquery ="select file from pre_application_attachment where pre_application_attachment_id='$pre_application_attachment_id2'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		$row = mysqli_fetch_assoc($select_result);
+		$file = $row['file'];
+		error_log("file".$file);
+		if($file == "C"){
+			$content2 = mysqli_real_escape_string($con,$content2);
+			if($content2 != ''){
+			$query2 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id2, '$filename2','$filetype2','$content2', 'C')";
+			error_log("Company query2 =".$query2);
+			$result2 = mysqli_query($con,$query2);
+			if($result2){
+				$DeletePreAttach2 ="Delete from pre_application_attachment where file='C' and  pre_application_attachment_id='$pre_application_attachment_id2'";
+				$DeletePreAttachresult2 = mysqli_query($con,$DeletePreAttach2);
+				error_log("DeletePreAttach2 =".$DeletePreAttach2);
+			}
+		}
+	}
+
+		$selectquery ="select file from pre_application_attachment where pre_application_attachment_id='$pre_application_attachment_id3'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		$row = mysqli_fetch_assoc($select_result);
+		$file = $row['file'];
+		error_log("file".$file);
+	
+if($file == "S"){
+		$content3 = mysqli_real_escape_string($con,$content3);
+		if($content3 != ''){
+			$query3 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id3, '$filename3','$filetype3','$content3', 'S')";
+			error_log("Signature query3 =".$query3);
+			$result3 = mysqli_query($con,$query3);
+			if($result3){
+				$DeletePreAttach3 ="Delete from pre_application_attachment where file='S' and  pre_application_attachment_id='$pre_application_attachment_id3'";
+				$DeletePreAttachresult3 = mysqli_query($con,$DeletePreAttach3);
+				error_log("DeletePreAttachresult3 =".$DeletePreAttach3);
+			}
+			}
+			echo "Your Application Attachments submitted successfully";
+		}
+	
+	}
+
+		
+
+	
 ?>	

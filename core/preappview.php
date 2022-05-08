@@ -17,6 +17,23 @@ $profile_id  = $_SESSION['profile_id'];
 .labspa {
 	color:blue;
 }
+.fileUpload {
+    position: relative;
+  
+    margin: 10px;
+}
+.fileUpload input.upload {
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    font-size: 20px;
+    cursor: pointer;
+    opacity: 0;
+    filter: alpha(opacity=0);
+	width: 62px;
+}
 </style>
 <div ng-controller='preappviewCtrl'>
 <div class="row">
@@ -100,10 +117,11 @@ $profile_id  = $_SESSION['profile_id'];
 									<th><?php echo PRE_APPLICATION_VIEW_ID; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_OUTLET_NAME; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_CONTACT_PERSON_NAME; ?></th>
-									<th><?php echo PRE_APPLICATION_VIEW_TIME; ?></th>
+									
 									<th><?php echo PRE_APPLICATION_VIEW_STATUS; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_DETAIL; ?></th>
 									<th>Attachments</th>
+									<th> Edit Attachments</th>
 									<th><?php echo PRE_APPLICATION_VIEW_TRANSFER; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_REJECT; ?></th>
 									<th ng-show="x.status='R'">Delete</th>
@@ -114,7 +132,7 @@ $profile_id  = $_SESSION['profile_id'];
 									<td>{{ x.id }}</td>
 									<td>{{ x.name }}</td>
 									<td>{{ x.cpn }}</td>
-									<td>{{ x.time }}</td>
+									
 									<td>{{ x.status }}</td>
 									<td><a id={{x.id}} class='ApplicationViewDialogue' ng-click='view($index,x.id)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
@@ -122,9 +140,13 @@ $profile_id  = $_SESSION['profile_id'];
 										<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/ui.png' /></button></a>
 									</td>
-									
+									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='editattach($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/clip.png' /></button></a>
+									</td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='transfer($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationTransferDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
@@ -139,7 +161,7 @@ $profile_id  = $_SESSION['profile_id'];
 									<td ng-show="x.stat !=='R'"> - </td>
 								</tr>
 								<tr ng-show="appviews.length==0">
-									<td colspan='8' >
+									<td colspan='9' >
 										<?php echo NO_DATA_FOUND; ?>              
 									</td>
 								</tr>
@@ -251,7 +273,7 @@ $profile_id  = $_SESSION['profile_id'];
 					</div> 
 				</div>
 				<div class='modal-footer' ng-hide='isLoader'>					
-					<button type='button' class='btn btn-primary'   id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_OK; ?></button>
+					<button type='button' class='btn btn-primary' ng-click='refresh()'    id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_OK; ?></button>
 					<button type='button' class='btn btn-primary'  ng-click='cancel()' data-dismiss='modal' ng-hide='isHide' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_CANCEL; ?></button>
 					<button type='button' class='btn btn-primary'  ng-dblclick="false" ng-hide='isHide' ng-click="ApplicatioTransferDForm.$invalid=true;transfinal(id)"     ng-disabled="transferbtn" id="TranferFinal"><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_TRANSFER; ?></button>
 				</div>
@@ -368,7 +390,7 @@ $profile_id  = $_SESSION['profile_id'];
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						
-						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span></h2>
+						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span><span  ng-if= "file=='S'" >Signature Document - {{outletname}} </span></h2>
 						
 					</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
@@ -398,6 +420,79 @@ $profile_id  = $_SESSION['profile_id'];
 				
 			</div>
 		</div>	
+	<div id='ApplicationAttachmentEditDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
+		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button  ng-hide='isLoader' type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'>Edit Attached Documents - #{{id}}</span></h2>
+				</div>	
+					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					    <form action="" method="POST" name='ApplicationRejDialogue' id="ApplicationRejDialogue">
+					        <div class='modal-body'>
+								<div id='AppentryCreateBody' ng-hide='isLoader'>
+							        <table class='table table-borderd'>
+										<tr>
+											<td><label for='IdDocument'><?php echo "ID Document"; ?><span class='spanre'>*</span><span style="color:red" ng-show="(applicationEntryForm.attachment.$touched && applicationEntryForm.attachment.$error.validFile) ">File is required</span></label>
+											   <div style='display:flex;'>
+													<input id="IdDocument" required ng-model='IDDocument'   placeholder="Choose File"  disabled="disabled" class='form-control' />
+												   <div ng-show="isInputDisabled"  class="fileUpload btn btn-primary" style='bottom:8px;' >
+													<span>Upload</span>
+													<input type="file"  accept="image/jpg,image/jpeg,image/png,application/pdf" valid-file ng-file='uploadfiles' data-max-size="2097152 " name='attachment' required  ng-model="attachment" class="upload" id="attachment">
+													</div>
+												
+											   </div>
+											</td>
+												<td><a id={{x.id}} class='Delete' ng-hide='Deleteattach' data-toggle='modal'  ng-confirm-click="Are you sure want to Delete the existing ID Document for this User ?"  confirmed-click='Deleteattachment($index,id,pre_application_attachment_id,attachment_type)'>
+															<button class='icoimg'><img style='height:22px;width:22px;margin-top: 29px;' src='../common/images/error.png' /></button></a>
+												</td>
+										
+										</tr>
+										<tr>
+											<td><label for='CompanyDocument'><?php echo "Company Document"; ?><span class='spanre'>*</span><span style="color:red" ng-show="(applicationEntryForm.attachment2.$touched && applicationEntryForm.attachment2.$error.validFile) ">File is required</span></label>
+											<div style='display:flex;'>
+												<input id="CompanyDocument"  ng-model='BussinessDocument' placeholder="Choose File"   disabled="disabled" class='form-control' />
+												<div ng-show="isInputDisabled2s"  class="fileUpload btn btn-primary" style='bottom:8px;' >
+													<span>Upload</span>
+													<input type="file"accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles2' data-max-size="2097152 " name='attachment2'   ng-model="attachment2" class="upload" id="attachment2">
+												</div>
+											</div></td>
+											<td ><a id={{x.id}} class='Delete' ng-hide='Deletes' data-toggle='modal'  ng-confirm-click="Are you sure want to Delete the existing Business Document for this User ?"  confirmed-click='Deleteattachment2($index,id,pre_application_attachment_id,attachment_type)'>
+												<button class='icoimg'><img style='height:22px;width:22px;margin-top: 29px;' src='../common/images/error.png' /></button></a>
+											</td>
+									
+										</tr>
+										<tr>
+											<td ><label for='signatureDocument'><?php echo "Signature Document"; ?><span class='spanre'>*</span><span style="color:red" ng-show="(applicationEntryForm.attachment3.$touched && applicationEntryForm.attachment3.$error.validFile) ">File is required</span></label>
+												<div style='display:flex;'>
+													<input id="signatureDocument"   ng-model='SignatureDocucment'  placeholder="Choose File"  disabled="disabled" class='form-control' />
+													<div  ng-show="isInputDisabled3" class="fileUpload btn btn-primary" style='bottom:8px;' >
+														<span>Upload</span>
+														<input type="file"     accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'   ng-model="attachment3" class="upload" id="attachment3">
+													</div>
+												</div>
+											</td>
+											<td >
+												<a id={{x.id}} class='Delete' ng-hide='Deleted' data-toggle='modal' ng-confirm-click="Are you sure want to Delete the existing Signature Document  for this User ?"   confirmed-click='Deleteattachment3($index,id,pre_application_attachment_id,attachment_type)'>
+												<button class='icoimg'><img style='height:22px;width:22px;margin-top: 29px;' src='../common/images/error.png' /></button></a>
+											</td>
+								       </tr>
+								  </table>
+						        </div>
+						 
+							<div class='modal-footer' style='text-align:center'>
+								<button type='button' class='btn btn-primary' ng-click='refresh()'  id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_ENTRY_BUTTON_OK; ?></button>
+								<button type="button" ng-hide='isHide' class="btn btn-primary"  ng-click='InsertNew($index,id,pre_application_attachment_id,pre_application_info_id,attachment_type)'   disabled  id="Submit"><?php echo APPLICATION_ENTRY_BUTTON_SUBMIT_APPLICATION; ?></button>
+								<button type="button" class="btn btn-primary" ng-click='refresh()'  ng-hide='isHideReset' id="Reset">Refresh</button>
+						
+							</div>
+							 </div>	
+				  
+				<form>	
+			</div>
+ 		</div>	
+	</div>	
+
 	<div id='preApplicationRejectDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
@@ -471,6 +566,16 @@ function AllTables(){
 	TestTable3();
 	LoadSelect2Script();
 }
+
+
+$(document).ready(function() {
+$('input[type="file"]').change(function(){
+    if($('#attachment').val() != '' && $('#attachment2').val() != '' && $('#attachment3').val() != '' )
+    {
+      $('#Submit').attr('disabled', false);
+    }
+  });
+});
 function AvoidSpace(event) {
     var k = event ? event.which : window.event.keyCode;
     if (k == 32) return false;
@@ -480,6 +585,9 @@ function AvoidSpace(event) {
 		
 		$("#StartDate, #EndDate").val(curDate);
 $(document).ready(function() {
+
+
+	
 	$("#Query").click(function() {				
 		LoadDataTablesScripts(AllTables);
 		
@@ -487,11 +595,74 @@ $(document).ready(function() {
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});	
-	$("#ApplicationTransferDialogue, #preApplicationRejectDialogue, #preApplicationDeleteDialogue").on("click","#Ok",function() {
+	$("#ApplicationTransferDialogue, #preApplicationRejectDialogue, #preApplicationDeleteDialogue","ApplicationAttachmentEditDialogue").on("click","#Ok",function() {
 //alert("sfd");
 		window.location.reload();
 
 	});
+
+	var d = new Date();
+var n = d.getFullYear() + '' + ('0' + (d.getMonth()+1)).slice(-2) + '' + ('0' + d.getDate()).slice(-2) +''+ (d.getHours() < 10 ? '0' : '') + d.getHours() + "" +  (d.getMinutes() < 10 ? '0' : '') + d.getMinutes() + "" +  (d.getSeconds() < 10 ? '0' : '') + d.getSeconds() ;
+var username='<?php echo $_SESSION['user_name'];?>';
+document.getElementById("attachment").onchange = function () {
+	var ext = $('#attachment').val().split('.').pop();
+	//alert(ext);
+	document.getElementById("IdDocument").value = username+ '_ID_'+n + '.' + ext;
+		document.getElementById("attachment").value = username+ '_ID_'+n + '.' + ext;
+
+ 
+};
+document.getElementById("attachment2").onchange = function () {
+	var ext = $('#attachment2').val().split('.').pop();
+    document.getElementById("CompanyDocument").value =username+ '_BD_'+n+ '.' + ext;
+	document.getElementById("attachment2").value =username+ '_BD_'+n+ '.' + ext;
+};
+
+document.getElementById("attachment3").onchange = function () {
+	var ext = $('#attachment3').val().split('.').pop();
+    document.getElementById("signatureDocument").value =username+ '_SIG_'+n+ '.' + ext;
+	document.getElementById("attachment3").value =username+ '_SIG_'+n+ '.' + ext;
+};
+    $('#attachment').change(function(e){
+		 var fileInput = $('#attachment');
+		 var maxSize = fileInput.data('max-size');
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+            if(fileSize>maxSize){
+                alert('file size is more than ' + 2 + ' mb');
+				document.getElementById("attachment").value ="";
+				document.getElementById("IdDocument").value ="";
+
+                return false;
+            }
+    });
+	 $('#attachment2').change(function(e){
+		 var fileInput = $('#attachment2');
+		 var maxSize = fileInput.data('max-size');
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+            if(fileSize>maxSize){
+                alert('file size is more than ' + 2 + ' mb');
+				document.getElementById("attachment2").value ="";
+				document.getElementById("CompanyDocument").value ="";
+
+                return false;
+			}
+		});
+
+			$('#attachment3').change(function(e){
+		 var fileInput = $('#attachment3');
+		 var maxSize = fileInput.data('max-size');
+            var fileSize = fileInput.get(0).files[0].size; // in bytes
+            if(fileSize>maxSize){
+                alert('file size is more than ' + 2 + ' mb');
+				document.getElementById("attachment3").value ="";
+				document.getElementById("signatureDocument").value ="";
+
+                return false;
+            }
+		
+    });
+
+	
 
 	/* $('#prospects_form').on('click', function(e) {
  e.preventDefault();
