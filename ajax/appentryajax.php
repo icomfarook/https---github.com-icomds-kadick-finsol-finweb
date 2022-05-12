@@ -74,20 +74,19 @@
 	}
 	
 	
-	$filetype =  mysqli_real_escape_string($con,pathinfo($location.$filename, PATHINFO_EXTENSION));
-	error_log("filetype = ".$filetype);
-	$allowed = array('pdf','png','jpg','jpeg');
+	$filetype =  mysqli_real_escape_string($con,pathinfo($location1.$filename, PATHINFO_EXTENSION));
+	//error_log("filetype = ".$filetype);
+	$allowed = array('pdf','png','jpg');
 
 	if (!in_array($filetype, $allowed)) {
-	    $filetype =	'oth';
+		$filetype =	'oth';
 	}
-	
 	$filetype2 =  mysqli_real_escape_string($con,pathinfo($location2.$filename2, PATHINFO_EXTENSION));
-	error_log("filetype = ".$filetype2);
-	$allowed = array('pdf','png','jpg','jpeg');
+	//error_log("filetype = ".$filetype2);
+	$allowed = array('pdf','png','jpg');
 
 	if (!in_array($filetype2, $allowed)) {
-	    $filetype2 =	'oth';
+		$filetype2 =	'oth';
 	}
 	$filetype3 =  mysqli_real_escape_string($con,pathinfo($location3.$filetype3, PATHINFO_EXTENSION));
 	//error_log("filetype = ".$filetype2);
@@ -110,10 +109,10 @@
 	//error_log("conten1".$content);	
 	$content2 = file_get_contents($location2.$filename2);
 	$content2 = base64_encode($content2);
-	error_log("content2".$content2);
+	//error_log("content2".$content2);
 	$content3 = file_get_contents($location3.$filename3);
 	$content3 = base64_encode($content3);
-error_log("content3".$content3);
+//error_log("content3".$content3);
 	if($appliertype == "S") {
 		$parenttype = "A";
 	}
@@ -171,42 +170,39 @@ error_log("content3".$content3);
 				die('Application main entry failed: ' . mysqli_error($con));
 			}
 			else {
-				$application_info_query = "INSERT INTO application_info (application_id, country_id, bvn,dob,gender, outlet_name, business_type, tax_number, address1, address2, state_id, local_govt_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, language_id, loc_latitude, loc_longitude) VALUES ($application_id, $countryid,'$bvn','$dob','$gender', '$outletname','$BusinessType', '$taxnumber', '$address1', '$address2', $stateid, $localgovernmentid, '$zipcode', '$mobileno', '$workno', '$email', '$cname', $cmobile, '$langpref', '$Latitude', '$Longitude')";
-				error_log("info_query = ".$application_info_query);
-				$application_info_result =  mysqli_query($con,$application_info_query);
-				if($application_info_result){
-					$updateBvnQuery = "update application_info set bvn_validated='Y' where application_id ='$application_id'";
+				$application_query = "INSERT INTO application (application_id, country_id, bvn,dob,gender, outlet_name, business_type, tax_number, address1, address2, state_id, local_govt_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, language_id, loc_latitude, loc_longitude) VALUES ($application_id, $countryid,'$bvn','$dob','$gender', '$outletname','$BusinessType', '$taxnumber', '$address1', '$address2', $stateid, $localgovernmentid, '$zipcode', '$mobileno', '$workno', '$email', '$cname', $cmobile, '$langpref', '$Latitude', '$Longitude')";
+				error_log("info_query = ".$application_query);
+				$application_result =  mysqli_query($con,$application_query);
+				if($application_result){
+					$updateBvnQuery = "update application set bvn_validated='Y' where application_id ='$application_id'";
 					error_log("updateBvnQuery = ".$updateBvnQuery);
 					$updatebvnresult = mysqli_query($con,$updateBvnQuery);
 					if(!$updatebvnresult) {
 						echo "App Info Update - Failed";				
 						die('Application Info Bvn Update failed: ' . mysqli_error($con));
 					}
-				$content = mysqli_real_escape_string($con,$content);
+			else{
+					$content = mysqli_real_escape_string($con,$content);
+				$query1  =  "INSERT INTO application_attachment (application_attachment_id,application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES  (0, $application_id, '$filename','$filetype','$content','I','Y')";
+				$result1 = mysqli_query($con,$query1);
+				//error_log("IDD query1 =".$query1);
 				$content2 = mysqli_real_escape_string($con,$content2);
+				if($content2 != ''){
+				$query2  =  "INSERT INTO application_attachment (application_attachment_id,application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES  (0, $application_id, '$filename2','$filetype2','$content2','C','Y')";
+				//error_log("Company query2 =".$query2);
+				$result2 = mysqli_query($con,$query2);
 				$content3 = mysqli_real_escape_string($con,$content3);
-				//error_log("content".$content);
-			
-				$query =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file) VALUES  (0, $application_id, '$filename','$filetype','$content','I')";
-				error_log($query);
-				//error_log($filetype);
-				$result = mysqli_query($con,$query);
-
-				$query2  =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file) VALUES  (0, $application_id, '$filename2','$filetype2','$content2','C')";
-				error_log($query2);
-				//error_log($filename2);
-				$attachmentresult = mysqli_query($con,$query2);
-
-				$query3  =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file) VALUES  (0, $application_id, '$filename3','$filetype3','$content3','S')";
-				error_log($query3);
-				//error_log($filename2);
-				$attachmentresult3 = mysqli_query($con,$query3);
-
-				if(!$result && !$attachmentresult && !$attachmentresult3) {
-					echo "FILE-ATTACHMENT - Failed";				
-				die(' Application file attachment failed: ' . mysqli_error($con));
 				}
-				if(!$application_info_result) {
+				if($content3 != ''){
+				$query3  =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES  (0, $application_id, '$filename3','$filetype3','$content3','S','Y')";
+				//error_log("Signature query3 =".$query3);
+				$result3 = mysqli_query($con,$query3);
+					}
+                		if(!$result1 && !$result2 && !$result3) {
+					echo "FILE-ATTACHMENT - Failed";				
+					die('Pre Application file attachment failed: ' . mysqli_error($con));
+				}
+				if(!$application_result) {
 					echo "APPINFO - Failed";				
 					die('Application info query failed: ' . mysqli_error($con));
 				}
@@ -214,7 +210,8 @@ error_log("content3".$content3);
 					echo "Your Application No: $application_id submitted successfully";
 				}
 				
-			}		
+			}	
+		}	
 		}
 			
 	}
@@ -303,5 +300,147 @@ error_log("content3".$content3);
 		error_log("code ".$httpcode);
 		error_log("exiting sendRequest");
       	return $response;
+	}
+
+
+	 if($action =="Uploadattachment"){
+		$NewApplicationID = $_POST['id'];
+		$application_attachment_id1 = $_POST['application_attachment_id1'];
+		$application_id1 = $_POST['application_id1'];
+		$application_attachment_id2 = $_POST['application_attachment_id2'];
+		$application_id2 = $_POST['application_id2'];
+		$application_attachment_id3 = $_POST['application_attachment_id3'];
+		$application_id3 = $_POST['application_id3'];
+		$attachment = $_POST['attachment'];
+		$attachment2 = $_POST['attachment2'];
+		$attachment3 = $_POST['attachment3'];
+
+	/* 	error_log("inside");
+		error_log("application_id1 =".$application_id1);
+		error_log("application_attachment_id1 =".$application_attachment_id1);
+		error_log("application_id2 =".$application_id2);
+		error_log("application_attachment_id2 =".$application_attachment_id2);
+		error_log("application_id3 =".$application_id3);
+		error_log("application_attachment_id3 =".$application_attachment_id3); */
+		
+		$selectquery ="select file,attachment_content from application_attachment where application_id='$NewApplicationID' and file='I'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		/* $row = mysqli_fetch_assoc($select_result);
+		$file = $row['file']; */
+		//error_log("file".$file);
+		$count = mysqli_num_rows($select_result);
+			//error_log("count ==".$count);
+	if($count >= 1){
+		if($file == "I"){
+			$content = mysqli_real_escape_string($con,$content);
+			//error_log("content".$content);
+			$query1 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $application_id1, '$filename','$filetype','$content','I','Y')";
+			//error_log("ID doc =".$query1);
+			$result1 = mysqli_query($con,$query1);
+			if($result1){
+				$updatePreAttach ="update  application_attachment set active='N' where  application_attachment_id='$application_attachment_id1'";
+				$updatePreAttachresult = mysqli_query($con,$updatePreAttach);
+				error_log("updatePreAttach =".$updatePreAttach);
+			}if($updatePreAttachresult){
+				$Insertquery1="INSERT INTO application_kyc_update(application_kyc_update_id,application_id,update_date,application_attachment_id) VALUES(0,$application_id1,now(),$application_attachment_id1)";
+				$insertresult1 = mysqli_query($con,$Insertquery1);
+				error_log("Insertquery1 =".$Insertquery1);
+				echo "Your New ID Document submitted successfully";
+			}
+			
+		}
+	}else{
+			$content = mysqli_real_escape_string($con,$content);
+			//error_log("content".$content);
+			$query1 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $NewApplicationID, '$filename','$filetype','$content','I','Y')";
+			error_log("ID doc =".$query1);
+			$result1 = mysqli_query($con,$query1);
+			if (!$result1) {
+				echo "Error: %s\n". mysqli_error($con);
+			}else{
+			echo "Your New ID  Document submitted successfully";
+			}
+		}
+
+		$selectquery ="select file,attachment_content from application_attachment where application_id='$NewApplicationID' and file='C'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		/* $row = mysqli_fetch_assoc($select_result);
+		$file = $row['file']; */
+		//error_log("file".$file);
+		$count = mysqli_num_rows($select_result);
+		//error_log("count2 ==".$count);
+	if($count >= 1){
+		if($file == "C"){
+			$content2 = mysqli_real_escape_string($con,$content2);
+			if($content2 != ''){
+			$query2 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $application_id2, '$filename2','$filetype2','$content2', 'C','Y')";
+			//error_log("Company query2 =".$query2);
+			$result2 = mysqli_query($con,$query2);
+			if($result2){
+				$updatePreAttach2 ="update  application_attachment set active='N' where  application_attachment_id='$application_attachment_id2'";
+				$updatePreAttachresult2 = mysqli_query($con,$updatePreAttach2);
+				error_log("updatePreAttach2 =".$updatePreAttach2);
+			}if($updatePreAttachresult2){
+				$Insertquery2="INSERT INTO application_kyc_update(application_kyc_update_id,application_id,update_date,application_attachment_id) VALUES(0,$application_id2,now(),$application_attachment_id2)";
+				$insertresult2 = mysqli_query($con,$Insertquery2);
+				//error_log("Insertquery2 =".$Insertquery2);
+				echo "Your New Business Document submitted successfully";
+			}
+		}
+	
+	}
+}else{
+	$query2 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $NewApplicationID, '$filename2','$filetype2','$content2', 'C','Y')";
+	error_log("Company query2 =".$query2);
+	$result2 = mysqli_query($con,$query2);
+	if (!$result2) {
+		echo "Error: %s\n". mysqli_error($con);
+	}else{
+	echo "Your New Business Document submitted successfully";
+	}
+}
+
+		$selectquery ="select file,attachment_content from application_attachment where application_id='$NewApplicationID' and file='S'";
+		error_log("selectquery".$selectquery);
+		$select_result = mysqli_query($con,$selectquery);
+		/* $row = mysqli_fetch_assoc($select_result);
+		$file = $row['file']; */
+		//error_log("file".$file);
+		$count = mysqli_num_rows($select_result);
+		//error_log("count4 ==".$count);
+	if($count >= 1){
+		if($file == "S"){
+			$content3 = mysqli_real_escape_string($con,$content3);
+			if($content3 != ''){
+				$query3 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $application_id3, '$filename3','$filetype3','$content3', 'S','Y')";
+				//error_log("Signature query3 =".$query3);
+				$result3 = mysqli_query($con,$query3);
+				if($result3){
+					$updatePreAttach3 ="update application_attachment set active='N' where  application_attachment_id='$application_attachment_id3'";
+					$updatePreAttachresult3 = mysqli_query($con,$updatePreAttach3);
+					//error_log("updatePreAttachresult3 =".$updatePreAttach3);
+				}if($updatePreAttachresult3){
+					$Insertquery3="INSERT INTO application_kyc_update(application_kyc_update_id,application_id,update_date,application_attachment_id) VALUES(0,$application_id3,now(),$application_attachment_id3)";
+					$insertresult3 = mysqli_query($con,$Insertquery3);
+					error_log("Insertquery3 =".$Insertquery3);
+					echo "Your New Signature Document submitted successfully";
+				}
+				}
+			
+			}
+	}else{
+			$content3 = mysqli_real_escape_string($con,$content3);
+			$query3 =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file,active) VALUES (0, $NewApplicationID, '$filename3','$filetype3','$content3', 'S','Y')";
+			//error_log("Signature query3 =".$query3);
+			$result3 = mysqli_query($con,$query3);
+			if (!$result3) {
+				echo "Error: %s\n". mysqli_error($con);
+			}else{
+			echo "Your New Signature Document submitted successfully";
+			}
+		}
+		echo "Your Application Attachments submitted successfully";
 	}
 ?>	

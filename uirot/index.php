@@ -342,6 +342,7 @@ if($(this).val() != "")
 						 <span class="hidden-xs"><?php echo INDEX_PARTY; ?></span>
 					</a>
 					<ul class="dropdown-menu">
+					
 						<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
 						<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
@@ -351,6 +352,7 @@ if($(this).val() != "")
 						<li><a class="ajax-link" href="#!payacc"><?php echo INDEX_PARTY_PAYABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptyrac"><?php echo INDEX_PARTY_RECEIVABLE_ACCOUNT; ?></a></li>
 						<li><a class="ajax-link" href="#!ptytss"><?php echo INDEX_PARTY_TSS_ACCOUNT; ?></a></li>
+						<li><a class="ajax-link" href="#!ptykyc">KYC Update</a></li>
 						<li class="dropdown">
 						<a href="#" class="dropdown-toggle">
 						<i class="fa fa-laptop"></i>

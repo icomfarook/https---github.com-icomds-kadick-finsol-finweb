@@ -40,7 +40,7 @@
 				}
 			}
 			
-			$query = "select a.inventory_id, CONCAT(c.agent_code,' - ',c.agent_name) as agent_name, a.terminal_id, a.terminal_serial_no, a.create_time, a.update_time, concat(d.vendor_name,'-',d.terminal_model) as vendor from terminal_inventory a,user_pos b, agent_info c,terminal_vendor d where a.terminal_id = b.terminal_id and b.user_id = c.user_id and a.vendor_id = d.terminal_vendor_id and a.status ='B'  $queryapd";
+			$query = "select a.inventory_id, CONCAT(c.agent_code,' - ',c.agent_name) as agent_name, a.terminal_id, a.terminal_serial_no, a.create_time, a.update_time, concat(d.vendor_name,'-',d.terminal_model) as vendor,concat(e.name) as bank from terminal_inventory a,user_pos b, agent_info c,terminal_vendor d,bank_master e where a.terminal_id = b.terminal_id and b.user_id = c.user_id and a.vendor_id = d.terminal_vendor_id and a.bank_master_id = e.bank_master_id and a.status ='B'  $queryapd";
 			error_log("query = ".$query);	
 			$result =  mysqli_query($con,$query);
 			if (!$result) {
@@ -51,7 +51,7 @@
 			$data = array();
 			
 				while ($row = mysqli_fetch_array($result)) {
-					$data[] = array("inventory_id"=>$row['inventory_id'],"id"=>$row['vendor_id'],"TerminalId"=>$row['terminal_id'],"TerminalSerialNo"=>$row['terminal_serial_no'],"agent_name"=>$row['agent_name'],"create_time"=>$row['create_time'],"update_time"=>$row['update_time'],"vendor"=>$row['vendor']);           
+					$data[] = array("inventory_id"=>$row['inventory_id'],"id"=>$row['vendor_id'],"TerminalId"=>$row['terminal_id'],"TerminalSerialNo"=>$row['terminal_serial_no'],"agent_name"=>$row['agent_name'],"create_time"=>$row['create_time'],"update_time"=>$row['update_time'],"vendor"=>$row['vendor'],"bank"=>$row['bank']);           
 				}
 			
 		//error_log("typ = $type - ".$query);

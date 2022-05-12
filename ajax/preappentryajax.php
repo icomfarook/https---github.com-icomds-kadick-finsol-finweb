@@ -168,30 +168,31 @@
 		$pre_application_attachment_id3 = $_POST['pre_application_attachment_id3'];
 		$pre_application_info_id3 = $_POST['pre_application_info_id3'];
 
-		error_log("inside");
+	/* 	error_log("inside");
 		error_log("pre_application_info_id1 =".$pre_application_info_id1);
 		error_log("pre_application_attachment_id1 =".$pre_application_attachment_id1);
 		error_log("pre_application_info_id2 =".$pre_application_info_id2);
 		error_log("pre_application_attachment_id2 =".$pre_application_attachment_id2);
 		error_log("pre_application_info_id3 =".$pre_application_info_id3);
-		error_log("pre_application_attachment_id3 =".$pre_application_attachment_id3);
+		error_log("pre_application_attachment_id3 =".$pre_application_attachment_id3); */
 		
 		$selectquery ="select file from pre_application_attachment where pre_application_attachment_id='$pre_application_attachment_id1'";
 		error_log("selectquery".$selectquery);
 		$select_result = mysqli_query($con,$selectquery);
 		$row = mysqli_fetch_assoc($select_result);
 		$file = $row['file'];
-		error_log("file".$file);
+		//error_log("file".$file);
 		if($file == "I"){
 			$content = mysqli_real_escape_string($con,$content);
 			//error_log("content".$content);
 			$query1 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id1, '$filename','$filetype','$content','I')";
-			error_log("ID doc =".$query1);
+			//error_log("ID doc =".$query1);
 			$result1 = mysqli_query($con,$query1);
 			if($result1){
 				$DeletePreAttach ="Delete from pre_application_attachment where file='I' and  pre_application_attachment_id='$pre_application_attachment_id1'";
 				$DeletePreAttachresult = mysqli_query($con,$DeletePreAttach);
 				error_log("DeletePreAttach =".$DeletePreAttach);
+				echo "Your New ID Document submitted successfully";
 			}
 		}
 
@@ -200,17 +201,18 @@
 		$select_result = mysqli_query($con,$selectquery);
 		$row = mysqli_fetch_assoc($select_result);
 		$file = $row['file'];
-		error_log("file".$file);
+		//error_log("file".$file);
 		if($file == "C"){
 			$content2 = mysqli_real_escape_string($con,$content2);
 			if($content2 != ''){
 			$query2 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id2, '$filename2','$filetype2','$content2', 'C')";
-			error_log("Company query2 =".$query2);
+			//error_log("Company query2 =".$query2);
 			$result2 = mysqli_query($con,$query2);
 			if($result2){
 				$DeletePreAttach2 ="Delete from pre_application_attachment where file='C' and  pre_application_attachment_id='$pre_application_attachment_id2'";
 				$DeletePreAttachresult2 = mysqli_query($con,$DeletePreAttach2);
 				error_log("DeletePreAttach2 =".$DeletePreAttach2);
+				echo "Your New Business Document submitted successfully";
 			}
 		}
 	}
@@ -220,18 +222,19 @@
 		$select_result = mysqli_query($con,$selectquery);
 		$row = mysqli_fetch_assoc($select_result);
 		$file = $row['file'];
-		error_log("file".$file);
+		//error_log("file".$file);
 	
 if($file == "S"){
 		$content3 = mysqli_real_escape_string($con,$content3);
 		if($content3 != ''){
 			$query3 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $pre_application_info_id3, '$filename3','$filetype3','$content3', 'S')";
-			error_log("Signature query3 =".$query3);
+			//error_log("Signature query3 =".$query3);
 			$result3 = mysqli_query($con,$query3);
 			if($result3){
 				$DeletePreAttach3 ="Delete from pre_application_attachment where file='S' and  pre_application_attachment_id='$pre_application_attachment_id3'";
 				$DeletePreAttachresult3 = mysqli_query($con,$DeletePreAttach3);
 				error_log("DeletePreAttachresult3 =".$DeletePreAttach3);
+				echo "Your New Signature Document submitted successfully";
 			}
 			}
 			echo "Your Application Attachments submitted successfully";

@@ -174,25 +174,24 @@
 		}
 		}
 
-else if($action == "editattachment") {
+else if($action == "editattachment1") {
 		
-
-
+	$id = $data->id;
 	
-		$app_view_attachment_query = "SELECT c.pre_application_attachment_id,c.pre_application_info_id,ifNULL(c.attachment_name,'-') as IDDocument,c.attachment_type,ifNULL((select a.attachment_name from pre_application_attachment a where a.file='C' and a.pre_application_info_id='$id'),'-') as BussinessDocument,ifNULL((select b.attachment_name from pre_application_attachment b where b.file='S' and b.pre_application_info_id='$id'),'-') as SignatureDocument  from pre_application_attachment c WHERE c.file='I' and c.pre_application_info_id = '$id'";
+		$app_view_attachment_query1 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as IDDocument,attachment_type  from pre_application_attachment WHERE file='I' and pre_application_info_id = '$id'";
 
-		error_log($app_view_attachment_query);
-		$app_view_view_result =  mysqli_query($con,$app_view_attachment_query);
-		if(!$app_view_view_result) {
-			die('app_view_view_result: ' . mysqli_error($con));
-			echo "app_view_view_result - Failed";				
+		error_log($app_view_attachment_query1);
+		$app_view_view_result1 =  mysqli_query($con,$app_view_attachment_query1);
+		if(!$app_view_view_result1) {
+			die('app_view_view_result1: ' . mysqli_error($con));
+			echo "app_view_view_result1 - Failed";				
 		}		
 		else {
 			$data = array();
 			
-			while ($row = mysqli_fetch_array($app_view_view_result)) {
+			while ($row = mysqli_fetch_array($app_view_view_result1)) {
 				
-				$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"BussinessDocument"=>$row['BussinessDocument'],"IDDocument"=>$row['IDDocument'],"SignatureDocucment"=>$row['SignatureDocument'],
+				$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"IDDocument"=>$row['IDDocument'],
 								"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
 								
 			}
@@ -200,7 +199,54 @@ else if($action == "editattachment") {
 		echo json_encode($data);
 	}
 
+	else if($action == "editattachment2") {
+		
+		$id = $data->id;
+		
+			$app_view_attachment_query2 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as BussinessDocument,attachment_type  from pre_application_attachment WHERE file='C' and pre_application_info_id = '$id'";
 	
+			error_log($app_view_attachment_query2);
+			$app_view_view_result2 =  mysqli_query($con,$app_view_attachment_query2);
+			if(!$app_view_view_result2) {
+				die('app_view_view_result2: ' . mysqli_error($con));
+				echo "app_view_view_result2 - Failed";				
+			}		
+			else {
+				$data = array();
+				
+				while ($row = mysqli_fetch_array($app_view_view_result2)) {
+					
+					$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"BussinessDocument"=>$row['BussinessDocument'],
+									"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
+									
+				}
+			}
+			echo json_encode($data);
+		}
+		else if($action == "editattachment3") {
+		
+			$id = $data->id;
+			
+				$app_view_attachment_query3 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as SignatureDocucment,attachment_type  from pre_application_attachment WHERE file='S' and pre_application_info_id = '$id'";
+		
+				error_log($app_view_attachment_query3);
+				$app_view_view_result3 =  mysqli_query($con,$app_view_attachment_query3);
+				if(!$app_view_view_result3) {
+					die('app_view_view_result3: ' . mysqli_error($con));
+					echo "app_view_view_result3 - Failed";				
+				}		
+				else {
+					$data = array();
+					
+					while ($row = mysqli_fetch_array($app_view_view_result3)) {
+						
+						$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"SignatureDocucment"=>$row['SignatureDocucment'],
+										"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
+										
+					}
+				}
+				echo json_encode($data);
+			}
 	
 	
 	

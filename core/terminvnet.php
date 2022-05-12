@@ -33,10 +33,13 @@
 
 <div class="row">
 	<div class="col-xs-12">
-		<form action="" method="POST" name='terminalInventorySearchForm' id="terminalInventorySearchForm">
+	<div class="box">
+		<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>		
+		<form  ng-hide='isLoader' action="" method="POST" name='terminalInventorySearchForm' id="terminalInventorySearchForm">
 			<div class='row' class='row appcont' ng-init = "creteria='S'" style='margin:1%'>
-				<input type='button' style='float: right;margin-right: 2%;' class='btn btn-primary' value='Create Inventory' id='Create' href='#' data-toggle='modal' data-target='#CreateInventory'/>
+				<input type='button' style='float: right;margin-right: 2%;margin-top: inherit;' class='btn btn-primary' value='Create Inventory' id='Create' href='#' data-toggle='modal' data-target='#CreateInventory'/>
 				<div class="col-xs-2">
+					
 				<label>Criteria</label>  <br />
 					<label style='margin-right:1%'><input style='margin-right:5px' ng-checked='true' value='S' type='radio' name='creteria' ng-model='creteria' />Summary</label>
 					<label><input  value='D' type='radio' style='margin-right:5px' name='creteria' ng-model='creteria' />Detail</label>
@@ -70,16 +73,26 @@
 					<label>Terminal Serial No</label> 
 					<input  ng-disabled="creteria=='S'" type='terslno' maxlength='20' ng-model='terslno' class='form-control'/>										
 			</div>
+		
 			</div>
-			<div class='row appcont'  style='text-align: -webkit-center;'>
-				<div style='text-align: center;' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
+		
+			<div class='row appcont'>
+			<div class='col-lg-4 col-xs-2 col-sm-2 col-md-2'>
+			<label>Bank</label> 
+					<select   ng-disabled="creteria=='S'" ng-model='bank'  ng-init ="bank='ALL'" class='form-control' name='bank'  >
+						<option value='ALL'>--ALL--</option>			
+						<option value='18'>Zenith Bank</option>			
+						<option value='10'>Polaris Bank</option>	
+					</select>												
+			</div>
+				<div ng-hide='isLoader' style='margin-top: inherit;margin-left: inherit;' class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 					<button type="button" class="btn btn-primary"  ng-disabled = '' ng-click='query()' ng-hide='isHide'  id="Query">Search</button>
 					<button type="button" class="btn btn-primary" ng-click='refresh()'  id="Refresh">Refresh</button>
 				</div>
 			</div>
 			
 		</form>
-		
+		</div>
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">					
@@ -89,8 +102,8 @@
 				<div class="no-move"></div> 
 			</div>
 			
-			<div class="box-content no-padding" data-backdrop="static" data-keyboard="false">		
-                <div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>			
+			<div ng-hide='isLoader' class="box-content no-padding" data-backdrop="static" data-keyboard="false">		
+             			
 				<table  ng-show='sushow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 					<thead>
 						<tr>
@@ -113,11 +126,12 @@
 							</tr>
 					</tbody>					
 				</table>
-				<table  ng-show='deshow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+				<table  ng-hide='isLoader'  ng-show='deshow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 					<thead>
 						<tr>
 							<th>Inventory id</th>
       						<th>Merchant Name</th>
+							<th>Bank Name</th>
 							<th>Status</th>
 							<th>Terminal Id</th>
 							<th>Edit</th>
@@ -128,6 +142,7 @@
 					      <tr ng-repeat="x in Inventory_list">
 							<td>{{ x.inventory_id }}</td>
 						 	<td>{{ x.merchantname }}</td>
+							 <td>{{ x.bank }}</td>
 							<td>{{ x.Status }}</td>
 							<td>{{ x.TerminalId }}</td>
 							<td><a id={{x.inventory_id }} class='editcountry' ng-click='edit($index,x.inventory_id )' data-toggle='modal' data-target='#EditinventoryDialogue'>
@@ -143,12 +158,11 @@
 								
 							</tr>
 						</tbody>
-					
-				</table>
+		     	</table>
 			</div>
 		</div>
 	</div>
-	
+
 	<div id='DetailViewDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
 		<div class="modal-dialog modal-lg" style='width:100%'>
 			<div class="modal-content">
@@ -171,6 +185,9 @@
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Merchant Name :<span class='labspa'>{{merchantname}}</span></label>
+							</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Bank Name :<span class='labspa'>{{bank}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Status: <span class='labspa'>{{Status}}</span></label>
@@ -368,13 +385,23 @@
 								<span class = 'err' ng-show="InventoryEditForm.TestTerm.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<input ng-model="TestTerm"  type='text' ng-disabled='isInputDisabled' id='TestTerm' ng-minlength="11" maxlength='11' name='TestTerm' required class='form-control'/>
 							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+							       <label>Bank List<span ng-show="InventoryEditForm.bank.$touched ||InventoryEditForm.bank.$dirty && InventoryEditForm.bank.$invalid">
+								<span class = 'err' ng-show="InventoryEditForm.bank.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select ng-model="bank"  type='text' ng-disabled='isInputDisabled' id='bank'  name='bank' required class='form-control' >											
+									<option value=''>--Select Bank--</option>
+									<option value='18'>Zenith Bank</option>
+									<option value='10'>Polaris Bank</option>
+								</select>
+								
+							</div>
 												
 						</div>
 						</div>
 						</form>	
 						</div>
 			<div class='modal-footer'>
-					<button type='button' class='btn btn-primary' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_OK; ?></button>
+					<button type='button' class='btn btn-primary'  ng-click='refresh()' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_OK; ?></button>
 					<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_CANCEL; ?></a>
 					<button type='button' class='btn btn-primary'  ng-hide='isHide'  ng-click="InventoryEditForm.$invalid=true;update(inventory_id )"  id="Update" >Update</button>
 			</div>		
@@ -511,15 +538,25 @@
 								</select>
 								
 							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+							       <label>Bank List<span ng-show="addinventoryForm.bank.$touched ||addinventoryForm.bank.$dirty && addinventoryForm.bank.$invalid">
+								<span class = 'err' ng-show="addinventoryForm.bank.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select ng-model="bank"   ng-init = "bank=='ALL'"  type='text' ng-disabled='isInputDisabled' id='bank'  name='bank' required class='form-control' >											
+									<option value=''>--Select Bank--</option>
+									<option value='18'>Zenith Bank</option>
+									<option value='10'>Polaris Bank</option>
+								</select>
+								
+							</div>
 												
 						</div>
 						</div>
 						</form>	
 						</div>
 			<div class='modal-footer'>
-					<button type='button' class='btn btn-primary' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_OK; ?></button>
+					<button type='button' class='btn btn-primary' ng-click='refresh()'  data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_OK; ?></button>
 					<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo BANK_ACCOUNT_CREATE_BUTTON_CANCEL; ?></a>
-					<button type="button" class="btn btn-primary" ng-click='addPBankForm.$invalid=true;create()' ng-hide='isHide' ng-click='refresh()' id="Create"><?php echo BANK_ACCOUNT_CREATE_BUTTON_CREATE; ?></button>
+					<button type="button" class="btn btn-primary" ng-click='addinventoryForm.$invalid=true;create()' ng-hide='isHide' ng-click='refresh()' id="Create"><?php echo BANK_ACCOUNT_CREATE_BUTTON_CREATE; ?></button>
 			</div>
 		
 	
@@ -530,18 +567,18 @@
 
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
-function AllTables(){
-	//TestTable1();
-	//TestTable2();
-	//TestTable3();
+/* function AllTables(){
+	TestTable1();
+	TestTable2();
+	TestTable3();
 	//LoadSelect2Script();
-}
-
+} */
 $(document).ready(function() {
-	// Load Datatables and run plugin on tables 
-	//LoadDataTablesScripts(AllTables);
-	// Add Drag-n-Drop feature
-	//WinMove();
+	
+/*  $("#Query").click(function() {				
+		LoadDataTablesScripts(AllTables);
+		// $.fn.dataTableExt.sErrMode = 'throw' ;
+	}); */
 
 	$("#EditBankAccountrDialogue, #AddBankAccountDialogue").on("click","#Ok",function() {
 		window.location.reload();

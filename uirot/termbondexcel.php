@@ -17,8 +17,8 @@ $objPHPExcel = new PHPExcel();
 			
 			
 			
-		$heading = array("Inventory Id","Vendor","Agent Name","Terminal Id","Terminal Serial Number","Create Time","Update Time");
-		$headcount = 7;
+		$heading = array("Inventory Id","Vendor","Agent Name","Bank Name","Terminal Id","Terminal Serial Number","Create Time","Update Time");
+		$headcount = 8;
 			
 		if(trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "All" &&  trim($vendor) != "All") {
 				$queryapd .= "  and  a.vendor_id = $vendor";
@@ -44,7 +44,7 @@ $objPHPExcel = new PHPExcel();
 			}
 			
 			
-			$query = "select a.inventory_id,concat(d.vendor_name,'-',d.terminal_model) as vendor ,CONCAT(c.agent_code,' - ',c.agent_name) as agent_name,a.terminal_id,a.terminal_serial_no,a.create_time,ifNULL(a.update_time,'-') as update_time from terminal_inventory a,user_pos b,agent_info c,terminal_vendor d where a.terminal_id = b.terminal_id and b.user_id = c.user_id and a.vendor_id = d.terminal_vendor_id  and a.status ='B'   $queryapd";
+			$query = "select a.inventory_id,concat(d.vendor_name,'-',d.terminal_model) as vendor ,CONCAT(c.agent_code,' - ',c.agent_name) as agent_name,concat(e.name) as bank,a.terminal_id,a.terminal_serial_no,a.create_time,ifNULL(a.update_time,'-') as update_time from terminal_inventory a,user_pos b,agent_info c,terminal_vendor d,bank_master e where a.terminal_id = b.terminal_id and b.user_id = c.user_id and a.vendor_id = d.terminal_vendor_id  and a.bank_master_id = e.bank_master_id and  a.status ='B'   $queryapd";
 	
 					
 		$result =  mysqli_query($con,$query);

@@ -82,6 +82,7 @@
 							<th>Inventory Id</th>
 							<th>Vendor</th>
       						<th>Agent Code</th>
+							  <th>Bank Name</th>
 							<th>Terminal Id</th>
 							<th>Terminal Serial No</th>
 						</tr>
@@ -91,11 +92,12 @@
 							<td>{{ x.inventory_id }}</td>
 							<td>{{ x.vendor}}</td>
 						 	<td>{{ x.agent_name }}</td>
+							 <td>{{ x.bank }}</td>
 							<td>{{ x.TerminalId }}</td>	
 							<td>{{ x.TerminalSerialNo }}</td>								
 							</tr>
 							<tr ng-show="Inventory_list.length==0">
-								<td colspan='4' >
+								<td colspan='6' >
 										<?php echo NO_DATA_FOUND; ?>              
 									</td>
 							

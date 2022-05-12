@@ -1,3 +1,369 @@
+app.controller('KycUpdateCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+	$scope.fn_load = function (partyType,partyCode) {
+		if(partyType == 'C' || partyType == 'A') {
+			$http({
+				method: 'post',
+				url: '../ajax/load.php',
+				params: { partyType:partyType,
+						partyCode:partyCode,
+						action: 'infolist'
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+		}
+	}
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+				    type: type
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+
+	}
+	$scope.query = function () {
+		$http({
+			method: 'post',
+			url: '../ajax/kycupdateajax.php',
+			data: {
+				action: 'findlist',
+				partyCode: $scope.partyCode,
+				partyType: $scope.partyType,
+				topartyCode:$scope.topartyCode,
+				creteria:$scope.creteria
+			},
+		}).then(function successCallback(response) {
+			   $scope.isLoader = false;
+      $scope.isMainLoader = false;
+   $scope.appviews = response.data;
+    $scope.id = response.data[0].id;
+
+		}, function errorCallback(response) {
+			console.log(response.data);
+		});
+	}
+	
+	$scope.attachmentid = function (index, id) {
+		$http({
+		 method: 'post',
+		 url: '../ajax/kycupdateajax.php',
+		 data: {
+		  id: id,
+		  action: 'attachmentid'
+		 },
+		}).then(function successCallback(response) {
+		 // $scope.isHide = true;
+		  $scope.isHideOk = false;
+		 $scope.isLoader = false;
+			$scope.isMainLoader = false;
+		// alert(response.data[0].attachment_content);
+		$scope.myImage = response.data[0].attachment_content;
+		//$scope.myImage = ;
+		$scope.outletname = response.data[0].outletname;
+		$scope.file = response.data[0].file;
+		$scope.attachment_type = response.data[0].attachment_type;
+		//$("#resmsg").html("<h3>" + response.data + "</h3>");
+		//alert(response.data);
+		}, function errorCallback(response) {
+		 // console.log(response);
+		});
+		$scope.PrintImage = function (url) {
+		  var src='data:image/;base64,'+url;
+		  //alert(src);
+			 var win = window.open('');
+		  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		  win.focus();
+		  };
+	   }
+	   
+	   $scope.attachmentcomp = function (index, id) {
+			
+		$http({
+		 method: 'post',
+		 url: '../ajax/kycupdateajax.php',
+		 data: {
+		  id: id,
+		  action: 'attachmentcomp'
+		 },
+		}).then(function successCallback(response) {
+		 // $scope.isHide = true;
+		  $scope.isHideOk = false;
+		 $scope.isLoader = false;
+			$scope.isMainLoader = false;
+		// alert(response.data[0].attachment_content);
+		//$("#resmsg").html("<h3>" + response.data + "</h3>");
+		$scope.myImage = response.data[0].attachment_content;
+		$scope.outletname = response.data[0].outletname;
+		$scope.file = response.data[0].file;
+		$scope.attachment_type = response.data[0].attachment_type;
+		//alert(response.data[0].attachment_type);
+		}, function errorCallback(response) {
+		 // console.log(response);
+		});
+	  
+			$scope.PrintImage = function (url) {
+		 var src='data:image/;base64,'+url;
+		 //alert(src);
+			var win = window.open('');
+		 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+			win.focus();
+		};
+	   }
+	  
+	   $scope.attachmentSig = function (index, id) {
+		  $http({
+		   method: 'post',
+		   url: '../ajax/kycupdateajax.php',
+		   data: {
+			id: id,
+			action: 'attachmentSig'
+		   },
+		  }).then(function successCallback(response) {
+		   // $scope.isHide = true;
+			$scope.isHideOk = false;
+		   $scope.isLoader = false;
+			  $scope.isMainLoader = false;
+		  // alert(response.data[0].attachment_content);
+		  //$("#resmsg").html("<h3>" + response.data + "</h3>");
+		  $scope.myImage = response.data[0].attachment_content;
+		  $scope.outletname = response.data[0].outletname;
+		  $scope.file = response.data[0].file;
+		  $scope.attachment_type = response.data[0].attachment_type;
+		  //alert(response.data[0].attachment_type);
+		  }, function errorCallback(response) {
+		   // console.log(response);
+		  });
+		
+			  $scope.PrintImage = function (url) {
+		   var src='data:image/;base64,'+url;
+		   //alert(src);
+			  var win = window.open('');
+		   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+			  win.focus();
+		  };
+		 }
+		 $scope.editattach1 = function (index, id) { 
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id, action: 'editattachment1' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				//$scope.BussinessDocument = response.data[0].BussinessDocument;
+				$scope.IDDocument = response.data[0].IDDocument;
+				//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
+				
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+		$scope.editattach2 = function (index, id) {
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id, action: 'editattachment2' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				$scope.BussinessDocument = response.data[0].BussinessDocument;
+				//$scope.IDDocument = response.data[0].IDDocument;
+				//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
+			
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+		$scope.editattach3 = function (index, id) {
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id, action: 'editattachment3' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				//$scope.BussinessDocument = response.data[0].BussinessDocument;
+				//$scope.IDDocument = response.data[0].IDDocument;
+				$scope.SignatureDocucment = response.data[0].SignatureDocument;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
+			
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+		$scope.Deleteattachment = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleteattach = true;
+			$scope.isInputDisabled = true;
+			$scope.IDDocument = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id1 = response.data[0].old_application_attachment_id;
+				$scope.application_id1 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		$scope.Deleteattachment2 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deletes = true;
+			$scope.isInputDisabled2s = true;
+			$scope.BussinessDocument = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id2 = response.data[0].old_application_attachment_id;
+				$scope.application_id2 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		$scope.Deleteattachment3 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleted = true;
+			$scope.isInputDisabled3 = true;
+			$scope.SignatureDocucment = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id3 = response.data[0].old_application_attachment_id;
+				$scope.application_id3 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		
+		$scope.InsertNew = function(index,id,application_attachment_id,application_id,attachment_type){
+		
+			$scope.isHideOk = true;
+			$scope.isHide = false;
+		
+			$scope.isLoader = true;
+			var fd = new FormData();
+			//alert($scope.dob);
+			var event = new Date($scope.dob);
+			
+			let date = JSON.stringify(event)
+			date = date.slice(1,11);
+			//alert(date);
+			
+			   angular.forEach($scope.uploadfiles,function(file){
+				 fd.append('file[]',file);
+			   });
+			   angular.forEach($scope.uploadfiles2,function(file2){
+			fd.append('file2[]',file2);
+			   });
+			   angular.forEach($scope.uploadfiles3,function(file3){
+				fd.append('file3[]',file3);
+				   });
+			   fd.append("id",$scope.id);
+			   fd.append("application_attachment_id1",$scope.application_attachment_id1);
+			   fd.append("application_id1",$scope.application_id1);
+			   fd.append("application_attachment_id2",$scope.application_attachment_id2);
+			   fd.append("application_id2",$scope.application_id2);
+			   fd.append("application_attachment_id3",$scope.application_attachment_id3);
+			   fd.append("application_id3",$scope.application_id3);
+			   fd.append("attachment_type","attachment_type");
+			   fd.append("action","Uploadattachment");
+			   fd.append("attachment",$scope.file);
+				fd.append("attachment",$scope.attachment);
+			   fd.append("attachment2",$scope.attachment2);
+			   fd.append("attachment3",$scope.attachment3);
+			//alert($scope.id);
+				/* 	alert($scope.attachment2);
+				alert($scope.attachment3); */
+			  $http({
+			method: 'post',
+			url: '../ajax/appentryajax.php',
+			headers: {'Content-Type': undefined},
+			ContentType: 'application/json',
+			data: fd,
+			}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isHideReset = true;
+			$scope.isLoader = false;
+			$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+		
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
+			}
+		$scope.refresh = function (id, type) {
+			window.location.reload();
+		}
+});
+
+
+
+
 app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
@@ -13582,8 +13948,74 @@ $scope.name = response.data[0].name;
     win.focus();
     };
  }
+ $scope.attachmentcomp = function (index, id) {
+	  
+	$http({
+	 method: 'post',
+	 url: '../ajax/preappviewajax.php',
+	 data: {
+	  id: id,
+	  action: 'attachmentcomp'
+	 },
+	}).then(function successCallback(response) {
+	 // $scope.isHide = true;
+	  $scope.isHideOk = false;
+	 $scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	//$("#resmsg").html("<h3>" + response.data + "</h3>");
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	}, function errorCallback(response) {
+	 // console.log(response);
+	});
+  
+		$scope.PrintImage = function (url) {
+	 var src='data:image/;base64,'+url;
+	 //alert(src);
+		var win = window.open('');
+	 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		win.focus();
+	};
+   }
+  
+   $scope.attachmentSig = function (index, id) {
+	  $http({
+	   method: 'post',
+	   url: '../ajax/preappviewajax.php',
+	   data: {
+		id: id,
+		action: 'attachmentSig'
+	   },
+	  }).then(function successCallback(response) {
+	   // $scope.isHide = true;
+		$scope.isHideOk = false;
+	   $scope.isLoader = false;
+		  $scope.isMainLoader = false;
+	  // alert(response.data[0].attachment_content);
+	  //$("#resmsg").html("<h3>" + response.data + "</h3>");
+	  $scope.myImage = response.data[0].attachment_content;
+	  $scope.outletname = response.data[0].outletname;
+	  $scope.file = response.data[0].file;
+	  $scope.attachment_type = response.data[0].attachment_type;
+	  //alert(response.data[0].attachment_type);
+	  }, function errorCallback(response) {
+	   // console.log(response);
+	  });
+	
+		  $scope.PrintImage = function (url) {
+	   var src='data:image/;base64,'+url;
+	   //alert(src);
+		  var win = window.open('');
+	   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		  win.focus();
+	  };
+	 }
 
- $scope.editattach = function (index, id) {
+ $scope.editattach1 = function (index, id) {
 	$scope.isHideOk = true;
 	$scope.isInputDisabled = false;
 	$scope.isInputDisabled2 = false;
@@ -13592,16 +14024,62 @@ $scope.name = response.data[0].name;
 	$http({
 		method: 'post',
 		url: '../ajax/preappviewajax.php',
-		data: { id: id, action: 'editattachment' },
+		data: { id: id, action: 'editattachment1' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		$scope.id = response.data[0].id;
+		//$scope.BussinessDocument = response.data[0].BussinessDocument;
+		$scope.IDDocument = response.data[0].IDDocument;
+		//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		$scope.attachment_type = response.data[0].attachment_type;
+		$scope.file = response.data[0].file;
+	
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+$scope.editattach2 = function (index, id) {
+	$scope.isHideOk = true;
+	$scope.isInputDisabled = false;
+	$scope.isInputDisabled2 = false;
+	$scope.isInputDisabled3 = false;
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id, action: 'editattachment2' },
 	}).then(function successCallback(response) {
 		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
 		$scope.id = response.data[0].id;
 		$scope.BussinessDocument = response.data[0].BussinessDocument;
-		$scope.IDDocument = response.data[0].IDDocument;
-		$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		//$scope.IDDocument = response.data[0].IDDocument;
+		//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
 		$scope.attachment_type = response.data[0].attachment_type;
 		$scope.file = response.data[0].file;
 	
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+$scope.editattach3 = function (index, id) {
+	$scope.isHideOk = true;
+	$scope.isInputDisabled = false;
+	$scope.isInputDisabled2 = false;
+	$scope.isInputDisabled3 = false;
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id, action: 'editattachment3' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		$scope.id = response.data[0].id;
+		//$scope.BussinessDocument = response.data[0].BussinessDocument;
+		//$scope.IDDocument = response.data[0].IDDocument;
+		$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		$scope.attachment_type = response.data[0].attachment_type;
+		$scope.file = response.data[0].file;
+		
 	}, function errorCallback(response) {
 		// console.log(response);
 	});
@@ -13732,72 +14210,7 @@ $scope.refresh = function (id, type) {
 
 
 
-  $scope.attachmentcomp = function (index, id) {
-	  
-  $http({
-   method: 'post',
-   url: '../ajax/preappviewajax.php',
-   data: {
-    id: id,
-    action: 'attachmentcomp'
-   },
-  }).then(function successCallback(response) {
-   // $scope.isHide = true;
-    $scope.isHideOk = false;
-   $scope.isLoader = false;
-      $scope.isMainLoader = false;
-  // alert(response.data[0].attachment_content);
-  //$("#resmsg").html("<h3>" + response.data + "</h3>");
-  $scope.myImage = response.data[0].attachment_content;
-  $scope.outletname = response.data[0].outletname;
-  $scope.file = response.data[0].file;
-  $scope.attachment_type = response.data[0].attachment_type;
-  //alert(response.data[0].attachment_type);
-  }, function errorCallback(response) {
-   // console.log(response);
-  });
-
-      $scope.PrintImage = function (url) {
-   var src='data:image/;base64,'+url;
-   //alert(src);
-      var win = window.open('');
-   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-      win.focus();
-  };
- }
-
- $scope.attachmentSig = function (index, id) {
-	$http({
-	 method: 'post',
-	 url: '../ajax/preappviewajax.php',
-	 data: {
-	  id: id,
-	  action: 'attachmentSig'
-	 },
-	}).then(function successCallback(response) {
-	 // $scope.isHide = true;
-	  $scope.isHideOk = false;
-	 $scope.isLoader = false;
-		$scope.isMainLoader = false;
-	// alert(response.data[0].attachment_content);
-	//$("#resmsg").html("<h3>" + response.data + "</h3>");
-	$scope.myImage = response.data[0].attachment_content;
-	$scope.outletname = response.data[0].outletname;
-	$scope.file = response.data[0].file;
-	$scope.attachment_type = response.data[0].attachment_type;
-	//alert(response.data[0].attachment_type);
-	}, function errorCallback(response) {
-	 // console.log(response);
-	});
   
-		$scope.PrintImage = function (url) {
-	 var src='data:image/;base64,'+url;
-	 //alert(src);
-		var win = window.open('');
-	 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-		win.focus();
-	};
-   }
    
  $scope.countrychange = function (id) {
 $http({
@@ -20957,12 +21370,17 @@ console.log(response);
 app.controller('TermInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $scope.sushow = true;
+$scope.sushow = true;
+$scope.isLoader = true;
+$scope.isMainLoader = false;
 $http({
 method: 'post',
 url: '../ajax/load.php',
 params: { for:'vendors',action:'active'
 },
 }).then(function successCallback(response) {
+	$scope.isLoader = false;
+      $scope.isMainLoader = false;
 $scope.vendors = response.data;
 });
 $scope.query = function () {
@@ -20978,6 +21396,8 @@ action: 'list',
 type:$scope.creteria
 },
 }).then(function successCallback(response) {
+	$scope.isLoader = false;
+      $scope.isMainLoader = false;
 $scope.Inventory_list = [];
 if(response.data.length > 0) {
 $scope.Inventory_list = response.data;
@@ -21001,9 +21421,12 @@ type:$scope.creteria,
 vendor:$scope.vendor,
 status:$scope.status,
 terid:$scope.terid,
+bank:$scope.bank,
 terslno:$scope.terslno
 },
 }).then(function successCallback(response) {
+	$scope.isLoader = false;
+      $scope.isMainLoader = false;
 $scope.Inventory_list = [];
 // alert(response.data.length);
 if(response.data.length > 0) {
@@ -21028,6 +21451,7 @@ data: { inventory_id: inventory_id, action: 'edit' },
 }).then(function successCallback(response) {
    $scope.inventory_id = response.data[0].inventory_id;
    $scope.id = response.data[0].id;
+   $scope.bank = response.data[0].bank;
 $scope.merchantid = response.data[0].merchantid;
 $scope.merchantname = response.data[0].merchantname;
 $scope.Status = response.data[0].Status;
@@ -21078,6 +21502,7 @@ Lga: $scope.Lga,
 MerAccName: $scope.MerAccName,
 PTSP: $scope.PTSP,
 TestTerm: $scope.TestTerm,
+bank: $scope.bank,
 action: 'create'
 },
 }).then(function successCallback(response) {
@@ -21102,6 +21527,7 @@ method: 'post',
 url: '../ajax/terminvnetajax.php',
 data: {
 inventory_id: $scope.inventory_id,
+bank: $scope.bank,
 id: $scope.id,
 merchantid: $scope.merchantid,
 merchantname: $scope.merchantname,
@@ -21147,6 +21573,7 @@ action: 'view'
 // $scope.isHideOk = false;
 $scope.inventory_id = response.data[0].inventory_id;
    $scope.id = response.data[0].id;
+   $scope.bank = response.data[0].bank;
 $scope.merchantid = response.data[0].merchantid;
 $scope.merchantname = response.data[0].merchantname;
 $scope.Status = response.data[0].Status;

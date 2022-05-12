@@ -117,7 +117,6 @@ $profile_id  = $_SESSION['profile_id'];
 									<th><?php echo PRE_APPLICATION_VIEW_ID; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_OUTLET_NAME; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_CONTACT_PERSON_NAME; ?></th>
-									
 									<th><?php echo PRE_APPLICATION_VIEW_STATUS; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_DETAIL; ?></th>
 									<th>Attachments</th>
@@ -132,7 +131,6 @@ $profile_id  = $_SESSION['profile_id'];
 									<td>{{ x.id }}</td>
 									<td>{{ x.name }}</td>
 									<td>{{ x.cpn }}</td>
-									
 									<td>{{ x.status }}</td>
 									<td><a id={{x.id}} class='ApplicationViewDialogue' ng-click='view($index,x.id)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
@@ -144,7 +142,7 @@ $profile_id  = $_SESSION['profile_id'];
 										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/ui.png' /></button></a>
 									</td>
-									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='editattach($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
+									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='editattach1($index,x.id, x.name);editattach2($index,x.id, x.name);editattach3($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/clip.png' /></button></a>
 									</td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='transfer($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationTransferDialogue'>
@@ -438,7 +436,7 @@ $profile_id  = $_SESSION['profile_id'];
 													<input id="IdDocument" required ng-model='IDDocument'   placeholder="Choose File"  disabled="disabled" class='form-control' />
 												   <div ng-show="isInputDisabled"  class="fileUpload btn btn-primary" style='bottom:8px;' >
 													<span>Upload</span>
-													<input type="file"  accept="image/jpg,image/jpeg,image/png,application/pdf" valid-file ng-file='uploadfiles' data-max-size="2097152 " name='attachment' required  ng-model="attachment" class="upload" id="attachment">
+													<input type="file"  accept="image/jpg,image/jpeg,image/png,application/pdf" valid-file ng-file='uploadfiles' data-max-size="2097152 " name='attachment' required  ng-value='true' ng-model="attachment" class="upload" id="attachment">
 													</div>
 												
 											   </div>
@@ -454,7 +452,7 @@ $profile_id  = $_SESSION['profile_id'];
 												<input id="CompanyDocument"  ng-model='BussinessDocument' placeholder="Choose File"   disabled="disabled" class='form-control' />
 												<div ng-show="isInputDisabled2s"  class="fileUpload btn btn-primary" style='bottom:8px;' >
 													<span>Upload</span>
-													<input type="file"accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles2' data-max-size="2097152 " name='attachment2'   ng-model="attachment2" class="upload" id="attachment2">
+													<input type="file"accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles2' data-max-size="2097152 " name='attachment2'   ng-model="attachment2"  ng-value='true' class="upload" id="attachment2">
 												</div>
 											</div></td>
 											<td ><a id={{x.id}} class='Delete' ng-hide='Deletes' data-toggle='modal'  ng-confirm-click="Are you sure want to Delete the existing Business Document for this User ?"  confirmed-click='Deleteattachment2($index,id,pre_application_attachment_id,attachment_type)'>
@@ -468,7 +466,7 @@ $profile_id  = $_SESSION['profile_id'];
 													<input id="signatureDocument"   ng-model='SignatureDocucment'  placeholder="Choose File"  disabled="disabled" class='form-control' />
 													<div  ng-show="isInputDisabled3" class="fileUpload btn btn-primary" style='bottom:8px;' >
 														<span>Upload</span>
-														<input type="file"     accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'   ng-model="attachment3" class="upload" id="attachment3">
+														<input type="file"     accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'   ng-model="attachment3" class="upload" ng-value='true' id="attachment3">
 													</div>
 												</div>
 											</td>
@@ -482,7 +480,7 @@ $profile_id  = $_SESSION['profile_id'];
 						 
 							<div class='modal-footer' style='text-align:center'>
 								<button type='button' class='btn btn-primary' ng-click='refresh()'  id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_ENTRY_BUTTON_OK; ?></button>
-								<button type="button" ng-hide='isHide' class="btn btn-primary"  ng-click='InsertNew($index,id,pre_application_attachment_id,pre_application_info_id,attachment_type)'   disabled  id="Submit"><?php echo APPLICATION_ENTRY_BUTTON_SUBMIT_APPLICATION; ?></button>
+								<button type="button" ng-hide='isHide' class="btn btn-primary"  ng-click='InsertNew($index,id,pre_application_attachment_id,pre_application_info_id,attachment_type)'    disabled id="Submit"><?php echo APPLICATION_ENTRY_BUTTON_SUBMIT_APPLICATION; ?></button>
 								<button type="button" class="btn btn-primary" ng-click='refresh()'  ng-hide='isHideReset' id="Reset">Refresh</button>
 						
 							</div>
@@ -567,15 +565,49 @@ function AllTables(){
 	LoadSelect2Script();
 }
 
+let button = document.getElementById("Submit")
+let input = document.getElementById("attachment")
+input.addEventListener("input", function(e) {
+	if(input.value.length === 0 && input.value() !== '') {
+  	button.disabled = true
+  } else {
+  	button.disabled = false
+  }
+})
 
-$(document).ready(function() {
+let button2 = document.getElementById("Submit")
+let input2 = document.getElementById("attachment2")
+input2.addEventListener("input", function(e) {
+	if(input2.value.length === 0 && input2.value() !== '' ) {
+  	button2.disabled = true
+  } else {
+  	button2.disabled = false
+  }
+})
+
+let button3 = document.getElementById("Submit")
+let input3 = document.getElementById("attachment3")
+input3.addEventListener("input", function(e) {
+	if(input3.value.length === 0 && input3.value() !== '') {
+  	button3.disabled = true
+  } else {
+  	button3.disabled = false
+  }
+})
+
+
+/* $(document).ready(function() {
+
+
+
+	
 $('input[type="file"]').change(function(){
-    if($('#attachment').val() != '' && $('#attachment2').val() != '' && $('#attachment3').val() != '' )
+    if($('#attachment').val() != '' ||   $('#attachment2').val() != '' ||  $('#attachment3').val() != '' )
     {
       $('#Submit').attr('disabled', false);
     }
   });
-});
+}); */
 function AvoidSpace(event) {
     var k = event ? event.which : window.event.keyCode;
     if (k == 32) return false;
