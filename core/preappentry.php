@@ -99,7 +99,7 @@
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Date of Birth<span class='spanre'>*</span><span ng-show="applicationEntryForm.dob.$touched ||applicationEntryForm.dob.$dirty && applicationEntryForm.dob.$invalid">
 								<span class = 'err' ng-show="applicationEntryForm.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input  ng-model="dob" type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
+								<input  ng-model="dob" type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob'  onkeydown="return false" required class='form-control'/>
 						</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label> Business Type

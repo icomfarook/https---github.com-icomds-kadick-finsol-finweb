@@ -140,9 +140,11 @@
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
 									<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>
+										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
 									</td>
 									 <?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<td ng-if="x.stat === 'P'"><a id={{x.id}} class='ApplicationEditDialogue' ng-click='edit($index,x.id,x.status,x.name)' data-toggle='modal' data-target='#ApplicationEditDialogue'>
@@ -312,7 +314,7 @@
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						
-						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span></h2>
+						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span><span  ng-if= "file=='S'" >Signature Document - {{outletname}} </span></h2>
 						
 					</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
@@ -627,13 +629,11 @@
 </div>
 </div>
 <script type="text/javascript">
-// Run Datables plugin and create 3 variants of settings
 function AllTables(){
-	//TestTable1();
-	//$("#datatable-1_filter, #datatable-1_length, .maintable box-content").hide();
-	//$(".box-content").css("padding","0px");
-	//TestTable2();
-	//TestTable3();
+	TestTable1();
+	TestTable2();
+	TestTable3();
+	LoadSelect2Script();
 }
 		var curDate = new Date();
 		curDate =curDate.getFullYear()+"-"+(curDate.getMonth()+1)+"-"+curDate.getDate();
@@ -641,7 +641,7 @@ function AllTables(){
 		$("#StartDate, #EndDate").val(curDate);
 	$(document).ready(function() {
 	$("#Query").click(function() {				
-		//LoadDataTablesScripts(AllTables);
+		LoadDataTablesScripts(AllTables);
 		
 		
 	});

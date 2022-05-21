@@ -11,6 +11,8 @@
 $profile_id  = $_SESSION['profile_id'];
 ?>
 <style>
+
+	
 #AddAuthorizationDialogue .table > tbody > tr > td {
 	border:none;
 }
@@ -116,45 +118,47 @@ $profile_id  = $_SESSION['profile_id'];
 								<tr> 
 									<th><?php echo PRE_APPLICATION_VIEW_ID; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_OUTLET_NAME; ?></th>
-									<th><?php echo PRE_APPLICATION_VIEW_CONTACT_PERSON_NAME; ?></th>
+									<th>Date  Time</th>
 									<th><?php echo PRE_APPLICATION_VIEW_STATUS; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_DETAIL; ?></th>
 									<th>Attachments</th>
 									<th> Edit Attachments</th>
 									<th><?php echo PRE_APPLICATION_VIEW_TRANSFER; ?></th>
 									<th><?php echo PRE_APPLICATION_VIEW_REJECT; ?></th>
-									<th ng-show="x.status='R'">Delete</th>
+									<th>Delete</th>
 								</tr>
 							</thead>
 							<tbody>
 								 <tr ng-repeat="x in appviews">
 									<td>{{ x.id }}</td>
 									<td>{{ x.name }}</td>
-									<td>{{ x.cpn }}</td>
+									<td>{{ x.time }}</td>
 									<td>{{ x.status }}</td>
 									<td><a id={{x.id}} class='ApplicationViewDialogue' ng-click='view($index,x.id)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
 										<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/ui.png' /></button></a>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
 									</td>
+									<td ng-show="x.stat !=='E'"> - </td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='editattach1($index,x.id, x.name);editattach2($index,x.id, x.name);editattach3($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/clip.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
 									</td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='transfer($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationTransferDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
 									<td ng-show="x.stat !=='E'"> - </td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='reject' ng-click='preappviewreject($index,x.id,x.name)' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
 									</td>
+									
 									<td ng-show="x.stat !=='E'"> - </td>
 										<td ng-show="x.stat==='R'"><a id={{x.id}} class='Delete' data-toggle='modal' ng-click='Previewdelete($index,x.id,x.name)' data-target='#preApplicationDeleteDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/delete.png' /></button></a>
 									</td>
 									<td ng-show="x.stat !=='R'"> - </td>
 								</tr>
@@ -175,14 +179,17 @@ $profile_id  = $_SESSION['profile_id'];
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" ng-click='cancel()' class="close" data-dismiss="modal">&times;</button>
-					<h2 style='text-align:center'><?php echo PRE_APPLICATION_VIEW_HEADING1; ?> -  {{name}} </h2>
+					<h2 style='text-align:center'>Transfer Action: -  {{name}} </h2>
 				</div>	
 				<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 				<div class='modal-body'  ng-hide='isLoader'>
 					<div id="TransferBody">	
 						<form action="" method="POST" name='ApplicatioTransferDForm' id="ApplicatioTransferDForm">
+						<div style="margin-left: 30px;font-weight: bold;" ng-show='BVNsuccess'>BVN Check: <label  style="color: green;" >BVN Validate Successfully</label></div>
+						
 						<div ng-show="bvn_validated" class='row appcont'>
-							<div style="border-style: ridge;width: fit-content;border-radius: 15%;margin-left: 45%;"  class='col-lg-12 col-xs-12 col-sm-12 col-md-12' ><label ng-model="bvn_validated">BVN Check : </label> <label  ng-hide='labelHide' style="color: red;"    ng-show="bvn_validated">BVN Check is not done</label><label ng-show="Success"   style="color: green;" >BVN Validate Successfully</label><label style="color: red;"    ng-show="Failure">BVN Validate Failure</label><br />
+							
+							<div style="border-style: ridge;width: fit-content;margin-left: 38%;padding:10px;"  class='col-lg-12 col-xs-12 col-sm-12 col-md-12' ><label ng-model="bvn_validated">BVN Check : </label> <label  ng-hide='labelHide' style="color: red;"    ng-show="bvn_validated">BVN Check is not done</label><label ng-show="Success"   style="color: green;" >BVN Validate Successfully</label><label style="color: red;"    ng-show="Failure">BVN Validate Failure</label><br />
 							<button type='button' ng-disabled='BVNBtn' class='btn btn-primary'  id='prospects_form' ng-click='Getbvn(id)'>BVN Check</button></div>
 						</div><br />
 							<div  class='row appcont'>				
@@ -422,11 +429,11 @@ $profile_id  = $_SESSION['profile_id'];
 		<div class="modal-dialog modal-md">
 			<div class="modal-content">
 				<div class="modal-header">
-					<button  ng-hide='isLoader' type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>Edit Attached Documents - #{{id}}</span></h2>
+					<button  ng-hide='isLoader' ng-click='resets()' type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'>Edit Attached Documents - #{{id}} </span></h2>
 				</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
-					    <form action="" method="POST" name='ApplicationRejDialogue' id="ApplicationRejDialogue">
+					    <form action="" method="POST" name='applicationEntryForm' id="applicationEntryForm">
 					        <div class='modal-body'>
 								<div id='AppentryCreateBody' ng-hide='isLoader'>
 							        <table class='table table-borderd'>
@@ -504,11 +511,11 @@ $profile_id  = $_SESSION['profile_id'];
 					
 						<div id='RejectBody' ng-hide='isLoader'>
 						
-							<div class='row' >
+						<div class='row' >
 								<div class='col-xs-12 col-lg-12 col-md-12 col-sm-12'>
 									<label><?php echo PRE_APPLICATION_VIEW_APPROVER_COMMENTS; ?><span class='spanre'>*</span><span ng-show="ApplicationRejDialogue.Comments.$dirty && ApplicationRejDialogue.Comments.$invalid">
 									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
-									<textarea rows='4' placeholder="Leave your comments" ng-model='comments' name='Comments' class='form-control'  required />
+									<textarea rows='4' placeholder="Leave your comments" ng-model='comments'  id="comments" name='Comments' class='form-control'  required />
 									</textarea>
 								</div>
 							</div>
@@ -618,7 +625,13 @@ function AvoidSpace(event) {
 		$("#StartDate, #EndDate").val(curDate);
 $(document).ready(function() {
 
-
+	$('#Reject').attr('disabled',true);
+    $('#comments').keyup(function(){
+        if($(this).val().length !=0)
+            $('#Reject').attr('disabled', false);            
+        else
+            $('#Reject').attr('disabled',true);
+    })
 	
 	$("#Query").click(function() {				
 		LoadDataTablesScripts(AllTables);

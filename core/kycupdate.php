@@ -188,14 +188,14 @@
 									<td>{{ x.partyCode }}</td>
 									<td>{{ x.partyType }}</td>
                                     <td><a  id={{x.id}} class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
 										<a   id={{x.id}} class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
 										<a  id={{x.id}}  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/ui.png' /></button></a>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
 									</td>
                                     <td><a id={{x.id}} class='transfer' ng-click='editattach1($index,x.id, x.name);editattach2($index,x.id, x.name);editattach3($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/clip.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
 									</td>
 									
 										 
@@ -258,7 +258,7 @@
 						<h2 style='text-align:center'>Edit Attached Documents - #{{id}}</span></h2>
 				</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
-					    <form action="" method="POST" name='ApplicationRejDialogue' id="ApplicationRejDialogue">
+					    <form action="" method="POST" name='applicationEntryForm' id="applicationEntryForm">
 					        <div class='modal-body'>
 								<div id='AppentryCreateBody' ng-hide='isLoader'>
 							        <table class='table table-borderd'>
@@ -268,7 +268,7 @@
 													<input id="IdDocument" required ng-model='IDDocument'   placeholder="Choose File"  disabled="disabled" class='form-control' />
 												   <div ng-show="isInputDisabled"  class="fileUpload btn btn-primary" style='bottom:8px;' >
 													<span>Upload</span>
-													<input type="file"  accept="image/jpg,image/jpeg,image/png,application/pdf" valid-file ng-file='uploadfiles' data-max-size="2097152 " name='attachment' ng-disabled='attachment' required  ng-value='true' ng-model="attachment" class="upload" id="attachment">
+													<input type="file"  accept="image/jpg,image/jpeg,image/png,application/pdf" valid-file ng-file='uploadfiles' data-max-size="2097152 " name='attachment' ng-disabled='attachment' required  ng-value='true' ng-model="attachment" class="upload" id="attachment" required >
 													</div>
 												
 											   </div>
@@ -284,7 +284,7 @@
 												<input id="CompanyDocument"  ng-model='BussinessDocument' placeholder="Choose File"   disabled="disabled" class='form-control' />
 												<div ng-show="isInputDisabled2s"  class="fileUpload btn btn-primary" style='bottom:8px;' >
 													<span>Upload</span>
-													<input type="file"accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles2' data-max-size="2097152 " name='attachment2'   ng-model="attachment2"  ng-disabled='attachment2' ng-value='true' class="upload" id="attachment2">
+													<input type="file"accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles2' data-max-size="2097152 " name='attachment2'   ng-model="attachment2"  ng-disabled='attachment2' ng-value='true' class="upload" id="attachment2" required >
 												</div>
 											</div></td>
 											<td ><a id={{x.id}} class='Delete' ng-hide='Deletes' data-toggle='modal'  ng-confirm-click="Are you sure want to Delete the existing Business Document for this User ?"  confirmed-click='Deleteattachment2($index,id,application_attachment_id,attachment_type)'>
@@ -298,7 +298,7 @@
 													<input id="signatureDocument"   ng-model='SignatureDocucment'  placeholder="Choose File"  disabled="disabled" class='form-control' />
 													<div  ng-show="isInputDisabled3" class="fileUpload btn btn-primary" style='bottom:8px;' >
 														<span>Upload</span>
-														<input type="file"     accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'  ng-disabled='attachment3' ng-model="attachment3" class="upload" ng-value='true' id="attachment3">
+														<input type="file"     accept="image/jpg,image/jpeg,image/png,application/pdf"  ng-file='uploadfiles3' data-max-size="2097152 " name='attachment3'  ng-disabled='attachment3' ng-model="attachment3" class="upload" ng-value='true' id="attachment3" required > 
 													</div>
 												</div>
 											</td>
@@ -312,7 +312,7 @@
 						 
 							<div class='modal-footer' style='text-align:center'>
 								<button type='button' class='btn btn-primary' ng-click='refresh()'  id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_ENTRY_BUTTON_OK; ?></button>
-								<button type="button" ng-hide='isHide' class="btn btn-primary"  ng-click='InsertNew($index,id,application_attachment_id,application_id,attachment_type)'    disabled id="Submit"><?php echo APPLICATION_ENTRY_BUTTON_SUBMIT_APPLICATION; ?></button>
+								<button type="button" ng-hide='isHide' class="btn btn-primary"  ng-click='InsertNew($index,id,application_attachment_id,application_id,attachment_type)'    ng-disabled='"applicationEntryForm.$invalid"'  id="Submit"><?php echo APPLICATION_ENTRY_BUTTON_SUBMIT_APPLICATION; ?></button>
 								<button type="button" class="btn btn-primary" ng-click='refresh()'  ng-hide='isHideReset' id="Reset">Refresh</button>
 						
 							</div>
@@ -372,6 +372,13 @@ input3.addEventListener("input", function(e) {
 
 
 $(document).ready(function() {
+
+    $('input[type=file][name="images[]"]').change(function(){
+    var hasNoFiles = this.files.length == 0;
+    $(this).closest('form') /* Select the form element */
+       .find('input[type=submit]') /* Get the submit button */
+       .prop('disabled', hasNoFiles); /* Disable the button. */
+});
   
 	//this script for the datatable.
 	$("#Query").click(function() {				

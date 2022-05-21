@@ -170,7 +170,7 @@
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Date of Birth<span class='spanre'>*</span><span ng-show="ApplicationEntryForms.dob.$touched ||ApplicationEntryForms.dob.$dirty && ApplicationEntryForms.dob.$invalid">
 								<span class = 'err'   ng-show="ApplicationEntryForms.dob.$error.required"><?php echo REQUIRED;?></span></span></label>
-								<input  ng-model="dob" ng-disabled='isInputDisabled' type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' required class='form-control'/>
+								<input  ng-model="dob" ng-disabled='isInputDisabled' type='date' id='dob'  data-date-format="yyyy-mm-dd" name='dob' onkeydown="return false" required class='form-control'/>
 						</div>
 							
 							</div>
@@ -354,7 +354,7 @@
 						
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo APPLICATION_ENTRY_COMMENT; ?></label>
-								<input  ng-model="comment" type='text' ng-disabled='BVNCheckForm' id='Comment' maxlength='256' name='comment' class='form-control'/>
+								<input  ng-model="comment" type='text' ng-disabled='BVNCheckForm' id='Comment' maxlength='256' name='comment' required class='form-control'/>
 							</div>
 							
 							

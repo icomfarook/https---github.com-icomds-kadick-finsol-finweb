@@ -126,7 +126,7 @@
 							</tr>
 					</tbody>					
 				</table>
-				<table  ng-hide='isLoader'  ng-show='deshow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+				<table  ng-hide='isLoader'  ng-show='deshow' class="table maintable table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 					<thead>
 						<tr>
 							<th>Inventory id</th>
@@ -267,7 +267,7 @@
 			<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h2 style='text-align:center'>Edit Terminal Inventory</h2>
+						<h2 style='text-align:center'>Edit Terminal Inventory - {{TerminalId}}</h2>
 					</div>		
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>					
 					<div class='modal-body' style='margin-top:2%'>
@@ -325,7 +325,7 @@
 								<input ng-model="Swversion"  type='text' ng-disabled='isInputDisabled' id='SWversion' maxlength='11' name='SWversion' required class='form-control'/>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-							       <label>Fw Version<<span ng-show="InventoryEditForm.FwVersion.$touched ||InventoryEditForm.FwVersion.$dirty && InventoryEditForm.FwVersion.$invalid">
+							       <label>Fw Version<span ng-show="InventoryEditForm.FwVersion.$touched ||InventoryEditForm.FwVersion.$dirty && InventoryEditForm.FwVersion.$invalid">
 								<span class = 'err' ng-show="InventoryEditForm.FwVersion.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<input ng-model="FwVersion"  type='text' ng-disabled='isInputDisabled' id='FwVersion'  maxlength='11' name='FwVersion' required class='form-control'/>
 							</div>
@@ -567,19 +567,20 @@
 
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
-/* function AllTables(){
+function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	//LoadSelect2Script();
-} */
+	LoadSelect2Script();
+}
 $(document).ready(function() {
 	
-/*  $("#Query").click(function() {				
+	$("#Query").click(function() {				
 		LoadDataTablesScripts(AllTables);
+	
 		// $.fn.dataTableExt.sErrMode = 'throw' ;
-	}); */
-
+	});
+	
 	$("#EditBankAccountrDialogue, #AddBankAccountDialogue").on("click","#Ok",function() {
 		window.location.reload();
 	});
