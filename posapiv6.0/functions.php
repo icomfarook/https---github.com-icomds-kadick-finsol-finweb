@@ -285,7 +285,6 @@
 		return $ret_val;
 	}	
 	
-
 	function process_glentry($acc_trans_type, $transaction_id, $firstpartycode, $firstpartytype, $secondpartycode, $secondpartytype, $comment, $amount, $uid, $con) {
 	    	
 		if ( $secondpartycode == "" ) {
@@ -597,7 +596,6 @@
 			return 0;
 		}
 	}
-
 	
 	function insertAccountServiceOrderComm($acc_service_order_no, $serviceconfig, $journal_entry_id, $txType, $agentCharge, $amsCharge, $con) {
 		
@@ -721,18 +719,61 @@
 						}
 						$result = 0;
 					}else {
-						error_log("validateKey1 -> invalid user_id");
+						error_log("validateKey2 -> invalid user_id");
 					}
 				}else {
-					error_log("validateKey1 -> invalid key1 values");
+					error_log("validateKey2 -> invalid key1 values");
 				}
 			}catch(Exception $e1) {
-				error_log("Exception in validateKey1: ".$e1->getMessage());
+				error_log("Exception in validateKey2: ".$e1->getMessage());
 			}
 		}
-		error_log("validateKey1.result = ".$result);
+		error_log("validateKey2.result = ".$result);
 		return $result;
 	}
+
+	function validateKey3($key1, $local_signature, $con) {
+
+		//valid key1: return 0, invalid key1: return 1;
+		//This function to be used by other finweb source like cron
+		$result = 1;
+		date_default_timezone_set('Africa/Lagos');
+		try {
+			$nday = date('z')+1;
+			$skey0 = date("mdY");
+			$skey1 = $nday;
+			$skey2 = $local_signature;
+			$skeya = str_pad($skey0.$skey1.$skey2, 16, '0', STR_PAD_LEFT);
+			$skeyb = str_pad($skey2.$skey1.$skey0, 16, '0', STR_PAD_LEFT);
+			error_log("skeya = ".$skeya.", skeyb = ".$skeyb);
+			error_log("before calling Security::decrypt");
+			$key1_result = AesCipher::decrypt($skeya, $key1);
+			error_log("after calling Security::decrypt");
+			$tilda_found = strpos($key1_result, '~');
+			if ( $tilda_found == false ) {
+				$result = 2;
+			}else {
+				$key1_array = explode("~", $key1_result);
+				$password = $key1_array[0];
+				$uname = $key1_array[1];
+				$token = $key1_array[2];
+				$ltime = $key1_array[3];
+				error_log("skey0.skye0 = ".$skey0.$skey0);
+				error_log("password = ".$password.", uname = ".$uname.", token = ".$token.", ltime = ".$ltime);
+				if ( $uname == $skeyb && $password == ($skey0.$skey0)) {
+					$result = 0;
+				}else {
+					$result = 3;
+				}
+			}
+		}catch(Exception $e1) {
+			error_log("Exception in validateKey2: ".$e1->getMessage());
+			$result = 4;
+		}
+		error_log("validateKey3.result = ".$result);
+		return $result;
+	}
+
 	
 	function checkDailyLimit($user_id, $requestAmount, $con) {
 		//Within Daily Limit: return 0, Exceed Daily Limit: -1, Invalid User: -2, Other Error: -3
@@ -837,8 +878,6 @@
 		error_log("checkForAlreadyProcessedJournalEntry for user_id = ".$user_id." for description = ".$description.", party_code = ".$party_code.", result = ".$result);
 		return $result;
 	}	
-	
-	
 	
 	function checkForAlreadyProcessedFundWalletOrder($user_id, $payment_reference, $con) {
 		$result = -1;

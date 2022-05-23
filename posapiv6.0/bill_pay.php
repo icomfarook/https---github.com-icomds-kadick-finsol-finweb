@@ -3,8 +3,8 @@
 	include("../common/admin/finsol_crypt.php");
 	include ("get_prime.php");	
 	require_once ("AesCipher.php");
-    	require_once("db_connect.php");
-    	include ("functions.php");
+    require_once("db_connect.php");
+    include ("functions.php");
 	error_log("inside pcposapi/bill_pay.php");
 	$response = array();
 	$current_time = date('Y-m-d H:i:s');
@@ -13,8 +13,8 @@
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		error_log("inside post request method");
-        	$data = json_decode(file_get_contents("php://input"));
-        	error_log("bill_pay <== ".json_encode($data));
+        $data = json_decode(file_get_contents("php://input"));
+        error_log("bill_pay <== ".json_encode($data));
 
 		if(isset($data -> operation) && $data -> operation == 'BP_PRODUCT_LIST') {
 			error_log("inside operation == BP_PRODUCT_LIST method");
@@ -34,7 +34,7 @@
 				$billerId = $data->billerId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -43,10 +43,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
-		                	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+		            $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -58,45 +58,45 @@
 						echo json_encode($response);
 						return;
 					} 
-		                	//$select_bp_product_query = "select bp_product_id, bp_product_name, bp_biller_id from kadick_bp_biller_product where active = 'Y' and bp_biller_id = $billerId";
-		                	$select_bp_product_query = "select bp_product_id, bp_product_name, bp_biller_id from kadick_bp_biller_product where active = 'Y' and bp_biller_id = $billerId";
-		                	error_log("select_bp_product_query = ".$select_bp_product_query);
-		                	$select_bp_product_result = mysqli_query($con, $select_bp_product_query);
-		                   	$response["bpProducts"] = array();
+		            //$select_bp_product_query = "select bp_product_id, bp_product_name, bp_biller_id from kadick_bp_biller_product where active = 'Y' and bp_biller_id = $billerId";
+		            $select_bp_product_query = "select bp_product_id, bp_product_name, bp_biller_id from kadick_bp_biller_product where active = 'Y' and bp_biller_id = $billerId";
+		            error_log("select_bp_product_query = ".$select_bp_product_query);
+		            $select_bp_product_result = mysqli_query($con, $select_bp_product_query);
+		            $response["bpProducts"] = array();
 					if ( $select_bp_product_result ) {
 						while($select_bp_product_row = mysqli_fetch_assoc($select_bp_product_result)) {
-						    	$bpProduct = array();
-						    	$bpProduct['productId'] = $select_bp_product_row['bp_product_id'];
-						    	$bpProduct['productName'] = $select_bp_product_row['bp_product_name'];
-						    	$bpProduct['billerId'] = $select_bp_product_row['bp_biller_id'];
-						    	array_push($response["bpProducts"], $bpProduct);
+						    $bpProduct = array();
+						    $bpProduct['productId'] = $select_bp_product_row['bp_product_id'];
+						    $bpProduct['productName'] = $select_bp_product_row['bp_product_name'];
+						    $bpProduct['billerId'] = $select_bp_product_row['bp_biller_id'];
+						    array_push($response["bpProducts"], $bpProduct);
 						}
-		                        	$response["result"] = "Success";
-		                        	$response["message"] = "Your request is processed successfuly";
-		                        	$response["statusCode"] = 0;
-		                        	$response["signature"] = $server_signature;
+		                $response["result"] = "Success";
+		                $response["message"] = "Your request is processed successfuly";
+		                $response["statusCode"] = 0;
+		                $response["signature"] = $server_signature;
 					}
-		                	else {
-		                	       	$response["result"] = "Error";
-		                	       	$response["message"] = "Error in finding your product list";
-		                	       	$response["statusCode"] = "100";
-		                	       	$response["signature"] = $server_signature;
-		                	}
+		            else {
+		               	$response["result"] = "Error";
+		               	$response["message"] = "Error in finding your product list";
+		               	$response["statusCode"] = "100";
+		               	$response["signature"] = $server_signature;
+		            }
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-		                	$response["message"] = "Failure: Invalid request";
-		                	$response["signature"] = $server_signature;
+		            $response["message"] = "Failure: Invalid request";
+		            $response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-		                $response["message"] = "Failure: Invalid Data";
-		                $response["signature"] = 0;
+		        $response["message"] = "Failure: Invalid Data";
+		        $response["signature"] = 0;
 			}
-        	}
+        }
 		else if(isset($data -> operation) && $data -> operation == 'BP_PAYANT_PRODUCT_LIST') {
 			error_log("inside operation == BP_PAYANT_PRODUCT_LIST method");
 			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
@@ -115,7 +115,7 @@
 				$billerId = $data->billerId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -124,10 +124,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
-		                	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+		            $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -139,45 +139,45 @@
 						echo json_encode($response);
 						return;
 					} 
-		                	$select_bp_product_query = "select bundle_code, concat(amount, ' - ', name) as name, amount, bp_payant_service_category_id as bp_biller_id from bp_payant_service_product where active = 'Y' and bp_payant_service_category_id = $billerId order by name";
-		                	error_log("select_bp_product_query = ".$select_bp_product_query);
-		                	$select_bp_product_result = mysqli_query($con, $select_bp_product_query);
-		                   	$response["bpProducts"] = array();
+		            $select_bp_product_query = "select bundle_code, concat(amount, ' - ', name) as name, amount, bp_payant_service_category_id as bp_biller_id from bp_payant_service_product where active = 'Y' and bp_payant_service_category_id = $billerId order by name";
+		            error_log("select_bp_product_query = ".$select_bp_product_query);
+		            $select_bp_product_result = mysqli_query($con, $select_bp_product_query);
+		            $response["bpProducts"] = array();
 					if ( $select_bp_product_result ) {
 						while($select_bp_product_row = mysqli_fetch_assoc($select_bp_product_result)) {
-						    	$bpProduct = array();
-						    	$bpProduct['productCode'] = $select_bp_product_row['bundle_code'];
-						    	$bpProduct['productName'] = $select_bp_product_row['name'];
-						    	$bpProduct['billerId'] = $select_bp_product_row['bp_biller_id'];
-						    	$bpProduct['amount'] = $select_bp_product_row['amount'];
-						    	array_push($response["bpProducts"], $bpProduct);
+						    $bpProduct = array();
+						    $bpProduct['productCode'] = $select_bp_product_row['bundle_code'];
+						    $bpProduct['productName'] = $select_bp_product_row['name'];
+						    $bpProduct['billerId'] = $select_bp_product_row['bp_biller_id'];
+						    $bpProduct['amount'] = $select_bp_product_row['amount'];
+						    array_push($response["bpProducts"], $bpProduct);
 						}
-		                        	$response["result"] = "Success";
-		                        	$response["message"] = "Your request is processed successfuly";
-		                        	$response["statusCode"] = 0;
-		                        	$response["signature"] = $server_signature;
+		                $response["result"] = "Success";
+		                $response["message"] = "Your request is processed successfuly";
+		                $response["statusCode"] = 0;
+		                $response["signature"] = $server_signature;
 					}
-		                	else {
-		                	       	$response["result"] = "Error";
-		                	       	$response["message"] = "Error in finding your product list";
-		                	       	$response["statusCode"] = "100";
-		                	       	$response["signature"] = $server_signature;
-		                	}
+		            else {
+		            	$response["result"] = "Error";
+		                $response["message"] = "Error in finding your product list";
+		                $response["statusCode"] = "100";
+		                $response["signature"] = $server_signature;
+		            }
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-		                	$response["message"] = "Failure: Invalid request";
-		                	$response["signature"] = $server_signature;
+		            $response["message"] = "Failure: Invalid request";
+		            $response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-		                $response["message"] = "Failure: Invalid Data";
-		                $response["signature"] = 0;
+		        $response["message"] = "Failure: Invalid Data";
+		        $response["signature"] = 0;
 			}
-        	}
+        }
 		else if(isset($data -> operation) && $data -> operation == 'BP_OPAY_BETTING_PROVIDER_LIST') {
 			error_log("inside operation == BP_OPAY_BETTING_PROVIDER_LIST method");
 			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
@@ -196,7 +196,7 @@
 				$billerId = $data->billerId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -205,10 +205,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
-		                	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+		            $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -220,48 +220,48 @@
 						echo json_encode($response);
 						return;
 					} 
-		                	$select_betting_provider_query = "select bp_opay_service_provider_id as id, bp_opay_service_provider_name as name, bp_opay_service_min_amount as min_amount, bp_opay_service_max_amount as max_amount from bp_opay_service_provider where active = 'Y' and bp_opay_service_id = $billerId order by bp_opay_service_provider_name";
-		                	error_log("select_betting_provider_query = ".$select_betting_provider_query);
-		                	$select_betting_provider_result = mysqli_query($con, $select_betting_provider_query);
-		                   	$response["providers"] = array();
+		            $select_betting_provider_query = "select bp_opay_service_provider_id as id, bp_opay_service_provider_name as name, bp_opay_service_min_amount as min_amount, bp_opay_service_max_amount as max_amount from bp_opay_service_provider where active = 'Y' and bp_opay_service_id = $billerId order by bp_opay_service_provider_name";
+		            error_log("select_betting_provider_query = ".$select_betting_provider_query);
+		            $select_betting_provider_result = mysqli_query($con, $select_betting_provider_query);
+		            $response["providers"] = array();
 					if ( $select_betting_provider_result ) {
 						while($select_betting_provider_row = mysqli_fetch_assoc($select_betting_provider_result)) {
-						    	$provider = array();
-						    	$provider['id'] = $select_betting_provider_row['id'];
-						    	$provider['name'] = $select_betting_provider_row['name'];
-						    	$provider['minimumAmount'] = $select_betting_provider_row['min_amount'];
-						    	$provider['maximumAmount'] = $select_betting_provider_row['max_amount'];
-						    	array_push($response["providers"], $provider);
+							$provider = array();
+						    $provider['id'] = $select_betting_provider_row['id'];
+						    $provider['name'] = $select_betting_provider_row['name'];
+						    $provider['minimumAmount'] = $select_betting_provider_row['min_amount'];
+						    $provider['maximumAmount'] = $select_betting_provider_row['max_amount'];
+						    array_push($response["providers"], $provider);
 						}
-		                        	$response["result"] = "Success";
-		                        	$response["message"] = "Your request is processed successfuly";
-		                        	$response["statusCode"] = 0;
-		                        	$response["signature"] = $server_signature;
+		                $response["result"] = "Success";
+		                $response["message"] = "Your request is processed successfuly";
+		                $response["statusCode"] = 0;
+		                $response["signature"] = $server_signature;
 					}
-		                	else {
-		                	       	$response["result"] = "Error";
-		                	       	$response["message"] = "Error in finding your provider list";
-		                	       	$response["statusCode"] = "100";
-		                	       	$response["signature"] = $server_signature;
-		                	}
+		            else {
+		                $response["result"] = "Error";
+		            	$response["message"] = "Error in finding your provider list";
+		                $response["statusCode"] = "100";
+		                $response["signature"] = $server_signature;
+		        	}
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-		                	$response["message"] = "Failure: Invalid request";
-		                	$response["signature"] = $server_signature;
+		            $response["message"] = "Failure: Invalid request";
+		            $response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-		                $response["message"] = "Failure: Invalid Data";
-		                $response["signature"] = 0;
+		        $response["message"] = "Failure: Invalid Data";
+		        $response["signature"] = 0;
 			}
-        	}        	
-        	else if(isset($data -> operation) && $data -> operation == 'BP_BILLER_LIST') {
+        }        	
+        else if(isset($data -> operation) && $data -> operation == 'BP_BILLER_LIST') {
 			error_log("inside operation == BP_BILLER_LIST method");
-            		if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+            if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
 			  	&& isset($data->userId) && !empty($data->userId) && isset($data->partyCode) && !empty($data->partyCode) 
 			   	&& isset($data->partyType) && !empty($data->partyType) && isset($data->countryId) && !empty($data->countryId)
 			   	&& isset($data->stateId) && !empty($data->stateId) && isset($data->billerGroupId) && !empty($data->billerGroupId) 
@@ -278,7 +278,7 @@
 				$billerGroupId = $data->billerGroupId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
                 
-                		error_log("signature = ".$signature.", key1 = ".$key1);
+                error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -287,10 +287,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-                		error_log("server_signature = ".$server_signature);
+                error_log("server_signature = ".$server_signature);
                                 
 				if ( $local_signature == $signature ) {
-                    			$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+                    $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -302,10 +302,10 @@
 						echo json_encode($response);
 						return;
 					} 
-                    			$select_bp_biller_query = "select bp_biller_id, bp_biller_name, bp_biller_group_id from kadick_bp_biller where active = 'Y' and bp_biller_group_id = $billerGroupId order by bp_biller_id";
-                    			error_log("select_bp_biller_query = ".$select_bp_biller_query);
-                   			$select_bp_biller_result = mysqli_query($con, $select_bp_biller_query);
-                   			$response["bpBillers"] = array();
+                    $select_bp_biller_query = "select bp_biller_id, bp_biller_name, bp_biller_group_id from kadick_bp_biller where active = 'Y' and bp_biller_group_id = $billerGroupId order by bp_biller_id";
+                    error_log("select_bp_biller_query = ".$select_bp_biller_query);
+                   	$select_bp_biller_result = mysqli_query($con, $select_bp_biller_query);
+                   	$response["bpBillers"] = array();
 					if ( $select_bp_biller_result ) {
 						while($select_bp_biller_row = mysqli_fetch_assoc($select_bp_biller_result)) {
 					    	$bpBiller = array();
@@ -314,35 +314,35 @@
 					    	$bpBiller['groupId'] = $select_bp_biller_row['bp_biller_group_id'];
 					    	array_push($response["bpBillers"], $bpBiller);
 					}
-                        		$response["result"] = "Success";
-                        		$response["message"] = "Your request is processed successfuly";
-                        		$response["statusCode"] = 0;
-                        		$response["signature"] = $server_signature;
+                        $response["result"] = "Success";
+                        $response["message"] = "Your request is processed successfuly";
+                        $response["statusCode"] = 0;
+                        $response["signature"] = $server_signature;
 					}
-                		   	else {
-                		        	$response["result"] = "Error";
-                		        	$response["message"] = "Error in finding your biller list";
-                		        	$response["statusCode"] = "100";
-                		        	$response["signature"] = $server_signature;
-                		    	}
+                	else {
+                		$response["result"] = "Error";
+                		$response["message"] = "Error in finding your biller list";
+                		$response["statusCode"] = "100";
+                		$response["signature"] = $server_signature;
+                	}
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-                	    		$response["message"] = "Failure: Invalid request";
-                	    		$response["signature"] = $server_signature;
+                	$response["message"] = "Failure: Invalid request";
+                	$response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-                		$response["message"] = "Failure: Invalid Data";
-                		$response["signature"] = 0;
+                $response["message"] = "Failure: Invalid Data";
+                $response["signature"] = 0;
 			}
         	}
 		else if(isset($data -> operation) && $data -> operation == 'BP_PAYANT_BILLER_LIST') {
 			error_log("inside operation == BP_PAYANT_BILLER_LIST method");
-            		if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+            if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
 			  	&& isset($data->userId) && !empty($data->userId) && isset($data->partyCode) && !empty($data->partyCode) 
 			   	&& isset($data->partyType) && !empty($data->partyType) && isset($data->countryId) && !empty($data->countryId)
 			   	&& isset($data->stateId) && !empty($data->stateId) && isset($data->billerGroupId) && !empty($data->billerGroupId) 
@@ -359,7 +359,7 @@
 				$billerGroupId = $data->billerGroupId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
                 
-                		error_log("signature = ".$signature.", key1 = ".$key1);
+                error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -368,10 +368,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-                		error_log("server_signature = ".$server_signature);
+                error_log("server_signature = ".$server_signature);
                                 
 				if ( $local_signature == $signature ) {
-                    			$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+                    $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -383,10 +383,10 @@
 						echo json_encode($response);
 						return;
 					} 
-                    			$select_bp_biller_query = "select bp_payant_service_category_id as bp_biller_id, bp_payant_service_category_name as bp_biller_name, bp_payant_service_id as bp_biller_group_id from bp_payant_service_category where active = 'Y' and bp_payant_service_id = $billerGroupId order by bp_payant_service_category_name";
-                    			error_log("select_bp_biller_query = ".$select_bp_biller_query);
-                   			$select_bp_biller_result = mysqli_query($con, $select_bp_biller_query);
-                   			$response["bpBillers"] = array();
+                    $select_bp_biller_query = "select bp_payant_service_category_id as bp_biller_id, bp_payant_service_category_name as bp_biller_name, bp_payant_service_id as bp_biller_group_id from bp_payant_service_category where active = 'Y' and bp_payant_service_id = $billerGroupId order by bp_payant_service_category_name";
+                    error_log("select_bp_biller_query = ".$select_bp_biller_query);
+                   	$select_bp_biller_result = mysqli_query($con, $select_bp_biller_query);
+                   	$response["bpBillers"] = array();
 					if ( $select_bp_biller_result ) {
 						while($select_bp_biller_row = mysqli_fetch_assoc($select_bp_biller_result)) {
 					    	$bpBiller = array();
@@ -394,36 +394,36 @@
 					    	$bpBiller['billerName'] = $select_bp_biller_row['bp_biller_name'];
 					    	$bpBiller['groupId'] = $select_bp_biller_row['bp_biller_group_id'];
 					    	array_push($response["bpBillers"], $bpBiller);
+						}
+                    	$response["result"] = "Success";
+                    	$response["message"] = "Your request is processed successfuly";
+                    	$response["statusCode"] = 0;
+                    	$response["signature"] = $server_signature;
 					}
-                        		$response["result"] = "Success";
-                        		$response["message"] = "Your request is processed successfuly";
-                        		$response["statusCode"] = 0;
-                        		$response["signature"] = $server_signature;
-					}
-                		   	else {
-                		        	$response["result"] = "Error";
-                		        	$response["message"] = "Error in finding your biller list";
-                		        	$response["statusCode"] = "100";
-                		        	$response["signature"] = $server_signature;
-                		    	}
+                	else {
+                		$response["result"] = "Error";
+                		$response["message"] = "Error in finding your biller list";
+                		$response["statusCode"] = "100";
+                		$response["signature"] = $server_signature;
+                	}
 				}else {
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-                	    		$response["message"] = "Failure: Invalid request";
-                	    		$response["signature"] = $server_signature;
+                	$response["message"] = "Failure: Invalid request";
+                	$response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-                		$response["message"] = "Failure: Invalid Data";
-                		$response["signature"] = 0;
+                $response["message"] = "Failure: Invalid Data";
+                $response["signature"] = 0;
 			}
-        	}        	
-        	else if(isset($data -> operation) && $data -> operation == 'BP_CHARGE_OPERATION') {
+        }        	
+        else if(isset($data -> operation) && $data -> operation == 'BP_CHARGE_OPERATION') {
 			error_log("inside operation == BP_CHARGE_OPERATION method");
-		    	if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+		    if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
 			  	&& isset($data->userId) && !empty($data->userId) && isset($data->partyCode) && !empty($data->partyCode) 
 			   	&& isset($data->partyType) && !empty($data->partyType) && isset($data->countryId) && !empty($data->countryId)
 			   	&& isset($data->stateId) && !empty($data->stateId) && isset($data->billerGroupId) && !empty($data->billerGroupId) 
@@ -537,7 +537,7 @@
 		                $response["message"] = "Failure: Invalid Data";
 		                $response["signature"] = 0;
 			}
-        	}
+        }
 		else if(isset($data -> operation) && $data -> operation == 'BP_PAYANT_CHARGE_OPERATION') {
 			error_log("inside operation == BP_PAYANT_CHARGE_OPERATION method");
 		    	if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
@@ -564,7 +564,7 @@
 				$requestAmount = $data->requestAmount;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -573,10 +573,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
-		                    	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+		            $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -681,7 +681,7 @@
 				$requestAmount = $data->requestAmount;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -690,7 +690,7 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
 		                    	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
@@ -771,11 +771,10 @@
 		                $response["message"] = "Failure: Invalid Data";
 		                $response["signature"] = 0;
 			}
-			
-        	}
+       	}
  		else if(isset($data -> operation) && $data -> operation == 'BP_PAYANT_CHARGE_OLD_OPERATION') {
 			error_log("inside operation == BP_PAYANT_CHARGE_OLD_OPERATION method");
-		    	if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
+		    if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
 			  	&& isset($data->userId) && !empty($data->userId) && isset($data->partyCode) && !empty($data->partyCode) 
 			   	&& isset($data->partyType) && !empty($data->partyType) && isset($data->countryId) && !empty($data->countryId)
 			   	&& isset($data->stateId) && !empty($data->stateId) && isset($data->billerGroupId) && !empty($data->billerGroupId) 
@@ -799,7 +798,7 @@
 				$requestAmount = $data->requestAmount;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 		                
-		                error_log("signature = ".$signature.", key1 = ".$key1);
+		        error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -808,10 +807,10 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-		                error_log("server_signature = ".$server_signature);
+		        error_log("server_signature = ".$server_signature);
 		                                
 				if ( $local_signature == $signature ) {
-		                    	$validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
+		            $validate_result = validateKey1($key1, $userId, $session_validity, '3', $con);
 					error_log("validateKey1 result = ".$validate_result);
 					if ( $validate_result != 0 ) {
 						// Invalid key1 - Session Timeut
@@ -879,18 +878,18 @@
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-		                	$response["message"] = "Failure: Invalid request";
-		                	$response["signature"] = $server_signature;
+		            $response["message"] = "Failure: Invalid request";
+		            $response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-		                $response["message"] = "Failure: Invalid Data";
-		                $response["signature"] = 0;
+		        $response["message"] = "Failure: Invalid Data";
+		        $response["signature"] = 0;
 			}
-        	}        	
-	       	else if(isset($data -> operation) && $data -> operation == 'BP_FORM_VALIDATION') {
+        }        	
+	   	else if(isset($data -> operation) && $data -> operation == 'BP_FORM_VALIDATION') {
 			error_log("inside operation == BP_FORM_VALIDATION method");
 			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1) 
 				&& isset($data->userId) && !empty($data->userId) && isset($data->partyCode) && !empty($data->partyCode) 
@@ -4749,6 +4748,7 @@
 											$firstpartycode = $partyCode;
 											$firstpartytype = $partyType;
 											$secondpartycode = $parentCode;
+											$narration = "BILLPAY-ORDER NO: ".$bp_service_order_no;
 											if(($secondpartycode == "") || empty($secondpartycode) || ($secondpartycode = null)) {
 												$secondpartycode = "";
 												$secondpartytype = "";
@@ -5995,15 +5995,15 @@
 					// Invalid Singature
 					$response["statusCode"] = "300";
 					$response["result"] = "Error";
-		                	$response["message"] = "Failure: Invalid request";
-		                	$response["signature"] = $server_signature;
+		            $response["message"] = "Failure: Invalid request";
+		            $response["signature"] = $server_signature;
 				}
 			}else {
 				// Invalid Data
 				$response["statusCode"] = "400";
 				$response["result"] = "Error";
-		                $response["message"] = "Failure: Invalid Data";
-		                $response["signature"] = 0;
+		        $response["message"] = "Failure: Invalid Data";
+		        $response["signature"] = 0;
 			}
 		}else {
 			// Invalid Operation
@@ -6020,7 +6020,7 @@
 		$response["message"] = "Post Failure";
 		$response["signature"] = 0;
 	}
-    	error_log("bill_pay ==> ".json_encode($response));
+    error_log("bill_pay ==> ".json_encode($response));
 	echo json_encode($response);
 	
 	
