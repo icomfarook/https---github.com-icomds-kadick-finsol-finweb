@@ -13541,6 +13541,38 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
    win.focus();
 };
 }
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appviewajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	//$("#resmsg").html("<h3>" + response.data + "</h3>");
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+		$scope.PrintImage = function (url) {
+	var src='data:image/;base64,'+url;
+	//alert(src);
+	   var win = window.open('');
+	win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+	   win.focus();
+	};
+	}
 $scope.print = function (index, id) {
 
 $http({
@@ -13815,6 +13847,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
  $scope.isGoDisbled = true;
 
 
+
  $scope.query = function () {
   $http({
    method: 'post',
@@ -13833,7 +13866,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    $scope.isLoader = false;
       $scope.isMainLoader = false;
    $scope.appviews = response.data;
-    $scope.id = response.data[0].id;
+  // $scope.id = response.data[0].id;
 $scope.name = response.data[0].name;
 }, function errorCallback(response) {
    // console.log(response);
@@ -13916,6 +13949,16 @@ $scope.name = response.data[0].name;
    // console.log(response);
   });
  }
+ $scope.resets = function () {
+
+	$scope.IDDocument = "";
+	$scope.attachment = "";
+	$scope.BussinessDocument = "";
+	$scope.attachment2 = "";
+	$scope.SignatureDocucment = "";
+	$scope.attachment3 = "";
+	}
+
   $scope.attachmentid = function (index, id) {
   $http({
    method: 'post',
@@ -14015,7 +14058,7 @@ $scope.name = response.data[0].name;
 	  };
 	 }
 
- $scope.editattach1 = function (index, id) {
+ $scope.editattach1 = function (index, id, name) {
 	$scope.isHideOk = true;
 	$scope.isInputDisabled = false;
 	$scope.isInputDisabled2 = false;
@@ -14024,7 +14067,7 @@ $scope.name = response.data[0].name;
 	$http({
 		method: 'post',
 		url: '../ajax/preappviewajax.php',
-		data: { id: id, action: 'editattachment1' },
+		data: { id: id, name: name, action: 'editattachment1' },
 	}).then(function successCallback(response) {
 		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
 		$scope.id = response.data[0].id;
@@ -14038,16 +14081,16 @@ $scope.name = response.data[0].name;
 		// console.log(response);
 	});
 }
-$scope.editattach2 = function (index, id) {
+$scope.editattach2 = function (index, id, name) {
 	$scope.isHideOk = true;
 	$scope.isInputDisabled = false;
 	$scope.isInputDisabled2 = false;
 	$scope.isInputDisabled3 = false;
-	
+
 	$http({
 		method: 'post',
 		url: '../ajax/preappviewajax.php',
-		data: { id: id, action: 'editattachment2' },
+		data: { id: id, name: name, action: 'editattachment2' },
 	}).then(function successCallback(response) {
 		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
 		$scope.id = response.data[0].id;
@@ -14061,7 +14104,7 @@ $scope.editattach2 = function (index, id) {
 		// console.log(response);
 	});
 }
-$scope.editattach3 = function (index, id) {
+$scope.editattach3 = function (index, id, name) {
 	$scope.isHideOk = true;
 	$scope.isInputDisabled = false;
 	$scope.isInputDisabled2 = false;
@@ -14070,7 +14113,7 @@ $scope.editattach3 = function (index, id) {
 	$http({
 		method: 'post',
 		url: '../ajax/preappviewajax.php',
-		data: { id: id, action: 'editattachment3' },
+		data: { id: id, name: name, action: 'editattachment3' },
 	}).then(function successCallback(response) {
 		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
 		$scope.id = response.data[0].id;
@@ -14277,10 +14320,13 @@ $scope.localgvts = response.data;
 $scope.bvn_validated = true;
 $scope.isSelectDisabledType = true;
 $scope.isSelectDisabled = true;
+$scope.BVNsuccess =false;
+
   }else{
 	$scope.bvn_validated = false;
 	$scope.isSelectDisabledType = false;
 	$scope.isSelectDisabled = false;
+	$scope.BVNsuccess =true;
   }
 
 $scope.isLoader = false;
@@ -14488,6 +14534,7 @@ $scope.isSelectDisabled = false;
     $scope.isHide = true;
    });
   }
+
   $scope.Previewdelete = function (index, id,name) {
   $scope.id =id;
   $scope.name = name;
@@ -21369,8 +21416,8 @@ console.log(response);
 
 app.controller('TermInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
-$scope.sushow = true;
-$scope.sushow = true;
+$scope.deshow = true;
+$scope.sushow = false;
 $scope.isLoader = true;
 $scope.isMainLoader = false;
 $http({

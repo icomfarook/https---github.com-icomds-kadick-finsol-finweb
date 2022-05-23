@@ -145,7 +145,7 @@
 		$query =  "UPDATE terminal_inventory set vendor_id = ".trim($id).",bank_master_id = ".trim($bank).", merchant_name = '".trim($merchantname)."', status = '".trim($Status)."', terminal_model_code = '".trim($termimodelCode)."', terminal_id = '".trim($TerminalId)."', terminal_serial_no = '".trim($TerminalSerialNo)."', sw_version = '".trim($Swversion)."', fw_version = '".trim($FwVersion)."', bank_code = '".trim($BankCode)."', bank_account_no = '".trim($BankAccountNo)."', visa_acquirer_id = '".trim($VisaAcqID)."', verve_acquirer_id = '".trim($VerAcqID)."', master_acquirer_id = '".trim($MastAcqID)."', new_terminal_owner_code = '".trim($NewTerOwnCode)."', lga = '".trim($Lga)."', merchant_account_name = '".trim($MerAccName)."', PTSP = '".trim($PTSP)."', test_terminal = '".trim($TestTerm)."' WHERE inventory_id = ".$inventory_id;
 		//error_log($query);
 		if(mysqli_query($con, $query)) {
-			 echo "Terminal Inventory [ $merchantname ] updated successfully";
+			 echo "Terminal Inventory [ $TerminalId ] updated successfully";
 		}
 		else {
 			echo mysqli_error($con);
