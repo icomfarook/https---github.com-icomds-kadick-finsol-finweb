@@ -77,7 +77,7 @@
 			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
 				<form name='AgentSumForm'  action ='agntsumexcel.php' method='POST'>	
 					<div class='row appcont' >									
-					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12' style="width:28%;margin-left:35%">					<label style="text-align:center;margin-left: 30%;" ><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
+					 	<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12' >					<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?></label>
 								<select  ng-init='agentCode = "ALL"' id='selUser'  ng-model='agentCode' class='form-control' name='agentCode' required>
 									<option value='ALL'>--ALL--</option>
 									<option ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
@@ -85,6 +85,29 @@
 								</select>
 									
 								</div>
+								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12' >
+								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required>											
+									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
+								</select>
+								<label>State
+								<span ng-show="infoViewForm.partyType.$dirty && infoViewForm.partyType.$invalid">
+								<span class = 'err' ng-show="infoViewForm.partyType.$error.required"><?php echo REQUIRED;?></span></span></label>
+								<select  ng-model="state" ng-change='statechange(this.state)' ng-init="state='ALL'" class='form-control' name = 'state' id='state' required>											
+									<option value='ALL'>ALL</option>
+									<option ng-repeat="state in states" value="{{state.id}}">{{state.name}}</option>
+								</select>
+								</div>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12' >										
+								<label>Local Government
+								<span ng-show="infoViewForm.partyCode.$dirty && infoViewForm.partyCode.$invalid">
+								<span class = 'err' ng-show="infoViewForm.partyCode.$error.required"><?php echo REQUIRED;?></span></span></label>	
+								<select  ng-model="localgovernment"   ng-init="localgovernment='ALL'"  class='form-control' name = 'localgovernment' id='LocalGoverment' required>											
+									<option value='ALL'>ALL</option>
+									<option ng-repeat="localgvt in localgvts" value="{{localgvt.id}}">{{localgvt.name}}</option>
+								</select>										
+							</div>			
+
+							
 							
 						<div class='clearfix'></div>
 							<div  style = 'text-align:Center;margin-top: inherit;' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
@@ -92,7 +115,7 @@
 								<button type="button" class="btn btn-primary"   ng-click='reset()' id="Refresh">Reset</button>
 								<button type="submit" class="btn btn-primary"   id="excel"  ng-hide='isHideexcel;'>Excel</button>
 							</div>
-						</div></div></div>
+						</div></div>	</div>
 																	
 					<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>

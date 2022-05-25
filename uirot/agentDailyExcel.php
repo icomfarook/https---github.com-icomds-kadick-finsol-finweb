@@ -7,6 +7,8 @@ include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$agentCode	= $_POST['agentCode'];
 	$MonthDate	= $_POST['MonthDate'];	
+	$state	= $_POST['state'];
+	$localgovernment	= $_POST['localgovernment'];	
 	$MonthDate = date("Y-m-d", strtotime($MonthDate));
 		
 $title = "KadickMoni";
@@ -14,12 +16,26 @@ $title = "KadickMoni";
 $msg = "Agent Ranking - Daily Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
-			if($agentCode == "ALL"){
-				$query = "select a.party_rank_day_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(run_date) = '$MonthDate'";
-			}else{
-				$query = "select a.party_rank_day_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend  from party_rank_day a,agent_info b where a.party_code = b.agent_code and  date(run_date) = '$MonthDate' and a.party_code = '$agentCode'";
-				
-			}
+			
+				$query = "select concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_date,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_cum_daily_count,a.actual_cum_daily_amount,a.actual_iso_daily_count,a.actual_iso_daily_amount,if(a.daily_trend = 'U','U-Up',if(a.daily_trend = 'D','D-Down',if(a.daily_trend='N','N-No Change','-'))) as daily_trend,c.name as state ,d.name as localGovt  from party_rank_day a,agent_info b,state_list c,local_govt_list d  where a.party_code = b.agent_code and b.state_id = c.state_id and b.local_govt_id = d.local_govt_id and  date(run_date) = '$MonthDate'";
+
+
+				if($agentCode != "ALL" && $state != "ALL" && $localgovernment != "ALL" ){
+					$query .= " and a.party_code = '$agentCode' and b.state_id='$state' and b.local_govt_id = '$localgovernment'";
+						
+					}
+					if($agentCode != "ALL" && $state != "ALL" && $localgovernment == "ALL" ){
+						$query .= " and a.party_code = '$agentCode' and b.state_id='$state'";
+					}
+					if($agentCode != "ALL" && $state == "ALL" && $localgovernment == "ALL"){
+						$query .= " and a.party_code = '$agentCode'";
+					}
+					if($state != "ALL" && $agentCode == "ALL"  && $localgovernment == "ALL" ){
+						$query .= " and b.state_id = '$state'";
+					}
+					if($state != "ALL" && $localgovernment != "ALL"  && $agentCode == "ALL"){
+						$query .= " and b.state_id = '$state' and  b.local_govt_id = '$localgovernment'";
+					}
 	
 					
 		$result =  mysqli_query($con,$query);
@@ -29,7 +45,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("ID","Party Type","Party Code","Run Date","Date Time","Target Monthly Count","Target Monthly Amount","Actual Daily Count","Actual Daily Amount","Actual ISO Daily Count","Actual ISO Daily Amount","Daily Trend");
+		$heading = array("Party Code","Run Date","Date Time","Target Monthly Count","Target Monthly Amount","Cumulative Daily Count","Cumulative Daily Amount","Actual Daily Count","Actual Daily Amount","Daily Trend","State","Local Government");
 		$headcount = 12;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						

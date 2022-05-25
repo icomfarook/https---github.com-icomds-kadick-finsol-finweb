@@ -727,6 +727,29 @@ $scope.tablerow = true;
 $scope.isHideexcel= true;
 
 
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -754,6 +777,8 @@ url: '../ajax/agntsumajax.php',
 data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -1042,78 +1067,6 @@ console.log(response);
 });
 
 
-app.controller('AgentDailyCtrl', function ($scope, $http) {
-$scope.startDate = new Date();
-$scope.tablerow = true;
-$scope.isHideexcel= true;
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-$scope.reset = function () {
-$scope.tablerow = false;
-$scope.MonthDate = "";
-$scope.agentCode = "";
-}
-
-$scope.query = function () {
-$scope.tablerow = true;
-$scope.isHideexcel= false;
-$http({
-method: 'post',
-url: '../ajax/agentDailyajax.php',
-data: {
-action: 'getreport',
-agentCode: $scope.agentCode,
-MonthDate: $scope.MonthDate,
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/agentDailyajax.php',
-data: {
-id: id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.id = response.data[0].id;
-$scope.party_type = response.data[0].party_type;
-$scope.agent_name = response.data[0].agent_name;
-$scope.run_date = response.data[0].run_date;
-$scope.date_time = response.data[0].date_time;
-$scope.target_monthly_count = response.data[0].target_monthly_count;
-$scope.target_monthly_amount = response.data[0].target_monthly_amount;
-$scope.actual_cum_daily_count = response.data[0].actual_cum_daily_count;
-$scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
-$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
-$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
-$scope.daily_trend = response.data[0].daily_trend;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-});
-
 
 app.controller('AgentMonthCtrl', function ($scope, $http) {
 detectBrowser();
@@ -1139,6 +1092,29 @@ function detectBrowser() {
     return "safari"
   }
 }
+
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
 
 
 const d = new Date();
@@ -1180,6 +1156,8 @@ MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
 }
 
 
+
+
 $scope.tablerow = true;
 $scope.isHideexcel= false;
 $http({
@@ -1189,6 +1167,8 @@ data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
 MonthAndYear: MonthAndYear,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -1222,6 +1202,8 @@ $scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
 $scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
 $scope.assigned_rank = response.data[0].assigned_rank;
 $scope.monthly_rank = response.data[0].monthly_rank;
+$scope.State = response.data[0].state;
+$scope.LocalGovernment = response.data[0].LocalGovernment;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -1234,6 +1216,11 @@ $scope.startDate = new Date();
 $scope.tablerow = true;
 $scope.isHideexcel= true;
 
+
+$scope.refresh = function () {
+	window.location.reload();
+	};
+
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -1243,6 +1230,29 @@ params: { action: 'active', for: 'agents' }
 $scope.agents = response.data;
 //window.location.reload();
 });
+
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
 
 $scope.reset = function () {
 $scope.tablerow = false;
@@ -1260,6 +1270,8 @@ data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
 MonthDate: $scope.MonthDate,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -1271,7 +1283,8 @@ $scope.res = response.data;
 
 }
 
-$scope.detail = function (index, id) {
+$scope.detail = function (index, id) { 
+
 $http({
 method: 'post',
 url: '../ajax/agentDailyajax.php',
@@ -1294,6 +1307,8 @@ $scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
 $scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
 $scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
 $scope.daily_trend = response.data[0].daily_trend;
+$scope.State = response.data[0].state;
+$scope.LocalGovernment = response.data[0].LocalGovernment;
 }, function errorCallback(response) {
 // console.log(response);
 });

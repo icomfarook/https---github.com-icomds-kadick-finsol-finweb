@@ -8,15 +8,33 @@
 	$partyCode = $_SESSION['party_code'];
 	$action		=  $data->action;
 	$agentCode		=  $data->agentCode;
+	$state		=  $data->state;
+	$localgovernment = $data->localgovernment;
+	error_log("LocalGover = ".$localgovernment);
 	
 	
 	if($action == "getreport") {
 		
-		if($agentCode == "ALL"){
-			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, format(c.target_monthly_count,0) as target_monthly_count, i_format(c.target_monthly_amount) as target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and c.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))  order by a.agent_code";
-		}else{
-			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category,  format(c.target_monthly_count,0) as target_monthly_count, i_format(c.target_monthly_amount) as target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and c.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH)) and c.party_code='$agentCode' order by a.agent_code";
-		}
+		
+			$query ="select a.agent_code, b.party_category_type_name as assigned_category, ifNULL((select b.party_category_type_name from party_category_type b where b.party_category_type_id = c.ranked_party_category_id),'Not-Available') as ranked_category, format(c.target_monthly_count,0) as target_monthly_count, i_format(c.target_monthly_amount) as target_monthly_amount,c.run_month from agent_info a, party_category_type b, party_rank_month c where a.agent_code = c.party_code and a.party_category_type_id = b.party_category_type_id and c.run_month between DATE_ADD(LAST_DAY(DATE_SUB(NOW(), INTERVAL 2 MONTH)), INTERVAL 1 DAY) and LAST_DAY(DATE_SUB(NOW(), INTERVAL 1 MONTH))";
+
+
+				if($agentCode != "ALL" && $state != "ALL" && $localgovernment != "ALL" ){
+				    $query .= " and  c.party_code='$agentCode' and a.state_id='$state' and a.local_govt_id = '$localgovernment'   order by a.agent_code";
+					
+				}
+				if($agentCode != "ALL" && $state != "ALL" && $localgovernment == "ALL" ){
+					$query .= " and  c.party_code='$agentCode' and a.state_id='$state'   order by a.agent_code";
+				}
+				if($agentCode != "ALL" && $state == "ALL" && $localgovernment == "ALL"){
+					$query .= " and  c.party_code='$agentCode'   order by a.agent_code";
+				}
+				if($state != "ALL" && $agentCode == "ALL" && $localgovernment == "ALL" ){
+					$query .= " and a.state_id = '$state'   order by a.agent_code";
+				}
+				if($state != "ALL" && $localgovernment != "ALL"  && $agentCode == "ALL"){
+					$query .= " and a.state_id = '$state' and  a.local_govt_id = '$localgovernment'   order by a.agent_code";
+				}
 		
 		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
