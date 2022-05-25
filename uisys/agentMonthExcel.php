@@ -8,6 +8,8 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$agentCode	= $_POST['agentCode'];
 	$MonthDate	= $_POST['MonthDate'];	
 	error_log("MonthDate ==".$MonthDate);
+	$state	= $_POST['state'];
+	$localgovernment	= $_POST['localgovernment'];	
   $MonthDate = date("Y-m", strtotime($MonthDate,'-1 month'));
 
 
@@ -16,10 +18,25 @@ $title = "KadickMoni";
 $msg = "Agent Ranking Monthly Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
-			if($agentCode == "ALL"){
-				$query = "select a.party_rank_month_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_monthly_count,a.actual_iso_monthly_amount,(select party_category_type_name  from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name  from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate'";
-			}else{
-				$query = "select a.party_rank_month_id,if(a.party_type = 'A','A-Agent',if(a.party_type = 'C','C-Champion',if(a.party_type = 'S','S-Sub Agent','-'))) as party_type,concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,a.target_monthly_count,a.target_monthly_amount,a.actual_iso_monthly_count,a.actual_iso_monthly_amount,(select party_category_type_name  from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name  from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id from party_rank_month a,agent_info b where a.party_code = b.agent_code and date_format(a.run_month,'%Y-%m') = '$MonthDate' and a.party_code = '$agentCode'";
+			$query ="select concat(a.party_code,' [',b.agent_name,']') as  agent_name,a.run_month,a.date_time,format(a.target_monthly_count,0) as target_monthly_count,i_format(a.target_monthly_amount) as target_monthly_amount,format(a.actual_iso_monthly_count,0) as actual_iso_monthly_count,i_format(a.actual_iso_monthly_amount) as actual_iso_monthly_amount,(select party_category_type_name from party_category_type where party_category_type_id = a.assigned_party_category_id) as  assigned_party_category_id,(select party_category_type_name from party_category_type where party_category_type_id = a.ranked_party_category_id) as ranked_party_category_id,c.name as state ,d.name as localGovt from party_rank_month a,agent_info b,state_list c,local_govt_list d where a.party_code = b.agent_code and b.state_id = c.state_id and b.local_govt_id = d.local_govt_id and date_format(a.run_month,'%Y-%m') = '$MonthDate'";
+							
+					
+				
+			if($agentCode != "ALL" && $state != "ALL" && $localgovernment != "ALL" ){
+			$query .= " and a.party_code = '$agentCode' and b.state_id='$state' and b.local_govt_id = '$localgovernment'";
+				
+			}
+			if($agentCode != "ALL" && $state != "ALL" && $localgovernment == "ALL" ){
+				$query .= " and a.party_code = '$agentCode' and b.state_id='$state'";
+			}
+			if($agentCode != "ALL" && $state == "ALL" && $localgovernment == "ALL"){
+				$query .= " and a.party_code = '$agentCode'";
+			}
+			if($state != "ALL" && $agentCode == "ALL"  && $localgovernment == "ALL" ){
+				$query .= " and b.state_id = '$state'";
+			}
+			if($state != "ALL" && $localgovernment != "ALL"  && $agentCode == "ALL"){
+				$query .= " and b.state_id = '$state' and  b.local_govt_id = '$localgovernment'";
 			}
 	
 					
@@ -30,7 +47,7 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("ID","Party Type","Party Code","Run Month","Date Time","Target Monthly Count","Target Monthly Amount","Actual ISO Monthly Count","Actual ISO Monthly Amount","Assigned Rank","Monthly Rank");
+		$heading = array("Party Code","Run Month","Date Time","Target Monthly Count","Target Monthly Amount","Actual Monthly Count","Actual Monthly Amount","Assigned Rank","Monthly Rank","State","Local Government");
 		$headcount = 11;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						

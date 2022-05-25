@@ -356,68 +356,93 @@ $scope.send = function (title,body) {
 
 
 app.controller('AgentSummCtrl', function ($scope, $http) {
-$scope.startDate = new Date();
-$scope.tablerow = true;
-$scope.isHideexcel= true;
-
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-
-$scope.reset = function () {
-$scope.tablerow = false;
-$scope.MonthDate = "";
-$scope.agentCode = "--ALL--";
-}
-
-$scope.query = function () {
-$scope.tablerow = true;
-$scope.isHideexcel= false;
-
-$http({
-method: 'post',
-url: '../ajax/agntsumajax.php',
-data: {
-action: 'getreport',
-agentCode: $scope.agentCode,
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-$scope.agent_name = response.data[0].agent_name;
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-
-$scope.detail = function (index, agent_name) {
-$http({
-method: 'post',
-url: '../ajax/agntsumajax.php',
-data: {
-agent_name: agent_name,
-action: 'view'
-},
-}).then(function successCallback(response) {
-$scope.view = response.data;
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-});
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	
+	$scope.countrychange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'statelist', "id": 566, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.states = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+		$scope.statechange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'localgvtlist', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.localgvts = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+	
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'agents' }
+	}).then(function successCallback(response) {
+	$scope.agents = response.data;
+	//window.location.reload();
+	});
+	
+	
+	$scope.reset = function () {
+	$scope.tablerow = false;
+	$scope.MonthDate = "";
+	$scope.agentCode = "--ALL--";
+	}
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	
+	$http({
+	method: 'post',
+	url: '../ajax/agntsumajax.php',
+	data: {
+	action: 'getreport',
+	agentCode: $scope.agentCode,
+	state: $scope.state,
+	localgovernment: $scope.localgovernment,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	$scope.agent_name = response.data[0].agent_name;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, agent_name) {
+	$http({
+	method: 'post',
+	url: '../ajax/agntsumajax.php',
+	data: {
+	agent_name: agent_name,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	$scope.view = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	});
 
 app.controller('TerminalBondCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
@@ -750,189 +775,252 @@ $scope.daily_trend = response.data[0].daily_trend;
 
 
 app.controller('AgentMonthCtrl', function ($scope, $http) {
-detectBrowser();
-$scope.startDate = new Date();
-$scope.tablerow = true;
-$scope.isHideexcel= true;
-
-function detectBrowser() {
-  if (navigator.userAgent.includes("Chrome")) {
-  $(".MonthPicker").show();
-   $(".MonthDropDown").hide();
-    return "chrome"
-  }
-  if (navigator.userAgent.includes("Firefox")) {
- $(".MonthPicker").hide();
-   $(".MonthDropDown").show();
-
-    return "firefox"
-  }
-  if (navigator.userAgent.includes("Safari")) {
- $(".MonthPicker").hide();
-   $(".MonthDropDown").show();
-    return "safari"
-  }
-}
-
-
-const d = new Date();
-let year = d.getFullYear();
-var years = [];
-for (var i = year; i >= 1990; i--) {
-   years.push(i);
-}
-console.log(years);
-$scope.yearList = years;
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-
-$scope.reset = function () {
-
-$scope.tablerow = false;
-$scope.MonthDate = "";
-$scope.agentCode = "";
-}
-
-$scope.query = function () {
-
-var MonthAndYear;
-
-if (detectBrowser() == "chrome"){
-var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
-MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
-}else{
-MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
-}
-
-
-$scope.tablerow = true;
-$scope.isHideexcel= false;
-$http({
-method: 'post',
-url: '../ajax/agentMonthajax.php',
-data: {
-action: 'getreport',
-agentCode: $scope.agentCode,
-MonthAndYear: MonthAndYear,
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/agentMonthajax.php',
-data: {
-id: id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.id = response.data[0].id;
-$scope.party_type = response.data[0].party_type;
-$scope.agent_name = response.data[0].agent_name;
-$scope.run_month = response.data[0].run_month;
-$scope.date_time = response.data[0].date_time;
-$scope.target_monthly_count = response.data[0].target_monthly_count;
-$scope.target_monthly_amount = response.data[0].target_monthly_amount;
-$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
-$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
-$scope.assigned_rank = response.data[0].assigned_rank;
-$scope.monthly_rank = response.data[0].monthly_rank;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-});
-
-app.controller('AgentDailyCtrl', function ($scope, $http) {
-$scope.startDate = new Date();
-$scope.tablerow = true;
-$scope.isHideexcel= true;
-
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-$scope.reset = function () {
-$scope.tablerow = false;
-$scope.MonthDate = "";
-$scope.agentCode = "";
-}
-
-$scope.query = function () {
-$scope.tablerow = true;
-$scope.isHideexcel= false;
-$http({
-method: 'post',
-url: '../ajax/agentDailyajax.php',
-data: {
-action: 'getreport',
-agentCode: $scope.agentCode,
-MonthDate: $scope.MonthDate,
-},
-}).then(function successCallback(response) {
-$scope.res = response.data;
-
-//alert(code);
-}, function errorCallback(response) {
-// console.log(response);
-});
-
-}
-
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/agentDailyajax.php',
-data: {
-id: id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.id = response.data[0].id;
-$scope.party_type = response.data[0].party_type;
-$scope.agent_name = response.data[0].agent_name;
-$scope.run_date = response.data[0].run_date;
-$scope.date_time = response.data[0].date_time;
-$scope.target_monthly_count = response.data[0].target_monthly_count;
-$scope.target_monthly_amount = response.data[0].target_monthly_amount;
-$scope.actual_cum_daily_count = response.data[0].actual_cum_daily_count;
-$scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
-$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
-$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
-$scope.daily_trend = response.data[0].daily_trend;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-});
+	detectBrowser();
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	function detectBrowser() {
+	  if (navigator.userAgent.includes("Chrome")) {
+	  $(".MonthPicker").show();
+	   $(".MonthDropDown").hide();
+		return "chrome"
+	  }
+	  if (navigator.userAgent.includes("Firefox")) {
+	 $(".MonthPicker").hide();
+	   $(".MonthDropDown").show();
+	
+		return "firefox"
+	  }
+	  if (navigator.userAgent.includes("Safari")) {
+	 $(".MonthPicker").hide();
+	   $(".MonthDropDown").show();
+		return "safari"
+	  }
+	}
+	
+	$scope.countrychange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'statelist', "id": 566, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.states = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+		$scope.statechange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'localgvtlist', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.localgvts = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+	
+	
+	const d = new Date();
+	let year = d.getFullYear();
+	var years = [];
+	for (var i = year; i >= 1990; i--) {
+	   years.push(i);
+	}
+	console.log(years);
+	$scope.yearList = years;
+	
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'agents' }
+	}).then(function successCallback(response) {
+	$scope.agents = response.data;
+	//window.location.reload();
+	});
+	
+	
+	$scope.reset = function () {
+	
+	$scope.tablerow = false;
+	$scope.MonthDate = "";
+	$scope.agentCode = "";
+	}
+	
+	$scope.query = function () {
+	
+	var MonthAndYear;
+	
+	if (detectBrowser() == "chrome"){
+	var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+	MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+	}else{
+	MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+	}
+	
+	
+	
+	
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/agentMonthajax.php',
+	data: {
+	action: 'getreport',
+	agentCode: $scope.agentCode,
+	MonthAndYear: MonthAndYear,
+	state: $scope.state,
+	localgovernment: $scope.localgovernment,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/agentMonthajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.party_type = response.data[0].party_type;
+	$scope.agent_name = response.data[0].agent_name;
+	$scope.run_month = response.data[0].run_month;
+	$scope.date_time = response.data[0].date_time;
+	$scope.target_monthly_count = response.data[0].target_monthly_count;
+	$scope.target_monthly_amount = response.data[0].target_monthly_amount;
+	$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
+	$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
+	$scope.assigned_rank = response.data[0].assigned_rank;
+	$scope.monthly_rank = response.data[0].monthly_rank;
+	$scope.State = response.data[0].state;
+	$scope.LocalGovernment = response.data[0].LocalGovernment;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	});
+	
+	
+	app.controller('AgentDailyCtrl', function ($scope, $http) {
+	$scope.startDate = new Date();
+	$scope.tablerow = true;
+	$scope.isHideexcel= true;
+	
+	
+	$scope.refresh = function () {
+		window.location.reload();
+		};
+	
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'agents' }
+	}).then(function successCallback(response) {
+	$scope.agents = response.data;
+	//window.location.reload();
+	});
+	
+	$scope.countrychange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'statelist', "id": 566, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.states = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+		$scope.statechange = function (id) {
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'localgvtlist', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.localgvts = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+		}
+	
+	$scope.reset = function () {
+	$scope.tablerow = false;
+	$scope.MonthDate = "";
+	$scope.agentCode = "";
+	}
+	
+	$scope.query = function () {
+	$scope.tablerow = true;
+	$scope.isHideexcel= false;
+	$http({
+	method: 'post',
+	url: '../ajax/agentDailyajax.php',
+	data: {
+	action: 'getreport',
+	agentCode: $scope.agentCode,
+	MonthDate: $scope.MonthDate,
+	state: $scope.state,
+	localgovernment: $scope.localgovernment,
+	},
+	}).then(function successCallback(response) {
+	$scope.res = response.data;
+	
+	//alert(code);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+	}
+	
+	$scope.detail = function (index, id) { 
+	
+	$http({
+	method: 'post',
+	url: '../ajax/agentDailyajax.php',
+	data: {
+	id: id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.id = response.data[0].id;
+	$scope.party_type = response.data[0].party_type;
+	$scope.agent_name = response.data[0].agent_name;
+	$scope.run_date = response.data[0].run_date;
+	$scope.date_time = response.data[0].date_time;
+	$scope.target_monthly_count = response.data[0].target_monthly_count;
+	$scope.target_monthly_amount = response.data[0].target_monthly_amount;
+	$scope.actual_cum_daily_count = response.data[0].actual_cum_daily_count;
+	$scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
+	$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
+	$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
+	$scope.daily_trend = response.data[0].daily_trend;
+	$scope.State = response.data[0].state;
+	$scope.LocalGovernment = response.data[0].LocalGovernment;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
 
 
 app.controller('ParentTransCtrl', function ($scope, $http) {
