@@ -20746,224 +20746,238 @@ console.log(response);
 });
 
 app.controller('TermInvenCtrl', function ($scope, $http) {
-$scope.isHideOk = true;
-$scope.sushow = true;
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:'vendors',action:'active'
-},
-}).then(function successCallback(response) {
-$scope.vendors = response.data;
-});
-$scope.query = function () {
-//alert($scope.creteria);
-if($scope.creteria == "S") {
-$scope.sushow = true;
-$scope.deshow = false;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-action: 'list',
-type:$scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.Inventory_list = [];
-if(response.data.length > 0) {
-$scope.Inventory_list = response.data;
-}
-else {
-alert("There is no inventory list found..");
-$scope.Inventory_list = [];
-}
-});
-}
-else {
-
-$scope.deshow = true;
-$scope.sushow = false;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-action: 'list',
-type:$scope.creteria,
-vendor:$scope.vendor,
-status:$scope.status,
-terid:$scope.terid,
-terslno:$scope.terslno
-},
-}).then(function successCallback(response) {
-$scope.Inventory_list = [];
-// alert(response.data.length);
-if(response.data.length > 0) {
-$scope.Inventory_list = response.data;
-}
-else {
-alert("There is no inventory list found..");
-$scope.Inventory_list = [];
-}
-});
-}
-}
-$scope.refresh = function () {
-window.location.reload();
-}
-
-$scope.edit = function (index, inventory_id) {
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: { inventory_id: inventory_id, action: 'edit' },
-}).then(function successCallback(response) {
-   $scope.inventory_id = response.data[0].inventory_id;
-   $scope.id = response.data[0].id;
-$scope.merchantid = response.data[0].merchantid;
-$scope.merchantname = response.data[0].merchantname;
-$scope.Status = response.data[0].Status;
-$scope.termimodelCode = response.data[0].termimodelCode;
-$scope.TerminalId = response.data[0].TerminalId;
-$scope.TerminalSerialNo = response.data[0].TerminalSerialNo;
-$scope.Swversion = response.data[0].Swversion;
-$scope.FwVersion = response.data[0].FwVersion;
-$scope.BankCode = response.data[0].BankCode;
-$scope.BankAccountNo = response.data[0].BankAccountNo;
-$scope.AccType = response.data[0].AccType;
-$scope.VisaAcqID = response.data[0].VisaAcqID;
-$scope.VerAcqID = response.data[0].VerAcqID;
-$scope.MastAcqID = response.data[0].MastAcqID;
-$scope.NewTerOwnCode = response.data[0].NewTerOwnCode;
-$scope.Lga = response.data[0].Lga;
-$scope.MerAccName = response.data[0].MerAccName;
-$scope.PTSP = response.data[0].PTSP;
-$scope.TestTerm = response.data[0].TestTerm;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.create = function () {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-id: $scope.id,
-merchantid: $scope.merchantid,
-merchantname: $scope.merchantname,
-Status: $scope.Status,
-termimodelCode: $scope.termimodelCode,
-TerminalId: $scope.TerminalId,
-TerminalSerialNo: $scope.TerminalSerialNo,
-Swversion: $scope.Swversion,
-FwVersion: $scope.FwVersion,
-BankCode: $scope.BankCode,
-BankAccountNo: $scope.BankAccountNo,
-AccType: $scope.AccType,
-VisaAcqID: $scope.VisaAcqID,
-VerAcqID: $scope.VerAcqID,
-MastAcqID: $scope.MastAcqID,
-NewTerOwnCode: $scope.NewTerOwnCode,
-Lga: $scope.Lga,
-MerAccName: $scope.MerAccName,
-PTSP: $scope.PTSP,
-TestTerm: $scope.TestTerm,
-action: 'create'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#invenCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.refresh = function (id, type) {
-window.location.reload();
-}
-$scope.update = function (inventory_id) {
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-inventory_id: $scope.inventory_id,
-id: $scope.id,
-merchantid: $scope.merchantid,
-merchantname: $scope.merchantname,
-Status: $scope.Status,
-termimodelCode: $scope.termimodelCode,
-TerminalId: $scope.TerminalId,
-TerminalSerialNo: $scope.TerminalSerialNo,
-Swversion: $scope.Swversion,
-FwVersion: $scope.FwVersion,
-BankCode: $scope.BankCode,
-BankAccountNo: $scope.BankAccountNo,
-AccType: $scope.AccType,
-VisaAcqID: $scope.VisaAcqID,
-VerAcqID: $scope.VerAcqID,
-MastAcqID: $scope.MastAcqID,
-NewTerOwnCode: $scope.NewTerOwnCode,
-Lga: $scope.Lga,
-MerAccName: $scope.MerAccName,
-PTSP: $scope.PTSP,
-TestTerm: $scope.TestTerm,
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#inventoryEditBody").html("<h3>" + response.data + "</h3>");
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-$scope.detail = function (index, inventory_id) {
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-inventory_id: inventory_id,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.inventory_id = response.data[0].inventory_id;
-   $scope.id = response.data[0].id;
-$scope.merchantid = response.data[0].merchantid;
-$scope.merchantname = response.data[0].merchantname;
-$scope.Status = response.data[0].Status;
-$scope.termimodelCode = response.data[0].termimodelCode;
-$scope.TerminalId = response.data[0].TerminalId;
-$scope.TerminalSerialNo = response.data[0].TerminalSerialNo;
-$scope.Swversion = response.data[0].Swversion;
-$scope.FwVersion = response.data[0].FwVersion;
-$scope.BankCode = response.data[0].BankCode;
-$scope.BankAccountNo = response.data[0].BankAccountNo;
-$scope.AccType = response.data[0].AccType;
-$scope.VisaAcqID = response.data[0].VisaAcqID;
-$scope.VerAcqID = response.data[0].VerAcqID;
-$scope.MastAcqID = response.data[0].MastAcqID;
-$scope.NewTerOwnCode = response.data[0].NewTerOwnCode;
-$scope.Lga = response.data[0].Lga;
-$scope.MerAccName = response.data[0].MerAccName;
-$scope.PTSP = response.data[0].PTSP;
-$scope.TestTerm = response.data[0].TestTerm;
-$scope.cretime = response.data[0].cretime;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-
-});
+	$scope.isHideOk = true;
+	$scope.deshow = true;
+	$scope.sushow = false;
+	$scope.isLoader = true;
+	$scope.isMainLoader = false;
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for:'vendors',action:'active'
+	},
+	}).then(function successCallback(response) {
+		$scope.isLoader = false;
+		  $scope.isMainLoader = false;
+	$scope.vendors = response.data;
+	});
+	$scope.query = function () {
+	//alert($scope.creteria);
+	if($scope.creteria == "S") {
+	$scope.sushow = true;
+	$scope.deshow = false;
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: {
+	action: 'list',
+	type:$scope.creteria
+	},
+	}).then(function successCallback(response) {
+		$scope.isLoader = false;
+		  $scope.isMainLoader = false;
+	$scope.Inventory_list = [];
+	if(response.data.length > 0) {
+	$scope.Inventory_list = response.data;
+	}
+	else {
+	alert("There is no inventory list found..");
+	$scope.Inventory_list = [];
+	}
+	});
+	}
+	else {
+	
+	$scope.deshow = true;
+	$scope.sushow = false;
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: {
+	action: 'list',
+	type:$scope.creteria,
+	vendor:$scope.vendor,
+	status:$scope.status,
+	terid:$scope.terid,
+	bank:$scope.bank,
+	terslno:$scope.terslno
+	},
+	}).then(function successCallback(response) {
+		$scope.isLoader = false;
+		  $scope.isMainLoader = false;
+	$scope.Inventory_list = [];
+	// alert(response.data.length);
+	if(response.data.length > 0) {
+	$scope.Inventory_list = response.data;
+	}
+	else {
+	alert("There is no inventory list found..");
+	$scope.Inventory_list = [];
+	}
+	});
+	}
+	}
+	$scope.refresh = function () {
+	window.location.reload();
+	}
+	
+	$scope.edit = function (index, inventory_id) {
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: { inventory_id: inventory_id, action: 'edit' },
+	}).then(function successCallback(response) {
+	   $scope.inventory_id = response.data[0].inventory_id;
+	   $scope.id = response.data[0].id;
+	   $scope.bank = response.data[0].bank;
+	$scope.merchantid = response.data[0].merchantid;
+	$scope.merchantname = response.data[0].merchantname;
+	$scope.Status = response.data[0].Status;
+	$scope.termimodelCode = response.data[0].termimodelCode;
+	$scope.TerminalId = response.data[0].TerminalId;
+	$scope.TerminalSerialNo = response.data[0].TerminalSerialNo;
+	$scope.Swversion = response.data[0].Swversion;
+	$scope.FwVersion = response.data[0].FwVersion;
+	$scope.BankCode = response.data[0].BankCode;
+	$scope.BankAccountNo = response.data[0].BankAccountNo;
+	$scope.AccType = response.data[0].AccType;
+	$scope.VisaAcqID = response.data[0].VisaAcqID;
+	$scope.VerAcqID = response.data[0].VerAcqID;
+	$scope.MastAcqID = response.data[0].MastAcqID;
+	$scope.NewTerOwnCode = response.data[0].NewTerOwnCode;
+	$scope.Lga = response.data[0].Lga;
+	$scope.MerAccName = response.data[0].MerAccName;
+	$scope.PTSP = response.data[0].PTSP;
+	$scope.TestTerm = response.data[0].TestTerm;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.create = function () {
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: {
+	id: $scope.id,
+	merchantid: $scope.merchantid,
+	merchantname: $scope.merchantname,
+	Status: $scope.Status,
+	termimodelCode: $scope.termimodelCode,
+	TerminalId: $scope.TerminalId,
+	TerminalSerialNo: $scope.TerminalSerialNo,
+	Swversion: $scope.Swversion,
+	FwVersion: $scope.FwVersion,
+	BankCode: $scope.BankCode,
+	BankAccountNo: $scope.BankAccountNo,
+	AccType: $scope.AccType,
+	VisaAcqID: $scope.VisaAcqID,
+	VerAcqID: $scope.VerAcqID,
+	MastAcqID: $scope.MastAcqID,
+	NewTerOwnCode: $scope.NewTerOwnCode,
+	Lga: $scope.Lga,
+	MerAccName: $scope.MerAccName,
+	PTSP: $scope.PTSP,
+	TestTerm: $scope.TestTerm,
+	bank: $scope.bank,
+	action: 'create'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	$scope.isMainLoader = false;
+	$("#invenCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.refresh = function (id, type) {
+	window.location.reload();
+	}
+	$scope.update = function (inventory_id) {
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$scope.isHideOk = true;
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: {
+	inventory_id: $scope.inventory_id,
+	bank: $scope.bank,
+	id: $scope.id,
+	merchantid: $scope.merchantid,
+	merchantname: $scope.merchantname,
+	Status: $scope.Status,
+	termimodelCode: $scope.termimodelCode,
+	TerminalId: $scope.TerminalId,
+	TerminalSerialNo: $scope.TerminalSerialNo,
+	Swversion: $scope.Swversion,
+	FwVersion: $scope.FwVersion,
+	BankCode: $scope.BankCode,
+	BankAccountNo: $scope.BankAccountNo,
+	AccType: $scope.AccType,
+	VisaAcqID: $scope.VisaAcqID,
+	VerAcqID: $scope.VerAcqID,
+	MastAcqID: $scope.MastAcqID,
+	NewTerOwnCode: $scope.NewTerOwnCode,
+	Lga: $scope.Lga,
+	MerAccName: $scope.MerAccName,
+	PTSP: $scope.PTSP,
+	TestTerm: $scope.TestTerm,
+	action: 'update'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	$scope.isMainLoader = false;
+	$("#inventoryEditBody").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	console.log(response);
+	});
+	}
+	$scope.detail = function (index, inventory_id) {
+	$http({
+	method: 'post',
+	url: '../ajax/terminvnetajax.php',
+	data: {
+	inventory_id: inventory_id,
+	action: 'view'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	// $scope.isHideOk = false;
+	$scope.inventory_id = response.data[0].inventory_id;
+	   $scope.id = response.data[0].id;
+	   $scope.bank = response.data[0].bank;
+	$scope.merchantid = response.data[0].merchantid;
+	$scope.merchantname = response.data[0].merchantname;
+	$scope.Status = response.data[0].Status;
+	$scope.termimodelCode = response.data[0].termimodelCode;
+	$scope.TerminalId = response.data[0].TerminalId;
+	$scope.TerminalSerialNo = response.data[0].TerminalSerialNo;
+	$scope.Swversion = response.data[0].Swversion;
+	$scope.FwVersion = response.data[0].FwVersion;
+	$scope.BankCode = response.data[0].BankCode;
+	$scope.BankAccountNo = response.data[0].BankAccountNo;
+	$scope.AccType = response.data[0].AccType;
+	$scope.VisaAcqID = response.data[0].VisaAcqID;
+	$scope.VerAcqID = response.data[0].VerAcqID;
+	$scope.MastAcqID = response.data[0].MastAcqID;
+	$scope.NewTerOwnCode = response.data[0].NewTerOwnCode;
+	$scope.Lga = response.data[0].Lga;
+	$scope.MerAccName = response.data[0].MerAccName;
+	$scope.PTSP = response.data[0].PTSP;
+	$scope.TestTerm = response.data[0].TestTerm;
+	$scope.cretime = response.data[0].cretime;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	});
 
 
 app.controller('walaccbalCtrl', function ($scope, $http) {
