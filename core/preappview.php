@@ -279,7 +279,7 @@ $profile_id  = $_SESSION['profile_id'];
 				</div>
 				<div class='modal-footer' ng-hide='isLoader'>					
 					<button type='button' class='btn btn-primary' ng-click='refresh()'    id='Ok' ng-hide='isHideOk' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_OK; ?></button>
-					<button type='button' class='btn btn-primary'  ng-click='cancel()' data-dismiss='modal' ng-hide='isHide' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_CANCEL; ?></button>
+					<button type='button' class='btn btn-primary'  ng-click='refresh()' data-dismiss='modal' ng-hide='isHide' ><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_CANCEL; ?></button>
 					<button type='button' class='btn btn-primary'  ng-dblclick="false" ng-hide='isHide' ng-click="ApplicatioTransferDForm.$invalid=true;transfinal(id)"     ng-disabled="transferbtn" id="TranferFinal"><?php echo PRE_APPLICATION_VIEW_APPROVE_BUTTON_TRANSFER; ?></button>
 				</div>
 			</div>
