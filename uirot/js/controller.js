@@ -21431,10 +21431,25 @@ console.log(response);
 
 app.controller('TermInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
-$scope.deshow = true;
-$scope.sushow = false;
+/* $scope.deshow = true;
+$scope.sushow = false; */
+$scope.tablerow = true;
 $scope.isLoader = true;
 $scope.isMainLoader = false;
+
+
+
+$scope.radiochange = function () {
+	$scope.tablerow = false;
+	
+	}
+
+	$scope.refresh = function () {
+		window.location.reload();
+		}
+		
+	
+
 $http({
 method: 'post',
 url: '../ajax/load.php',
@@ -21446,34 +21461,10 @@ params: { for:'vendors',action:'active'
 $scope.vendors = response.data;
 });
 $scope.query = function () {
-//alert($scope.creteria);
-if($scope.creteria == "S") {
-$scope.sushow = true;
-$scope.deshow = false;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-action: 'list',
-type:$scope.creteria
-},
-}).then(function successCallback(response) {
-	$scope.isLoader = false;
-      $scope.isMainLoader = false;
-$scope.Inventory_list = [];
-if(response.data.length > 0) {
-$scope.Inventory_list = response.data;
-}
-else {
-alert("There is no inventory list found..");
-$scope.Inventory_list = [];
-}
-});
-}
-else {
 
-$scope.deshow = true;
-$scope.sushow = false;
+$scope.tablerow = true;
+/* $scope.deshow = true;
+$scope.sushow = false; */
 $http({
 method: 'post',
 url: '../ajax/terminvnetajax.php',
@@ -21499,11 +21490,9 @@ alert("There is no inventory list found..");
 $scope.Inventory_list = [];
 }
 });
+
 }
-}
-$scope.refresh = function () {
-window.location.reload();
-}
+
 
 $scope.edit = function (index, inventory_id) {
 $http({

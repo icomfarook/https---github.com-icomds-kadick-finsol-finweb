@@ -41,8 +41,8 @@
 				<div class="col-xs-2">
 					
 				<label>Criteria</label>  <br />
-					<label style='margin-right:1%'><input style='margin-right:5px' ng-checked='true' value='S' type='radio' name='creteria' ng-model='creteria' />Summary</label>
-					<label><input  value='D' type='radio' style='margin-right:5px' name='creteria' ng-model='creteria' />Detail</label>
+					<label style='margin-right:1%'><input style='margin-right:5px' ng-checked='true' value='S' type='radio' name='creteria' ng-change='refresh()' ng-model='creteria' />Summary</label>
+					<label><input  value='D' type='radio'    ng-click='radiochange()' style='margin-right:5px' name='creteria' ng-model='creteria' />Detail</label>
 				</div>	
 				<div class='col-lg-2 col-xs-2 col-sm-2 col-md-2'>
 					<label>Vendor</label> 
@@ -101,10 +101,12 @@
 				
 				<div class="no-move"></div> 
 			</div>
+
+			
 			
 			<div ng-hide='isLoader' class="box-content no-padding" data-backdrop="static" data-keyboard="false">		
              			
-				<table  ng-show='sushow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+			<!-- 	<table  ng-show='sushow' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 					<thead>
 						<tr>
 							<th>Vendor</th>
@@ -125,29 +127,35 @@
 								
 							</tr>
 					</tbody>					
-				</table>
-				<table  ng-hide='isLoader'  ng-show='deshow' class="table maintable table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+				</table> -->
+				<table  ng-hide='isLoader'   class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 					<thead>
 						<tr>
-							<th>Inventory id</th>
-      						<th>Merchant Name</th>
-							<th>Bank Name</th>
-							<th>Status</th>
-							<th>Terminal Id</th>
-							<th>Edit</th>
-							<th>Detail</th>
+							<th ng-show="creteria =='S'">Vendor</th>
+      						<th ng-show="creteria =='S'">Status</th>
+							<th ng-show="creteria =='S'">Count</th>
+							<th ng-show="creteria =='D'">Inventory id</th>
+      						<th ng-show="creteria =='D'">Merchant Name</th>
+							<th ng-show="creteria =='D'">Bank Name</th>
+							<th ng-show="creteria =='D'">Status</th>
+							<th ng-show="creteria =='D'">Terminal Id</th>
+							<th ng-show="creteria =='D'">Edit</th>
+							<th ng-show="creteria =='D'">Detail</th>
 						</tr>
 					</thead>
 					<tbody>
-					      <tr ng-repeat="x in Inventory_list">
-							<td>{{ x.inventory_id }}</td>
-						 	<td>{{ x.merchantname }}</td>
-							 <td>{{ x.bank }}</td>
-							<td>{{ x.Status }}</td>
-							<td>{{ x.TerminalId }}</td>
-							<td><a id={{x.inventory_id }} class='editcountry' ng-click='edit($index,x.inventory_id )' data-toggle='modal' data-target='#EditinventoryDialogue'>
+					      <tr  ng-show='tablerow' ng-repeat="x in Inventory_list">
+						  <td ng-show="creteria =='S'">{{ x.name }}</td>
+						 	<td ng-show="creteria =='S'">{{ x.status }}</td>
+							<td ng-show="creteria =='S'">{{ x.count }}</td>		
+							<td ng-show="creteria =='D'">{{ x.inventory_id }}</td>
+						 	<td ng-show="creteria =='D'">{{ x.merchantname }}</td>
+							 <td ng-show="creteria =='D'">{{ x.bank }}</td>
+							<td ng-show="creteria =='D'">{{ x.Status }}</td>
+							<td ng-show="creteria =='D'">{{ x.TerminalId }}</td>
+							<td ng-show="creteria =='D'"><a id={{x.inventory_id }} class='editcountry' ng-click='edit($index,x.inventory_id )' data-toggle='modal' data-target='#EditinventoryDialogue'>
 							<button  class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
-							<td><a id={{x.inventory_id}} class='detail' ng-click='detail($index,x.inventory_id)' data-toggle='modal' data-target='#DetailViewDialogue'>
+							<td ng-show="creteria =='D'"><a id={{x.inventory_id}} class='detail' ng-click='detail($index,x.inventory_id)' data-toggle='modal' data-target='#DetailViewDialogue'>
 							<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 							</td>
 							</tr>
@@ -571,14 +579,15 @@ function AllTables(){
 	TestTable1();
 	TestTable2();
 	TestTable3();
-	LoadSelect2Script();
+	//LoadSelect2Script();
 }
 $(document).ready(function() {
 	
 	$("#Query").click(function() {				
+	$('.dataTables_info').css("display","block"); 	
+		$('#datatable-1_paginate').css("display","block");	
 		LoadDataTablesScripts(AllTables);
-	
-		// $.fn.dataTableExt.sErrMode = 'throw' ;
+		
 	});
 	
 	$("#EditBankAccountrDialogue, #AddBankAccountDialogue").on("click","#Ok",function() {
