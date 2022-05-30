@@ -12,7 +12,7 @@ $localgovernment	= $_POST['localgovernment'];
 
 $title = "KadickMoni";
  
-$msg = "Agent Ranking Monthly Report For Party Code $agentCode between $MonthDate ";
+$msg = "Agent Ranking Summary Report For Party Code $agentCode between $MonthDate ";
 $objPHPExcel = new PHPExcel();
 
 
