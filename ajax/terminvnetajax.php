@@ -52,35 +52,35 @@
 			if(trim($status) != "" && !empty($status) &&  trim($status) != null &&  trim($status) != "-1" &&  trim($status) != -1) {
 					//error_log("status ".$status);
 				if(trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "-1"  &&  trim($vendor) != -1   || (trim($bank) != "" && !empty($bank) &&  trim($bank) != null &&  trim($bank) != "ALL") || (trim($terid) != "" && !empty($terid) &&  trim($terid) != null) || (trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null)) {
-					$queryapd .= "and  a.status = '$status'";
+					$queryapd .= " and  a.status = '$status'";
 				}
 				else {						
-					$queryapd .= "and   a.status = '$status'";
+					$queryapd .= " and   a.status = '$status'";
 				}
 			}
 			if(trim($bank) != "" && !empty($bank) &&  trim($bank) != null &&  trim($bank) != "ALL") {
 		
 				if(trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "-1"  &&  trim($vendor) != -1  || (trim($status) != "" && !empty($status) &&  trim($status) != null &&  trim($status) != -1 &&  trim($status) != "-1") || (trim($terid) != "" && !empty($terid) &&  trim($terid) != null) || (trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null)) {
-						$queryapd .= "and b.bank_master_id = '$bank'";
+						$queryapd .= " and b.bank_master_id = '$bank'";
 					}
 					else {						
-						$queryapd .= "and b.bank_master_id = '$bank'";
+						$queryapd .= " and b.bank_master_id = '$bank'";
 					}
 				}
 			if(trim($terid) != "" && !empty($terid) &&  trim($terid) != null) {
 				if((trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "-1" &&  trim($vendor) != -1) || (trim($bank) != "" && !empty($bank) &&  trim($bank) != null &&  trim($bank) != "ALL") || (trim($status) != "" && !empty($status) &&  trim($status) != null &&  trim($status) != -1 &&  trim($status) != "-1") || (trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null)) {
-					$queryapd .= "and  a.terminal_id = '$terid'";
+					$queryapd .= " and  a.terminal_id = '$terid'";
 				}
 				else {
-					$queryapd .= "and  a.terminal_id = '$terid'";
+					$queryapd .= " and  a.terminal_id = '$terid'";
 				}
 			}
 			if(trim($terslno) != "" && !empty($terslno) &&  trim($terslno) != null) {
 				if((trim($vendor) != "" && !empty($vendor) &&  trim($vendor) != null &&  trim($vendor) != "-1" &&  trim($vendor) != -1) || (trim($bank) != "" && !empty($bank) &&  trim($bank) != null &&  trim($bank) != "ALL") || (trim($status) != "" && !empty($status) &&  trim($status) != null &&  trim($status) != -1 &&  trim($status) != "-1") || (trim($terid) != "" && !empty($terid) &&  trim($terid) != null)) {
-					$queryapd .= "and a.terminal_serial_no = '$terslno'";
+					$queryapd .= " and a.terminal_serial_no = '$terslno'";
 				}
 				else {
-					$queryapd .= "and a.terminal_serial_no = '$terslno'";
+					$queryapd .= " and a.terminal_serial_no = '$terslno'";
 				}
 			}
 			
