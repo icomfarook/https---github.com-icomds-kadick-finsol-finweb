@@ -24,10 +24,16 @@
 				$fbToken = $data -> fbToken;
 				$imei = $data -> imei;
 				$userId = $data->userId;
+				
 				$signature = $data->signature;
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
 			 
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -120,7 +126,7 @@
 								error_log("Success in updating Firebase Token");
 							}
 						}else{
-							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, create_time) VALUES (0, '$imei', '$fbToken', 'I', $userId, now())";
+							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, device_type, create_time) VALUES (0, '$imei', '$fbToken', 'I', $userId, '$deviceType', now())";
 							error_log("insert_query = ".$insert_query);
 							$insert_result = mysqli_query($con, $insert_query);
 							if( $insert_result ) {
@@ -272,7 +278,7 @@
 								$response["message"] = "FB Status Open Update already present";
 							}
 						}else{
-							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, create_time) VALUES (0, '$imei', '$fbToken', 'O', $userId, now())";
+							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, device_type, create_time) VALUES (0, '$imei', '$fbToken', 'O', $userId, '$deviceType', now())";
 							error_log("insert_query = ".$insert_query);
 							$insert_result = mysqli_query($con, $insert_query);
 							if( $insert_result ) {
@@ -424,7 +430,7 @@
 								$response["message"] = "FB Status Register Update already present";
 							}
 						}else{
-							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, create_time) VALUES (0, '$imei', '$fbToken', 'R', $userId, now())";
+							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, device_type, create_time) VALUES (0, '$imei', '$fbToken', 'R', $userId, '$deviceType', now())";
 							error_log("insert_query = ".$insert_query);
 							$insert_result = mysqli_query($con, $insert_query);
 							if( $insert_result ) {
@@ -576,7 +582,7 @@
 								$response["message"] = "Firebase Token Login already present";
 							}
 						}else{
-							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, create_time) VALUES (0, '$imei', '$fbToken', 'L', $userId, now())";
+							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, device_type, create_time) VALUES (0, '$imei', '$fbToken', 'L', $userId, '$deviceType', now())";
 							error_log("insert_query = ".$insert_query);
 							$insert_result = mysqli_query($con, $insert_query);
 							if( $insert_result ) {
@@ -713,7 +719,7 @@
 									error_log("installed_user_topic is not updated for imei = ".$imei);
 								}
 							}else {
-								$insert_query = "insert into installed_user_topic (installed_user_topic_id, imei, topic, user_id, create_time) values (0, '$imei', '$topic', $userId, now())";
+								$insert_query = "insert into installed_user_topic (installed_user_topic_id, imei, topic, user_id, device_type, create_time) values (0, '$imei', '$topic', $userId, '$deviceType', now())";
 								error_log("insert_query = ".$insert_query);
 								$result = mysqli_query($con, $insert_query);
 								if ( $result ) {
@@ -727,7 +733,7 @@
 						}
 					}
 					
-					$insert_query = "INSERT INTO topic_subscription (topic_subscription_id, imei, topic, subscription_type, status, user_id, create_time) VALUES (0, '$imei', '$topic', '$subscription_type', '$status', $userId, now())";
+					$insert_query = "INSERT INTO topic_subscription (topic_subscription_id, imei, topic, subscription_type, status, user_id, device_type, create_time) VALUES (0, '$imei', '$topic', '$subscription_type', '$status', $userId, '$deviceType', now())";
 					error_log("insert_query = ".$insert_query);
 					$insert_result = mysqli_query($con, $insert_query);
 					if( $insert_result ) {
@@ -862,7 +868,7 @@
 								error_log("Success in updating Firebase Token");
 							}
 						}else{
-							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, create_time) VALUES (0, '$imei', '$fbToken', 'U', $userId, now())";
+							$insert_query = "INSERT INTO installed_user (installed_user_id, imei, firebase_token, status, user_id, device_type, create_time) VALUES (0, '$imei', '$fbToken', 'U', $userId, '$deviceType', now())";
 							error_log("insert_query = ".$insert_query);
 							$insert_result = mysqli_query($con, $insert_query);
 							if( $insert_result ) {
