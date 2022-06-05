@@ -4,6 +4,7 @@
 	require '../api/get_prime.php';
 	require '../api/security.php';
 	require '../common/gh/autoload.php';
+
 	$data = json_decode(file_get_contents("php://input"));		
 	$location = PRE_APP_ENTRY_ATTACHMENT_LOCATION;
 	$action = $_POST['action'];
@@ -48,12 +49,12 @@
 	$filename3 = $_SESSION['user_name']."_SIG_".$currentTime.".".$filetype3;
 
  	//$check = filesize ($filename);   
-    	//error_log("filename1".$filename);
+    //error_log("filename1".$filename);
 	//error_log("filename2".$filename2);
 	move_uploaded_file($_FILES['file']['tmp_name'][0],$location.$filename);  
 	move_uploaded_file($_FILES['file2']['tmp_name'][0],$location.$filename2);
 	move_uploaded_file($_FILES['file3']['tmp_name'][0],$location.$filename3);
-    	$content = file_get_contents($location.$filename);	
+    $content = file_get_contents($location.$filename);	
 	$content = base64_encode($content);	
 	//error_log("conten1".$content);	
 	$content2 = file_get_contents($location.$filename2);
@@ -61,8 +62,6 @@
 	//error_log("content2".$content2);
 	$content3 = file_get_contents($location.$filename3);
 	$content3 = base64_encode($content3);
-
-
 
 	$id   = $data->id;
 	$status    = $data->crestatus;
@@ -126,7 +125,7 @@
 			echo json_encode($data);
 		}
 	}
-	if($action == "userchk") {
+	else if($action == "userchk") {
 		$userName = $data->userName;
 		$query ="select login_name from application_main where LOWER(login_name) = '$userName'";
 		$result = mysqli_query($con, $query);
@@ -142,26 +141,28 @@
 		}
 	}
 	else if($action == "reject") {
+		
 		$comments = $data->comments;
 		$id = $data->id;
 		$update_query = "UPDATE pre_application_info SET status = 'R', update_user = $cuser, update_time = now() WHERE pre_application_info_id = $id";
-			error_log($update_query);
-			$update_result =  mysqli_query($con,$update_query);
-			if(!$update_result) {
-				echo "Udate - Failed";				
-				die('update failed: ' . mysqli_error($con));
-			}
-			else {
-				echo "Your Application No: $id Rejected successfully";
-			}					
+		error_log($update_query);
+		$update_result =  mysqli_query($con,$update_query);
+		if(!$update_result) {
+			echo "Udate - Failed";				
+			die('update failed: ' . mysqli_error($con));
 		}
-		else if($action == "transupdate") {	
+		else {
+			echo "Your Application No: $id Rejected successfully";
+		}					
+	}
+	else if($action == "transupdate") {	
+		
 		$id = $data->id;
 		$localgvt = $data->localgvt;
 		$state = $data->state;
 		
 		$query="select state_id,local_govt_id,bvn_validated from pre_application_info where  pre_application_info_id=".$id;
-		error_log($query);
+		error_log("transupdate query = ".$query);
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
@@ -172,14 +173,11 @@
 			echo "Error: %s\n", mysqli_error($con);
 			exit();
 		}
-		}
-
-else if($action == "editattachment1") {
+	}
+	else if($action == "editattachment1") {
 		
-	$id = $data->id;
-	
+		$id = $data->id;
 		$app_view_attachment_query1 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as IDDocument,attachment_type  from pre_application_attachment WHERE file='I' and pre_application_info_id = '$id'";
-
 		error_log($app_view_attachment_query1);
 		$app_view_view_result1 =  mysqli_query($con,$app_view_attachment_query1);
 		if(!$app_view_view_result1) {
@@ -188,69 +186,52 @@ else if($action == "editattachment1") {
 		}		
 		else {
 			$data = array();
-			
 			while ($row = mysqli_fetch_array($app_view_view_result1)) {
-				
 				$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"IDDocument"=>$row['IDDocument'],
 								"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
-								
 			}
 		}
 		echo json_encode($data);
 	}
-
 	else if($action == "editattachment2") {
 		
 		$id = $data->id;
-		
-			$app_view_attachment_query2 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as BussinessDocument,attachment_type  from pre_application_attachment WHERE file='C' and pre_application_info_id = '$id'";
+		$app_view_attachment_query2 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as BussinessDocument,attachment_type  from pre_application_attachment WHERE file='C' and pre_application_info_id = '$id'";
 	
-			error_log($app_view_attachment_query2);
-			$app_view_view_result2 =  mysqli_query($con,$app_view_attachment_query2);
-			if(!$app_view_view_result2) {
-				die('app_view_view_result2: ' . mysqli_error($con));
-				echo "app_view_view_result2 - Failed";				
-			}		
-			else {
-				$data = array();
-				
-				while ($row = mysqli_fetch_array($app_view_view_result2)) {
-					
-					$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"BussinessDocument"=>$row['BussinessDocument'],
-									"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
-									
-				}
+		error_log($app_view_attachment_query2);
+		$app_view_view_result2 =  mysqli_query($con,$app_view_attachment_query2);
+		if(!$app_view_view_result2) {
+			die('app_view_view_result2: ' . mysqli_error($con));
+			echo "app_view_view_result2 - Failed";				
+		}		
+		else {
+			$data = array();
+			while ($row = mysqli_fetch_array($app_view_view_result2)) {
+				$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"BussinessDocument"=>$row['BussinessDocument'],
+								"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
 			}
-			echo json_encode($data);
 		}
-		else if($action == "editattachment3") {
-		
-			$id = $data->id;
-			
-				$app_view_attachment_query3 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as SignatureDocucment,attachment_type  from pre_application_attachment WHERE file='S' and pre_application_info_id = '$id'";
-		
-				error_log($app_view_attachment_query3);
-				$app_view_view_result3 =  mysqli_query($con,$app_view_attachment_query3);
-				if(!$app_view_view_result3) {
-					die('app_view_view_result3: ' . mysqli_error($con));
-					echo "app_view_view_result3 - Failed";				
-				}		
-				else {
-					$data = array();
-					
-					while ($row = mysqli_fetch_array($app_view_view_result3)) {
-						
-						$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"SignatureDocucment"=>$row['SignatureDocucment'],
-										"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
-										
-					}
-				}
-				echo json_encode($data);
+		echo json_encode($data);
+	}
+	else if($action == "editattachment3") {
+	
+		$id = $data->id;
+		$app_view_attachment_query3 = "SELECT pre_application_attachment_id,pre_application_info_id,ifNULL(attachment_name,'-') as SignatureDocucment,attachment_type  from pre_application_attachment WHERE file='S' and pre_application_info_id = '$id'";
+		error_log($app_view_attachment_query3);
+		$app_view_view_result3 =  mysqli_query($con,$app_view_attachment_query3);
+		if(!$app_view_view_result3) {
+			die('app_view_view_result3: ' . mysqli_error($con));
+			echo "app_view_view_result3 - Failed";				
+		}		
+		else {
+			$data = array();
+			while ($row = mysqli_fetch_array($app_view_view_result3)) {
+			$data[] = array("pre_application_attachment_id"=>$row['pre_application_attachment_id'],"id"=>$row['pre_application_info_id'],"SignatureDocucment"=>$row['SignatureDocucment'],
+							"attachment_type"=>$row['attachment_type'],"file"=>$row['file'] );           
 			}
-	
-	
-	
-
+		}
+		echo json_encode($data);
+	}
 	else if($action == "transfer") {	
 		$id = $data->id;
 		$appliertype = $data->appliertype;
@@ -268,8 +249,7 @@ else if($action == "editattachment1") {
 			die('selectresult: ' . mysqli_error($con));
 			echo "selectresult - Failed";				
 		}
-    
-		else {
+    	else {
 			$row = mysqli_fetch_assoc($selectresult);
 			$pre_application_id = $row['pre_application_info_id'];
 			$countryid = $row['country_id'];
@@ -305,12 +285,12 @@ else if($action == "editattachment1") {
 			else if($appliertype == "A") {
 				$parenttype = "C";
 			}
-				else if($appliertype == "C") {
-			$parenttype = "C";
-				}
-				else if($appliertype == "P") {
-					$parenttype = "P";
-				}
+			else if($appliertype == "C") {
+				$parenttype = "C";
+			}
+			else if($appliertype == "P") {
+				$parenttype = "P";
+			}
 			$get_sequence_number_query = "SELECT get_sequence_num(200) as application_id";
 			error_log($get_sequence_number_query );
 			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
@@ -344,30 +324,38 @@ else if($action == "editattachment1") {
 					die('Application info query failed: ' . mysqli_error($con));
 				}
 				else{
-				$app_view_attachment_query = "SELECT pre_application_attachment_id,pre_application_info_id,attachment_name,attachment_type,attachment_content,file  from pre_application_attachment  WHERE file='I' and pre_application_info_id = '$id'";
-				error_log($app_view_attachment_query);
-				$app_view_attachment_result =  mysqli_query($con,$app_view_attachment_query);
-				$count = mysqli_num_rows($app_view_attachment_result);
-				$data = array();
+					//$app_view_attachment_query = "SELECT pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content, file from pre_application_attachment  WHERE file='I' and pre_application_info_id = '$id'";
+					$app_view_attachment_query = "SELECT pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content, file from pre_application_attachment WHERE pre_application_info_id = '$id'";
+					error_log($app_view_attachment_query);
+					$app_view_attachment_result =  mysqli_query($con,$app_view_attachment_query);
+					$count = mysqli_num_rows($app_view_attachment_result);
+					$data = array();
 					if(!$app_view_attachment_result) {
 						die('app_view_view_result: ' . mysqli_error($con));
 						echo "app_view_view_result - Failed";				
 					}		
 					else {
+						$attachment_count = 0;
+						$attachment_insert_count = 0;
 						while ($row = mysqli_fetch_array($app_view_attachment_result)) {
-						$application_attachment_id = $row['pre_application_attachment_id'];
-						//$application_id = $row['pre_application_info_id'];
-						$attachment_name = $row['attachment_name'];
-						$attachment_type = $row['attachment_type'];
-						$file = $row['file'];
-						$attachment_content = $row['attachment_content'];
+							$attachment_count++;
+							$application_attachment_id = $row['pre_application_attachment_id'];
+							//$application_id = $row['pre_application_info_id'];
+							$attachment_name = $row['attachment_name'];
+							$attachment_type = $row['attachment_type'];
+							$file = $row['file'];
+							$attachment_content = $row['attachment_content'];
+							$query2  =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content, file, active) VALUES  (0, $application_id, '$attachment_name','$attachment_type','$attachment_content','$file', 'Y')";
+							//error_log($query2);
+							$attachmentresult = mysqli_query($con,$query2);
+							if($attachmentresult) {
+								$attachment_insert_count++;
+							}
 						}
-						$query2  =  "INSERT INTO application_attachment (application_attachment_id, application_id, attachment_name, attachment_type, attachment_content,file) VALUES  (0, $application_id, '$attachment_name','$attachment_type','$attachment_content','$file')";
-						//error_log($query2);
-						$attachmentresult = mysqli_query($con,$query2);
-						if(!$attachmentresult) {
-						echo "FILE-ATTACHMENT - Failed";				
-						die(' Application file attachment failed: ' . mysqli_error($con));
+						error_log("attachment_count = ".$attachment_count.", attachment_insert_count = ".$attachment_insert_count);				
+						if($attachment_count != $attachment_insert_count ) {
+							echo "FILE-ATTACHMENT - Failed";				
+							die(' Application file attachment failed: ' . mysqli_error($con));
 						}
 						else {
 							$update_query = "UPDATE pre_application_info SET status = 'T', application_id = $application_id, update_user = $cuser, update_time = now() WHERE pre_application_info_id = $pre_application_id";
@@ -380,73 +368,63 @@ else if($action == "editattachment1") {
 							else {
 								echo "Your Application No: $application_id submitted successfully";
 							}
-							
 						}
 					}
 				}	
 			}
-
 		}
 	}
-		else if($action == "attachmentid") {
-			$id = $data->id;
+	else if($action == "attachmentid") {
 
+		$id = $data->id;
 		$app_view_attachment_query = "SELECT a.pre_application_attachment_id,a.pre_application_info_id,a.attachment_name,a.attachment_type,a.attachment_content,a.file, b.outlet_name from pre_application_attachment a ,pre_application_info b  WHERE  a.pre_application_info_id = b.pre_application_info_id and a.file='I' and a.pre_application_info_id = '$id'";
 		error_log($app_view_attachment_query);
 		$app_view_attachment_result =  mysqli_query($con,$app_view_attachment_query);
 		$count = mysqli_num_rows($app_view_attachment_result);
 		$data = array();
-			if(!$app_view_attachment_result) {
-				die('app_view_view_result: ' . mysqli_error($con));
-				echo "app_view_view_result - Failed";				
-			}		
-			else {
-				if($count <= 0) {
-					$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
-				}
-				else{
-				
+		if(!$app_view_attachment_result) {
+			die('app_view_view_result: ' . mysqli_error($con));
+			echo "app_view_view_result - Failed";				
+		}		
+		else {
+			if($count <= 0) {
+				$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
+			}
+			else{
 				while ($row = mysqli_fetch_array($app_view_attachment_result)) {
 				$data[] = array("application_attachment_id"=>$row['pre_application_attachment_id'],"application_id"=>$row['pre_application_info_id'],"attachment_name"=>$row['attachment_name'],"attachment_type"=>$row['attachment_type'],
 									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
 				
 				}
-				
 			}
-			
 		}	
 		echo json_encode($data);
 	}
 	else if($action == "attachmentcomp") {
+		
 		$id = $data->id;
-
 		$app_view_attachment_query = "SELECT a.pre_application_attachment_id,a.pre_application_info_id, a.attachment_name, a.attachment_type, a.attachment_content, a.file, b.outlet_name  from pre_application_attachment a, pre_application_info b WHERE a.pre_application_info_id = b.pre_application_info_id and a.file='C' and a.pre_application_info_id = '$id'";
 		error_log($app_view_attachment_query);
 		$app_view_attachment_result =  mysqli_query($con,$app_view_attachment_query);
 		$count = mysqli_num_rows($app_view_attachment_result);
 		$data = array();
-			if(!$app_view_attachment_result) {
-				die('app_view_view_result: ' . mysqli_error($con));
-				echo "app_view_view_result - Failed";				
-			}		
-			else {
-				if($count <= 0) {
-					$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
-				}
-				else{
-				
+		if(!$app_view_attachment_result) {
+			die('app_view_view_result: ' . mysqli_error($con));
+			echo "app_view_view_result - Failed";				
+		}		
+		else {
+			if($count <= 0) {
+				$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
+			}
+			else{
 				while ($row = mysqli_fetch_array($app_view_attachment_result)) {
 				$data[] = array("application_attachment_id"=>$row['pre_application_attachment_id'],"application_id"=>$row['pre_application_info_id'],"attachment_name"=>$row['attachment_name'],"attachment_type"=>$row['attachment_type'],
 									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
-				
 				}
-				
 			}
-			
 		}	
 		echo json_encode($data);
 	}
-
 	else if($action == "attachmentSig") {
 		$id = $data->id;
 
@@ -455,24 +433,20 @@ else if($action == "editattachment1") {
 		$app_view_attachment_result =  mysqli_query($con,$app_view_attachment_query);
 		$count = mysqli_num_rows($app_view_attachment_result);
 		$data = array();
-			if(!$app_view_attachment_result) {
-				die('app_view_view_result: ' . mysqli_error($con));
-				echo "app_view_view_result - Failed";				
-			}		
-			else {
-				if($count <= 0) {
-					$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
-				}
-				else{
-				
-				while ($row = mysqli_fetch_array($app_view_attachment_result)) {
-				$data[] = array("application_attachment_id"=>$row['pre_application_attachment_id'],"application_id"=>$row['pre_application_info_id'],"attachment_name"=>$row['attachment_name'],"attachment_type"=>$row['attachment_type'],
-									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
-				
-				}
-				
+		if(!$app_view_attachment_result) {
+			die('app_view_view_result: ' . mysqli_error($con));
+			echo "app_view_view_result - Failed";				
+		}		
+		else {
+			if($count <= 0) {
+				$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
 			}
-			
+			else{
+				while ($row = mysqli_fetch_array($app_view_attachment_result)) {
+					$data[] = array("application_attachment_id"=>$row['pre_application_attachment_id'],"application_id"=>$row['pre_application_info_id'],"attachment_name"=>$row['attachment_name'],"attachment_type"=>$row['attachment_type'],
+									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
+				}
+			}
 		}	
 		echo json_encode($data);
 	}
@@ -509,8 +483,8 @@ else if($action == "editattachment1") {
 		}			
 	}
 	else if($action == "Delete") {
-		$id = $data->id;
 		
+		$id = $data->id;
 		$query = "delete from pre_application_attachment where pre_application_info_id=$id";
 		error_log($query);
 		$query2="delete from pre_application_info where pre_application_info_id=$id";
@@ -524,17 +498,14 @@ else if($action == "editattachment1") {
 		echo "Registration Deleted  successfully";
 		}
 	}
-
-
 	else if($action =="deleteupload"){
 		$id = $data->id;
 		$pre_application_attachment_id = $data->pre_application_attachment_id;
 		$attachment_type = $data->attachment_type;
 			
 		$selectQuery = "Select pre_application_attachment_id,pre_application_info_id,attachment_name,attachment_type,attachment_content,file from pre_application_attachment where file='I' and pre_application_info_id='$id'";
-		    error_log($selectQuery);
-		
-	$result = mysqli_query($con,$selectQuery);
+		error_log($selectQuery);
+		$result = mysqli_query($con,$selectQuery);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
 			$data[] = array("old_pre_application_attachment_id"=>$row['pre_application_attachment_id'],"old_attachment_name"=>$row['attachment_name'],"old_pre_application_info_id"=>$row['pre_application_info_id'],"old_file"=>$row['file'],"old_attachment_type"=>$row['attachment_type']);           
@@ -549,11 +520,9 @@ else if($action == "editattachment1") {
 		$id = $data->id;
 		$pre_application_attachment_id = $data->pre_application_attachment_id;
 		$attachment_type = $data->attachment_type;
-			
 		$selectQuery = "Select pre_application_attachment_id,pre_application_info_id,attachment_name,attachment_type,attachment_content,file from pre_application_attachment where file='C' and pre_application_info_id='$id'";
-		    error_log($selectQuery);
-		
-	$result = mysqli_query($con,$selectQuery);
+		error_log($selectQuery);
+		$result = mysqli_query($con,$selectQuery);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
 			$data[] = array("old_pre_application_attachment_id"=>$row['pre_application_attachment_id'],"old_attachment_name"=>$row['attachment_name'],"old_pre_application_info_id"=>$row['pre_application_info_id'],"old_file"=>$row['file'],"old_attachment_type"=>$row['attachment_type']);           
@@ -570,9 +539,8 @@ else if($action == "editattachment1") {
 		$attachment_type = $data->attachment_type;
 			
 		$selectQuery = "Select pre_application_attachment_id,pre_application_info_id,attachment_name,attachment_type,attachment_content,file from pre_application_attachment where file='S' and pre_application_info_id='$id'";
-		    error_log($selectQuery);
-		
-	$result = mysqli_query($con,$selectQuery);
+		error_log($selectQuery);
+		$result = mysqli_query($con,$selectQuery);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
 			$data[] = array("old_pre_application_attachment_id"=>$row['pre_application_attachment_id'],"old_attachment_name"=>$row['attachment_name'],"old_pre_application_info_id"=>$row['pre_application_info_id'],"old_file"=>$row['file'],"old_attachment_type"=>$row['attachment_type']);           
@@ -583,55 +551,44 @@ else if($action == "editattachment1") {
 			exit();
 		}
 	}
-
-else if($action =="Uploadattachment"){
-
-error_log("inside");
-
-$content = mysqli_real_escape_string($con,$content);
-//error_log("content".$content);
-$query1 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename','$filetype','$content','I')";
-error_log("ID doc =".$query1);
-$result1 = mysqli_query($con,$query1);
-$content2 = mysqli_real_escape_string($con,$content2);
-if($content2 != ''){
-$query2 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename2','$filetype2','$content2', 'C')";
-error_log("Company query2 =".$query2);
-$result2 = mysqli_query($con,$query2);
-$content3 = mysqli_real_escape_string($con,$content3);
-}
-
-if($content3 != ''){
-	$query3 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename3','$filetype3','$content3', 'S')";
-	error_log("Signature query3 =".$query3);
-	$result3 = mysqli_query($con,$query3);
-	}
+	else if($action =="Uploadattachment"){
+		//error_log("inside");
+		$content = mysqli_real_escape_string($con,$content);
+		//error_log("content".$content);
+		$query1 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename','$filetype','$content','I')";
+		error_log("ID doc =".$query1);
+		$result1 = mysqli_query($con,$query1);
+		$content2 = mysqli_real_escape_string($con,$content2);
+		if($content2 != ''){
+			$query2 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename2','$filetype2','$content2', 'C')";
+			error_log("Company query2 =".$query2);
+			$result2 = mysqli_query($con,$query2);
+			$content3 = mysqli_real_escape_string($con,$content3);
+		}
+		if($content3 != ''){
+			$query3 =  "INSERT INTO pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) VALUES (0, $application_id, '$filename3','$filetype3','$content3', 'S')";
+			error_log("Signature query3 =".$query3);
+			$result3 = mysqli_query($con,$query3);
+		}
 		if(!$result1) {
-	echo "FILE-ATTACHMENT - Failed";				
-	die('Pre Application file attachment failed: ' . mysqli_error($con));
-}
-}
+			echo "FILE-ATTACHMENT - Failed";				
+			die('Pre Application file attachment failed: ' . mysqli_error($con));
+		}
+	}
+	else if($action == "attachmentidUpdate") {	
 
-
-	if($action == "attachmentidUpdate") {	
-
-		error_log("inside");
 		$location = APP_ENTRY_ATTACHMENT_LOCATION1;
 		$filename = $_FILES['file']['name'][0];  
 		$filetype =  mysqli_real_escape_string($con,pathinfo($location.$filename, PATHINFO_EXTENSION));
 		$allowed = array('pdf','png','jpg','jpeg');
 
-			if (!in_array($filetype, $allowed)) {
+		if (!in_array($filetype, $allowed)) {
 			$filetype =	'oth';
-			}
-			$filename = $_SESSION['user_name']."_ID_".$currentTime.".".$filetype;
-			move_uploaded_file($_FILES['file']['tmp_name'][0],$location.$filename);  
-		
-			$content = file_get_contents($location.$filename);	
-			$content = base64_encode($content);	
-
-
-			
+		}
+		$filename = $_SESSION['user_name']."_ID_".$currentTime.".".$filetype;
+		move_uploaded_file($_FILES['file']['tmp_name'][0],$location.$filename);  
+		$content = file_get_contents($location.$filename);	
+		$content = base64_encode($content);	
 		$query =  "UPDATE pre_application_attachment set attachment_content = '".trim($content)."' WHERE file='I' and pre_application_info_id = ".$id;
 		error_log($query);
 		if(mysqli_query($con, $query)) {
@@ -642,83 +599,73 @@ if($content3 != ''){
 			exit();
 		 }			
 	}
-
-
-
-	if($action == "getbvn") {		
+	else if($action == "getbvn") {		
 
 		$Preid = $data->id;
 		$userId = $_SESSION['user_id'];
 		$dob = date("Y-m-d", strtotime($dob));	
-
-
 		$PreAppQuery = "SELECT pre_application_info_id,first_name,last_name, country_id, outlet_name, bvn, tax_number, address1, address2, local_govt_id, state_id, mobile_no, work_no, email, language_id, contact_person_name, contact_person_mobile,loc_latitude, loc_longitude, comments,dob,gender,business_type FROM pre_application_info WHERE pre_application_info_id = $Preid and status = 'E'";
 		$selectresult =  mysqli_query($con,$PreAppQuery);
-			$row = mysqli_fetch_assoc($selectresult);
-		    $pre_application_id = $row['pre_application_info_id'];
-			$firstName = $row['first_name'];
-	    		$lastName= $row['last_name'];
-			$countryid = $row['country_id'];
-			$dob = $row['dob'];
-			$localgovernmentid = $row['local_govt_id'];
-			$stateid = $row['state_id'];
-			$phone = $row['mobile_no'];
-			$bvn = $row['bvn'];
-       		if($selectresult){
+		$row = mysqli_fetch_assoc($selectresult);
+	    $pre_application_id = $row['pre_application_info_id'];
+		$firstName = $row['first_name'];
+		$lastName= $row['last_name'];
+		$countryid = $row['country_id'];
+		$dob = $row['dob'];
+		$localgovernmentid = $row['local_govt_id'];
+		$stateid = $row['state_id'];
+		$phone = $row['mobile_no'];
+		$bvn = $row['bvn'];
+       	if($selectresult){
 			$create_user = $_SESSION['user_id'];
 			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
 			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
 			if(!$get_sequence_number_result) {
 				error_log('Get sequnce number 2 failed: ' . mysqli_error($con));
 				echo "GETSEQ - Failed";				
-		}	
-		else {
-			$get_sequence_num_row = mysqli_fetch_assoc($get_sequence_number_result);
-			$id = $get_sequence_num_row['id'];
-			$reqMsg = "{bvn: ".$bvn.", firstName: ".$firstName.",lastname: ".$lastName.",dob:".$dob.",phone:".$mobileno."}";
-			$query =  "INSERT INTO fin_non_trans_log (fin_non_trans_log_id, service_feature_id, bank_id,source,message_send_time, create_user, create_time, request_message ) VALUES ($id, 19,NULL,'F', now(), $create_user, now(), '$reqMsg')";
-			error_log($query);
-			$result = mysqli_query($con,$query);
-			if (!$result) {
-				echo "Error: %s\n". mysqli_error($con);
-			}
+			}	
 			else {
-				$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid);
-				$api_response = json_decode($res, true);
-				$response_code = $api_response['responseCode'];
-				$res_description = $api_response['responseDescription'];
-				$description = $api_response['description'];
-				$query1 = "UPDATE fin_non_trans_log SET response_message ='$res', message_receive_time = now(), response_received = 'Y', error_code = '$response_code', error_description = '$res_description' where fin_non_trans_log_id = $id ";                 
-				$result = mysqli_query($con,$query1);
-				error_log("After Success Response Update Que".$query1);
+				$get_sequence_num_row = mysqli_fetch_assoc($get_sequence_number_result);
+				$id = $get_sequence_num_row['id'];
+				$reqMsg = "{bvn: ".$bvn.", firstName: ".$firstName.",lastname: ".$lastName.",dob:".$dob.",phone:".$mobileno."}";
+				$query =  "INSERT INTO fin_non_trans_log (fin_non_trans_log_id, service_feature_id, bank_id,source,message_send_time, create_user, create_time, request_message ) VALUES ($id, 19,NULL,'F', now(), $create_user, now(), '$reqMsg')";
+				error_log($query);
+				$result = mysqli_query($con,$query);
+				if (!$result) {
+					echo "Error: %s\n". mysqli_error($con);
+				}
+				else {
+					$res = sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid);
+					$api_response = json_decode($res, true);
+					$response_code = $api_response['responseCode'];
+					$res_description = $api_response['responseDescription'];
+					$description = $api_response['description'];
+					$query1 = "UPDATE fin_non_trans_log SET response_message ='$res', message_receive_time = now(), response_received = 'Y', error_code = '$response_code', error_description = '$res_description' where fin_non_trans_log_id = $id ";                 
+					$result = mysqli_query($con,$query1);
+					error_log("After Success Response Update Que".$query1);
 
-				 if($result) {
-                    			$SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
-					error_log("SelectQuery ==".$SelectQuery);
-					$Selectresult =  mysqli_query($con,$SelectQuery);
-					$count = mysqli_num_rows($Selectresult);
+				 	if($result) {
+                    	$SelectQuery = "select * from fin_non_trans_log where fin_non_trans_log_id= $id and response_message like '%VALID%' and error_code=0";
+						error_log("SelectQuery ==".$SelectQuery);
+						$Selectresult =  mysqli_query($con,$SelectQuery);
+						$count = mysqli_num_rows($Selectresult);
 						error_log($count);
 						if($count > 0) { 
 							$updateQuery ="update pre_application_info set bvn_validated='Y',trans_log_id=$id where pre_application_info_id = $Preid";
 							error_log("updateQuery ==".$updateQuery);
 							$UpdateResult = mysqli_query($con,$updateQuery);
 							echo $res;
-							
 						}
 						error_log("Error in Select Fin Non Trans Log  Statment");
-				  }
-				  error_log("Error in After Success Response Update Query");
-				
-
+				  	}
+				  	error_log("Error in After Success Response Update Query");
+				}
+				error_log("Error in Sending Request");
 			}
-			error_log("Error in Sending Request");
-		}
-			
-		
-		error_log("respnse = ".$res);		
-	}	
-	error_log("Error in Select Pre Application Info Statment");
-}
+			error_log("respnse = ".$res);		
+		}	
+		error_log("Error in Select Pre Application Info Statment");
+	}
 		
 	function sendRequest($userId,$firstName,$lastName,$phone,$dob,$bvn,$stateid,$countryid,$localgovernmentid) {	
 		error_log("entering sendRequest");
@@ -738,10 +685,10 @@ if($content3 != ''){
 		$body['localGovtId'] =  $localgovernmentid;
 		$body['userId'] = $userId;
 		$body['firstName'] = $firstName;
-        	$body['lastName'] = $lastName;
-        	$body['phone'] = $phone;
-        	$body['dob'] = $dob;
-        	$body['bvn'] = $bvn;
+        $body['lastName'] = $lastName;
+        $body['phone'] = $phone;
+        $body['dob'] = $dob;
+        $body['bvn'] = $bvn;
 		$body['key1'] = $key1;
 		$body['signature'] = $signature;
 		error_log("request sent ==> ".json_encode($body));
