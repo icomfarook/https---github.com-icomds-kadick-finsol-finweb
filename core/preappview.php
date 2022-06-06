@@ -306,9 +306,16 @@ $profile_id  = $_SESSION['profile_id'];
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo PRE_APPLICATION_VIEW_DETAIL_OUTLET_NAME; ?><span class='labspa'>{{outletname}}</span></label>
 							</div>	
-									<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label>Date of Birth: <span class='labspa'>{{dob}}</span></label>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>First Name: <span class='labspa'>{{first_name}}</span></label>
+							</div>	
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Last Name: <span class='labspa'>{{last_name}}</span></label>
 							</div>		
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Date of Birth: <span class='labspa'>{{dob}}</span></label>
+							</div>	
+						
 								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Gender: <span class='labspa'>{{gender}}</span></label>
 							</div>	

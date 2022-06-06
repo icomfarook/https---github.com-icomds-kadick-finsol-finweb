@@ -96,6 +96,7 @@
 									<th>IMEI</th>
 									<th>Agent Name</th>
 									<th>Topic</th>
+									<th>Device Type</th>
 									<th>Create Time</th>
 									<th>Detail</th>
 								</tr>
@@ -105,12 +106,13 @@
 									<td>{{ x.imei }}</td>
 									<td>{{ x.agent }}</td>
 									<td>{{ x.topic }}</td>
+									<td>{{ x.device_type }}</td>
 									<td>{{ x.create_time }}</td>
 								<td><a id={{x.id}} class='editpro' ng-click='detail($index,x.id)' data-toggle='modal' data-target='#ServiceDialogue'>
 								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
 								</tr>
 								<tr ng-show="res.length==0">
-									<td style='text-align:center' colspan='5' >
+									<td style='text-align:center' colspan='6' >
 										<?php echo JOUNRAL_ENTRY_COMMI_MAIN_NO_DATA_FOUND; ?>            
 									</td>
 								</tr>
@@ -143,7 +145,10 @@
 								<label><span >IMEI :</span><span class='labspa'>{{imei}}</span></label>
 							</div>
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
-								<label>Topic :<span class='labspa'>{{topic }}</span></label>
+								<label>Topic :<span class='labspa'>{{topic}}</span></label>
+							</div>
+							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
+								<label>Device Type :<span class='labspa'>{{device_type}}</span></label>
 							</div>
 							
 							<div class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>

@@ -195,7 +195,13 @@
 								<label><?php echo APPLICATION_VIEW_DETAIL_OUTLET_NAME; ?><span class='labspa'>{{outletname}}</span></label>
 							</div>
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label><?php echo BVN; ?> :<span class='labspa'>{{bvn}}</span></label>
+								<label>First Name: <span class='labspa'>{{first_name}}</span></label>
+							</div>	
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Last Name: <span class='labspa'>{{last_name}}</span></label>
+							</div>		
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>BVN :<span class='labspa'>{{bvn}}</span></label>
 							</div>
 							<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
 								<label> Gender : <span style='color:blue'>{{gender}}</span></label>								

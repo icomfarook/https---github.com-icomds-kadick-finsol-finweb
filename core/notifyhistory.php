@@ -81,7 +81,16 @@
 								<label>Title</label>
 								<input maxlength='50' ng-trim="false" ng-model="Title" type='text' id='Title' name='Title'   class='form-control'/>
 							</div>
-							 
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Device Type<span class='spanre'>*</span></label>
+								<select ng-init="DeviceType='ALL'" ng-model='DeviceType' class='form-control' name='DeviceType' required>
+                                     <option value='ALL'>--ALL--</option>
+									<option value='P'>P-POS</option>
+									<option value='M'>M-Mobile</option>
+								
+									
+								</select>
+							</div>
 						</div>	<div class='clearfix'></div>
 							<div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 								<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_COMMI_MAIN_BUTTON_QUERY; ?></button>

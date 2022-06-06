@@ -354,4 +354,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/notifyhistory.php",
 		controller: "NotifyHistoryCtrl"
 	})
+	.when("/fcmnotia90", {
+		templateUrl : "../core/sendnotifi.php",
+		controller: "SendNotificationCtrl"
+	})
 });

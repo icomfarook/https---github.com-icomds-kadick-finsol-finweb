@@ -251,7 +251,7 @@
 	}
 	else if($action == 'detail') {
 		$id = $data->id;
-		$query = "SELECT d.name as state, c.country_description as country_name, a.application_id, if(a.applier_type='A','Agent',if(a.applier_type='P','Personal',if(a.applier_type='S','Sub Agent','Champion'))) as applier_type, if(a.application_category='N','New',if(a.application_category = 'C', 'Change',if(a.application_category = 'T','Transfer','Cancel'))) as application_category, b.outlet_name, a.create_time, if(a.status='P','Pending',if(a.status='A','Approved',if(a.status='R','Rejected',if(a.status='C','Cancelled','Authorized')))) as status, ifNull(b.address1,'-') as address1, ifNull(b.address2,'-') as address2, e.name as local_govt, ifNull(b.zip_code,'-') as zip_code, ifNull(b.tax_number,'-') as tax_number, ifNull(b.email,'-') as email, ifNull(b.mobile_no,'-') as mobile_no, ifNull(b.work_no,'-')as work_no, ifNull(b.contact_person_mobile,'-') as contact_person_mobile, ifNull(b.contact_person_name,'-') as contact_person_name, ifNull(a.comments,'-') as comments, ifNull(a.approver_comments,'-') as approver_comments, ifNull(a.approved_time,'-') as approved_time, b.loc_latitude, b.loc_longitude,b.bvn,b.dob,b.gender,if(b.business_type='0','Pharmacy',if(b.business_type='1','Gas Station',if(b.business_type='2','Saloon',if(b.business_type='3','Groceries Stores',if(b.business_type='4','Super Market',if(b.business_type='5','Mobile Network Outlets',if(b.business_type='6','Restaurants',if(b.business_type='7','Hotels',if(b.business_type='8','Cyber Cafe',if(b.business_type='9','Post Office','Others')))))))))) as business_type FROM application_main a, application_info b ,country c, state_list d, local_govt_list e Where c.country_id = b.country_id and b.state_id = d.state_id and d.state_id = e.state_id and b.local_govt_id = e.local_govt_id and a.application_id = b.application_id and a.application_id = $id";
+		$query = "SELECT d.name as state, c.country_description as country_name, a.application_id, if(a.applier_type='A','Agent',if(a.applier_type='P','Personal',if(a.applier_type='S','Sub Agent','Champion'))) as applier_type, if(a.application_category='N','New',if(a.application_category = 'C', 'Change',if(a.application_category = 'T','Transfer','Cancel'))) as application_category, b.outlet_name, a.create_time, if(a.status='P','Pending',if(a.status='A','Approved',if(a.status='R','Rejected',if(a.status='C','Cancelled','Authorized')))) as status, ifNull(b.address1,'-') as address1, ifNull(b.address2,'-') as address2, e.name as local_govt, ifNull(b.zip_code,'-') as zip_code, ifNull(b.tax_number,'-') as tax_number, ifNull(b.email,'-') as email, ifNull(b.mobile_no,'-') as mobile_no, ifNull(b.work_no,'-')as work_no, ifNull(b.contact_person_mobile,'-') as contact_person_mobile, ifNull(b.contact_person_name,'-') as contact_person_name, ifNull(a.comments,'-') as comments, ifNull(a.approver_comments,'-') as approver_comments, ifNull(a.approved_time,'-') as approved_time, b.loc_latitude, b.loc_longitude,b.bvn,b.dob,b.gender,if(b.business_type='0','Pharmacy',if(b.business_type='1','Gas Station',if(b.business_type='2','Saloon',if(b.business_type='3','Groceries Stores',if(b.business_type='4','Super Market',if(b.business_type='5','Mobile Network Outlets',if(b.business_type='6','Restaurants',if(b.business_type='7','Hotels',if(b.business_type='8','Cyber Cafe',if(b.business_type='9','Post Office','Others')))))))))) as business_type,ifNULL(b.first_name,'-') as first_name,ifNULL(b.last_name,'-') as last_name FROM application_main a, application_info b ,country c, state_list d, local_govt_list e Where c.country_id = b.country_id and b.state_id = d.state_id and d.state_id = e.state_id and b.local_govt_id = e.local_govt_id and a.application_id = b.application_id and a.application_id = $id";
 		error_log($query);
 		$result = mysqli_query($con,$query);
 		$data = array();
@@ -260,7 +260,7 @@
 							,"category"=>$row['application_category'],"time"=>$row['create_time'],"status"=>$row['status'],"address1"=>$row['address1']
 							,"address2"=>$row['address2'],"localgovt"=>$row['local_govt'],"state"=>$row['state'],"zip"=>$row['zip_code'],"tax"=>$row['tax_number']
 							,"email"=>$row['email'],"mobile"=>$row['mobile_no'],"work"=>$row['work_no']
-							,"cpm"=>$row['contact_person_mobile'],"cpn"=>$row['contact_person_name'],"comment"=>$row['comments'],"appcomment"=>$row['approver_comments'],"appdate"=>$row['approved_time'],"Latitude"=>$row['loc_latitude'],"Longitude"=>$row['loc_longitude'],"bvn"=>$row['bvn'],"dob"=>$row['dob'],"gender"=>$row['gender'],"BusinessType"=>$row['business_type']);           
+							,"cpm"=>$row['contact_person_mobile'],"cpn"=>$row['contact_person_name'],"comment"=>$row['comments'],"appcomment"=>$row['approver_comments'],"appdate"=>$row['approved_time'],"Latitude"=>$row['loc_latitude'],"Longitude"=>$row['loc_longitude'],"bvn"=>$row['bvn'],"dob"=>$row['dob'],"gender"=>$row['gender'],"BusinessType"=>$row['business_type'],"first_name"=>$row['first_name'],"last_name"=>$row['last_name']);           
 		}
 		//error_log("data = ".$data);
 		echo json_encode($data);
@@ -314,6 +314,34 @@
 									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
 				}
 			}
+		}	
+		echo json_encode($data);
+	}
+	else if($action == "attachmentSig") {
+		
+		$app_approve_attachment_query = "SELECT application_attachment_id,application_id,attachment_name,attachment_type,attachment_content,file,(select outlet_name from application_info where application_id ='$id') as outlet_name  from application_attachment  WHERE file='S' and application_id = '$id'";
+		error_log($app_approve_attachment_query);
+		$app_approve_attachment_result =  mysqli_query($con,$app_approve_attachment_query);
+		$count = mysqli_num_rows($app_approve_attachment_result);
+		$data = array();
+			if(!$app_approve_attachment_result) {
+				die('app_view_view_result: ' . mysqli_error($con));
+				echo "app_view_view_result - Failed";				
+			}		
+			else {
+				if($count <= 0) {
+					$data[] = array("attachment_type" => '000',"attachment_content"=>'000');
+				}
+				else{
+				
+				while ($row = mysqli_fetch_array($app_approve_attachment_result)) {
+				$data[] = array("application_attachment_id"=>$row['application_attachment_id'],"application_id"=>$row['application_id'],"attachment_name"=>$row['attachment_name'],"attachment_type"=>$row['attachment_type'],
+									"attachment_content"=>$row['attachment_content'],"file"=>$row['file'],"outletname"=>$row['outlet_name']);           
+				
+				}
+				
+			}
+			
 		}	
 		echo json_encode($data);
 	}

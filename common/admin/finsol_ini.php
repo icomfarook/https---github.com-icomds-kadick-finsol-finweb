@@ -253,6 +253,8 @@ define ("PTSP_POSVAS_TRANSACTION_URI","/nibss/api/transaction_posvas");
 
 define ("FCM_URL","https://fcm.googleapis.com/fcm/send");
 define ("FCM_API_KEY","AAAAIC3ieAs:APA91bEslZGxZ4CKxcl0C6bu2Tzfog3Y6K5VX-9useLkij2HYzXMqZ57_NZjAbHU6WuQI-NzdxQ_ip6h-FWOC8mUBmtEgcqAFIaawJI5iqULoYlaZ43zpbEafs07ZPMCcK61WD-T2ZzH");
+define ("PUSHY_URL","https://pushy.me/docs/api/send-notifications");
+define ("PUSHY_API_KEY","AAAAIC3ieAs:APA91bEslZGxZ4CKxcl0C6bu2Tzfog3Y6K5VX-9useLkij2HYzXMqZ57_NZjAbHU6WuQI-NzdxQ_ip6h-FWOC8mUBmtEgcqAFIaawJI5iqULoYlaZ43zpbEafs07ZPMCcK61WD-T2ZzH");
 define ("TOPIC_KADICK_USER","kadick-user");
 define ("TOPIC_INSTALLED_USER","installed-user");
 define ("TOPIC_REGISTERED_USER","registered-user");

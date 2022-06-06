@@ -1,3 +1,108 @@
+app.controller('SendNotificationCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+	$scope.creteria = "A";
+	$scope.agentCode = [];
+	$scope.countTable = false;
+	$scope.title = "";
+	$scope.body = "";
+	$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	
+	$http({
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'agentsWithToken' }
+	}).then(function successCallback(response) {
+	$scope.agents = response.data;
+	//window.location.reload();
+	});
+	
+	$scope.query = function () {
+	$http({
+	method: 'post',
+	url: '../ajax/sendnotifiajax.php',
+	data: {
+	action: 'query',
+	agent: $scope.agentCode,
+	user_type: $scope.userType,
+	state:$scope.state,
+	local_govt_id:$scope.local_govt_id,
+	creteria: $scope.creteria
+	},
+	}).then(function successCallback(response) {
+	$scope.countTable = true;
+	$scope.count = response.data;
+	
+	}, function errorCallback(response) {
+	console.log(response.data);
+	});
+	}
+	
+	$scope.send = function (title,body) {
+	
+		if(title == "" ){
+			alert("Please Enter Title");
+			return false;
+		}else if(body == "" ){
+			alert("Please Enter Content");
+			return false;
+		}else{
+			var result = confirm("Are you sure to send notification?");
+			if (result) {
+				$http({
+					method: 'post',
+					url: '../ajax/sendnotifiajax.php',
+					data: {
+					action: 'send_notification',
+					title: title,
+					body: body,
+					agent: $scope.agentCode,
+					user_type: $scope.userType,
+					creteria: $scope.creteria,
+					state: $scope.state,
+					local_govt_id: $scope.local_govt_id
+					},
+					}).then(function successCallback(response) {
+						alert(JSON.parse(response.data));
+						window.location.reload();
+					$scope.isHide = true;
+					$scope.isHideOk = false;
+					$scope.isLoader = false;
+	
+					}, function errorCallback(response) {
+					console.log(response.data);
+					});
+			}else{
+				return false;
+			}
+	
+		}
+	
+	}
+	
+	});
+
 app.controller('KycUpdateCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.fn_load = function (partyType,partyCode) {
@@ -379,6 +484,7 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	action: 'getreport',
 	Date: $scope.Date,
 	Title: $scope.Title,
+	DeviceType: $scope.DeviceType,
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
@@ -412,7 +518,7 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.count = response.data[0].count;
 	$scope.response = response.data[0].response;
 	$scope.date = response.data[0].date;
-
+	$scope.device_type = response.data[0].device_type;
 	
 	}, function errorCallback(response) {
 	// console.log(response);
@@ -478,7 +584,7 @@ app.controller('TopicSubCtrl', function ($scope, $http) {
 	$scope.status = response.data[0].status;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+	$scope.device_type = response.data[0].device_type;
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
@@ -530,7 +636,7 @@ app.controller('ClientTopicCtrl', function ($scope, $http) {
 	$scope.agent = response.data[0].agent;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+	$scope.device_type = response.data[0].device_type;
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
@@ -561,6 +667,7 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 		UserType: $scope.UserType,
 		agentCode: $scope.agentCode,
 		IMEI: $scope.IMEI,
+		DeviceType:$scope.DeviceType,
 	    action: 'query'
 	  },
 	 }).then(function successCallback(response) {
@@ -610,13 +717,14 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 	  $scope.status = response.data[0].status;
 	  $scope.create_time = response.data[0].create_time;
 	  $scope.update_time = response.data[0].update_time;
+	  $scope.device_type = response.data[0].device_type;
 	 }, function errorCallback(response) {
 	  // console.log(response);
 	 });
 	}
    });
 
-app.controller('notificationCtrl', function ($scope, $http) {
+app.controller('notificationCtrl', function ($scope, $http) { 
 $scope.isHideOk = true;
 $scope.creteria = "A";
 $scope.agentCode = [];
@@ -646,6 +754,34 @@ $scope.localgvts = response.data;
 });
 }
 
+/* $scope.creterias = function() { 
+	$scope.state = "";
+	$scope.local_govt_id = "";
+$scope.userType == "--ALL--";
+$scope.agentCode == "--ALL--";
+
+}
+
+$scope.clickra = function (clickra) {
+	$scope.state = "";
+	$scope.local_govt_id = "";
+$scope.userType == "--ALL--";
+$scope.agentCode == "--ALL--";
+
+	if(clickra == "BT") {
+	$scope.isOrderNoDi = true;
+	$scope.isStartDateDi = false;
+	$scope.isEndDateDi = false;
+	$scope.orderno = "";
+	$scope.isOrderTypeDi = false;
+	$scope.startDate = new Date();
+	$scope.type = "ALL";
+	$scope.endDate = new Date();
+	$scope.ischampionCode = true;
+	$scope.isstate = true;
+	$scope.Terminal_id = true;
+	}
+} */
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -11143,6 +11279,37 @@ $scope.attachment_type = response.data[0].attachment_type;
 }, function errorCallback(response) {
 // console.log(response);
 });
+    $scope.PrintImage = function (url) {
+var src='data:image/;base64,'+url;
+//alert(src);
+   var win = window.open('');
+win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+   win.focus();
+};
+}
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appapproveajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	//$("#appattachment").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
 
     $scope.PrintImage = function (url) {
 var src='data:image/;base64,'+url;
@@ -11225,6 +11392,8 @@ $scope.entrycomments = response.data[0].entrycomments;
 $scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
 $scope.gender = response.data[0].gender;
+$scope.first_name = response.data[0].first_name;
+$scope.last_name = response.data[0].last_name;
 
 }, function errorCallback(response) {
 // console.log(response);
@@ -11458,6 +11627,8 @@ $scope.bvn = response.data[0].bvn;
 $scope.gender = response.data[0].gender;
 $scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
+$scope.first_name = response.data[0].first_name;
+$scope.last_name = response.data[0].last_name;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -11530,6 +11701,39 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
    win.focus();
 };
 }
+
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appauthorizeajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	//$("#appattachment").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+		$scope.PrintImage = function (url) {
+	var src='data:image/;base64,'+url;
+	//alert(src);
+	   var win = window.open('');
+	win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+	   win.focus();
+	};
+	}
 
 
 $scope.authorize = function (id, type) {
@@ -13628,6 +13832,8 @@ var response = "<p>Search Creteria For: </p>" + text + " - " + valu +
 "<tr><th>Category</th><th>" + response.data[0].category + "</th></tr>" +
 "<tr><th>Country</th><th>" + response.data[0].country + "</th></tr>" +
 "<tr><th>Outlet Name</th><th>" + response.data[0].outletname + "</th></tr>" +
+"<tr><th>First Name</th><th>" + response.data[0].first_name + "</th></tr>" +
+"<tr><th>Last Name</th><th>" + response.data[0].last_name + "</th></tr>" +
 "<tr><th>Date Of Birth</th><th>" + response.data[0].dob + "</th></tr>" +
 "<tr><th>Gender</th><th>" + response.data[0].gender + "</th></tr>" +
 "<tr><th>Business Type</th><th>" + response.data[0].BusinessType + "</th></tr>" +
@@ -13775,6 +13981,8 @@ $scope.Longitude = response.data[0].Longitude;
   $scope.gender = response.data[0].gender;
 $scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
+  $scope.first_name = response.data[0].first_name;
+   $scope.last_name = response.data[0].last_name;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -14617,6 +14825,8 @@ $http({
    $scope.usetup = response.data[0].usetup;
    $scope.login = response.data[0].login;
    $scope.bvn = response.data[0].bvn;
+   $scope.first_name = response.data[0].first_name;
+   $scope.last_name = response.data[0].last_name;
   }, function errorCallback(response) {
    // console.log(response);
   });
