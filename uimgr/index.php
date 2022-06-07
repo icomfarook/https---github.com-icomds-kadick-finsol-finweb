@@ -20,7 +20,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title>Kadick Mo&#8358;ei :: Manager</title>
+		<title>Kadick Moni :: Manager</title>
 		<meta name="description" content="description">
 		<meta name="icom" content="icom">
 		<meta name="viewport" content="width=device-width, initial-scale=1">

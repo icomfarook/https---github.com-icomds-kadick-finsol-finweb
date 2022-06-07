@@ -17,7 +17,7 @@
 <html lang="en">
 	<head>
 		<meta charset="utf-8">
-		<title> Kadick Mo&#8358;ei :: System </title>
+		<title> Kadick Moni :: System </title>
 		<meta name="description" content="description">
 		<meta name="icom" content="icom">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -173,7 +173,9 @@ if($(this).val() != "")
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!papent"><?php echo INDEX_PRE_APPLICATION_ENTRY; ?></a></li>
 						<li><a class="ajax-link" href="#!papviw"><?php echo INDEX_PRE_APPLICATION_VIEW; ?></a></li>
+<!--
 						<li><a class="ajax-link" href="#!appent"><?php echo INDEX_APPLICATION_ENTRY; ?></a></li>
+-->						
 						<li><a class="ajax-link" href="#!appviw"><?php echo INDEX_APPLICATION_VIEW; ?></a></li>
 						<li><a class="ajax-link" href="#!appapr"><?php echo INDEX_APPLICATION_APPROVE; ?></a></li>
 						<li><a class="ajax-link" href="#!appaut"><?php echo INDEX_APPLICATION_AUTHORIZE; ?></a></li>

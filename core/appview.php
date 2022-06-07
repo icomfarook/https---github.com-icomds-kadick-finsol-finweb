@@ -140,11 +140,11 @@
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
 									<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/blue_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/yellow_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/red_attach.png' /></button></a>
 									</td>
 									 <?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22 || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<td ng-if="x.stat === 'P'"><a id={{x.id}} class='ApplicationEditDialogue' ng-click='edit($index,x.id,x.status,x.name)' data-toggle='modal' data-target='#ApplicationEditDialogue'>

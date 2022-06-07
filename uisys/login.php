@@ -244,7 +244,7 @@ if(isset($_POST['login'])) {
 <body>
 <head>
 <meta charset="utf-8">
-<title> Kadick Mo&#8358;ei</title>
+<title> Kadick Moni</title>
 <meta name="icom" content="icom">
 <link href="css/loginstyle.css" rel="stylesheet" type="text/css" />
 <link href="../common/css/fontawesome-all.css" rel="stylesheet" />

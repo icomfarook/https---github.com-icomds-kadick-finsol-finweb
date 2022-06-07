@@ -109,17 +109,17 @@ legend {
 									<td>{{ x.time }}</td>
 									<td>{{ x.status }}</td>
 									<td><a id={{x.id}} class='applicationApproveDialogue' ng-click='edit($index,x.id,x.code,x.rtype, x.profile)' data-toggle='modal' data-target='#ApplicationApproveDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
 									</td>
 									<td><a id={{x.id}} class='applicationDetailDialogue' ng-click='detail($index,x.id)' data-toggle='modal' data-target='#ApplicationDetailDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
 									<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button  title="ID Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button  title="ID Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/blue_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button title="Business Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<button title="Business Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/yellow_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/red_attach.png' /></button></a>
 									</td>
 									<td><a id={{x.id}} class='applicationRejectDialogue' ng-click='authreject($index,x.id,x.name)' data-toggle='modal' data-target='#ApplicationRejectDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>

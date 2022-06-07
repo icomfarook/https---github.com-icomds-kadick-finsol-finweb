@@ -190,10 +190,10 @@
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
 									</td>
 									<td ng-show="x.bvn==='N-No'"><a id={{x.id}} class='reject'  data-toggle='modal' data-target='#RejectBody'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/question.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
 									</td>
 									<td ng-show="x.bvn==='-'"><a id={{x.id}} class='reject'  data-toggle='modal' data-target='#RejectBody'>
-										<button class='icoimg'><img style="height: 26px;width: 26px;" src='../common/images/null.jpg' /></button></a>
+										<button class='icoimg'><img style="height: 26px;width: 26px;" src='../common/images/question1.png' /></button></a>
 									</td>
 									<td><a id='{{x.agent_code}}' class='ApplicationViewDialogue' ng-click='view($index,x.agent_code)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>

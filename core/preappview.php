@@ -138,18 +138,18 @@ $profile_id  = $_SESSION['profile_id'];
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
 										<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button class='icoimg' title="ID Document"><img style='height:22px;width:22px' src='../common/images/blue_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<button class='icoimg' title="Business Document"><img style='height:22px;width:22px' src='../common/images/yellow_attach.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/red_attach.png' /></button></a>
 									</td>
 									<td ng-show="x.stat !=='E'"> - </td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='editattach1($index,x.id, x.name);editattach2($index,x.id, x.name);editattach3($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationAttachmentEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
 									</td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='transfer' ng-click='transfer($index,x.id, x.name)' data-toggle='modal' data-target='#ApplicationTransferDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
 									</td>
 									<td ng-show="x.stat !=='E'"> - </td>
 									<td ng-show="x.stat==='E'"><a id={{x.id}} class='reject' ng-click='preappviewreject($index,x.id,x.name)' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
