@@ -11,27 +11,43 @@
 	$DeviceType = $data->DeviceType;
 	
 	if($action == "query") {
-      
-		if($DeviceType == "ALL"){
-           if($agentCode == ""){
-				if($IMEI == ""){
-					$authorizationquery = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,a.update_time,if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a,agent_info b where a.user_id =b.user_id  and a.status='$UserType'";
+      	if ($UserType == 'L' ) {
+			if($DeviceType == "ALL"){
+           		if($agentCode == ""){
+					if($IMEI == ""){
+						$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, concat(b.agent_name,'[',b.agent_code,']') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a, agent_info b where a.user_id = b.user_id and a.status = '$UserType'";
+					}else{
+						$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, concat(b.agent_name,'[',b.agent_code,']') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a, gent_info b where a.user_id = b.user_id and a.status = '$UserType' and a.imei = '$IMEI'";
+					}
 				}else{
-						$authorizationquery = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,a.update_time,if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a,agent_info b where a.user_id =b.user_id  and a.status='$UserType'  and  a.imei = '$IMEI'";
+					$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, concat(b.agent_name,'[',b.agent_code,']') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a, agent_info b where a.user_id = b.user_id and a.status = '$UserType' and a.user_id = '$agentCode'";
 				}
 			}else{
-				$authorizationquery = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,a.update_time,if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a,agent_info b where a.user_id =b.user_id  and a.status='$UserType' and a.user_id = '$agentCode'";
-
+				$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, concat(b.agent_name,'[',b.agent_code,']') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a, agent_info b where a.user_id = b.user_id and a.status = '$UserType' and a.device_type = '$DeviceType'";
 			}
-		}else{
-				$authorizationquery = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,a.update_time,if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a,agent_info b where a.user_id =b.user_id  and a.status='$UserType' and a.device_type = '$DeviceType'";
-
+			if($IMEI <> ""  && $agentCode <> ""  && $UserType <> "" &&  $DeviceType <> "ALL"){
+				$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, concat(b.agent_name,'[',b.agent_code,']') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, ifNULL( if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')),'-') as device_type  from installed_user a, agent_info b where a.user_id = b.user_id and a.status = '$UserType' and a.user_id = '$agentCode' and a.imei = '$IMEI' and a.device_type = '$DeviceType'";
 			}
-		if($IMEI <> ""  && $agentCode <> ""  && $UserType <> "" &&  $DeviceType <> "ALL"){
-			$authorizationquery = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,a.update_time,ifNULL(if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')),'-') as device_type  from installed_user a,agent_info b where a.user_id =b.user_id  and a.status='$UserType' and a.user_id = '$agentCode' and a.imei = '$IMEI' and a.device_type = '$DeviceType'";
+		}else {
+			if($DeviceType == "ALL"){
+				if($agentCode == ""){
+					if($IMEI == ""){
+						$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, '-' as  agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a where a.status = '$UserType'";
+				 	}else{
+						$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, '-' as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a where a.status = '$UserType' and a.imei = '$IMEI'";
+				 	}
+				}else{
+					$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, '-' as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a where a.status = '$UserType' and a.user_id = '$agentCode'";
+			 	}
+		 	}else{
+				$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, '-' as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')) as device_type from installed_user a where a.status = '$UserType' and a.device_type = '$DeviceType'";
+		 	}
+		 	if($IMEI <> ""  && $agentCode <> ""  && $UserType <> "" &&  $DeviceType <> "ALL"){
+				$authorizationquery = "select a.installed_user_id, a.imei, ifNULL(a.topic,'-') as topic, a.firebase_token, '-' as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, a.update_time, ifNULL( if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')),'-') as device_type  from installed_user a where a.status = '$UserType' and a.user_id = '$agentCode' and a.imei = '$IMEI' and a.device_type = '$DeviceType'";
+		 	}
 		}
      
-		error_log($authorizationquery);
+		error_log("authorizationquery: ".$authorizationquery);
 		$authorizationresult =  mysqli_query($con,$authorizationquery);
 		if (!$authorizationresult) {
 			printf("Error: %s\n", mysqli_error($con));
@@ -46,8 +62,8 @@
 	
 	if($action == "view") {
         $id = $data->id;	
-        $Query = "select a.installed_user_id,a.imei,ifNULL(a.topic,'-') as topic,a.firebase_token,concat(b.agent_name,'[',b.agent_code,']') as agent,if(a.status='I','I-Installed',if(a.status='O','O-Open',if(a.status='R','R-Registered',if(a.status='U','U-Uninstalled',if(a.status='L','L-Authorized','-'))))) as status,a.create_time,ifNULL(a.update_time,'-') as update_time,ifNULL(if(a.device_type = 'P','P-Pos',if(a.device_type = 'M','M-Mobile','O-Others')),'-') as device_type from installed_user a,agent_info b where a.user_id =b.user_id and installed_user_id = '$id'";
-		error_log($Query);
+        $Query = "select a.installed_user_id, a.imei,ifNULL(a.topic,'-') as topic, a.firebase_token, ifnull(concat(b.agent_name,'[',b.agent_code,']'), '-') as agent, if(a.status='I','I-Installed', if(a.status='O','O-Open', if(a.status='R','R-Registered', if(a.status='U','U-Uninstalled', if(a.status='L','L-Authorized','-'))))) as status, a.create_time, ifNULL(a.update_time,'-') as update_time, ifNULL(if(a.device_type = 'P','P-Pos', if(a.device_type = 'M','M-Mobile','O-Others')),'-') as device_type from installed_user a left join agent_info b on a.user_id = b.user_id where installed_user_id = '$id'";
+		error_log("Query: ".$Query);
 		$Result =  mysqli_query($con,$Query);
 		if (!$Result) {
 			printf("Error: %s\n", mysqli_error($con));
@@ -61,9 +77,8 @@
 	}
     else if($action == "Delete") {
 		$id = $data->id;
-		
 		$query = "delete from installed_user where installed_user_id =$id";
-		error_log($query);
+		error_log("query: ".$query);
 		
 		$result = mysqli_query($con,$query);
 		if (!$result) {

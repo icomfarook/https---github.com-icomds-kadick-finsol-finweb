@@ -4,11 +4,10 @@
 	include('../common/admin/finsol_ini.php');
 
 	$data = json_decode(file_get_contents("php://input")); 
-
 	$action =  $data->action;
-
 	
 	if($action == "query") {
+		
 		$local_govt_id =  $data->local_govt_id;
 		$creteria = $data->creteria;
 		$state   = $data->state;
@@ -16,32 +15,26 @@
 		$agents =  $data->agent;
 		
 		if($creteria == 'A'){
-			 if (in_array("ALL", $agents))
-			  {
+			if (in_array("ALL", $agents)) {
 				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type = 'M'";
-				
-			  }else{
+			}else{
 				$str_of_agents = implode(',', $agents);
-
 				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L'  AND b.device_type = 'M' AND agent_code IN ('$str_of_agents')";
-			  }
-			
+		  	}
 		}else if($creteria == 'UT'){
-		
 			if($user_type == 'ALL'){
 				$query = "SELECT installed_user_id FROM installed_user where device_type = 'M'";
 			}else{
-				$query = "SELECT installed_user_id FROM installed_user WHERE device_type = 'M' status = '$user_type'";
+				$query = "SELECT installed_user_id FROM installed_user WHERE device_type = 'M' and status = '$user_type'";
 			}			
 		}else if($creteria == 'STATE'){
-			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND  state_id = $state";
+			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND state_id = $state";
 		}else if($creteria == 'LOCAL_GOVT'){
-			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND local_govt_id  = $local_govt_id";
+			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND local_govt_id = $local_govt_id";
 		}
 		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
 		$count = mysqli_num_rows($result);
-
 		if (!$result) {
 			echo "Error: %s\n". mysqli_error($con);
 			exit();
@@ -49,6 +42,7 @@
 			echo json_encode($count);
 		}
 	}else if($action == "send_notification") {
+		
 		$local_govt_id =  $data->local_govt_id;
 		$creteria = $data->creteria;
 		$state   = $data->state;
@@ -70,7 +64,8 @@
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
-			}else if($count == 0){
+			}
+			if($count == 0){
 				echo "No users found!";
 			}else{					
 				$tokens = array();
@@ -101,7 +96,8 @@
 				if (!$result) {
 					echo "Error: %s\n". mysqli_error($con);
 					exit();
-				}else if($count == 0){
+				}
+				if($count == 0){
 					echo "No users found!";
 				}else{
 					$toTopic = "/topics/".TOPIC_KADICK_USER;
@@ -124,7 +120,8 @@
 				if (!$result) {
 					echo "Error: %s\n". mysqli_error($con);
 					exit();
-				}else if($count == 0){
+				}
+				if($count == 0){
 					echo "No users found!";
 				}else{
 					switch ($user_type) {
@@ -162,14 +159,15 @@
 			}			
 		}else if($creteria == "STATE"){
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND a.device_type = 'M' AND b.state_id = $state";
-			error_log($query);
+			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
 			error_log("No. of agents : ".$count);
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
-			}else if($count == 0){
+			}
+			if($count == 0){
 				echo "No users found!";
 			}else{
 				$toTopic = "/topics/".TOPIC_STATE.$state;
@@ -189,14 +187,15 @@
 			}
 		}else if($creteria == "LOCAL_GOVT"){
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type = 'M' AND b.local_govt_id = $local_govt_id";
-			error_log($query);
+			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
 			error_log("No. of agents : ".$count);
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
-			}else if($count == 0){
+			}
+			if($count == 0){
 				echo "No users found!";
 			}else{
 					
@@ -234,7 +233,6 @@
 	function push_notification_android($fcmData){
 		$url = FCM_URL;
 		$api_key = FCM_API_KEY; 
-
     		//header includes Content type and api key
     		$headers = array(
         		'Content-Type:application/json',

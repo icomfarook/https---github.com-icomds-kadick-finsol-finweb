@@ -29,9 +29,9 @@
 		}else if($creteria == 'UT'){
 		
 			if($user_type == 'ALL'){
-				$query = "SELECT installed_user_id FROM installed_user  where device_type ='P'";
+				$query = "SELECT installed_user_id FROM installed_user where device_type ='P'";
 			}else{
-				$query = "SELECT installed_user_id FROM installed_user WHERE device_type ='P' and  status = '$user_type'";
+				$query = "SELECT installed_user_id FROM installed_user WHERE device_type ='P' and status = '$user_type'";
 			}			
 		}else if($creteria == 'STATE'){
 			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND b.device_type ='P' AND state_id = $state";
@@ -94,7 +94,7 @@
 			}
 		}else if($creteria == "UT"){
 			if($user_type == 'ALL'){
-				$query = "SELECT firebase_token FROM installed_user where device_type='P'";
+				$query = "SELECT firebase_token FROM installed_user where device_type = 'P'";
 				error_log($query);
 				$result =  mysqli_query($con,$query);
 				$count = mysqli_num_rows($result);
@@ -117,7 +117,7 @@
 					echo json_encode($result);
 				}
 			}else{
-				$query = "SELECT firebase_token FROM installed_user WHERE device_type='P' and  status = '$user_type'";
+				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'P' and status = '$user_type'";
 				error_log($query);
 				$result =  mysqli_query($con,$query);
 				$count = mysqli_num_rows($result);
@@ -162,7 +162,7 @@
 				
 			}			
 		}else if($creteria == "STATE"){
-			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type='P' AND b.state_id = $state";
+			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type ='P' AND b.state_id = $state";
 			error_log($query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
@@ -189,7 +189,7 @@
 				echo json_encode($result);
 			}
 		}else if($creteria == "LOCAL_GOVT"){
-			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND  a.device_type='P' AND  b.local_govt_id = $local_govt_id";
+			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND a.device_type='P' AND  b.local_govt_id = $local_govt_id";
 			error_log($query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
