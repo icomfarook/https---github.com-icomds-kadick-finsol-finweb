@@ -34,15 +34,15 @@
 }
 
 </style>
-<div ng-controller='notificationCtrl' data-ng-init="fn_load(<?php echo "'".$partyType."',"."'".$partyCode."'" ?>)">
+<div ng-controller='SendNotificationCtrl' data-ng-init="fn_load(<?php echo "'".$partyType."',"."'".$partyCode."'" ?>)">
 <div class="row">
 	<div id="breadcrumb" class="col-xs-12">
 		<a href="#" class="show-sidebar">
 			<i class="fa fa-bars"></i>
 		</a>
 		<ol class="breadcrumb pull-left">
-			<li><a href="#!ptyinf"><?php echo INFO_MAIN_HEADING1; ?></a></li>
-			<li><a href="#!ptyinf">Notification</a></li>
+			<li><a href="#!fcmnotia90"><?php echo INFO_MAIN_HEADING1; ?></a></li>
+			<li><a href="#!fcmnotia90">Send Notification A90</a></li>
 		</ol>
 		
 	</div>
@@ -54,7 +54,7 @@
 		<div class="box">
 			<div class="box-header">
 				<div class="box-name">					
-					<span>Notification</span>
+					<span>Send Notification A90</span>
 				</div>
 				<div class="box-icons">
 					<a class="expand-link">
@@ -72,7 +72,7 @@
 						 <div class='row appcont' ng-init="creteria='A'">
 							
 								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>	
-								<label><input value='A' type='radio' ng-click='clickra(creteria)' name='creteria' ng-model='creteria' /></label>
+								<label><input value='A' ng-click='creterias' type='radio' name='creteria' ng-model='creteria' /></label>
 								<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?><span class='spanre'>*</span></label>
 								<select  ng-init="agentCode = 'ALL'" id='selUser'  ng-model='agentCode' class='form-control' multiple="multiple" name='agentCode' required  ng-disabled="creteria !='A'">>
 									<option value='ALL'>ALL</option>
@@ -80,7 +80,7 @@
 								</select>									
 								</div>
 							<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
-								<label><input value='UT' type='radio' ng-click='clickra(creteria)' name='creteria' ng-model='creteria' /></label>
+								<label><input value='UT' type='radio' ng-click='creterias' name='creteria' ng-model='creteria' /></label>
 
 								<label>User Type<span class='spanre'>*</span><span ng-show="editINFOForm.userType.$touched ||editINFOForm.userType.$dirty && editINFOForm.userType.$invalid">
 								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="editINFOForm.userType.$error.required"><?php echo REQUIRED;?></span></span></label>
@@ -92,7 +92,7 @@
 								</select>
 							</div>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-								<label><input value='STATE' type='radio' ng-click='clickra(creteria)' name='creteria' ng-model='creteria' /></label>
+								<label><input value='STATE' type='radio'  ng-click='creterias' name='creteria' ng-model='creteria' /></label>
 								<select ng-hide='hide=true' ng-model="country" ng-init="country='<?php echo ADMIN_COUNTRY_ID; ?>';countrychange(this.country)"   class='form-control' name = 'country' id='country' required  ng-disabled="creteria !='LOCAL_GOVT'">>											
 									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
 								</select>
@@ -107,7 +107,7 @@
 							
 								
 								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
-								<label><input value='LOCAL_GOVT' ng-click='clickra(creteria)' type='radio' name='creteria' ng-model='creteria' /></label>
+								<label><input value='LOCAL_GOVT' ng-click='creterias' type='radio' name='creteria' ng-model='creteria' /></label>
 								<label>Local Goverment<span ng-show="editINFOForm.local_govt_id.$touched ||editINFOForm.local_govt_id.$dirty && editINFOForm.local_govt_id.$invalid">
 								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="editINFOForm.local_govt_id.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<select ng-model="local_govt_id"   class='form-control' name = 'local_govt_id' id='LocalGoverment' ng-disabled="(creteria !='LOCAL_GOVT' && creteria !='STATE') || creteria =='STATE'">											

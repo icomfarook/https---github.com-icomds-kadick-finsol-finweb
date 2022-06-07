@@ -52,13 +52,23 @@
 			  <div style='text-align:center' ng-hide='isMainLoader' class="loading-spiner-holder" data-loading ><div class="loading-spiner"><img src="../common/img/gif1.gif" /></div></div>			
 				<form name='stateReportForm'  action='statreportexcel.php' method='POST' novalidate>	
 					<div class='row appcont'>
-                    <div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+                    <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label>User Type<span class='spanre'>*</span></label>
 								<select ng-init="UserType='L'" ng-model='UserType' class='form-control' name='UserType' required>
                                      <option value='L'>L-Authorized</option>
 									<option value='I'>I-Installed</option>
 									<option value='O'>O-Open</option>
 									<option value='R'>R-Registered</option>
+									
+								</select>
+							</div>
+							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
+								<label>Device Type<span class='spanre'>*</span></label>
+								<select ng-init="DeviceType='ALL'" ng-model='DeviceType' class='form-control' name='DeviceType' required>
+                                     <option value='ALL'>--ALL--</option>
+									<option value='P'>P-POS</option>
+									<option value='M'>M-Mobile</option>
+								
 									
 								</select>
 							</div>
@@ -69,7 +79,7 @@
 									<option  ng-repeat="agent in agents" value="{{agent.user_id}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
 								</select>
 							</div>
-                            <div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+                            <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label>IMEI</label>
 								<input maxlength='100' ng-trim="false" ng-model="IMEI" type='text' id='IMEI' name='IMEI'   class='form-control'/>
 							</div>
@@ -88,6 +98,7 @@
                                 <th>IMEI</th>
 									<th>Agent Name</th>
 									<th>User Type</th>
+									<th>Device Type</th>
 									<th>Create Time</th>
 									<th>Details</th>
 									<th>Delete</th>				
@@ -99,6 +110,7 @@
                                  <td>{{ x.imei }}</td>
 									<td>{{ x.agent }}</td>
 									<td>{{ x.status }}</td>
+									<td>{{ x.device_type }}</td>
 									<td>{{ x.create_time }}</td>
 									<td><a id='{{x.id}}' class='ApplicationViewDialogue' ng-click='view($index,x.id)' data-toggle='modal' data-target='#ApplicationViewDialogue'>
 									<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
@@ -107,7 +119,7 @@
 									<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a></td>
 								</tr>
 								<tr ng-show="infoss.length==0">
-									<td style='text-align:center' colspan='6' >
+									<td style='text-align:center' colspan='7' >
 										<?php echo JOUNRAL_ENTRY_COMMI_MAIN_NO_DATA_FOUND; ?>            
 									</td>
 								</tr>
@@ -142,8 +154,11 @@
 							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Topic: <span class='labspa'>{{topic}}</span></label>
 							</div>	
-									<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>User Type :<span class='labspa'>{{status}}</span></label>
+							</div>	
+							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+								<label>Device Type :<span class='labspa'>{{device_type}}</span></label>
 							</div>		
 								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 								<label>Create Time: <span class='labspa'>{{create_time}}</span></label>

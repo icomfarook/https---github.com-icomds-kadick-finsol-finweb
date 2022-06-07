@@ -115,9 +115,11 @@ legend {
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
 									<td><a  class='ApplicationattachDialogue' ng-click='attachmentid($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
+										<button  title="ID Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/FileChoose.png' /></button></a>| &nbsp
 										<a  class='ApplicationattachDialogue' ng-click='attachmentcomp($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>
+										<button title="Business Document" class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>| &nbsp
+										<a  class='ApplicationattachDialogue' ng-click='attachmentSig($index,x.id)' data-toggle='modal' data-target='#ApplicationattachDialogue'>
+										<button class='icoimg' title="Signature Document"><img style='height:22px;width:22px' src='../common/images/sig.png' /></button></a>
 									</td>
 									<td><a id={{x.id}} class='applicationRejectDialogue' ng-click='authreject($index,x.id,x.name)' data-toggle='modal' data-target='#ApplicationRejectDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
@@ -159,6 +161,14 @@ legend {
 								<tr>
 									<th><?php echo APPLICATION_AUTHORIZE_DETAIL_NAME; ?></th>
 									<th>{{name}}</th>
+								</tr>
+								<tr>
+									<th>First Name</th>
+									<th>{{first_name}}</th>
+								</tr>
+								<tr>
+									<th>Last Name</th>
+									<th>{{last_name}}</th>
 								</tr>
 								<tr>
 									<th>Gender </th>
@@ -308,7 +318,7 @@ legend {
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						
-						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span></h2>
+						<h2  style='text-align:center'><span  ng-if= "file=='I'" >ID Document - {{outletname}} </span><span  ng-if= "file=='C'" >Company Document - {{outletname}} </span><span  ng-if= "file=='S'" >Signature Document - {{outletname}} </span></h2>
 						
 					</div>	
 					<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>

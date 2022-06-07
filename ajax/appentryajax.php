@@ -225,6 +225,7 @@
 
 			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
 			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
+			error_log("get_sequence_number_query ==".$get_sequence_number_query);
 			if(!$get_sequence_number_result) {
 				error_log('Get sequnce number 2 failed: ' . mysqli_error($con));
 				echo "GETSEQ - Failed";				

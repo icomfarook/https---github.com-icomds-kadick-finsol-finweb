@@ -18,25 +18,26 @@
 		if($creteria == 'A'){
 			 if (in_array("ALL", $agents))
 			  {
-				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type = 'M'";
+				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type ='P'";
 				
 			  }else{
 				$str_of_agents = implode(',', $agents);
 
-				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L'  AND b.device_type = 'M' AND agent_code IN ('$str_of_agents')";
+				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type ='P' AND agent_code IN ('$str_of_agents')";
 			  }
 			
 		}else if($creteria == 'UT'){
 		
 			if($user_type == 'ALL'){
-				$query = "SELECT installed_user_id FROM installed_user where device_type = 'M'";
+				$query = "SELECT installed_user_id FROM installed_user  where device_type ='P'";
 			}else{
-				$query = "SELECT installed_user_id FROM installed_user WHERE device_type = 'M' status = '$user_type'";
+				$query = "SELECT installed_user_id FROM installed_user WHERE device_type ='P' and  status = '$user_type'";
 			}			
 		}else if($creteria == 'STATE'){
-			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND  state_id = $state";
+			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND b.device_type ='P' AND state_id = $state";
+
 		}else if($creteria == 'LOCAL_GOVT'){
-			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND a.device_type = 'M' AND local_govt_id  = $local_govt_id";
+			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND b.device_type ='P' AND local_govt_id  = $local_govt_id";
 		}
 		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
@@ -59,10 +60,10 @@
 		
 		if($creteria == 'A'){
 			if (in_array("ALL", $agents)) {
-				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id  AND b.device_type = 'M' AND b.status = 'L'";
+				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type ='P'";
 			}else{
 				$str_of_agents = implode(',', $agents);
-				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id  AND b.device_type = 'M' AND b.status = 'L' AND agent_code IN ('$str_of_agents')";
+				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id  AND b.status = 'L' AND b.device_type ='P' AND agent_code IN ('$str_of_agents')";
 			}
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
@@ -93,7 +94,7 @@
 			}
 		}else if($creteria == "UT"){
 			if($user_type == 'ALL'){
-				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'M'";
+				$query = "SELECT firebase_token FROM installed_user where device_type='P'";
 				error_log($query);
 				$result =  mysqli_query($con,$query);
 				$count = mysqli_num_rows($result);
@@ -116,7 +117,7 @@
 					echo json_encode($result);
 				}
 			}else{
-				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'M' AND status = '$user_type'";
+				$query = "SELECT firebase_token FROM installed_user WHERE device_type='P' and  status = '$user_type'";
 				error_log($query);
 				$result =  mysqli_query($con,$query);
 				$count = mysqli_num_rows($result);
@@ -161,7 +162,7 @@
 				
 			}			
 		}else if($creteria == "STATE"){
-			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND a.device_type = 'M' AND b.state_id = $state";
+			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type='P' AND b.state_id = $state";
 			error_log($query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
@@ -188,7 +189,7 @@
 				echo json_encode($result);
 			}
 		}else if($creteria == "LOCAL_GOVT"){
-			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type = 'M' AND b.local_govt_id = $local_govt_id";
+			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND  a.device_type='P' AND  b.local_govt_id = $local_govt_id";
 			error_log($query);
 			$result =  mysqli_query($con,$query);
 			$count = mysqli_num_rows($result);
@@ -232,8 +233,8 @@
 	}
 	
 	function push_notification_android($fcmData){
-		$url = FCM_URL;
-		$api_key = FCM_API_KEY; 
+		$url = PUSHY_URL;
+		$api_key = PUSHY_API_KEY; 
 
     		//header includes Content type and api key
     		$headers = array(

@@ -556,4 +556,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/kycupdate.php",
 		controller: "KycUpdateCtrl"
 	})
+	.when("/fcmnotia90", {
+		templateUrl : "../core/sendnotifi.php",
+		controller: "SendNotificationCtrl"
+	})
 });
