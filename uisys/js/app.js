@@ -552,4 +552,12 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/notifyhistory.php",
 		controller: "NotifyHistoryCtrl"
 	})
+	.when("/ptykyc", {
+		templateUrl : "../core/kycupdate.php",
+		controller: "KycUpdateCtrl"
+	})
+	.when("/fcmnotia90", {
+		templateUrl : "../core/sendnotifi.php",
+		controller: "SendNotificationCtrl"
+	})
 });
