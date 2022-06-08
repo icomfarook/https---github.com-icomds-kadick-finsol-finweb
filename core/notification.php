@@ -85,7 +85,7 @@
 								<label>User Type<span class='spanre'>*</span><span ng-show="editINFOForm.userType.$touched ||editINFOForm.userType.$dirty && editINFOForm.userType.$invalid">
 								<span class = 'err'  ng-hide = "isMsgSpan" ng-show="editINFOForm.userType.$error.required"><?php echo REQUIRED;?></span></span></label>
 								<select  ng-model="userType" ng-init="userType='ALL'"  class='form-control' name = 'userType' id='userType' ng-disabled="creteria !='UT'">>											
-									<option value='ALL'>ALL</option>
+									<option value='A'>ALL</option>
 									<option value='I'>Installed</option>
 									<option value='R'>Registered</option>
 									<option value='L'>Logged In</option>

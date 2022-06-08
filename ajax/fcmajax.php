@@ -5,6 +5,7 @@
 
 	$data = json_decode(file_get_contents("php://input")); 
 	$action =  $data->action;
+	$userId = 0;
 	
 	if($action == "query") {
 		
@@ -22,7 +23,7 @@
 				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L'  AND b.device_type = 'M' AND agent_code IN ('$str_of_agents')";
 		  	}
 		}else if($creteria == 'UT'){
-			if($user_type == 'ALL'){
+			if($user_type == 'A'){
 				$query = "SELECT installed_user_id FROM installed_user where device_type = 'M'";
 			}else{
 				$query = "SELECT installed_user_id FROM installed_user WHERE device_type = 'M' and status = '$user_type'";
@@ -52,6 +53,7 @@
 		$title =  $data->title;
 		
 		if($creteria == 'A'){
+
 			if (in_array("ALL", $agents)) {
 				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id  AND b.device_type = 'M' AND b.status = 'L'";
 			}else{
@@ -80,14 +82,15 @@
 					],
 				);
 				$result = push_notification_android($fields);
-				$db_res = notification_db($con,  $str_of_agents, "", "", "NULL", $title, $body, $count, $result);
+				$db_res = notification_db($con, $str_of_agents, $userId, null, null, "U", $title, $body, $count, $result);
 				if($db_res == -1){
-					$result = $result." But DB Insert Failed";
+					$result = $result.", Client Notification DB Insert Failed";
 				}
 				echo json_encode($result);
 			}
 		}else if($creteria == "UT"){
-			if($user_type == 'ALL'){
+			error_log("Inside UT, user_type = ".$user_type);
+			if($user_type == 'A'){
 				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'M'";
 				error_log("query: ".$query);
 				$result =  mysqli_query($con, $query);
@@ -109,6 +112,7 @@
 						]
 					);
 					$result = push_notification_android($fields);
+					$db_res = notification_db($con, null, $userId, null, null, $user_type, $title, $body, $count, $result);
 					echo json_encode($result);
 				}
 			}else{
@@ -149,7 +153,7 @@
 					
 					);
 					$result = push_notification_android($fields);
-					$db_res = notification_db($con, "", "", "", "'".$user_type."'", $title, $body, $count, $result);
+					$db_res = notification_db($con, null, $userId, null, null, $user_type, $title, $body, $count, $result);
 					if($db_res == -1){
 						$result = $result." But DB Insert Failed";
 					}
@@ -157,6 +161,7 @@
 				}
 			}			
 		}else if($creteria == "STATE"){
+
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND a.device_type = 'M' AND b.state_id = $state";
 			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
@@ -178,13 +183,14 @@
 					],
 				);
 				$result = push_notification_android($fields);
-				$db_res = notification_db($con, "", $state, "", 'NULL', $title, $body, $count, $result);
+				$db_res = notification_db($con, null, $userId, $state, null, 'S', $title, $body, $count, $result);
 				if($db_res == -1){
 					$result = $result." But DB Insert Failed";
 				}
 				echo json_encode($result);
 			}
 		}else if($creteria == "LOCAL_GOVT"){
+
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type = 'M' AND b.local_govt_id = $local_govt_id";
 			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
@@ -206,8 +212,7 @@
 					],
 				);
 				$result = push_notification_android($fields);
-				error_log("state =".$state.", local_govt_ids=".$local_govt_id);
-				$db_res = notification_db($con, "", $state, $local_govt_id, 'NULL', $title, $body, $count, $result);
+				$db_res = notification_db($con, null, $userId, null, $local_govt_id, 'C', $title, $body, $count, $result);
 				if($db_res == -1){
 					$result = $result." But DB Insert Failed";
 				}
@@ -216,9 +221,10 @@
 		}
 	}
 
-	function notification_db($con, $agentSelection, $stateSelection, $localGovtSelection, $userSelection, $title, $body, $count , $db_res){
-		$query = "INSERT INTO client_notification (agent_selection, state_selection, local_govt_selection, user_selection,title, content, count, response, date_time) VALUES  ('$agentSelection', '$stateSelection','$localGovtSelection',$userSelection, '$title', '$body', $count, '$db_res', now())";
-		error_log($query);
+	function notification_db($con, $agentSelection, $userId, $stateSelection, $localGovtSelection, $userSelection, $title, $body, $count , $db_res){
+		error_log("userId = ".$userId);
+		$query = "INSERT INTO client_notification (client_notification_id, user_id, device_type, agent_selection, state_selection, local_govt_selection, user_selection,title, content, count, response, date_time) VALUES (0, $userId, 'M', '$agentSelection', '$stateSelection', '$localGovtSelection', '$userSelection', '$title', '$body', $count, '$db_res', now())";
+		error_log("notification_db: ".$query);
 		$result = mysqli_query($con,$query);
 		if(!$result) {
 			return -1;				
@@ -228,6 +234,8 @@
 	}
 	
 	function push_notification_android($fcmData){
+		
+		error_log("entering push_notification_android");
 		$url = FCM_URL;
 		$api_key = FCM_API_KEY; 
     		//header includes Content type and api key
@@ -249,6 +257,8 @@
     			die('FCM Send Error: ' . curl_error($ch));
     		}
     		curl_close($ch);
+			error_log("result = ".$result);
+			error_log("exiting push_notification_android");
     		return $result;
 	}
 
