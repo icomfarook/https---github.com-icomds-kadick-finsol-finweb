@@ -79,7 +79,8 @@
 					'to' => $tokens,
 					'data' => [
 						'title' => $title,
-						'message' => $body
+						'message' => $body,
+						'contact' => PUSHY_CONTACT_DETAIL
 					],
 					'notification' => [
 						'title' => $title,
@@ -114,7 +115,8 @@
 						'to' => $toTopic,
 						'data' => [
 							'title' => $title,
-							'message' => $body
+							'message' => $body,
+							'contact' => PUSHY_CONTACT_DETAIL
 						],
 						'notification' => [
 							'title' => $title,
@@ -160,7 +162,8 @@
 						'to' => $toTopic,
 						'data' => [
 							'title' => $title,
-							'message' => $body
+							'message' => $body,
+							'contact' => PUSHY_CONTACT_DETAIL
 						],
 						'notification' => [
 							'title' => $title,
@@ -196,7 +199,8 @@
 					'to' => $toTopic,
 					'data' => [
 						'title' => $title,
-						'message' => $body
+						'message' => $body,
+						'contact' => PUSHY_CONTACT_DETAIL
 					],
 					'notification' => [
 						'title' => $title,
@@ -230,7 +234,8 @@
 					'to' => $toTopic,
 					'data' => [
 						'title' => $title,
-						'message' => $body
+						'message' => $body,
+						'contact' => PUSHY_CONTACT_DETAIL
 					],
 					'notification' => [
 						'title' => $title,
