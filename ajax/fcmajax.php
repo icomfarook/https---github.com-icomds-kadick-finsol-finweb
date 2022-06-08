@@ -34,11 +34,11 @@
 		}
 		error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);
-		$count = mysqli_num_rows($result);
 		if (!$result) {
 			echo "Error: %s\n". mysqli_error($con);
 			exit();
 		}else{
+			$count = mysqli_num_rows($result);
 			echo json_encode($count);
 		}
 	}else if($action == "send_notification") {
@@ -59,12 +59,12 @@
 				$query = "SELECT b.firebase_token FROM agent_info a, installed_user b WHERE a.user_id = b.user_id  AND b.device_type = 'M' AND b.status = 'L' AND agent_code IN ('$str_of_agents')";
 			}
 			$result =  mysqli_query($con,$query);
-			$count = mysqli_num_rows($result);
-			error_log("No. of agents : ".$count);
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
 			}
+			$count = mysqli_num_rows($result);
+			error_log("No. of agents : ".$count);
 			if($count == 0){
 				echo "No users found!";
 			}else{					
@@ -89,14 +89,14 @@
 		}else if($creteria == "UT"){
 			if($user_type == 'ALL'){
 				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'M'";
-				error_log($query);
-				$result =  mysqli_query($con,$query);
-				$count = mysqli_num_rows($result);
-				error_log("No. of agents : ".$count);
+				error_log("query: ".$query);
+				$result =  mysqli_query($con, $query);
 				if (!$result) {
 					echo "Error: %s\n". mysqli_error($con);
 					exit();
 				}
+				$count = mysqli_num_rows($result);
+				error_log("No. of agents : ".$count);
 				if($count == 0){
 					echo "No users found!";
 				}else{
@@ -113,14 +113,14 @@
 				}
 			}else{
 				$query = "SELECT firebase_token FROM installed_user WHERE device_type = 'M' AND status = '$user_type'";
-				error_log($query);
+				error_log("query: ".$query);
 				$result =  mysqli_query($con,$query);
-				$count = mysqli_num_rows($result);
-				error_log("No. of agents : ".$count);
 				if (!$result) {
 					echo "Error: %s\n". mysqli_error($con);
 					exit();
 				}
+				$count = mysqli_num_rows($result);
+				error_log("No. of agents : ".$count);
 				if($count == 0){
 					echo "No users found!";
 				}else{
@@ -155,18 +155,17 @@
 					}
 					echo json_encode($result);
 				}
-				
 			}			
 		}else if($creteria == "STATE"){
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id  AND a.device_type = 'M' AND b.state_id = $state";
 			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
-			$count = mysqli_num_rows($result);
-			error_log("No. of agents : ".$count);
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
 			}
+			$count = mysqli_num_rows($result);
+			error_log("No. of agents : ".$count);
 			if($count == 0){
 				echo "No users found!";
 			}else{
@@ -189,16 +188,15 @@
 			$query = "SELECT installed_user_topic_id FROM installed_user_topic a, agent_info b WHERE a.user_id = b.user_id AND a.device_type = 'M' AND b.local_govt_id = $local_govt_id";
 			error_log("query: ".$query);
 			$result =  mysqli_query($con,$query);
-			$count = mysqli_num_rows($result);
-			error_log("No. of agents : ".$count);
 			if (!$result) {
 				echo "Error: %s\n". mysqli_error($con);
 				exit();
 			}
+			$count = mysqli_num_rows($result);
+			error_log("No. of agents : ".$count);
 			if($count == 0){
 				echo "No users found!";
 			}else{
-					
 				$toTopic = "/topics/".TOPIC_LOCAL_GOVT.$local_govt_id;
 				$fields = array (
 					'to' => $toTopic,
@@ -208,8 +206,7 @@
 					],
 				);
 				$result = push_notification_android($fields);
-				error_log("state=".$state);
-				error_log("local_govt_ids=".$local_govt_id);
+				error_log("state =".$state.", local_govt_ids=".$local_govt_id);
 				$db_res = notification_db($con, "", $state, $local_govt_id, 'NULL', $title, $body, $count, $result);
 				if($db_res == -1){
 					$result = $result." But DB Insert Failed";
