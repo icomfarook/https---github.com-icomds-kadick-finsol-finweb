@@ -32,7 +32,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 	url: '../ajax/load.php',
 	method: "POST",
 	//Content-Type: 'application/json',
-	params: { action: 'active', for: 'agentsWithToken' }
+	params: { action: 'active', for: 'agentsWithTokena90' }
 	}).then(function successCallback(response) {
 	$scope.agents = response.data;
 	//window.location.reload();
