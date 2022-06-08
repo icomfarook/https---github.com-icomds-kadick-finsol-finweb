@@ -87,6 +87,7 @@
 								<select  ng-model="userType" ng-init="userType='ALL'"  class='form-control' name = 'userType' id='userType' ng-disabled="creteria !='UT'">>											
 									<option value='A'>ALL</option>
 									<option value='I'>Installed</option>
+									<option value='O'>Opened</option>
 									<option value='R'>Registered</option>
 									<option value='L'>Logged In</option>
 								</select>

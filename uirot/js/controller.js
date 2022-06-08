@@ -84,7 +84,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 					local_govt_id: $scope.local_govt_id
 					},
 					}).then(function successCallback(response) {
-						alert(JSON.parse(response.data));
+						//alert(JSON.parse(response.data));
 						window.location.reload();
 					$scope.isHide = true;
 					$scope.isHideOk = false;
@@ -838,7 +838,7 @@ $scope.send = function (title,body) {
 				local_govt_id: $scope.local_govt_id
 				},
 				}).then(function successCallback(response) {
-					alert(JSON.parse(response.data));
+					//alert(JSON.parse(response.data));
 					window.location.reload();
 				$scope.isHide = true;
 				$scope.isHideOk = false;

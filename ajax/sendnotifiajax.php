@@ -6,9 +6,9 @@
 	$data = json_decode(file_get_contents("php://input")); 
 
 	$action =  $data->action;
-
 	
 	if($action == "query") {
+		error_log("inside query");
 		$local_govt_id =  $data->local_govt_id;
 		$creteria = $data->creteria;
 		$state   = $data->state;
@@ -16,27 +16,25 @@
 		$agents =  $data->agent;
 		
 		if($creteria == 'A'){
-			 if (in_array("ALL", $agents))
-			  {
+			error_log("inside criteria = A");
+			if (in_array("ALL", $agents)){
 				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type ='P'";
-				
-			  }else{
+			}else{
 				$str_of_agents = implode(',', $agents);
-
 				$query = "SELECT a.agent_name FROM agent_info a, installed_user b WHERE a.user_id = b.user_id AND b.status = 'L' AND b.device_type ='P' AND agent_code IN ('$str_of_agents')";
-			  }
-			
+			}
 		}else if($creteria == 'UT'){
-		
-			if($user_type == 'ALL'){
+			error_log("inside criteria = UT");
+			if($user_type == 'A'){
 				$query = "SELECT installed_user_id FROM installed_user where device_type ='P'";
 			}else{
 				$query = "SELECT installed_user_id FROM installed_user WHERE device_type ='P' and status = '$user_type'";
 			}			
 		}else if($creteria == 'STATE'){
+			error_log("inside criteria = STATE");
 			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND b.device_type ='P' AND state_id = $state";
-
 		}else if($creteria == 'LOCAL_GOVT'){
+			error_log("inside criteria = LOCAL GOVT");
 			$query = "SELECT installed_user_id FROM installed_user a, agent_info b WHERE a.user_id = b.user_id AND a.status = 'L' AND b.device_type ='P' AND local_govt_id  = $local_govt_id";
 		}
 		error_log("query = ".$query);
@@ -50,6 +48,7 @@
 			echo json_encode($count);
 		}
 	}else if($action == "send_notification") {
+
 		$local_govt_id =  $data->local_govt_id;
 		$creteria = $data->creteria;
 		$state   = $data->state;
