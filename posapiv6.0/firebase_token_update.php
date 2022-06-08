@@ -177,6 +177,12 @@
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
 			 
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
+
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -329,6 +335,12 @@
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
 			 
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
+
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -481,6 +493,12 @@
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
 			 
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
+
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -635,7 +653,13 @@
 				$signature = $data->signature;
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
-			 
+				
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
+
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
@@ -775,7 +799,13 @@
 				$signature = $data->signature;
 				$key1 = $data->key1;
 				$session_validity = AGENT_FULL_DAY_SESSION_VALID_TIME;
-			 
+					
+				if ( isset($data -> deviceType ) && !empty($data -> deviceType)  ) {
+					$deviceType = $data->deviceType;
+				}else {
+					$deviceType = "M";
+				}
+				
 				error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
