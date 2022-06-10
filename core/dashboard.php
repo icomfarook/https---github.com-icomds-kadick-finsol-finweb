@@ -16,8 +16,8 @@ $fulname = $_SESSION['first_name']." ".$_SESSION['last_name'];
 			<i class="fa fa-bars"></i>
 		</a>
 		<ol class="breadcrumb pull-left">
-			<li><a href="index.html">Home</a></li>
-			<li><a href="#">Dashboard</a></li>
+			<li><a href="#">Home</a></li>
+			<li><a href="#!dash">Dashboard</a></li>
 		</ol>
 		
 	</div>
