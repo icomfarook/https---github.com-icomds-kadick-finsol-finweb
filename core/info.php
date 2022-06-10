@@ -197,7 +197,7 @@
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/error.png' /></button></a>
 									</td>
 									<td ng-show="x.bvn==='-'"><a id={{x.id}} class='reject' ng-click='Getbvn($index,x.partyCode)' data-toggle='modal' data-target='#RejectBody'>
-										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question.png' /></button></a>
+										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question1.png' /></button></a>
 									</td>
 									<?php } ?>
 								</tr>

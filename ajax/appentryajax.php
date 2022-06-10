@@ -252,7 +252,7 @@
 		$nth_year_day_prime = get_prime($nday+$nyear);
 		$signature = $nday + $nth_day_prime;
 		$tsec = time();
-		$raw_data1 = FINAPI_SERVER_APP_PASSWORD.FINWEB_SERVER_SHORT_NAME."|".FINAPI_SERVER_APP_USERNAME.FINWEB_SERVER_SHORT_NAME."|".$tsec;
+		$raw_data1 = FINPOS_SERVER_APP_PASSWORD."|".FINPOS_SERVER_APP_USERNAME.FINPOS_SERVER_SHORT_NAME."|".$tsec;
 		$key1 = base64_encode($raw_data1);
 		error_log("before calling post");
 		error_log("url = ".FINAPI_SERVER_BVN_CHECK_URL);		
