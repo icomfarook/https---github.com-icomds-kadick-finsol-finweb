@@ -9,8 +9,8 @@ define ("DOB","1997-01-01");
 define ("GENDER","Male");
 define ("BUSINESS_TYPE","1");
 
-define ("FINSOL_APP_VERSION","1.8");
-define ("FINSOL_DB_VERSION","1.1");
+define ("FINSOL_APP_VERSION","2.0");
+define ("FINSOL_DB_VERSION","1.2");
 
 //ATTEPMT  LIMITS
 define ("ADMIN_ATTEMPT_LIMIT","3");
@@ -31,6 +31,10 @@ define ("BPAPI_SERVER_APP_PASSWORD","Ready4BPayServerFIN");
 
 define ("SANEFAPI_SERVER_APP_USERNAME","SANEFSERVER");
 define ("SANEFAPI_SERVER_APP_PASSWORD","Ready4Sanef");
+
+define ("FINPOS_SERVER_SHORT_NAME","POS1");
+define ("FINPOS_SERVER_APP_USERNAME","WSSERVER");
+define ("FINPOS_SERVER_APP_PASSWORD","Ready4Pos1ServerFIN");
 
 define ("EVD_FIXED_SERVER_URL","http://localhost:8989/finweb/api/fixedrecharge.php");
 define ("EVD_SERVER_URL","http://localhost:8989/finweb/api/flexirecharge.php");
