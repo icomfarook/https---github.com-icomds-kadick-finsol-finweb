@@ -16,7 +16,7 @@ define ("FINSOL_DB_VERSION","1.1");
 define ("ADMIN_ATTEMPT_LIMIT","3");
 
 //define("CAPTCHA_FONT_LOCATION", "D:/xampp24/htdocs/finweb/common/fonts/monofont.ttf");
-define("CAPTCHA_FONT_LOCATION", "c:/xampp123/htdocs/finweb/common/fonts/monofont.ttf");
+define("CAPTCHA_FONT_LOCATION", "c:/xampp737/htdocs/finweb/common/fonts/monofont.ttf");
 //define("CAPTCHA_FONT_LOCATION", "/idfs/web/www1/html/finweb/common/fonts/monofont.ttf");
 
 define ("FINWEB_SERVER_SHORT_NAME","WS1");
@@ -51,7 +51,7 @@ define ("FINAPI_SERVER_TIER_AC1_URL","http://localhost:8989/finweb/api/t1accstat
 define ("FINAPI_SERVER_TIER_AC1_CREATE_URL","http://localhost:8989/finweb/api/createt1accpost.php");
 define ("FINAPI_SERVER_FLEXI_API_URL","http://localhost:8989/flexiapi/ws.api/flexisale");
 define ("FINAPI_SERVER_NAME_ENQUIRY_URL","http://localhost:8989/finweb/api/nnenquiry.php");
-define ("FINAPI_SERVER_BVN_CHECK_URL","http://localhost:80/kadick-finsol-finweb/api/bvn_check.php");
+define ("FINAPI_SERVER_BVN_CHECK_URL","http://localhost:8989/finweb/api/bvn_check.php");
 
 
 
@@ -253,8 +253,9 @@ define ("PTSP_POSVAS_TRANSACTION_URI","/nibss/api/transaction_posvas");
 
 define ("FCM_URL","https://fcm.googleapis.com/fcm/send");
 define ("FCM_API_KEY","AAAAIC3ieAs:APA91bEslZGxZ4CKxcl0C6bu2Tzfog3Y6K5VX-9useLkij2HYzXMqZ57_NZjAbHU6WuQI-NzdxQ_ip6h-FWOC8mUBmtEgcqAFIaawJI5iqULoYlaZ43zpbEafs07ZPMCcK61WD-T2ZzH");
-define ("PUSHY_URL","https://pushy.me/docs/api/send-notifications");
-define ("PUSHY_API_KEY","AAAAIC3ieAs:APA91bEslZGxZ4CKxcl0C6bu2Tzfog3Y6K5VX-9useLkij2HYzXMqZ57_NZjAbHU6WuQI-NzdxQ_ip6h-FWOC8mUBmtEgcqAFIaawJI5iqULoYlaZ43zpbEafs07ZPMCcK61WD-T2ZzH");
+define ("PUSHY_URL","https://api.pushy.me/push");
+define ("PUSHY_CONTACT_DETAIL","Mobile: 08000KADICK (08000523425)");
+define ("PUSHY_API_KEY","441cba315f5222df8ff7f60b7d50e58ede791d23b7888a32fe8ff88c73be9bfd");
 define ("TOPIC_KADICK_USER","kadick-user");
 define ("TOPIC_INSTALLED_USER","installed-user");
 define ("TOPIC_REGISTERED_USER","registered-user");
