@@ -11,17 +11,15 @@
 	$response['processingStartTime'] = $current_time;
 
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-
 		error_log("inside post request method");
-        	$data = json_decode(file_get_contents("php://input"));
-        	error_log("cashout_mpos_charge_calculate <== ".json_encode($data));				
+        $data = json_decode(file_get_contents("php://input"));
+        error_log("cashout_mpos_charge_calculate <== ".json_encode($data));				
 
 		if(isset($data -> operation) && $data -> operation == 'CASHOUT_CHARGE_OPERATION' 
 			|| isset($data -> operation) && $data -> operation == 'CASHOUT_PHONE_CHARGE_OPERATION' 
 			|| isset($data -> operation) && $data -> operation == 'CASHOUT_USSD_CHARGE_OPERATION'
 		) {
 			error_log("inside operation == ".$data -> operation." method");
-
 			if ( isset($data->productId) && !empty($data->productId) && isset($data->partnerId) && !empty($data->partnerId) 
 				&& isset($data->requestAmount) && !empty($data->requestAmount) && isset($data->countryId) && !empty($data->countryId)
 				&& isset($data->stateId) && !empty($data->stateId) && isset($data->partyCode) && !empty($data->partyCode)
@@ -83,20 +81,41 @@
 					//For Cashout Product Id = 90, check the database for txtType
 					//For others like CoralPay and PayAttitude Cashout, it should default to txtType = E
 					if ( $productId == 90 ) {
-						$db_flexiRate = "N";
-						$flexi_rate_query = "select state_flexi_rate_id from state_flexi_rate where state_id = $stateId and (service_feature_id is null or (service_feature_id = $productId)) and active = 'Y' and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) >= current_date())) order by state_flexi_rate_id limit 1";
-						error_log("flexi_rate_query query = ".$flexi_rate_query);
-						$flexi_rate_result = mysqli_query($con, $flexi_rate_query);
-						if ($flexi_rate_result) {
-							$flexi_rate_count = mysqli_num_rows($flexi_rate_result);
-							if($flexi_rate_count > 0) {					
-								$db_flexiRate = "Y";
+						$user_db_flexi_rate = "N";
+						//Check for Hybrid Rating
+						$user_rate_query = "select ifnull(flexi_rate,'N') as flexi_rate from user_pos where user_id = ".$userId;
+						error_log("user_rate_query: ".$user_rate_query);
+						$user_rate_result = mysqli_query($con, $user_rate_query);
+						if ( $user_rate_result ) {
+							$user_rate_count = mysqli_num_rows($user_rate_result);
+							if ( $user_rate_count > 0 ) {
+								$row = mysqli_fetch_assoc($user_rate_result); 
+								$user_db_flexi_rate = $row['flexi_rate'];
 							}
 						}
+						//If user_pos.flexi_rate = H, then it is hybrid rating based on requested amount
+						if ( $user_db_flexi_rate == "H") {
+							if ( $requestAmount < 20000 ) {
+								$txtType = "F";
+							}else {
+								$txtType = "E";
+							}
+						} else {
+							$db_flexiRate = "N";
+							$flexi_rate_query = "select state_flexi_rate_id from state_flexi_rate where state_id = $stateId and (service_feature_id is null or (service_feature_id = $productId)) and active = 'Y' and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) >= current_date())) order by state_flexi_rate_id limit 1";
+							error_log("flexi_rate_query query = ".$flexi_rate_query);
+							$flexi_rate_result = mysqli_query($con, $flexi_rate_query);
+							if ($flexi_rate_result) {
+								$flexi_rate_count = mysqli_num_rows($flexi_rate_result);
+								if($flexi_rate_count > 0) {					
+									$db_flexiRate = "Y";
+								}
+							}
 
-						if ( "Y" == $flexiRate || "Y" == $db_flexiRate ) {
-							$txtType = "F";
-							//$partyCount = 2;
+							if ( "Y" == $flexiRate || "Y" == $db_flexiRate ) {
+								$txtType = "F";
+								//$partyCount = 2;
+							}
 						}
 					}else {
 						$txtType = "E";
@@ -110,8 +129,8 @@
 						$db_result = $row['result']; 
 						error_log("db_result = ".$db_result);
 						if ( substr( $db_result, 0, 1 ) === "0" ) {
-                           				$response["chargeDetail"] = $row['result']; 
-                            				$response["statusCode"] = "0";
+                           	$response["chargeDetail"] = $row['result']; 
+                            $response["statusCode"] = "0";
 							$response["signature"] = $server_signature;
 							$response["message"] = "CashOut Service Charge responded successfuly";
 							$response["result"] = "Success";
