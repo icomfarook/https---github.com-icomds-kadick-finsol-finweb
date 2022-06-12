@@ -67,6 +67,7 @@
 					$partyCount = 3;
 				}
 				
+				/*
 				$db_flexiRate = "N";
 				$flexi_rate_query = "select state_flexi_rate_id from state_flexi_rate where state_id = $stateId and (service_feature_id is null or (service_feature_id = $productId)) and active = 'Y' and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) >= current_date())) order by state_flexi_rate_id limit 1";
 				error_log("flexi_rate_query query = ".$flexi_rate_query);
@@ -81,6 +82,8 @@
 				if ( "Y" == $flexiRate || "Y" == $db_flexiRate ) {
 					$txType = "F";
 				}
+				*/
+				$txType = "E";
 				error_log("txType = ".$txType.", partyCount = ".$partyCount);
 				
 				error_log("signature = ".$signature.", key1 = ".$key1);
