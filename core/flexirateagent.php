@@ -197,9 +197,9 @@
 				</div>
 		</div>
 		 <div id='infoViewDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
-		<div class="modal-dialog modal-sm">
+		<div class="modal-dialog modal-lg">
 			<form name='flexiRateForm' action='' method='POST'>
-				<div class="modal-content">
+				<div class="modal-content" style="width: 64%;margin-left: 20%;">
 						<div class="modal-header">
 							<button type="button" class="close" data-dismiss="modal">&times;</button>
 							<h2 style='text-align:center'><?php echo FLEXI_RATE_AGENT_VIEW_HEADING1; ?>- {{outlet_name}}  <span ng-show='parenroutletname'>({{parenroutletname}})</span></h2>
@@ -208,7 +208,7 @@
 						<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 						<div id='flexirateagaentbody'>
 							<div class='modal-body'>
-									<div style="width: 26%;margin-left: 38%;" class='col-xs-6 col-md-12 col-lg-12 col-sm-12'>
+									<div  class='col-xs-12 col-md-12 col-lg-12 col-sm-12'>
 									<label style='margin-left: inherit'>Flexi Rate</label>
 										<select ng-model="flexirate" ng-init='Y' class='form-control' name = 'flexirate' id='flexirate' required >											
 											<option value='Y'>Flexi Rating</option>
