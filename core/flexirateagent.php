@@ -148,7 +148,7 @@
 											</select>										
 										</div>
 									
-										 <div  class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
+										 <div style="margin-top: inherit;"  class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
 											<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='infoViewForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo FLEXI_RATE_AGENT_VIEW_QUERY_BUTTON; ?></button>
 											<button type="button" class="btn btn-primary"   id="Refresh"><?php echo FLEXI_RATE_AGENT_VIEW_REFRESH_BUTTON; ?></button>
 										</div>
@@ -179,6 +179,10 @@
 										<a id={{x.code}} class='infoViewDialogue' data-target='#infoViewDialogue' data-toggle='modal' >
 										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/error.png' /></button></a>
 									</td>
+									<td ng-show="x.flexirate =='H'"> 
+										<a id={{x.code}} class='infoViewDialogue' data-target='#infoViewDialogue' data-toggle='modal' >
+										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/error.png' /></button></a>
+									</td>
 									 
 								</tr>
 								<tr ng-show="infoss.length==0">
@@ -193,7 +197,7 @@
 				</div>
 		</div>
 		 <div id='infoViewDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-sm">
 			<form name='flexiRateForm' action='' method='POST'>
 				<div class="modal-content">
 						<div class="modal-header">
@@ -204,15 +208,20 @@
 						<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
 						<div id='flexirateagaentbody'>
 							<div class='modal-body'>
-									<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12'>
-									<label>Flexi Rate</label>
-										<select ng-model="flexirate" class='form-control' name = 'flexirate' id='flexirate' required >											
-											<option value='Y'>Yes</option>
-											<option value='N'>No</option>									
+									<div style="width: 26%;margin-left: 38%;" class='col-xs-6 col-md-12 col-lg-12 col-sm-12'>
+									<label style='margin-left: inherit'>Flexi Rate</label>
+										<select ng-model="flexirate" ng-init='Y' class='form-control' name = 'flexirate' id='flexirate' required >											
+											<option value='Y'>Flexi Rating</option>
+											<option value='N'>Fixed Rating</option>
+											<option value='H'>Hybrid Rating</option>	
+											
+											
 										</select>
 								</div>
 							</div>		
 						</div>
+						<br />
+						
 						<div class='modal-footer' style='margin:2%'>
 							<div class='row appcont' style='text-align:center' ng-hide='isLoader'>						
 								<button type='button' class='btn btn-primary'  id='Ok' ng-hide='isHideOk' >Ok</button>

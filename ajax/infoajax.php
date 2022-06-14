@@ -267,6 +267,7 @@
 		$selectresult =  mysqli_query($con,$PreAppQuery);
 			$row = mysqli_fetch_assoc($selectresult);
 		    $Preid = $row['pre_application_info_id'];
+			$AppId = $row['application_id'];
 			$firstName = $row['first_name'];
 	    	$lastName= $row['last_name'];
 			$countryid = $row['country_id'];
@@ -276,7 +277,27 @@
 			$phone = $row['mobile_no'];
 			$bvn = $row['bvn'];
        		if($selectresult){
+				$count = mysqli_num_rows($Selectresult);
+				error_log($count);
+				if($count == 0) { 
+					$PreAppQuery1 = "SELECT a.application_id,a.first_name,a.last_name, a.country_id, a.outlet_name, a.bvn, a.tax_number, a.address1, a.address2, a.local_govt_id, a.state_id, a.mobile_no, a.work_no, a.email, a.language_id, a.contact_person_name, a.contact_person_mobile,a.loc_latitude, a.loc_longitude,a.dob,a.gender,a.business_type FROM application_info a,agent_info b,user c WHERE a.application_id = b.application_id   and b.user_id = c.user_id and b.agent_code ='$partyCode'";
+					error_log("PreAppQuery1 ==".$PreAppQuery1);
+					$selectresult1 =  mysqli_query($con,$PreAppQuery1);
+					$row = mysqli_fetch_assoc($selectresult1);
+					//$Preid = $row['pre_application_info_id'];
+					$AppId = $row['application_id'];
+					$firstName = $row['first_name'];
+					$lastName= $row['last_name'];
+					$countryid = $row['country_id'];
+					$dob = $row['dob'];
+					$localgovernmentid = $row['local_govt_id'];
+					$stateid = $row['state_id'];
+					$phone = $row['mobile_no'];
+					$bvn = $row['bvn'];
+				}
+
 			$create_user = $_SESSION['user_id'];
+			//error_log("AppId ==".$AppId);
 			$get_sequence_number_query = "SELECT get_sequence_num(2200) as id";
 			$get_sequence_number_result =  mysqli_query($con,$get_sequence_number_query);
 			if(!$get_sequence_number_result) {
@@ -313,11 +334,12 @@
 							$updateQuery ="update pre_application_info set bvn_validated='Y',trans_log_id=$id where pre_application_info_id = $Preid";
 							error_log("updateQuery ==".$updateQuery);
 							$UpdateResult = mysqli_query($con,$updateQuery);
-							
-							
-							
+				
+							$update_app_query ="update application_info set bvn_validated='Y' where application_id = $AppId";
+							error_log("update_app_query ==".$update_app_query);
+							$update_app_result  = mysqli_query($con,$update_app_query);
 						}
-						error_log("Error in Select Fin Non Trans Log  Statment");
+						error_log("Error in  Update BVN validation in Pre application Info table");
 						
 				  }
 				  error_log("Error in After Success Response Update Query");
