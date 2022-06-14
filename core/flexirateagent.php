@@ -171,17 +171,17 @@
 								 <tr ng-repeat="x in infoss">
 									<td>{{ x.agent }}</td>
 									<td>{{ x.lname }}</td>
-									<td ng-show="x.flexirate =='Y'"> 
+									<td ng-show="x.flexirate =='Y'"> Flexi Rating
 										<a id={{x.code}} class='infoViewDialogue' ng-click='edit($index,x.agent,x.user_id)' data-toggle='modal' data-target='#infoViewDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/flexi.png' /></button></a>
 									</td>
-								<td ng-show="x.flexirate =='N'"> 
+								<td ng-show="x.flexirate =='N'"> Fixed Rating
 										<a id={{x.code}} class='infoViewDialogue' data-target='#infoViewDialogue' data-toggle='modal' >
-										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/error.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/fixed.png' /></button></a>
 									</td>
-									<td ng-show="x.flexirate =='H'"> 
+									<td ng-show="x.flexirate =='H'"> Hybrid Rating
 										<a id={{x.code}} class='infoViewDialogue' data-target='#infoViewDialogue' data-toggle='modal' >
-										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/error.png' /></button></a>
+										<button class='icoimg'><img style='height:22px;width:22px' ng-click='edit($index,x.agent,x.user_id)' src='../common/images/hybrid.png' /></button></a>
 									</td>
 									 
 								</tr>
