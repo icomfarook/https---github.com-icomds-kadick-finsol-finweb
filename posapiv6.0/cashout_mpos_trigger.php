@@ -69,20 +69,43 @@
 				if ($cashoutAllIn == "") {
 					$cashoutAllIn = "N";
 				}
-				$db_flexiRate = "N";
-				$flexi_rate_query = "select state_flexi_rate_id from state_flexi_rate where state_id = $stateId and (service_feature_id is null or (service_feature_id = $productId)) and active = 'Y' and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) >= current_date())) order by state_flexi_rate_id limit 1";
-				error_log("flexi_rate_query query = ".$flexi_rate_query);
-				$flexi_rate_result = mysqli_query($con, $flexi_rate_query);
-				if ($flexi_rate_result) {
-					$flexi_rate_count = mysqli_num_rows($flexi_rate_result);
-					if($flexi_rate_count > 0) {					
-						$db_flexiRate = "Y";
+
+				$user_db_flexi_rate = "N";
+				//Check for Hybrid Rating
+				$user_rate_query = "select ifnull(flexi_rate,'N') as flexi_rate from user_pos where user_id = ".$userId;
+				error_log("user_rate_query: ".$user_rate_query);
+				$user_rate_result = mysqli_query($con, $user_rate_query);
+				if ( $user_rate_result ) {
+					$user_rate_count = mysqli_num_rows($user_rate_result);
+					if ( $user_rate_count > 0 ) {
+						$row = mysqli_fetch_assoc($user_rate_result); 
+						$user_db_flexi_rate = $row['flexi_rate'];
 					}
 				}
-				error_log("db_flexiRate = ".$db_flexiRate.", flexiRate = ".$flexiRate);										
-				if ( "Y" == $flexiRate || "Y" == $db_flexiRate ) {
-					$txType = "F";
-					//$partyCount = 2;
+				
+				//If user_pos.flexi_rate = H, then it is hybrid rating based on requested amount
+				if ( $user_db_flexi_rate == "H") {
+					if ( $requestedAmount < 20000 ) {
+						$txType = "F";
+					}else {
+						$txType = "E";
+					}
+				}else {
+					$db_flexiRate = "N";
+					$flexi_rate_query = "select state_flexi_rate_id from state_flexi_rate where state_id = $stateId and (service_feature_id is null or (service_feature_id = $productId)) and active = 'Y' and (start_date is null or (start_date is not null and date(start_date) <= current_date())) and (expiry_date is null or (expiry_date is not null and date(expiry_date) >= current_date())) order by state_flexi_rate_id limit 1";
+					error_log("flexi_rate_query query = ".$flexi_rate_query);
+					$flexi_rate_result = mysqli_query($con, $flexi_rate_query);
+					if ($flexi_rate_result) {
+						$flexi_rate_count = mysqli_num_rows($flexi_rate_result);
+						if($flexi_rate_count > 0) {					
+							$db_flexiRate = "Y";
+						}
+					}
+					error_log("db_flexiRate = ".$db_flexiRate.", flexiRate = ".$flexiRate);										
+					if ( "Y" == $flexiRate || "Y" == $db_flexiRate ) {
+						$txType = "F";
+						//$partyCount = 2;
+					}
 				}
 				error_log("txType = ".$txType.", partyCount = ".$partyCount);
 				
