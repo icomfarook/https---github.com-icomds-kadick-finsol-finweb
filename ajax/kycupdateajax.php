@@ -12,7 +12,7 @@
 		$creteria = $data->creteria;
 		$query = "";
 
-		if($profile_id == 1 ||  $profile_id == 10 ||  $profile_id == 22 ||  $profile_id == 20) {
+
 			$partyCode = $data->partyCode;
 			$partyType = $data->partyType;
 	
@@ -41,7 +41,7 @@
             if($partyType == "P") {
 				$partyType = "P - Personal";
 			}				
-		}
+		
 		
         error_log("query = ".$query);
 		$result =  mysqli_query($con,$query);

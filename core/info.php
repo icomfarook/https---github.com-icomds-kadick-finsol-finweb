@@ -171,7 +171,9 @@
 									<th>Edit</th>
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>View</th>
+									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<th>BVN Check</th>
+									<?php } ?>
 									<?php } ?>
 								</tr>
 							</thead>
@@ -190,6 +192,7 @@
 										<a id={{x.code}} class='infoViewDialogue' ng-click='view($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
+									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<td ng-show="x.bvn==='Y-Yes'"><a id={{x.id}} class='reject' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
 									</td>
@@ -199,6 +202,7 @@
 									<td ng-show="x.bvn==='-'"><a id={{x.id}} class='reject' ng-click='Getbvn($index,x.partyCode)' data-toggle='modal' data-target='#RejectBody'>
 										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question1.png' /></button></a>
 									</td>
+									<?php } ?>
 									<?php } ?>
 								</tr>
 								<tr ng-show="infoss.length==0">

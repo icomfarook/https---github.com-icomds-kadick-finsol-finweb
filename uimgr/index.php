@@ -298,6 +298,7 @@
 							<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 							<li><a class="ajax-link" href="#!walhis">Wallet History</a></li>
 							<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
+							<li><a class="ajax-link" href="#!ptykyc">KYC Update</a></li>
 							<li class="dropdown">
 							<a href="#" class="dropdown-toggle">
 							<i class="fa fa-newspaper-o"></i>
