@@ -3,8 +3,8 @@
 	include("../common/admin/finsol_crypt.php");
 	include ("get_prime.php");	
 	require_once ("AesCipher.php");
-    	include ("functions.php");
-	error_log("inside pcposapi/registration.php");
+    include ("functions.php");
+	error_log("inside pcposapiv6.0/registration.php");
 	$response = array();
 	$current_time = date('Y-m-d H:i:s');
 	$response['processingStartTime'] = $current_time;
@@ -12,8 +12,8 @@
 	if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
 		error_log("inside post request method");
-        	$data = json_decode(file_get_contents("php://input"));
-        	error_log("registration <== ".json_encode($data));
+        $data = json_decode(file_get_contents("php://input"));
+        error_log("registration <== ".json_encode($data));
 
 		if(isset($data -> operation) && $data -> operation == 'REGISTRATION') {
 			error_log("inside operation == REGISTRATION method");
@@ -21,7 +21,8 @@
 			error_log("dob = ".$data->registration->dob.", gender = ".$data->registration->gender.", outletName = ".$data->registration->outletName.", mobile = ".$data->registration->mobile);
 			error_log("address = ".$data->registration->address.", businessType = ".$data->registration->businessType.", stateId = ".$data->registration->stateId.", localGovtId = ".$data->registration->localGovtId);
 			error_log("idName = ".$data->registration->idName.", locLatitude = ".$data->registration->locLatitude.", locLongitude = ".$data->registration->locLongitude);
-            		if ( isset($data->signature) && !empty($data->signature) 
+			error_log("signatureName = ".$data->registration->signatureName);
+            if ( isset($data->signature) && !empty($data->signature) 
 			    && isset($data->key1) && !empty($data->key1) 
 			    && isset($data->registration->firstName) && !empty($data->registration->firstName) 
 			    && isset($data->registration->lastName) && !empty($data->registration->lastName) 
@@ -63,6 +64,10 @@
 				$idImage = $data->registration->idImage;
 				$idName = $data->registration->idName;
 				$idFileType = $data->registration->idFileType;
+				$signatureImage = $data->registration->signatureImage;
+				$signatureName = $data->registration->signatureName;
+				$signatureFileType = $data->registration->signatureFileType;
+
 				//$latitude = $data->registration->locLatitude;
 				//$longitude = $data->registration->locLongitude;
 				$signature= $data->signature;
@@ -70,7 +75,7 @@
 				$key2 = $data->key2;
 				$language_id = 1;
   
-                		error_log("signature = ".$signature.", key1 = ".$key1);
+                error_log("signature = ".$signature.", key1 = ".$key1);
 				date_default_timezone_set('Africa/Lagos');
 				$nday = date('z')+1;
 				$nyear = date('Y');
@@ -79,7 +84,7 @@
 				$local_signature = $nday + $nth_day_prime;
 				error_log("local_signature = ".$local_signature);
 				$server_signature = $nth_year_day_prime + $nday + $nyear;
-                		error_log("server_signature = ".$server_signature);
+                error_log("server_signature = ".$server_signature);
 				
 				$skey0 = date("mdY");
 				$skey1 = $nday;
@@ -148,23 +153,35 @@
                             				$comments = "Registration request from mPos. IMEI = ".$device_sno;
                             				$pre_application_id = generate_seq_num(2100, $con);
                             				if($pre_application_id > 0) {
-								$outletName = mysqli_real_escape_string($con, $outletName);
-								$address = mysqli_real_escape_string($con, $address);
-								$contactName = mysqli_real_escape_string($con, $contactName);
+												$outletName = mysqli_real_escape_string($con, $outletName);
+												$address = mysqli_real_escape_string($con, $address);
+												$contactName = mysqli_real_escape_string($con, $contactName);
                                 				$insert_main_query = "INSERT into pre_application_info (pre_application_info_id, country_id, bvn, dob, gender, outlet_name, first_name, last_name, business_type, address1, local_govt_id, state_id, mobile_no, email, language_id, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, comments, status, create_user, create_time) values ($pre_application_id, $countryId, '$bvn', '$dob', '$gender', '$outletName', '$firstName', '$lastName', '$businessType', '$address', $localGovtId, $stateId, '$mobile', '$email', $language_id, '$contactName', '$mobile', left('$latitude', 10), left('$longitude', 10), '$comments', 'E', 6, now())";
                                 				error_log("insert_main_query = ".$insert_main_query);
                                 				$insert_main_result = mysqli_query($con, $insert_main_query);
                                 				if($insert_main_result) {
-                                	    				error_log("insert_main_query is success");
-									$insert_second_query = "INSERT into pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) values (0, $pre_application_id, '$idName', '$idFileType', '$idImage','I')";
-                                    					$insert_second_result = mysqli_query($con, $insert_second_query);
-                                    					if ( $insert_second_result ) {
-                                        					$response["result"] = "Success";
-                                        					$response["message"] = "Registration is successful. Regd #".$pre_application_id;
-                                        					$response["statusCode"] = "0";
-                                        					$response["signature"] = $server_signature;
-                                        					$response["registrationId"] = $pre_application_id;
-                                    					}
+                                	    			error_log("insert_main_query is success");
+													$insert_second_query = "INSERT into pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) values (0, $pre_application_id, '$idName', '$idFileType', '$idImage','I')";
+                                    				$insert_second_result = mysqli_query($con, $insert_second_query);
+                                    				if ( $insert_second_result ) {
+                                        				$response["result"] = "Success";
+                                        				$response["message"] = "Registration is successful. Regd #".$pre_application_id;
+                                        				$response["statusCode"] = "0";
+                                        				$response["signature"] = $server_signature;
+                                        				$response["registrationId"] = $pre_application_id;
+                                    				}
+													if ( $signatureName != "" ) {
+														$insert_third_query = "INSERT into pre_application_attachment (pre_application_attachment_id, pre_application_info_id, attachment_name, attachment_type, attachment_content,file) values (0, $pre_application_id, '$signatureName', '$signatureFileType', '$signatureImage','S')";
+                                    					$insert_third_result = mysqli_query($con, $insert_third_query);
+                                    					if ( $insert_third_result ) {
+															error_log("Signature document is successuflly inserted for Pre Application Info Id: ".$pre_application_id);
+                                    					}else {
+															error_log("Signature document is not inserted for Pre Application Info Id: ".$pre_application_id);
+														}
+													}else{
+														error_log("Signature document is empty for Pre Application Info Id: ".$pre_application_id);
+													}
+
 								    	//$tmp_file = "id_file_".$pre_application_id.".jpg";
 								    	//$image_data = base64_decode($idImage);
 								    	//$id_image_new = imagecreatefromstring($image_data);
