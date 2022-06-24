@@ -13712,7 +13712,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	$scope.isLoader = true;
 	$scope.startDate = new Date();
 	$scope.endDate = new Date();
-	$scope.isMainLoader = true;
+	$scope.isMainLoader = false;
 	$scope.isHideOk = true;
 	$scope.isGoDisbled = true;
    
@@ -13736,7 +13736,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	  $scope.isLoader = false;
 		 $scope.isMainLoader = false;
 	  $scope.appviews = response.data;
-	   $scope.id = response.data[0].id;
+	 // $scope.id = response.data[0].id;
    $scope.name = response.data[0].name;
    }, function errorCallback(response) {
 	  // console.log(response);
@@ -13819,6 +13819,16 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	  // console.log(response);
 	 });
 	}
+	$scope.resets = function () {
+   
+	   $scope.IDDocument = "";
+	   $scope.attachment = "";
+	   $scope.BussinessDocument = "";
+	   $scope.attachment2 = "";
+	   $scope.SignatureDocucment = "";
+	   $scope.attachment3 = "";
+	   }
+   
 	 $scope.attachmentid = function (index, id) {
 	 $http({
 	  method: 'post',
@@ -13851,38 +13861,270 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   win.focus();
 	   };
 	}
-	 $scope.attachmentcomp = function (index, id) {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'attachmentcomp'
-	  },
-	 }).then(function successCallback(response) {
-	  // $scope.isHide = true;
-	   $scope.isHideOk = false;
-	  $scope.isLoader = false;
-		 $scope.isMainLoader = false;
-	 // alert(response.data[0].attachment_content);
-	 //$("#resmsg").html("<h3>" + response.data + "</h3>");
-	 $scope.myImage = response.data[0].attachment_content;
-	 $scope.outletname = response.data[0].outletname;
-	 $scope.file = response.data[0].file;
-	 $scope.attachment_type = response.data[0].attachment_type;
-	 //alert(response.data[0].attachment_type);
-	 }, function errorCallback(response) {
-	  // console.log(response);
-	 });
+	$scope.attachmentcomp = function (index, id) {
+		 
+	   $http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: {
+		 id: id,
+		 action: 'attachmentcomp'
+		},
+	   }).then(function successCallback(response) {
+		// $scope.isHide = true;
+		 $scope.isHideOk = false;
+		$scope.isLoader = false;
+		   $scope.isMainLoader = false;
+	   // alert(response.data[0].attachment_content);
+	   //$("#resmsg").html("<h3>" + response.data + "</h3>");
+	   $scope.myImage = response.data[0].attachment_content;
+	   $scope.outletname = response.data[0].outletname;
+	   $scope.file = response.data[0].file;
+	   $scope.attachment_type = response.data[0].attachment_type;
+	   //alert(response.data[0].attachment_type);
+	   }, function errorCallback(response) {
+		// console.log(response);
+	   });
+	 
+		   $scope.PrintImage = function (url) {
+		var src='data:image/;base64,'+url;
+		//alert(src);
+		   var win = window.open('');
+		win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		   win.focus();
+	   };
+	  }
+	 
+	  $scope.attachmentSig = function (index, id) {
+		 $http({
+		  method: 'post',
+		  url: '../ajax/preappviewajax.php',
+		  data: {
+		   id: id,
+		   action: 'attachmentSig'
+		  },
+		 }).then(function successCallback(response) {
+		  // $scope.isHide = true;
+		   $scope.isHideOk = false;
+		  $scope.isLoader = false;
+			 $scope.isMainLoader = false;
+		 // alert(response.data[0].attachment_content);
+		 //$("#resmsg").html("<h3>" + response.data + "</h3>");
+		 $scope.myImage = response.data[0].attachment_content;
+		 $scope.outletname = response.data[0].outletname;
+		 $scope.file = response.data[0].file;
+		 $scope.attachment_type = response.data[0].attachment_type;
+		 //alert(response.data[0].attachment_type);
+		 }, function errorCallback(response) {
+		  // console.log(response);
+		 });
+	   
+			 $scope.PrintImage = function (url) {
+		  var src='data:image/;base64,'+url;
+		  //alert(src);
+			 var win = window.open('');
+		  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+			 win.focus();
+		 };
+		}
    
-		 $scope.PrintImage = function (url) {
-	  var src='data:image/;base64,'+url;
-	  //alert(src);
-		 var win = window.open('');
-	  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-		 win.focus();
-	 };
-	}
+	$scope.editattach1 = function (index, id, name) {
+	   $scope.isHideOk = true;
+	   $scope.isInputDisabled = false;
+	   $scope.isInputDisabled2 = false;
+	   $scope.isInputDisabled3 = false;
+	   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id, name: name, action: 'editattachment1' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		   $scope.id = response.data[0].id;
+		   //$scope.BussinessDocument = response.data[0].BussinessDocument;
+		   $scope.IDDocument = response.data[0].IDDocument;
+		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		   $scope.attachment_type = response.data[0].attachment_type;
+		   $scope.file = response.data[0].file;
+	   
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   }
+   $scope.editattach2 = function (index, id, name) {
+	   $scope.isHideOk = true;
+	   $scope.isInputDisabled = false;
+	   $scope.isInputDisabled2 = false;
+	   $scope.isInputDisabled3 = false;
+   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id, name: name, action: 'editattachment2' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		   $scope.id = response.data[0].id;
+		   $scope.BussinessDocument = response.data[0].BussinessDocument;
+		   //$scope.IDDocument = response.data[0].IDDocument;
+		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		   $scope.attachment_type = response.data[0].attachment_type;
+		   $scope.file = response.data[0].file;
+	   
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   }
+   $scope.editattach3 = function (index, id, name) {
+	   $scope.isHideOk = true;
+	   $scope.isInputDisabled = false;
+	   $scope.isInputDisabled2 = false;
+	   $scope.isInputDisabled3 = false;
+	   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id, name: name, action: 'editattachment3' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		   $scope.id = response.data[0].id;
+		   //$scope.BussinessDocument = response.data[0].BussinessDocument;
+		   //$scope.IDDocument = response.data[0].IDDocument;
+		   $scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		   $scope.attachment_type = response.data[0].attachment_type;
+		   $scope.file = response.data[0].file;
+		   
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   }
+   
+   $scope.Deleteattachment = function(index,id,pre_application_attachment_id,attachment_type){ 
+	   $scope.Deleteattach = true;
+	   $scope.isInputDisabled = true;
+	   $scope.IDDocument = "";
+   
+	   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id1 = response.data[0].old_pre_application_attachment_id;
+		   $scope.pre_application_info_id1 = response.data[0].old_pre_application_info_id;
+		   $scope.attachment_name = response.data[0].old_attachment_name;
+		   $scope.file = response.data[0].old_file;
+		   $scope.attachment_type = response.data[0].old_attachment_type;
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   
+   }
+   $scope.Deleteattachment2 = function(index,id,pre_application_attachment_id,attachment_type){ 
+	   $scope.Deletes = true;
+	   $scope.isInputDisabled2s = true;
+	   $scope.BussinessDocument = "";
+   
+	   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id2 = response.data[0].old_pre_application_attachment_id;
+		   $scope.pre_application_info_id2 = response.data[0].old_pre_application_info_id;
+		   $scope.attachment_name = response.data[0].old_attachment_name;
+		   $scope.file = response.data[0].old_file;
+		   $scope.attachment_type = response.data[0].old_attachment_type;
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   
+   }
+   $scope.Deleteattachment3 = function(index,id,pre_application_attachment_id,attachment_type){ 
+	   $scope.Deleted = true;
+	   $scope.isInputDisabled3 = true;
+	   $scope.SignatureDocucment = "";
+   
+	   
+	   $http({
+		   method: 'post',
+		   url: '../ajax/preappviewajax.php',
+		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
+	   }).then(function successCallback(response) {
+		   $scope.pre_application_attachment_id3 = response.data[0].old_pre_application_attachment_id;
+		   $scope.pre_application_info_id3 = response.data[0].old_pre_application_info_id;
+		   $scope.attachment_name = response.data[0].old_attachment_name;
+		   $scope.file = response.data[0].old_file;
+		   $scope.attachment_type = response.data[0].old_attachment_type;
+	   }, function errorCallback(response) {
+		   // console.log(response);
+	   });
+   
+   }
+   
+   $scope.InsertNew = function(index,id,pre_application_attachment_id,pre_application_info_id,attachment_type){
+   
+	   $scope.isHideOk = true;
+	   $scope.isHide = false;
+   
+	   $scope.isLoader = true;
+	   var fd = new FormData();
+	   //alert($scope.dob);
+	   var event = new Date($scope.dob);
+	   
+	   let date = JSON.stringify(event)
+	   date = date.slice(1,11);
+	   //alert(date);
+	   
+		  angular.forEach($scope.uploadfiles,function(file){
+			fd.append('file[]',file);
+		  });
+		  angular.forEach($scope.uploadfiles2,function(file2){
+	   fd.append('file2[]',file2);
+		  });
+		  angular.forEach($scope.uploadfiles3,function(file3){
+		   fd.append('file3[]',file3);
+			  });
+		  fd.append("id","id");
+		  fd.append("pre_application_attachment_id1",$scope.pre_application_attachment_id1);
+		  fd.append("pre_application_info_id1",$scope.pre_application_info_id1);
+		  fd.append("pre_application_attachment_id2",$scope.pre_application_attachment_id2);
+		  fd.append("pre_application_info_id2",$scope.pre_application_info_id2);
+		  fd.append("pre_application_attachment_id3",$scope.pre_application_attachment_id3);
+		  fd.append("pre_application_info_id3",$scope.pre_application_info_id3);
+		  fd.append("attachment_type","attachment_type");
+		  fd.append("action","Uploadattachment");
+		  fd.append("attachment",$scope.file);
+		   fd.append("attachment",$scope.attachment);
+		  fd.append("attachment2",$scope.attachment2);
+		  fd.append("attachment3",$scope.attachment3);
+		   
+	   
+		 $http({
+	   method: 'post',
+	   url: '../ajax/preappentryajax.php',
+	   headers: {'Content-Type': undefined},
+	   ContentType: 'application/json',
+	   data: fd,
+	   }).then(function successCallback(response) {
+	   $scope.isHide = true;
+	   $scope.isHideOk = false;
+	   $scope.isHideReset = true;
+	   $scope.isLoader = false;
+	   $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+   
+	   }, function errorCallback(response) {
+	   // console.log(response);
+	   });
+	   }
+   $scope.refresh = function (id, type) {
+	   window.location.reload();
+   }
+   
+   
+   
+	 
+	  
 	$scope.countrychange = function (id) {
    $http({
    method: 'post',
@@ -13948,10 +14190,13 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    $scope.bvn_validated = true;
    $scope.isSelectDisabledType = true;
    $scope.isSelectDisabled = true;
+   $scope.BVNsuccess =false;
+   
 	 }else{
 	   $scope.bvn_validated = false;
 	   $scope.isSelectDisabledType = false;
 	   $scope.isSelectDisabled = false;
+	   $scope.BVNsuccess =true;
 	 }
    
    $scope.isLoader = false;
@@ -14159,6 +14404,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isHide = true;
 	  });
 	 }
+   
 	 $scope.Previewdelete = function (index, id,name) {
 	 $scope.id =id;
 	 $scope.name = name;
@@ -14226,6 +14472,8 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	  $scope.usetup = response.data[0].usetup;
 	  $scope.login = response.data[0].login;
 	  $scope.bvn = response.data[0].bvn;
+	  $scope.first_name = response.data[0].first_name;
+	  $scope.last_name = response.data[0].last_name;
 	 }, function errorCallback(response) {
 	  // console.log(response);
 	 });
