@@ -27,13 +27,13 @@ $msg = "Deatiled EVD Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time ,a.ams_charge,group_concat(d.charge_value ORDER BY d.service_charge_party_name) as charges  FROM evd_transaction a, agent_info b, operator c,evd_service_order_comm d  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and a.e_transaction_id = d.e_transaction_id";
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time ,a.ams_charge,group_concat(d.charge_value ORDER BY d.service_charge_party_name) as charges  FROM evd_transaction a, agent_info b, operator c,evd_service_order_comm d  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and a.e_transaction_id = d.e_transaction_id";
 		}
 		if($profileid  == 51) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'";
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'";
 		}
 		if($profileid  == 52) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."' and b.sub_agent = 'Y'";
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."' and b.sub_agent = 'Y'";
 		}
 		
 		if($creteria == "BT") {
@@ -69,23 +69,23 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Operator","Agent","State","Local Government","Request Amount","Partner Charge","Other Charge","Total Amount","Date Time","Ams Charges","Total Splited Commissions","Agent Commission","Champion Commission","Kadick Commission");
+		$heading = array("Order No","Operator","Agent Code","Agent","State","Local Government","Request Amount","Partner Charge","Other Charge","Total Amount","Date Time","Ams Charges","Total Splited Commissions","Agent Commission","Champion Commission","Kadick Commission");
 		$headcount = 15;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
 			//error_log("agentrow['10']_slit  ==".$row['11']);
-			$split_charges = explode(",",$row['11']);
+			$split_charges = explode(",",$row['12']);
 			$agent_slit = $split_charges[0] ;
-			$row['12'] = $agent_slit;
+			$row['13'] = $agent_slit;
 			
 			//error_log("agent_slit  ==".$agent_slit);
 			//error_log("agent_slit1  ==".$row['14'] );
 			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
-			$row['13'] = $champion_slit;
+			$row['14'] = $champion_slit;
 			$kadick_slit = $split_charges[2];
-			$row['14'] = $kadick_slit;
+			$row['15'] = $kadick_slit;
 			/* if ($split_charges[2] == '') { 
 			$kadick_slit = '-';
 			} */

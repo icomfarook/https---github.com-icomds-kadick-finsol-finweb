@@ -30,13 +30,13 @@ $msg = "Detailed Acc Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
-			$query = "SELECT a.acc_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge,  a.total_amount,  concat(f.name) as bank,  a.date_time as date_time,c.update_time,c.bvn,ifNULL(c.email,'-') as email,c.account_number,ifNULL(c.account_balance,'-') as account_balance,group_concat(p.charge_value ORDER BY p.service_charge_party_name) as chargese FROM acc_service_order a, agent_info b, acc_request c, service_feature d,user_pos e,bank_master f,acc_service_order_comm p WHERE a.acc_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id and a.bank_id = f.bank_master_id and a.acc_service_order_no = p.acc_service_order_no";
+			$query = "SELECT a.acc_service_order_no,concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(b.agent_code,'-') as agent_code,concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user,(select name from state_list where state_id=b.state_id) as state,(select name from local_govt_list where local_govt_id = b.local_govt_id) as local,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge,  a.total_amount,  concat(f.name) as bank,  a.date_time as date_time,c.update_time,c.bvn,ifNULL(c.email,'-') as email,c.account_number,ifNULL(c.account_balance,'-') as account_balance,group_concat(p.charge_value ORDER BY p.service_charge_party_name) as chargese FROM acc_service_order a, agent_info b, acc_request c, service_feature d,user_pos e,bank_master f,acc_service_order_comm p WHERE a.acc_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and a.user_id = e.user_id and a.bank_id = f.bank_master_id and a.acc_service_order_no = p.acc_service_order_no";
 		}
 		if($profileid  == 51) {
-			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.acc_service_order_no,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time as date_time,c.update_time, concat(f.name) as bank,IF(a.service_feature_code='BAO','Account Open', IF(a.service_feature_code='BWL','Wallet Open', IF(a.service_feature_code='BCL','Card Link','-'))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and a.user_id = b.user_id ";
+			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(b.agent_code,'-') as agent_code, a.acc_service_order_no,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time as date_time,c.update_time, concat(f.name) as bank,IF(a.service_feature_code='BAO','Account Open', IF(a.service_feature_code='BWL','Wallet Open', IF(a.service_feature_code='BCL','Card Link','-'))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and a.user_id = b.user_id ";
 		}
 		if($profileid  == 52) {
-			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code, a.acc_service_order_no,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time as date_time,c.update_time, concat(f.name) as bank,IF(a.service_feature_code='BAO','Account Open', IF(a.service_feature_code='BWL','Wallet Open', IF(a.service_feature_code='BCL','Card Link','-'))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and b.sub_agent = 'Y' and a.user_id = b.user_id ";
+			$query = "SELECT concat(a.service_feature_code, ' - ', d.feature_description) as service_feature_code,ifNULL(b.agent_code,'-') as agent_code, a.acc_service_order_no,ifNULL(a.stamp_charge,'-') as stamp_charge,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time as date_time,c.update_time, concat(f.name) as bank,IF(a.service_feature_code='BAO','Account Open', IF(a.service_feature_code='BWL','Wallet Open', IF(a.service_feature_code='BCL','Card Link','-'))) as reference, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user FROM fin_service_order a, agent_info b, fin_request c, service_feature d WHERE a.fin_service_order_no = c.order_no and c.status = 'S' and a.user_id = b.user_id and a.service_feature_code = d.feature_code and b.agent_code = '".$_SESSION['party_code']."' and b.sub_agent = 'Y' and a.user_id = b.user_id ";
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
@@ -80,23 +80,23 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Order Type","Agent","State","Local Government","Stamp Charge","Partner Charge","Other Charge","Total Amount","Bank", "Date Time","Update Time","Bvn","Email","Account Number","Account Balance","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
-		$headcount = 20;
+		$heading = array("Order No","Order Type","Agent Code","Agent","State","Local Government","Stamp Charge","Partner Charge","Other Charge","Total Amount","Bank", "Date Time","Update Time","Bvn","Email","Account Number","Account Balance","Total Splited Commission","Agent Commission","Champion Commission","Kadick Commission");
+		$headcount = 21;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{
 			//error_log("agentrow['10']_slit  ==".$row['12']);
-			$split_charges = explode(",",$row['16']);
+			$split_charges = explode(",",$row['17']);
 			$agent_slit = $split_charges[0] ;
-			$row['17'] = $agent_slit;
+			$row['18'] = $agent_slit;
 			
 			//error_log("agent_slit  ==".$agent_slit);
 			//error_log("agent_slit1  ==".$row['14'] );
 			//error_log("split_charges  ==".$split_charges );
 			$champion_slit = $split_charges[1];
-			$row['18'] = $champion_slit;
+			$row['19'] = $champion_slit;
 			$kadick_slit = $split_charges[2];
-			$row['19'] = $kadick_slit;
+			$row['20'] = $kadick_slit;
 			
 			//$row['10'] = null;
 			generateExcel ($i, $row,$objPHPExcel,$headcount);
