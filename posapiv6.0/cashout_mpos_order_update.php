@@ -134,9 +134,9 @@
 							//If user_pos.flexi_rate = H, then it is hybrid rating based on requested amount
 							if ( $user_db_flexi_rate == "H") {
 								if ( $requestAmount < 20000 ) {
-									$txtType = "F";
+									$txType = "F";
 								}else {
-									$txtType = "E";
+									$txType = "E";
 								}
 							} else {
 								$db_flexiRate = "N";
@@ -156,7 +156,7 @@
 								}
 							}
 							
-							error_log("txtType = ".$txType.", partyCount = ".$partyCount);
+							error_log("txType = ".$txType.", partyCount = ".$partyCount);
 							$glComment = "Cash-Out (Card) Order #".$fin_service_order_no;
                             $check_order_result = checkForAlreadyProcessedCashOutOrder($user_id, $orderNo, $con);
                             error_log("checkForAlreadyProcessedCashOutOrder.check_order_result = ".$check_order_result);
