@@ -40,33 +40,33 @@ $objPHPExcel = new PHPExcel();
 		}
 		if($creteria == "BT") {
 			if($type == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.acc_service_order_no,  a.total_amount, a.date_time,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,user, a.agent_charge, a.ams_charge,state,local order by date_time desc";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by service_feature_code, a.acc_service_order_no,  a.total_amount, a.date_time,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,user, a.agent_charge, a.ams_charge,state,local,agent_code order by date_time desc";
 			}
 			else{ 
-				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				$query .= " and a.service_feature_code = '$type' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by date_time desc ";
 			}
 		}
 		if($creteria == "BO") {
-			$query .= " and a.acc_service_order_no = $orderNo group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by a.acc_service_order_no";
+			$query .= " and a.acc_service_order_no = $orderNo group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by a.acc_service_order_no";
 		}
 		if($creteria == "C") { 
 			if($championCode == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by date_time desc ";
 			}
 			else{ 
-				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				$query .= " and b.parent_code = '$championCode' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by date_time desc ";
 			}
 		}
 		if($creteria == "S") { 
 			if($state == "ALL") {
-				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,b.state_id,b.local_govt_id order by date_time desc ";
+				$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,b.state_id,b.local_govt_id,agent_code order by date_time desc ";
 			}
 			else{ 
 				if($local_govt_id == ""){
-					$query .= " and b.state_id = '$state'   and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+					$query .= " and b.state_id = '$state'   and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by date_time desc ";
 				}
 				else{
-				  $query .= " and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'  and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local order by date_time desc ";
+				  $query .= " and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'  and  date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' group by a.acc_service_order_no,b.agent_name,b.parent_code,c.update_time,c.bvn,c.email,c.account_number,c.account_balance,state,local,agent_code order by date_time desc ";
 			}
 				
 		}
