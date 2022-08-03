@@ -16,7 +16,7 @@ define ("FINSOL_DB_VERSION","1.2");
 define ("ADMIN_ATTEMPT_LIMIT","3");
 
 //define("CAPTCHA_FONT_LOCATION", "D:/xampp24/htdocs/finweb/common/fonts/monofont.ttf");
-define("CAPTCHA_FONT_LOCATION", "c:/xampp123/htdocs/finweb/common/fonts/monofont.ttf");
+define("CAPTCHA_FONT_LOCATION", "D:/xampp24/htdocs/kadick-finsol-finweb/common/fonts/monofont.ttf");
 //define("CAPTCHA_FONT_LOCATION", "/idfs/web/www1/html/finweb/common/fonts/monofont.ttf");
 
 define ("FINWEB_SERVER_SHORT_NAME","WS1");
