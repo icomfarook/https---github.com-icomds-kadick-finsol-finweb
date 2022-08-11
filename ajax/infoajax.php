@@ -237,7 +237,8 @@
 			$table_name = 'champion_info';	
 			$col_name = 'champion_code';				
 		}
-		
+		$address1 = mysqli_real_escape_string($con, $address1);
+		$address2 = mysqli_real_escape_string($con, $address2);
 		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
 		$query ="UPDATE $table_name SET state_id = $state_id, local_govt_id = $local_govt_id,dob = '$dob',gender = '$gender',business_type = '$BusinessType', loc_latitude = '$loc_latitude',active = '$active', loc_longitude = '$loc_longitude', address1 = '$address1', address2 = '$address2',  contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile' WHERE $col_name = '$partyCode'";
 		error_log("update query = ".$query);
