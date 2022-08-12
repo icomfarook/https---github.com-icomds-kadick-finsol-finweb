@@ -223,7 +223,7 @@
 
 	function notification_db($con, $agentSelection, $userId, $stateSelection, $localGovtSelection, $userSelection, $title, $body, $count , $db_res){
 		error_log("userId = ".$userId);
-		$query = "INSERT INTO client_notification (client_notification_id, user_id, device_type, agent_selection, state_selection, local_govt_selection, user_selection,title, content, count, response, date_time) VALUES (0, $userId, 'M', '$agentSelection', '$stateSelection', '$localGovtSelection', '$userSelection', '$title', '$body', $count, '$db_res', now())";
+		$query = "INSERT INTO client_notification (client_notification_id, user_id, device_type, agent_selection, state_selection, local_govt_selection, user_selection,title, content, count, response, date_time) VALUES (0, $userId, 'M', '$agentSelection', '$stateSelection', '$localGovtSelection', '$userSelection', 'left('$title', 50)', 'left('$body', 200)', $count, 'left('$db_res', 200)', now())";
 		error_log("notification_db: ".$query);
 		$result = mysqli_query($con,$query);
 		if(!$result) {
