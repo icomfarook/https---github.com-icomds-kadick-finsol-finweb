@@ -362,4 +362,8 @@ app.config(function($routeProvider) {
 		templateUrl : "../core/sendnotifi.php",
 		controller: "SendNotificationCtrl"
 	})
+	.when("/daitrans", {
+        templateUrl : "../core/dailyreport.php",
+        controller: "DailyTransCtrl"
+    })
 });

@@ -1,3 +1,97 @@
+app.controller('DailyTransCtrl', function ($scope, $http) {
+	$scope.isHideexcel = true;
+	$scope.isLoader = true;
+	$scope.startDate = new Date();
+	$scope.startDate.setDate($scope.startDate.getDate() - 1);
+	$scope.endDate = new Date();
+	$scope.endDate.setDate($scope.endDate.getDate() - 1);
+	$scope.isMainLoader = true;
+	$scope.isHideOk = true;
+	$scope.query = function (id) {
+		$scope.isHideexcel = false;
+		$http({
+			method: 'post',
+			url: '../ajax/dailyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				startDate: $scope.startDate,
+				endDate: $scope.endDate,
+				action: 'query'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+		// alert( response.data);
+		$scope.id = response.data[0].id;
+			$scope.nontrans = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+		$scope.detail = function (id) {
+		$http({
+			method: 'post',
+			url: '../ajax/dailyreportajax.php',
+			data: { id: id, action: 'detail' },
+		}).then(function successCallback(response) {
+			$scope.id = response.data[0].id;
+			$scope.party_type = response.data[0].party_type;
+			$scope.party_code = response.data[0].party_code;
+			$scope.party_name = response.data[0].party_name;
+			$scope.run_date = response.data[0].run_date;
+			$scope.state_name = response.data[0].state_name;
+			$scope.local_govt_name = response.data[0].local_govt_name;
+			$scope.party_sales_type = response.data[0].party_sales_type;
+			$scope.credit_limit = response.data[0].credit_limit;
+			$scope.daily_limit = response.data[0].daily_limit;
+			$scope.advance_amount = response.data[0].advance_amount;
+			$scope.available_balance = response.data[0].available_balance;
+			$scope.current_balance = response.data[0].current_balance;
+			$scope.minimum_balance = response.data[0].minimum_balance;
+			$scope.previous_current_balance = response.data[0].previous_current_balance;
+			$scope.comm_available_balance = response.data[0].comm_available_balance;
+			$scope.comm_current_balance = response.data[0].comm_current_balance;
+			$scope.comm_minimum_balance = response.data[0].comm_minimum_balance;
+			$scope.last_tx_no = response.data[0].last_tx_no;
+			$scope.last_tx_amount = response.data[0].last_tx_amount;
+			$scope.last_tx_date = response.data[0].last_tx_date;
+			$scope.comm_last_tx_no = response.data[0].comm_last_tx_no;
+			$scope.comm_last_tx_amount = response.data[0].comm_last_tx_amount;
+			$scope.comm_last_tx_date = response.data[0].comm_last_tx_date;
+			$scope.comm_withdraw_count = response.data[0].comm_withdraw_count;
+			$scope.comm_withdraw_amount = response.data[0].comm_withdraw_amount;
+			$scope.comm_withdraw_time = response.data[0].comm_withdraw_time;
+			$scope.wallet_fund_count = response.data[0].wallet_fund_count;
+			$scope.wallet_fund_amount = response.data[0].wallet_fund_amount;
+			$scope.wallet_fund_time = response.data[0].wallet_fund_time;
+			$scope.cashin_count = response.data[0].cashin_count;
+			$scope.cashin_amount = response.data[0].cashin_amount;
+			$scope.cashin_time = response.data[0].cashin_time;
+			$scope.cashout_count = response.data[0].cashout_count;
+			$scope.cashout_amount = response.data[0].cashout_amount;
+			$scope.cashout_time = response.data[0].cashout_time;
+			$scope.evd_count = response.data[0].evd_count;
+			$scope.evd_amount = response.data[0].evd_amount;
+			$scope.evd_time = response.data[0].evd_time;
+			$scope.billpay_count = response.data[0].billpay_count;
+			$scope.billpay_amount = response.data[0].billpay_amount;
+			$scope.billpay_time = response.data[0].billpay_time;
+			$scope.create_time = response.data[0].create_time;
+			
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
+	}
+	$scope.refresh = function (id, type) {
+		window.location.reload();
+	}
+});
+
+
 app.controller('SendNotificationCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.creteria = "A";
