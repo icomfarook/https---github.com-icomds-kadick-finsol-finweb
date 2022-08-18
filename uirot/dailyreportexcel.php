@@ -1,40 +1,41 @@
 <?php
+
+set_time_limit(100);
+
 ERROR_REPORTING(E_ALL);
 $data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
-//error_log("s");
 include("excelfunctions.php");
-//error_log("1");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-//error_log("1");
+
    $startDate		=  $_POST['startDate'];
-   $endDate	=  $_POST['endDate'];
+  // $endDate	=  $_POST['endDate'];
    $Detail 	= $_POST['Detail'];
    
    $startDate = date("Y-m-d", strtotime($startDate));
-   $endDate = date("Y-m-d", strtotime($endDate));
+   //$endDate = date("Y-m-d", strtotime($endDate));
 $title = "";
 $title = "KadickMoni";
 if($startDate == null ){
    $startDate = date('Y-m-d');
 }
-if($endDate == null ){
+/* if($endDate == null ){
        $endDate   =  date('Y-m-d');
 }
 //error_log($ba);
-//error_log($endDate);
+//error_log($endDate); */
 $msg = "Daily Transaction Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
 if($Detail == true){
     $heading = array("Agent Code","Agent Name","State","Local Government","Run Date","Available Balance","Current Balance","Advance Amount","Minimum Balance","Commission Withdrawn","Wallet Funding","Cash In","Cash Out","Evd","Bill Payment");
     $headcount = 15;
-    $query = "select party_Code,party_name,state_name,local_govt_name,run_date,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(advance_amount) as advance_amount,i_format(minimum_balance) as minimum_balance,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(create_time) between '$startDate' and '$endDate' and party_type='A'";
+    $query = "select party_Code,party_name,state_name,local_govt_name,run_date,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(advance_amount) as advance_amount,i_format(minimum_balance) as minimum_balance,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(run_date) = '$startDate' and party_type='A'";
 }else{
     $heading = array("Party Code","Party Name","State","Local Government","Run Date","Available Balance","Current Balance","Advance Amount","Minimum Balance","Commission Withdrawn","Wallet Funding","Cash In","Cash Out","Evd","Bill Payment");
     $headcount = 15;
-    $query = "select party_Code,party_name,state_name,local_govt_name,run_date,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(advance_amount) as advance_amount,i_format(minimum_balance) as minimum_balance,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(create_time) between '$startDate' and '$endDate' ";
+    $query = "select party_Code,party_name,state_name,local_govt_name,run_date,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(advance_amount) as advance_amount,i_format(minimum_balance) as minimum_balance,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(run_date) = '$startDate'";
 }
 
        $result =  mysqli_query($con,$query);

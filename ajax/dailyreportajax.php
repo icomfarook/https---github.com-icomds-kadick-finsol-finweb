@@ -4,17 +4,17 @@
 	include('../common/admin/configmysql.php');
 	$data = json_decode(file_get_contents("php://input"));
 	$action = $data->action;
-
+	sleep(10);
 	if($action == "query") {
 		$Detail = $data->Detail;
     	$startDate = $data->startDate;
-		$endDate = $data->endDate;	
+		//$endDate = $data->endDate;	
 		$startDate = date("Y-m-d", strtotime($startDate));
-		$endDate = date("Y-m-d", strtotime($endDate));
+		//$endDate = date("Y-m-d", strtotime($endDate. "+1 days"));
         if($Detail == true){
-            $query = "select party_wallet_history_id,run_date,party_Code,party_name,state_name,local_govt_name,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(minimum_balance) as minimum_balance,i_format(advance_amount) as advance_amount,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(create_time) between '$startDate' and '$endDate' and party_type='A'";
+            $query = "select party_wallet_history_id,run_date,party_Code,party_name,state_name,local_govt_name,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(minimum_balance) as minimum_balance,i_format(advance_amount) as advance_amount,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(run_date) = '$startDate' and party_type='A'";
         }else{
-            $query = "select party_wallet_history_id,run_date,party_Code,party_name,state_name,local_govt_name,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(minimum_balance) as minimum_balance,i_format(advance_amount) as advance_amount,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(create_time) between '$startDate' and '$endDate' ";
+            $query = "select party_wallet_history_id,run_date,party_Code,party_name,state_name,local_govt_name,i_format(available_balance) as available_balance,i_format(current_balance) as current_balance,i_format(minimum_balance) as minimum_balance,i_format(advance_amount) as advance_amount,i_format(comm_withdraw_amount) as comm_withdraw_amount,i_format(wallet_fund_amount) as wallet_fund_amount,i_format(cashin_amount) as cashin_amount,i_format(cashout_amount) as cashout_amount,i_format(evd_amount) as evd_amount,i_format(billpay_amount) as billpay_amount from party_wallet_history where date(run_date) = '$startDate'";
         }
 		
 		error_log("queyr".$query);

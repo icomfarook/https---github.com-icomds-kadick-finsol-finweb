@@ -1,6 +1,6 @@
 app.controller('DailyTransCtrl', function ($scope, $http) {
+	
 	$scope.isHideexcel = true;
-	$scope.isLoader = true;
 	$scope.startDate = new Date();
 	$scope.startDate.setDate($scope.startDate.getDate() - 1);
 	$scope.endDate = new Date();
@@ -8,7 +8,9 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 	$scope.isMainLoader = true;
 	$scope.isHideOk = true;
 	$scope.query = function (id) {
+
 		$scope.isHideexcel = false;
+		$scope.isLoader = true;
 		$http({
 			method: 'post',
 			url: '../ajax/dailyreportajax.php',

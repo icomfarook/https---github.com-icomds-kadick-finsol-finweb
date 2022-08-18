@@ -15,6 +15,7 @@
 	//$partyType = "A";	
 	//$partyCode = "AG0101";
 	//$profileId = 1;
+	
 ?>
 <style>
 #AddINFODialogue .table > tbody > tr > td {
@@ -55,32 +56,34 @@
 			</div>
 			
 			<div class="box-content no-padding" >	
-			<div style='text-align:center' class="loading-spiner-holder"  ng-hide='isMainLoader' data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
+			<div style='text-align:center' class="loading-spiner-holder"   data-loading ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif1.gif" /></div></div>
 				<form name='infoViewForm' action='dailyreportexcel.php' method='POST'>	
-					<div style="margin-left:23%;" class='row appcont'>						
+					<div  class='row appcont'>						
 						<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-											<label><?php echo NON_TRANSACTION_REPORT_START_DATE; ?></label>
+											<label>Run Date</label>
 											<input ng-disabled="isStartDateDi" ng-model="startDate" type='date' id='startDate' name='startDate' required class='form-control'/>
 										</div>
-										<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>							
+										<!-- <div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>							
 											<label><?php echo NON_TRANSACTION_REPORT_END_DATE; ?></label>
 											<span class = 'err' ng-show="dateerr">{{dateerr}}</span>
 											<input  datetime="yyyy-MM-dd"  ng-blur='checkdate(startDate,endDate)'  ng-disabled="isEndDateDi"  ng-model="endDate" type='date' id='endDate' name='endDate' required class='form-control'/>
-										</div>
+										</div> -->
                                         <div  style='margin-top:28px;' class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
                                         <label><input type='checkbox' ng-model='Detail' name='Detail' />&nbsp;&nbsp;External Agents Only</label>
                                         </div>
-										 <div class='clearfix'></div>
-									</div>	
-											 <div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
+										
+									
+											 <div  style = 'text-align-last:auto;margin-top:inherit;margin-left: -127px' class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 											<button type="button" class="btn btn-primary" ng-disabled = 'infoViewForm.$invalid' ng-click='infoViewForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo NON_TRANSACTION_REPORT_BUTTON_QUERY; ?></button>
 											<button type="button" class="btn btn-primary"   id="Refresh"><?php echo NON_TRANSACTION_REPORT_BUTTON_REFRESH; ?></button>
                                             <button type="submit" class="btn btn-primary"   id="excel" ng-hide='isHideexcel;'>Excel</button>
 										</div>
+										</div>	
 								 </form>
 							</div>		
+							</div>		
                             <div class='clearfix'></div>						
-					<table class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+					<table ng-hide='isLoader' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>
 								<tr> 
 									<th>Run Date</th>
