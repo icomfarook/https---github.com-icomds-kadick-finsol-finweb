@@ -4,7 +4,6 @@
 	include('../common/admin/configmysql.php');
 	$data = json_decode(file_get_contents("php://input"));
 	$action = $data->action;
-	sleep(10);
 	if($action == "query") {
 		$Detail = $data->Detail;
     	$startDate = $data->startDate;
