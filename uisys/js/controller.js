@@ -1,6 +1,6 @@
 app.controller('DailyTransCtrl', function ($scope, $http) {
+
 	$scope.isHideexcel = true;
-	$scope.isLoader = true;
 	$scope.startDate = new Date();
 	$scope.startDate.setDate($scope.startDate.getDate() - 1);
 	$scope.endDate = new Date();
@@ -8,7 +8,9 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 	$scope.isMainLoader = true;
 	$scope.isHideOk = true;
 	$scope.query = function (id) {
+
 		$scope.isHideexcel = false;
+		$scope.isLoader = true;
 		$http({
 			method: 'post',
 			url: '../ajax/dailyreportajax.php',
@@ -27,7 +29,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 		// alert( response.data);
 		$scope.id = response.data[0].id;
 			$scope.nontrans = response.data;
-			
+
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
@@ -81,7 +83,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 			$scope.billpay_amount = response.data[0].billpay_amount;
 			$scope.billpay_time = response.data[0].billpay_time;
 			$scope.create_time = response.data[0].create_time;
-			
+
 			}, function errorCallback(response) {
 			// console.log(response);
 			});
@@ -120,7 +122,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 	// console.log(response);
 	});
 	}
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -130,7 +132,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 	$scope.agents = response.data;
 	//window.location.reload();
 	});
-	
+
 	$scope.query = function () {
 	$http({
 	method: 'post',
@@ -146,14 +148,14 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 	}).then(function successCallback(response) {
 	$scope.countTable = true;
 	$scope.count = response.data;
-	
+
 	}, function errorCallback(response) {
 	console.log(response.data);
 	});
 	}
-	
+
 	$scope.send = function (title,body) {
-	
+
 		if(title == "" ){
 			alert("Please Enter Title");
 			return false;
@@ -182,18 +184,18 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 					$scope.isHide = true;
 					$scope.isHideOk = false;
 					$scope.isLoader = false;
-	
+
 					}, function errorCallback(response) {
 					console.log(response.data);
 					});
 			}else{
 				return false;
 			}
-	
+
 		}
-	
+
 	}
-	
+
 	});
 
 
@@ -240,7 +242,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				}).then(function successCallback(response) {
 					$scope.infos = response.data;
 				});
-	
+
 		}
 		$scope.query = function () {
 			$http({
@@ -258,12 +260,12 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 		  $scope.isMainLoader = false;
 	   $scope.appviews = response.data;
 		$scope.id = response.data[0].id;
-	
+
 			}, function errorCallback(response) {
 				console.log(response.data);
 			});
 		}
-		
+
 		$scope.attachmentid = function (index, id) {
 			$http({
 			 method: 'post',
@@ -296,9 +298,9 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 			  win.focus();
 			  };
 		   }
-		   
+
 		   $scope.attachmentcomp = function (index, id) {
-				
+
 			$http({
 			 method: 'post',
 			 url: '../ajax/kycupdateajax.php',
@@ -321,7 +323,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 			}, function errorCallback(response) {
 			 // console.log(response);
 			});
-		  
+
 				$scope.PrintImage = function (url) {
 			 var src='data:image/;base64,'+url;
 			 //alert(src);
@@ -330,7 +332,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				win.focus();
 			};
 		   }
-		  
+
 		   $scope.attachmentSig = function (index, id) {
 			  $http({
 			   method: 'post',
@@ -354,7 +356,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 			  }, function errorCallback(response) {
 			   // console.log(response);
 			  });
-			
+
 				  $scope.PrintImage = function (url) {
 			   var src='data:image/;base64,'+url;
 			   //alert(src);
@@ -363,13 +365,13 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				  win.focus();
 			  };
 			 }
-			 $scope.editattach1 = function (index, id) { 
-				
+			 $scope.editattach1 = function (index, id) {
+
 				$scope.isHideOk = true;
 				$scope.isInputDisabled = false;
 				$scope.isInputDisabled2 = false;
 				$scope.isInputDisabled3 = false;
-				
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -382,18 +384,18 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 					//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
 					$scope.attachment_type = response.data[0].attachment_type;
 					$scope.file = response.data[0].file;
-					
+
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
 			}
 			$scope.editattach2 = function (index, id) {
-				
+
 				$scope.isHideOk = true;
 				$scope.isInputDisabled = false;
 				$scope.isInputDisabled2 = false;
 				$scope.isInputDisabled3 = false;
-				
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -406,18 +408,18 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 					//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
 					$scope.attachment_type = response.data[0].attachment_type;
 					$scope.file = response.data[0].file;
-				
+
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
 			}
 			$scope.editattach3 = function (index, id) {
-				
+
 				$scope.isHideOk = true;
 				$scope.isInputDisabled = false;
 				$scope.isInputDisabled2 = false;
 				$scope.isInputDisabled3 = false;
-				
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -430,17 +432,17 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 					$scope.SignatureDocucment = response.data[0].SignatureDocument;
 					$scope.attachment_type = response.data[0].attachment_type;
 					$scope.file = response.data[0].file;
-				
+
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
 			}
-			$scope.Deleteattachment = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleteattachment = function(index,id,application_attachment_id,attachment_type){
 				$scope.Deleteattach = true;
 				$scope.isInputDisabled = true;
 				$scope.IDDocument = "";
-			
-				
+
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -454,14 +456,14 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
-			
+
 			}
-			$scope.Deleteattachment2 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleteattachment2 = function(index,id,application_attachment_id,attachment_type){
 				$scope.Deletes = true;
 				$scope.isInputDisabled2s = true;
 				$scope.BussinessDocument = "";
-			
-				
+
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -475,14 +477,14 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
-			
+
 			}
-			$scope.Deleteattachment3 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleteattachment3 = function(index,id,application_attachment_id,attachment_type){
 				$scope.Deleted = true;
 				$scope.isInputDisabled3 = true;
 				$scope.SignatureDocucment = "";
-			
-				
+
+
 				$http({
 					method: 'post',
 					url: '../ajax/kycupdateajax.php',
@@ -496,23 +498,23 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				}, function errorCallback(response) {
 					// console.log(response);
 				});
-			
+
 			}
-			
+
 			$scope.InsertNew = function(index,id,application_attachment_id,application_id,attachment_type){
-			
+
 				$scope.isHideOk = true;
 				$scope.isHide = false;
-			
+
 				$scope.isLoader = true;
 				var fd = new FormData();
 				//alert($scope.dob);
 				var event = new Date($scope.dob);
-				
+
 				let date = JSON.stringify(event)
 				date = date.slice(1,11);
 				//alert(date);
-				
+
 				   angular.forEach($scope.uploadfiles,function(file){
 					 fd.append('file[]',file);
 				   });
@@ -550,7 +552,7 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 				$scope.isHideReset = true;
 				$scope.isLoader = false;
 				$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-			
+
 				}, function errorCallback(response) {
 				// console.log(response);
 				});
@@ -564,7 +566,7 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
+
 	$scope.query = function () {
 	$scope.tablerow = true;
 	$scope.isHideexcel= false;
@@ -578,14 +580,14 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.detail = function (index, id) {
 	$http({
 	method: 'post',
@@ -609,12 +611,12 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.response = response.data[0].response;
 	$scope.date = response.data[0].date;
 
-	
+
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
 	}
-	
+
 	});
 
 
@@ -622,7 +624,7 @@ app.controller('TopicSubCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
+
 	$http({
 		url: '../ajax/load.php',
 		method: "POST",
@@ -647,14 +649,14 @@ app.controller('TopicSubCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.detail = function (index, id) {
 	$http({
 	method: 'post',
@@ -674,12 +676,12 @@ app.controller('TopicSubCtrl', function ($scope, $http) {
 	$scope.status = response.data[0].status;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
 	}
-	
+
 	});
 
 
@@ -687,7 +689,7 @@ app.controller('ClientTopicCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
+
 	$scope.query = function () {
 	$scope.tablerow = true;
 	$scope.isHideexcel= false;
@@ -701,14 +703,14 @@ app.controller('ClientTopicCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.detail = function (index, id) {
 	$http({
 	method: 'post',
@@ -726,12 +728,12 @@ app.controller('ClientTopicCtrl', function ($scope, $http) {
 	$scope.agent = response.data[0].agent;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
 	}
-	
+
 	});
 
 app.controller('ClientListCtrl', function ($scope, $http) {
@@ -747,7 +749,7 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 		$scope.agents = response.data;
 		//window.location.reload();
 		});
-   
+
 	$scope.query = function () {
 		$scope.tablerow = true;
 	 $http({
@@ -769,7 +771,7 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 	$scope.refresh = function () {
 		window.location.reload();
 		};
-   
+
 	  $scope.Delete = function (index, id,name) {
 	//$scope.id = id;
    $http({
@@ -786,7 +788,7 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 	   $scope.isHide = true;
    });
 	 }
-   
+
 	$scope.view = function (index, id) {
 	 $http({
 	  method: 'post',
@@ -921,8 +923,8 @@ app.controller('AgentSummCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
-	
+
+
 	$scope.countrychange = function (id) {
 		$http({
 		method: 'post',
@@ -945,7 +947,7 @@ app.controller('AgentSummCtrl', function ($scope, $http) {
 		// console.log(response);
 		});
 		}
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -955,18 +957,18 @@ app.controller('AgentSummCtrl', function ($scope, $http) {
 	$scope.agents = response.data;
 	//window.location.reload();
 	});
-	
-	
+
+
 	$scope.reset = function () {
 	$scope.tablerow = false;
 	$scope.MonthDate = "";
 	$scope.agentCode = "--ALL--";
 	}
-	
+
 	$scope.query = function () {
 	$scope.tablerow = true;
 	$scope.isHideexcel= false;
-	
+
 	$http({
 	method: 'post',
 	url: '../ajax/agntsumajax.php',
@@ -979,14 +981,14 @@ app.controller('AgentSummCtrl', function ($scope, $http) {
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
 	$scope.agent_name = response.data[0].agent_name;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.detail = function (index, agent_name) {
 	$http({
 	method: 'post',
@@ -997,12 +999,12 @@ app.controller('AgentSummCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.view = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
 	});
 
@@ -1341,7 +1343,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
+
 	function detectBrowser() {
 	  if (navigator.userAgent.includes("Chrome")) {
 	  $(".MonthPicker").show();
@@ -1351,7 +1353,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	  if (navigator.userAgent.includes("Firefox")) {
 	 $(".MonthPicker").hide();
 	   $(".MonthDropDown").show();
-	
+
 		return "firefox"
 	  }
 	  if (navigator.userAgent.includes("Safari")) {
@@ -1360,7 +1362,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 		return "safari"
 	  }
 	}
-	
+
 	$scope.countrychange = function (id) {
 		$http({
 		method: 'post',
@@ -1383,8 +1385,8 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 		// console.log(response);
 		});
 		}
-	
-	
+
+
 	const d = new Date();
 	let year = d.getFullYear();
 	var years = [];
@@ -1393,7 +1395,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	}
 	console.log(years);
 	$scope.yearList = years;
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -1403,29 +1405,29 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	$scope.agents = response.data;
 	//window.location.reload();
 	});
-	
-	
+
+
 	$scope.reset = function () {
-	
+
 	$scope.tablerow = false;
 	$scope.MonthDate = "";
 	$scope.agentCode = "";
 	}
-	
+
 	$scope.query = function () {
-	
+
 	var MonthAndYear;
-	
+
 	if (detectBrowser() == "chrome"){
 	var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
 	MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
 	}else{
 	MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
 	}
-	
-	
-	
-	
+
+
+
+
 	$scope.tablerow = true;
 	$scope.isHideexcel= false;
 	$http({
@@ -1440,14 +1442,14 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.detail = function (index, id) {
 	$http({
 	method: 'post',
@@ -1477,18 +1479,18 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	});
 	}
 	});
-	
-	
+
+
 	app.controller('AgentDailyCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.isHideexcel= true;
-	
-	
+
+
 	$scope.refresh = function () {
 		window.location.reload();
 		};
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -1498,7 +1500,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	$scope.agents = response.data;
 	//window.location.reload();
 	});
-	
+
 	$scope.countrychange = function (id) {
 		$http({
 		method: 'post',
@@ -1521,13 +1523,13 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 		// console.log(response);
 		});
 		}
-	
+
 	$scope.reset = function () {
 	$scope.tablerow = false;
 	$scope.MonthDate = "";
 	$scope.agentCode = "";
 	}
-	
+
 	$scope.query = function () {
 	$scope.tablerow = true;
 	$scope.isHideexcel= false;
@@ -1543,16 +1545,16 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
-	
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
-	$scope.detail = function (index, id) { 
-	
+
+	$scope.detail = function (index, id) {
+
 	$http({
 	method: 'post',
 	url: '../ajax/agentDailyajax.php',
@@ -1581,7 +1583,7 @@ app.controller('AgentMonthCtrl', function ($scope, $http) {
 	// console.log(response);
 	});
 	}
-	
+
 	});
 
 
@@ -10151,7 +10153,7 @@ $scope.ad =response.data[0].ad;
 
 app.controller('posmenuCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
-	
+
 	$http({
 	method: 'post',
 	url: '../ajax/userposajax.php',
@@ -10192,7 +10194,7 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 	//$scope.servfea = response.data[0].menu;
 	$scope.active = response.data[0].active;
 	$scope.startdate = new Date(response.data[0].startDate);
-	
+
 	$scope.expdate = new Date(response.data[0].expDate);
 	$scope.code = response.data[0].code;
 	$scope.servfea = response.data[0].service_feature_id;
@@ -10209,9 +10211,9 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 	// console.log(response);
 	});
 	}
-	
+
 	$scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
-		
+
 		$http({
 			method: 'post',
 			url: '../ajax/userposajax.php',
@@ -10227,13 +10229,13 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 			}, function errorCallback(response) {
 			// console.log(response);
 			});
-	
+
 	}
-	
-	
+
+
 	$scope.reject = function (user_pos_menu_id,user_id) {
 	//alert(user_id);
-	
+
 	$scope.isLoader = true;
 	$scope.isMainLoader = true;
 	$scope.isHideOk = true;
@@ -10253,12 +10255,12 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 	$scope.isLoader = false;
 	$scope.isMainLoader = false;
 	$("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
-	
+
 	}, function errorCallback(response) {
 	console.log(response);
 	});
 	}
-	
+
 	$scope.create = function () {
 	$scope.isLoader = true;
 	$scope.isMainLoader = true;
@@ -10308,7 +10310,7 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 	$scope.isLoader = false;
 	$scope.isMainLoader = false;
 	$("#usrposEditBody").html("<h3>" + response.data + "</h3>");
-	
+
 	}, function errorCallback(response) {
 	console.log(response);
 	});
@@ -10341,8 +10343,8 @@ app.controller('posmenuCtrl', function ($scope, $http) {
 	// console.log(response);
 	});
 	}
-	
-	
+
+
 	});
 
 app.controller('changeLangCtrl', function ($scope, $http) {
@@ -13808,9 +13810,9 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	$scope.isMainLoader = false;
 	$scope.isHideOk = true;
 	$scope.isGoDisbled = true;
-   
-   
-   
+
+
+
 	$scope.query = function () {
 	 $http({
 	  method: 'post',
@@ -13913,7 +13915,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	 });
 	}
 	$scope.resets = function () {
-   
+
 	   $scope.IDDocument = "";
 	   $scope.attachment = "";
 	   $scope.BussinessDocument = "";
@@ -13921,7 +13923,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.SignatureDocucment = "";
 	   $scope.attachment3 = "";
 	   }
-   
+
 	 $scope.attachmentid = function (index, id) {
 	 $http({
 	  method: 'post',
@@ -13955,7 +13957,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   };
 	}
 	$scope.attachmentcomp = function (index, id) {
-		 
+
 	   $http({
 		method: 'post',
 		url: '../ajax/preappviewajax.php',
@@ -13978,7 +13980,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   }, function errorCallback(response) {
 		// console.log(response);
 	   });
-	 
+
 		   $scope.PrintImage = function (url) {
 		var src='data:image/;base64,'+url;
 		//alert(src);
@@ -13987,7 +13989,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		   win.focus();
 	   };
 	  }
-	 
+
 	  $scope.attachmentSig = function (index, id) {
 		 $http({
 		  method: 'post',
@@ -14011,7 +14013,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		 }, function errorCallback(response) {
 		  // console.log(response);
 		 });
-	   
+
 			 $scope.PrintImage = function (url) {
 		  var src='data:image/;base64,'+url;
 		  //alert(src);
@@ -14020,13 +14022,13 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 			 win.focus();
 		 };
 		}
-   
+
 	$scope.editattach1 = function (index, id, name) {
 	   $scope.isHideOk = true;
 	   $scope.isInputDisabled = false;
 	   $scope.isInputDisabled2 = false;
 	   $scope.isInputDisabled3 = false;
-	   
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14039,7 +14041,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
 		   $scope.attachment_type = response.data[0].attachment_type;
 		   $scope.file = response.data[0].file;
-	   
+
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
@@ -14049,7 +14051,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isInputDisabled = false;
 	   $scope.isInputDisabled2 = false;
 	   $scope.isInputDisabled3 = false;
-   
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14062,7 +14064,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
 		   $scope.attachment_type = response.data[0].attachment_type;
 		   $scope.file = response.data[0].file;
-	   
+
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
@@ -14072,7 +14074,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isInputDisabled = false;
 	   $scope.isInputDisabled2 = false;
 	   $scope.isInputDisabled3 = false;
-	   
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14085,18 +14087,18 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		   $scope.SignatureDocucment = response.data[0].SignatureDocucment;
 		   $scope.attachment_type = response.data[0].attachment_type;
 		   $scope.file = response.data[0].file;
-		   
+
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
    }
-   
-   $scope.Deleteattachment = function(index,id,pre_application_attachment_id,attachment_type){ 
+
+   $scope.Deleteattachment = function(index,id,pre_application_attachment_id,attachment_type){
 	   $scope.Deleteattach = true;
 	   $scope.isInputDisabled = true;
 	   $scope.IDDocument = "";
-   
-	   
+
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14110,14 +14112,14 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
-   
+
    }
-   $scope.Deleteattachment2 = function(index,id,pre_application_attachment_id,attachment_type){ 
+   $scope.Deleteattachment2 = function(index,id,pre_application_attachment_id,attachment_type){
 	   $scope.Deletes = true;
 	   $scope.isInputDisabled2s = true;
 	   $scope.BussinessDocument = "";
-   
-	   
+
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14131,14 +14133,14 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
-   
+
    }
-   $scope.Deleteattachment3 = function(index,id,pre_application_attachment_id,attachment_type){ 
+   $scope.Deleteattachment3 = function(index,id,pre_application_attachment_id,attachment_type){
 	   $scope.Deleted = true;
 	   $scope.isInputDisabled3 = true;
 	   $scope.SignatureDocucment = "";
-   
-	   
+
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14152,23 +14154,23 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   }, function errorCallback(response) {
 		   // console.log(response);
 	   });
-   
+
    }
-   
+
    $scope.InsertNew = function(index,id,pre_application_attachment_id,pre_application_info_id,attachment_type){
-   
+
 	   $scope.isHideOk = true;
 	   $scope.isHide = false;
-   
+
 	   $scope.isLoader = true;
 	   var fd = new FormData();
 	   //alert($scope.dob);
 	   var event = new Date($scope.dob);
-	   
+
 	   let date = JSON.stringify(event)
 	   date = date.slice(1,11);
 	   //alert(date);
-	   
+
 		  angular.forEach($scope.uploadfiles,function(file){
 			fd.append('file[]',file);
 		  });
@@ -14191,8 +14193,8 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		   fd.append("attachment",$scope.attachment);
 		  fd.append("attachment2",$scope.attachment2);
 		  fd.append("attachment3",$scope.attachment3);
-		   
-	   
+
+
 		 $http({
 	   method: 'post',
 	   url: '../ajax/preappentryajax.php',
@@ -14205,7 +14207,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isHideReset = true;
 	   $scope.isLoader = false;
 	   $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-   
+
 	   }, function errorCallback(response) {
 	   // console.log(response);
 	   });
@@ -14213,11 +14215,11 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    $scope.refresh = function (id, type) {
 	   window.location.reload();
    }
-   
-   
-   
-	 
-	  
+
+
+
+
+
 	$scope.countrychange = function (id) {
    $http({
    method: 'post',
@@ -14229,7 +14231,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    // console.log(response);
    });
    }
-   
+
    $scope.statechange = function (id) {
    $http({
    method: 'post',
@@ -14241,8 +14243,8 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    // console.log(response);
    });
    }
-	$scope.transfer = function (index, id, name) { 
-   
+	$scope.transfer = function (index, id, name) {
+
 	 $scope.name = name;
 	 $scope.transferbtn = true;
 	 $scope.id = id;
@@ -14276,7 +14278,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	 $scope.state = response.data[0].state;
 	 $scope.localgovernment = response.data[0].localgvt;
 	   $scope.bvn_validated = response.data[0].bvn_validated;
-   
+
 	 //alert(response.data[0].bvn_validated);
 	 if($scope.bvn_validated !="Y")
 	 {
@@ -14284,22 +14286,22 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    $scope.isSelectDisabledType = true;
    $scope.isSelectDisabled = true;
    $scope.BVNsuccess =false;
-   
+
 	 }else{
 	   $scope.bvn_validated = false;
 	   $scope.isSelectDisabledType = false;
 	   $scope.isSelectDisabled = false;
 	   $scope.BVNsuccess =true;
 	 }
-   
+
    $scope.isLoader = false;
 	   $scope.isMainLoader = false;
    $scope.TransferBody = response.data;
    }, function errorCallback(response) {
    // console.log(response);
    });
-   
-   
+
+
 	 $http({
 	  url: '../ajax/load.php',
 	  method: "POST",
@@ -14318,8 +14320,8 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	  $scope.champions = response.data;
 	  //window.location.reload();
 	 });
-   
-   
+
+
 	 $scope.checkuservalid = function () {
 	  var user = $scope.userName.length;
 	  if(user >= 9) {
@@ -14329,7 +14331,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isGoDisbled = true;
 	  }
 	 }
-	 $scope.cancel = function(){ 
+	 $scope.cancel = function(){
 	  $scope.appliertype = "";
 	  $scope.parentcode = "";
 	  $scope.userName = "";
@@ -14346,7 +14348,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	  $scope.isSelectDisabled = true;
 	  $scope.isSelectDisabledType = true;
 	  $scope.isHideGo = false;
-   
+
 	  $http({
 	   method: 'post',
 	   url: '../ajax/preappviewajax.php',
@@ -14371,21 +14373,21 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 		$scope.transferbtn = true;
 	   }
 	   $scope.isLoader = false;
-   
-   
+
+
 	  }, function errorCallback(response) {
 	   // console.log(response);
 	  });
 	 }
 	$scope.transfinal = function (id) {
    if($scope.parentcode){
-   
+
    $http({
    method: 'post',
    url: '../ajax/preappviewajax.php',
-   
+
    data: {
-   
+
    id: id,
    action: 'transfer',
    appliertype:$scope.appliertype,
@@ -14421,15 +14423,15 @@ app.controller('preappviewCtrl', function ($scope, $http) {
    $scope.isSelectDisabled = false;
    }
    }
-   
+
 	 }
 	}
-	$scope.Getbvn = function(id){  
+	$scope.Getbvn = function(id){
 	   $scope.BVNBtn = false;
 	   $scope.isSelectDisabledType = false;
 	   $scope.isSelectDisabled = false;
 	   alert("Please wait, while we validate the BVN");
-   
+
 	   $http({
 		   method: 'post',
 		   url: '../ajax/preappviewajax.php',
@@ -14475,9 +14477,9 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 			   $scope.processingStartTime = response.data.processingStartTime; */
 		   }
 	   });
-   
+
 	}
-   
+
 	$scope.preappviewreject = function (index, id,name) {
 	 $scope.id =id;
 	 $scope.name = name;
@@ -14497,7 +14499,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isHide = true;
 	  });
 	 }
-   
+
 	 $scope.Previewdelete = function (index, id,name) {
 	 $scope.id =id;
 	 $scope.name = name;
@@ -14518,7 +14520,7 @@ app.controller('preappviewCtrl', function ($scope, $http) {
 	   $scope.isHide = true;
    });
 	 }
-   
+
 	$scope.view = function (index, id) {
 	 $http({
 	  method: 'post',
@@ -14993,7 +14995,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	// console.log(response);
 	});
 	}
-	
+
 	$scope.statechange = function (id) {
 	// alert(id);
 	$http({
@@ -15047,7 +15049,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	}).then(function successCallback(response) {
 	$scope.infos = response.data;
 	});
-	
+
 	}
 	$scope.query = function () {
 	$http({
@@ -15063,7 +15065,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	}).then(function successCallback(response) {
 	$scope.infoss = response.data;
 	$scope.bvn = response.data[0].bvn;
-	
+
 	}, function errorCallback(response) {
 	console.log(response.data);
 	});
@@ -15074,7 +15076,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	url: '../ajax/infoajax.php',
 	data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
 	}).then(function successCallback(response) {
-	
+
 	// alert(id);
 	$http({
 	method: 'post',
@@ -15085,7 +15087,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	$scope.active = response.data[0].active;
 	$scope.application_id = response.data[0].application_id;
 	$scope.block_date = response.data[0].block_date;
@@ -15128,7 +15130,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	$scope.gender = response.data[0].gender;
 	$scope.BusinessType = response.data[0].BusinessType;
 	$scope.dob = new Date(response.data[0].dob);
-	
+
 	if(response.data[0].dob==null){
 	$scope.dob="";
 	}
@@ -15142,7 +15144,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	url: '../ajax/infoajax.php',
 	data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
 	}).then(function successCallback(response) {
-	
+
 	// alert(id);
 	$http({
 	method: 'post',
@@ -15153,7 +15155,7 @@ app.controller('infoCtrl', function ($scope, $http) {
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	$scope.active = response.data[0].active;
 	$scope.application_id = response.data[0].application_id;
 	$scope.block_date = response.data[0].block_date;
@@ -15231,16 +15233,16 @@ app.controller('infoCtrl', function ($scope, $http) {
 	$scope.isLoader = false;
 		$scope.isMainLoader = false;
 	$("#infoBody").html("<h3>" + response.data + "</h3>");
-	
+
 	}, function errorCallback(response) {
 	console.log(response);
 	});
 	}
-	
-	$scope.Getbvn = function(index, partyCode, partyType, creteria){  
-		
+
+	$scope.Getbvn = function(index, partyCode, partyType, creteria){
+
 		alert("Please wait, while we validate the BVN");
-	
+
 		$http({
 			method: 'post',
 			url: '../ajax/infoajax.php',
@@ -15249,17 +15251,17 @@ app.controller('infoCtrl', function ($scope, $http) {
 				partyCode:partyCode,
 			},
 		}).then(function successCallback(response) {
-			
+
 			$scope.resc = response.data.responseCode;
 			$scope.resd = response.data.responseDescription;
-	
-			
+
+
 			if(parseInt($scope.resc) == 0) {
-				
+
 				if(!alert('BVN Validated Successfully!')){window.location.reload();}
-	
+
 				//$scope.resd = response.data.responseDescription;
-			
+
 				/* $scope.tabeHide = false;
 				$scope.tabeHide2 = true;
 				$scope.res = response.data;
@@ -15272,11 +15274,11 @@ app.controller('infoCtrl', function ($scope, $http) {
 				$scope.processingStartTime = response.data.processingStartTime; */
 			}
 			else {
-	
+
 				if(!alert('BVN Validated Failed Due to '+ $scope.resd)){window.location.reload();}
-	
+
 				//alert($scope.resd);
-				
+
 			/* 	$scope.res = response.data;
 				$scope.requestStatus = response.data.requestStatus;
 				$scope.bvn = response.data.bvn;
@@ -15287,9 +15289,9 @@ app.controller('infoCtrl', function ($scope, $http) {
 				$scope.processingStartTime = response.data.processingStartTime; */
 			}
 		});
-	
+
 	 }
-	 
+
 	});
 
 app.controller('walletCtrl', function ($scope, $http) {
@@ -18976,7 +18978,7 @@ app.controller('traEnCtrl', function ($scope, $http) {
 });
 
 app.controller('bvnCtrl', function ($scope, $http) {
-	
+
 	$scope.tablerow = true;
     $http({
         url: '../ajax/load.php',
@@ -18989,7 +18991,7 @@ app.controller('bvnCtrl', function ($scope, $http) {
     });
 	$scope.findlist = function () {
 		$scope.tablerow = false;
-	
+
 	 $http({
 		 method: 'post',
 		 url: '../ajax/bvncheckajax.php',
@@ -19000,7 +19002,7 @@ app.controller('bvnCtrl', function ($scope, $http) {
 			mobileno: $scope.mobileno,
 			dob: $scope.dob,
 		    action: 'query'
-		 
+
 		 },
 		 }).then(function successCallback(response) {
 		 $scope.res = response.data;
@@ -19011,7 +19013,7 @@ app.controller('bvnCtrl', function ($scope, $http) {
 		 $scope.responseCode = response.data.responseCode;
 		 $scope.responseDescription = response.data.responseDescription;
 		 $scope.processingStartTime = response.data.processingStartTime;
-		 
+
 		 }, function errorCallback(response) {
 		 // console.log(response);
 		 });
@@ -21565,7 +21567,7 @@ $scope.isMainLoader = false;
 
 $scope.radiochange = function () {
     $scope.tablerow = false;
-    
+
     }
 
 $scope.refresh = function () {
@@ -22141,14 +22143,14 @@ app.controller('listofagentsCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
 	$scope.endDate = new Date();
-	
+
 	$scope.radiochange = function () {
 	$scope.tablerow = false;
 	}
 	$scope.impor =function () {
 		 $scope.tablerow = false;
 	}
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -22158,7 +22160,7 @@ app.controller('listofagentsCtrl', function ($scope, $http) {
 	$scope.agents = response.data;
 	//window.location.reload();
 	});
-	
+
 	$http({
 	url: '../ajax/load.php',
 	method: "POST",
@@ -22168,7 +22170,7 @@ app.controller('listofagentsCtrl', function ($scope, $http) {
 	$scope.champions = response.data;
 	//window.location.reload();
 	});
-	
+
 	$scope.reset = function () {
 	$scope.tablerow = false;
 	$scope.orderdetail = true;
@@ -22198,15 +22200,15 @@ app.controller('listofagentsCtrl', function ($scope, $http) {
 	$scope.agent_code = response.data[0].agent_code;
 	$scope.champion_code =response.data[0].champion_code;
 	$scope.champion_name =response.data[0].champion_name;
-	
-	
+
+
 	//alert(code);
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-	
+
 	}
-	
+
 	$scope.countrychange = function (id) {
 	$http({
 	method: 'post',
@@ -22241,12 +22243,12 @@ app.controller('listofagentsCtrl', function ($scope, $http) {
 	// $scope.isHide = true;
 	// $scope.isHideOk = false;
 	$scope.resview = response.data;
-	
+
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
 	}
-	
+
 	});
 
 app.controller('TermAllocCtrl', function ($scope, $http) {
