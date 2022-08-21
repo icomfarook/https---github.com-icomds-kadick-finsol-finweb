@@ -1,3 +1,4 @@
+
 <?php 	
 	include('../common/sessioncheck.php');
 	error_reporting(0);
@@ -113,20 +114,16 @@
 							</tbody>
 						</table>
 					</div>
-				
-			</div>
-		</div>
-	
-
-	<div id='NonTranscDetailDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog modal-md" style='width:1000px;'>
+				<div id='NonTranscDetailDialogue'   class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
+			<div  class="modal-dialog modal-lg" style='width: 1095px;'>
 			<div class="modal-content">
-				<div class="modal-header">
+					<div  class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h2 style='text-align:center'><?php echo NON_TRANSACTION_REPORT_DETAILS; ?> -  [ {{party_code}} - {{party_name}} ]</h2>
-					</div>		
-						<div style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
-					<div class='modal-body' >
+		
+				</div>				
+					<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					<div class='modal-body'>
 					   <form action="" method="POST" name='nontransDetailForm' id="nontransDetailForm">
                        <div id='AuthBody'>
 							<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
@@ -150,10 +147,10 @@
 							<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
 								<label> Local Government : <span style='color:blue'>{{local_govt_name}}</span></label>								
 							</div>
-							<!-- <div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
+							 <div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
 								<label> Party Sales Type : <span style='color:blue'>{{party_sales_type}}</span></label>								
 							</div>
-							<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
+							<!--<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
 								<label> Credit Limit : <span style='color:blue'>{{credit_limit}}</span></label>								
 							</div>
 							<div class='col-xs-12 col-md-12 col-lg-4 col-sm-12 '>
@@ -267,10 +264,14 @@
 					 <button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide'  href='#'><?php echo NON_TRANSACTION_DETAIL_REPORT_BUTTON_CANCEL; ?></button>
 					</div>
 				</div>
-		</div>
-	</div>	
-    
+			</div>
+		</div>	
+	</div>
 </div>
+		
+ 
+
+
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
@@ -284,22 +285,13 @@ $(document).ready(function() {
  // WinMove();
 	
     $("#Query").click(function() {			
-		$('.dataTables_info').css("display","block"); 	
-		$('#datatable-1_paginate').css("display","block");	
+		/* $('.dataTables_info').css("display","block"); 	
+		$('#datatable-1_paginate').css("display","block");	 */
 		LoadDataTablesScripts(AllTables);
 		
 	});
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});
-	$("#EditINFODialogue, #AddINFODialogue").on("keypress",".sc", function (event) {
-		    var regex = new RegExp("^[a-zA-Z0-9 \b:/.~!@#$*_-]+$");
- 		    var key = String.fromCharCode(!event.charCode ? event.which : event.charCode);
- 		    if (!regex.test(key)) {
- 		       event.preventDefault();
- 		       return false;
- 		    }
- 		});
-		 /* window.alert = function() {}; alert = function() {}; */
-});
+	});
 </script>

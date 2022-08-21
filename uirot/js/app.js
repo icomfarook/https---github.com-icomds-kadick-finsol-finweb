@@ -564,4 +564,8 @@ app.config(function($routeProvider) {
         templateUrl : "../core/dailyreport.php",
         controller: "DailyTransCtrl"
     })
+	.when("/mnthtrans", {
+        templateUrl : "../core/MonthlyReport.php",
+        controller: "MonthTransCtrl"
+    })
 });

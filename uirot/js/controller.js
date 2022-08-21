@@ -1,3 +1,134 @@
+app.controller('MonthTransCtrl', function ($scope, $http) {
+	
+
+	detectBrowser();
+
+	function detectBrowser() {
+		if (navigator.userAgent.includes("Chrome")) {
+		$(".MonthPicker").show();
+		 $(".MonthDropDown").hide();
+		  return "chrome"
+		}
+		if (navigator.userAgent.includes("Firefox")) {
+	   $(".MonthPicker").hide();
+		 $(".MonthDropDown").show();
+	  
+		  return "firefox"
+		}
+		if (navigator.userAgent.includes("Safari")) {
+	   $(".MonthPicker").hide();
+		 $(".MonthDropDown").show();
+		  return "safari"
+		}
+	  }
+	  const d = new Date();
+		let year = d.getFullYear();
+		var years = [];
+		for (var i = year; i >= 1990; i--) {
+		years.push(i);
+		}
+		console.log(years);
+		$scope.yearList = years;
+
+
+
+		$scope.isHideexcel = true;
+		$scope.startDate = new Date();
+		$scope.startDate.setDate($scope.startDate.getDate() - 1);
+		$scope.endDate = new Date();
+		$scope.endDate.setDate($scope.endDate.getDate() - 1);
+		$scope.isMainLoader = true;
+		$scope.isHideOk = true;
+	
+		$scope.query = function (id) {
+
+		var MonthAndYear;
+			
+		if (detectBrowser() == "chrome"){
+		var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+		MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+		}else{
+		MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+		}
+		
+
+		$scope.isHideexcel = false;
+		$scope.isLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+				action: 'list1'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+	    $scope.nontrans = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	 $http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+
+				action: 'list2'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+	
+	
+		$scope.RegionTable = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		}); 
+		$http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+
+				action: 'list3'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+	
+	
+		$scope.PercentageTable = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		}); 
+		
+	}
+		
+	$scope.refresh = function (id, type) {
+		window.location.reload();
+	}
+});
+
+
+
+
+
 app.controller('DailyTransCtrl', function ($scope, $http) {
 	
 	$scope.isHideexcel = true;
@@ -38,8 +169,9 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 		$http({
 			method: 'post',
 			url: '../ajax/dailyreportajax.php',
-			data: { id: id, action: 'detail' },
+			data: { id: id, action: 'view' },
 		}).then(function successCallback(response) {
+			
 			$scope.id = response.data[0].id;
 			$scope.party_type = response.data[0].party_type;
 			$scope.party_code = response.data[0].party_code;
@@ -83,8 +215,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 			$scope.billpay_amount = response.data[0].billpay_amount;
 			$scope.billpay_time = response.data[0].billpay_time;
 			$scope.create_time = response.data[0].create_time;
-			
-			}, function errorCallback(response) {
+		   }, function errorCallback(response) {
 			// console.log(response);
 			});
 	}
