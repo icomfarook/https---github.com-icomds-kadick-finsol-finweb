@@ -115,6 +115,7 @@
 							</div>		
 							</div>		
                             <div class='clearfix'></div>
+                            <div ng-hide = "ThreeTables">
                             <p  style="font-size: initial;color:initial;color: blue;">Type Table</p>						
 					<table ng-hide='isLoader' class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
 							<thead>
@@ -206,6 +207,7 @@
 							</tbody>
 						</table>
 					</div>
+                    </div>
 				
 			</div>
 		</div>

@@ -31,7 +31,7 @@ app.controller('MonthTransCtrl', function ($scope, $http) {
 		$scope.yearList = years;
 
 
-
+		$scope.ThreeTables = true;
 		$scope.isHideexcel = true;
 		$scope.startDate = new Date();
 		$scope.startDate.setDate($scope.startDate.getDate() - 1);
@@ -41,6 +41,7 @@ app.controller('MonthTransCtrl', function ($scope, $http) {
 		$scope.isHideOk = true;
 	
 		$scope.query = function (id) {
+			
 
 		var MonthAndYear;
 			
@@ -50,10 +51,10 @@ app.controller('MonthTransCtrl', function ($scope, $http) {
 		}else{
 		MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
 		}
-		
-
+		$scope.ThreeTables = false;
 		$scope.isHideexcel = false;
 		$scope.isLoader = true;
+		
 		$http({
 			method: 'post',
 			url: '../ajax/Monthlyreportajax.php',
@@ -94,7 +95,7 @@ app.controller('MonthTransCtrl', function ($scope, $http) {
 			
 		}, function errorCallback(response) {
 			// console.log(response);
-		}); 
+	}); 
 		$http({
 			method: 'post',
 			url: '../ajax/Monthlyreportajax.php',
@@ -139,8 +140,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 	$scope.isMainLoader = true;
 	$scope.isHideOk = true;
 	$scope.query = function (id) {
-
-		$scope.isHideexcel = false;
+    	$scope.isHideexcel = false;
 		$scope.isLoader = true;
 		$http({
 			method: 'post',
@@ -155,15 +155,15 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 		}).then(function successCallback(response) {
 			//	$scope.isHide = true;
 			//	$scope.isHideOk = false;
-			$scope.isLoader = false;
-	     $scope.isMainLoader = false;
-		// alert( response.data);
-		$scope.id = response.data[0].id;
-			$scope.nontrans = response.data;
-			
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
+				$scope.isLoader = false;
+	   			$scope.isMainLoader = false;
+			// alert( response.data);
+				$scope.id = response.data[0].id;
+				$scope.nontrans = response.data;
+				
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
 	}
 		$scope.detail = function (id) {
 		$http({
