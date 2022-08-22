@@ -281,15 +281,10 @@ function AllTables(){
 	//LoadSelect2Script(); 
 }
 $(document).ready(function() {
-  //LoadDataTablesScripts(AllTables);
+  LoadDataTablesScripts(AllTables);
  // WinMove();
 	
-    $("#Query").click(function() {			
-		/* $('.dataTables_info').css("display","block"); 	
-		$('#datatable-1_paginate').css("display","block");	 */
-		LoadDataTablesScripts(AllTables);
-		
-	});
+    
 	$("#Refresh").click(function() {
 		window.location.reload();
 	});
