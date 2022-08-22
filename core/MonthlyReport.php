@@ -12,10 +12,6 @@
 	$profileId = $_SESSION['profile_id'];
 	$partyCode = $_SESSION['party_code'];
 	$agent_name	=   $_SESSION['party_name'];
-	//$partyType = "A";	
-	//$partyCode = "AG0101";
-	//$profileId = 1;
-	
 ?>
 <style>
 #AddINFODialogue .table > tbody > tr > td {
@@ -197,7 +193,7 @@
 							</thead>
 							<tbody>
 								 <tr ng-repeat="x in PercentageTable">
-									<td>{{x.transact_percentage}}</td>
+									<td>{{x.transact_percentage}}%</td>
 						 		</tr>
 								<tr ng-show="nontrans.length==0">
 									<td colspan='1' >
