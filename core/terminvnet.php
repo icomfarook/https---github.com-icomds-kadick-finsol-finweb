@@ -128,7 +128,7 @@
 							</tr>
 					</tbody>					
 				</table> -->
-				<table  ng-hide='isLoader'   class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+				<table  ng-hide='isLoader'   class="table table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1" data-side-pagination="server">
 					<thead>
 						<tr>
 							<th ng-show="creteria =='S'">Vendor</th>
@@ -574,22 +574,42 @@
 </div>
 
 <script type="text/javascript">
+	
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
 	TestTable1();
-	TestTable2();
-	TestTable3();
+	//TestTable2();
+	//TestTable3();
 	//LoadSelect2Script();
 }
 $(document).ready(function() {
-	
-	$("#Query").click(function() {				
+	LoadDataTablesScripts(AllTables);
+
+
+/* 	$('#datatable-1').DataTable( {
+        "stateSave": true
+    } ); */
+
+	/* $('#datatable-1_paginate').DataTable({
+   "bPaginate" : $('#datatable-1 tbody tr').length>10,
+   "iDisplayLength": 10,
+   "bAutoWidth": false,
+   "aoColumnDefs": [
+       {"bSortable": true, "aTargets": [0,2]}
+   ]
+});  */
+
+
+
+/* 	$("#Query").click(function() {				
 	$('.dataTables_info').css("display","block"); 	
 		$('#datatable-1_paginate').css("display","block");	
-		LoadDataTablesScripts(AllTables);
 		
-	});
-	
+		
+	}); */
+
+	       $('#datatable-1').DataTable();
+	   
 	$("#EditBankAccountrDialogue, #AddBankAccountDialogue").on("click","#Ok",function() {
 		window.location.reload();
 	});

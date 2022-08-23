@@ -29,7 +29,6 @@
 	$PTSP = $data->PTSP;
 	$TestTerm = $data->TestTerm;
 	$bank = $data->bank;
-	
 	if($action == "list") {
 		$type = $data->type;	
 		
@@ -102,7 +101,7 @@
 
 		}
 		else {					
-			$query = "SELECT CONCAT(b.vendor_name,' - ',b.terminal_model ) as vendor_name, if(a.status='A','Avilable',if(a.status = 'B','Bound',if(a.status = 'X','Block',if(a.status = 'D','Damage',if(a.status = 'F','Fault',if(a.status='S','Suspended','Others')))))) as status, count(*) as count FROM terminal_inventory a, terminal_vendor b WHERE a.vendor_id = b.terminal_vendor_id group by a.vendor_id,a.status ";
+			$query = "SELECT CONCAT(b.vendor_name,' - ',b.terminal_model ) as vendor_name, if(a.status='A','Avilable',if(a.status = 'B','Bound',if(a.status = 'X','Block',if(a.status = 'D','Damage',if(a.status = 'F','Fault',if(a.status='S','Suspended','Others')))))) as status, count(*) as count FROM terminal_inventory a, terminal_vendor b WHERE a.vendor_id = b.terminal_vendor_id group by a.vendor_id,a.status";
 			$result =  mysqli_query($con,$query);
 			if (!$result) {
 				printf("Error: %s\n", mysqli_error($con));
@@ -159,6 +158,7 @@
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
+			
 			$data[] = array("inventory_id"=>$row['inventory_id'],"id"=>$row['vendor_id'],"merchantid"=>$row['merchant_id'],"merchantname"=>$row['merchant_name'],"Status"=>$row['status'],"termimodelCode"=>$row['terminal_model_code'],"TerminalId"=>$row['terminal_id'],"TerminalSerialNo"=>$row['terminal_serial_no'],"Swversion"=>$row['sw_version'],"FwVersion"=>$row['fw_version'],"BankCode"=>$row['bank_code'],"BankAccountNo"=>$row['bank_account_no'],"AccType"=>$row['bank_account_type'],"VisaAcqID"=>$row['visa_acquirer_id'],"VerAcqID"=>$row['verve_acquirer_id'],"MastAcqID"=>$row['master_acquirer_id'],"NewTerOwnCode"=>$row['new_terminal_owner_code'],"Lga"=>$row['lga'],"MerAccName"=>$row['merchant_account_name'],"PTSP"=>$row['PTSP'],"TestTerm"=>$row['test_terminal'],"cretime"=>$row['create_time'],"update_time"=>$row['update_time'],"bank"=>$row['bank']);           
 		}
 		echo json_encode($data);

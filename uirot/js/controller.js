@@ -89,7 +89,18 @@ app.controller('MonthTransCtrl', function ($scope, $http) {
 			//	$scope.isHideOk = false;
 			$scope.isLoader = false;
 	     $scope.isMainLoader = false;
-	
+		/*  $scope.regions = response.data[0].regions;
+		 $scope.airtime_count = response.data[0].airtime_count;
+		 $scope.airtime_value = response.data[0].airtime_value;
+		 $scope.cashcount = response.data[0].cashcount;
+		 $scope.cash_value = response.data[0].cash_value;
+		 $scope.billpay_count = response.data[0].billpay_count;
+		 $scope.billpay_value = response.data[0].billpay_value;
+		 $scope.cashin_count = response.data[0].cashin_count;
+		 $scope.cashin_value = response.data[0].cashin_value;
+	alert(response.data[0].cashcount);
+	alert(response.data[0].cash_value);
+	alert(response.data[0].cashcount); */
 	
 		$scope.RegionTable = response.data;
 			

@@ -280,6 +280,14 @@ function AllTables(){
 	TestTable3();
 	//LoadSelect2Script(); 
 }
+$('#datatable-1').dataTable({
+   "bPaginate" : $('#datatable-1 tbody tr').length>10,
+   "iDisplayLength": 10,
+   "bAutoWidth": false,
+   "aoColumnDefs": [
+       {"bSortable": true, "aTargets": [0,2]}
+   ]
+});
 $(document).ready(function() {
   LoadDataTablesScripts(AllTables);
  // WinMove();

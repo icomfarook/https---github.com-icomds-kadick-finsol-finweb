@@ -169,12 +169,12 @@
 							<tbody>
 								 <tr ng-repeat="x in RegionTable">
 									<td>{{x.regions}}</td>
-									<td>{{x.Count}}</td>
-									<td>{{x.Value}}</td>
-                                    <td>{{x.Count}}</td>
-									<td>{{x.Value}}</td>
-                                    <td>{{x.Count}}</td>
-									<td>{{x.Value}}</td>
+									<td>{{x.airtime_count}}</td>
+									<td>{{x.airtime_value}}</td>
+                                    <td>{{x.cashcount}}</td>
+									<td>{{x.cash_value}}</td>
+                                    <td>{{x.billpay_count}}</td>
+									<td>{{x.billpay_value}}</td>
 						 		</tr>
 								<tr ng-show="RegionTable.length==0">
 									<td colspan='6' >
