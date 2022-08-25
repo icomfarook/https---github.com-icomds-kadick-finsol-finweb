@@ -542,15 +542,15 @@ else if($action == "accessrestrict") {
 					$userid = $user['userid'];
 					error_log("userid = ".$userid);
 					if ( trim($sdate) == '' && trim($edate) == '' ) {
-						$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, email) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$email')";
+						$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, email,country_id) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$email',566)";
 						//error_log("1.insert_user_query = ". $insert_user_query);
 					}else {
 						if ( trim($sdate) == '' && trim($edate) != '' ) {
-							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, expiry_date, email,user_type, access_restrict) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$edate', '$email','U','Y')";
+							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, expiry_date, email,user_type, access_restrict,country_id) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$edate', '$email','U','Y',566)";
 						}else if ( trim($edate) == '' && trim($sdate) != '' ) {
-							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, start_date, email,user_type, access_restrict) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$sdate', '$email','U','Y')";
+							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, start_date, email,user_type, access_restrict,country_id) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$sdate', '$email','U','Y',566)";
 						}else {
-							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, start_date, expiry_date, email,user_type, access_restrict) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$sdate', '$edate', '$email','U','Y')";
+							$insert_user_query = "INSERT INTO user(user_id, user_name, first_name, last_name, password, active, profile_id, start_date, expiry_date, email,user_type, access_restrict,country_id) VALUES ($userid, '$username', '$firstName', '$lastName', '$hash_password', '$active', $profile, '$sdate', '$edate', '$email','U','Y',566)";
 						}
 					}	
 					error_log("insert_user_query = ". $insert_user_query);
