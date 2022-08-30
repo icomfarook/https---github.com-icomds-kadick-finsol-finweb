@@ -264,7 +264,7 @@
 																	$data['sessionId'] = $sessionId;
 																	$data['totalAmount'] = $totalAmount;
 																	$data['requestedAmount'] = $requestedAmount;
-																	$data['naration'] = $narration;
+																	$data['naration'] = clean_special_chars($narration);
 																	$data['transactionId'] = $fin_request_id;
 																	$data['countryId'] = $countryId;
 																	$data['stateId'] = $stateId;
@@ -700,6 +700,10 @@ function checking_feature_value($userId, $country, $state, $partyCount, $product
 	$row = mysqli_fetch_assoc($result); 
 	$res = $row['res']; 		
 	return $res;
+}
+
+function clean_special_chars($input) {
+	return preg_replace('/[^A-Za-z0-9-]/', ' ', $input);
 }
 					
 ?>
