@@ -11560,7 +11560,26 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
 }
 
 
-$scope.edit = function (index, id, profile) {
+$scope.edit = function (index, id, profile) {  
+
+	$scope.ba = "E";
+$scope.radiochange = function(){
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+$scope.RadioChangeE = function(){
+	$scope.SalesChain = false;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -11593,6 +11612,31 @@ $scope.services = response.data;
 }, function errorCallback(response) {
 // console.log(response);
 });
+
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+		}
+
 }
 $scope.isHide = false;
 $scope.isHideOk = true;
@@ -11659,6 +11703,10 @@ creditLimit: $scope.creditLimit,
 dailyLimit: $scope.dailyLimit,
 advanceAmount: $scope.advanceAmount,
 minimumBalance: $scope.minimumBalance,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
 selectedServices: arr,
 comments: $scope.comments,
 action: 'approve',

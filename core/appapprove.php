@@ -158,7 +158,7 @@ legend {
 							</select>
 						</div>		
 												
-							</div>
+							</div><br />
 							<div class='row' style='margin-left:0px;margin-right:0px'>
 								<fieldset class='scheduler-border'>
 									<legend class='scheduler-border'><?php echo APPLICATION_APPROVE_APPROVE_WALLET; ?></legend>
@@ -193,6 +193,46 @@ legend {
 									<input type="checkbox" name="selectedServices[]" ng-model='selectedServices' class='selectedServices' value="{{service.sid}}" > {{service.sdesc}} 	</label>
 								</fieldset>
 							</div>
+							<div class='row' style='margin-left:0px;margin-right:0px'>
+								<fieldset class='scheduler-border'>
+									<legend class='scheduler-border'>Agent Type</legend>
+								<div style='display:contents;' class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+									<label><input type='radio'  ng-click='RadioChangeE()' name='ba' ng-model='ba' value='E'>&nbsp;External Agents</label>&nbsp;&nbsp;
+									<label><input type='radio' ng-click='radiochange()' name='ba' ng-model='ba' value='I'>&nbsp;Internal Agents</label>
+								</div><br />
+								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label ng-if="ba=='E'" >Sales Agent Parent Type</label>
+							<label ng-if="ba=='I'" >Parent Type</label>
+
+							    <select ng-model="SalesParentType"  ng-change='SalesParentList(this.SalesParentType)'   class='form-control' name = 'SalesParentType' id='type' >											
+								<option value=''>--Select Sales Agent Parent--</option>
+								<option ng-repeat="SP in SalesParent" value="{{SP.id}}">{{SP.name}}</option>
+							</select>
+						</div>		
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+							    <select ng-model="SalesChainCode"  ng-disabled='SalesChain' class='form-control' name = 'SalesChainCode' id='type' >											
+								<option value=''>--Select Agent Code--</option>
+								<option ng-repeat="SC in SalesCode" value="{{SC.code}}">{{SC.code}} -{{SC.name}}</option>
+							</select>
+						</div>		
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								
+								<label>Referred By</label>
+								<select  ng-model='RefferedBy' ng-disabled='SalesChain'  class='form-control' name='RefferedBy' >
+									<option value=''>--Select Referred Type--</option>
+									<option value='O'>..??????</option>
+									<option value='A'>A-Agent</option>
+									<option value='C'>C-Champion</option>
+								</select>
+							</div>
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+									
+							<input type='text' ng-model='Code'  ng-disabled='SalesChain' name='Code' maxlength="6" class='form-control'  />		
+						</div>		
+								</fieldset>
+							</div>
 							
 							<div class='row' >
 								<div class='col-xs-12 col-lg-12 col-md-12 col-sm-12'>
@@ -201,6 +241,7 @@ legend {
 									<textarea rows='4' ng-model='comments' name='Comments' class='form-control'  required />
 									</textarea>
 								</div>
+								
 							</div>
 							<div class='clearfix'></div>
 						</div>
