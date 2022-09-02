@@ -11685,7 +11685,10 @@ $scope.last_name = response.data[0].last_name;
 $scope.refresh = function (id, type) {
 window.location.reload();
 }
-$scope.approve = function (id, type) {
+$scope.approve = function (id, type) { 
+
+
+
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 var i = 0;
@@ -11706,6 +11709,7 @@ minimumBalance: $scope.minimumBalance,
 SalesParentType: $scope.SalesParentType,
 SalesChainCode: $scope.SalesChainCode,
 RefferedBy: $scope.RefferedBy,
+RadioButton: $scope.ba,
 Code: $scope.Code,
 selectedServices: arr,
 comments: $scope.comments,
@@ -11822,6 +11826,59 @@ $scope.endDate = new Date();
 
 }
 $scope.edit = function (index, id, code, rtype,profile) {
+	/* $http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		}); */
+
+	$scope.radiochange = function(){
+		$scope.SalesChain = true;
+		$scope.SalesParentType ="";
+		$scope.SalesChainCode ="";
+		$scope.RefferedBy ="";
+		$scope.Code="";
+	}
+	
+	$scope.RadioChangeE = function(){
+		$scope.SalesChain = false;
+		$scope.SalesParentType ="";
+		$scope.SalesChainCode ="";
+		$scope.RefferedBy ="";
+		$scope.Code="";
+	}
+
+	
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+		}
+	
+	
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -11831,11 +11888,14 @@ params: { action: 'active', for: 'partycatype' }
 $scope.partycatypes = response.data;
 //window.location.reload();
 });
+
+
 $http({
 method: 'post',
 url: '../ajax/appauthorizeajax.php',
 data: { id: id, action: 'edit', rtype: rtype },
 }).then(function successCallback(response) {
+
 $scope.id = response.data[0].id;
 $scope.outletname = response.data[0].name;
 $scope.approverComment = response.data[0].approverComment;
@@ -11850,10 +11910,50 @@ $scope.code = response.data[0].code;
 $scope.agent_code = response.data[0].agent_code;
 $scope.group_type = response.data[0].group_type;
 $scope.loginname = response.data[0].loginname;
+$scope.ba = response.data[0].party_sales_chain_id;
+if(response.data[0].party_sales_chain_id == 10){
+	$scope.ba = "E"
+}else {
+	$scope.ba = "I"
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+if($scope.ba == "E"){
+	$scope.SalesParentType = "";
+
+}else{
+	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
+
+}
+$scope.SalesChainCode = response.data[0].party_sales_parent_code;
+$scope.RefferedBy = response.data[0].refer_party_type;
+
+if(response.data[0].refer_party_type == "O"){
+	$scope.CodeDisableed = true;
+	$scope.Code = "";
+
+}else{
+	$scope.CodeDisableed = false;
+	$scope.Code = response.data[0].refer_party_code;
+
+}
 }, function errorCallback(response) {
 // console.log(response);
 });
 
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
 $http({
 method: 'post',
 url: '../ajax/load.php',
@@ -12024,6 +12124,32 @@ $scope.attachmentSig = function (index, id) {
 
 
 $scope.authorize = function (id, type) {
+
+
+
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+$scope.SalesParentList = function (id) {
+	//alert(id);
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'SalesChainCode', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.SalesCode = response.data;
+	//console.log(response.data);
+	}, function errorCallback(response) {
+		//console.log(response);
+	});
+	}
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 var i = 0;
@@ -12043,6 +12169,11 @@ advanceAmount: $scope.advanceAmount,
 minimumBalance: $scope.minimumBalance,
 selectedServices: arr,
 comment: $scope.authorizeComment,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
 action: 'authorize',
 partycatype: $scope.partycatype,
 type: $scope.type
@@ -15616,22 +15747,67 @@ console.log(response.data);
 });
 }
 $scope.edit = function (index, partyCode, partyType, creteria) {
-$http({
-method: 'post',
-url: '../ajax/infoajax.php',
-data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
-}).then(function successCallback(response) {
 
-// alert(id);
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
+
+	
+$scope.radiochange = function(){
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+$scope.RadioChangeE = function(){
+	$scope.SalesChain = false;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+	}
+
+
+	$http({
+	method: 'post',
+	url: '../ajax/infoajax.php',
+	data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
+	}).then(function successCallback(response) {
+
+	// alert(id);
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+
 
 $scope.active = response.data[0].active;
 $scope.application_id = response.data[0].application_id;
@@ -15674,6 +15850,35 @@ $scope.loc_latitude = response.data[0].loc_latitude;
 $scope.loc_longitude = response.data[0].loc_longitude;
 $scope.gender = response.data[0].gender;
 $scope.BusinessType = response.data[0].BusinessType;
+$scope.ba = response.data[0].party_sales_chain_id;
+if(response.data[0].party_sales_chain_id == 10){
+	$scope.ba = "E"
+}else {
+	$scope.ba = "I"
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+if($scope.ba == "E"){
+	$scope.SalesParentType = "";
+
+}else{
+	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
+
+}
+$scope.SalesChainCode = response.data[0].party_sales_parent_code;
+$scope.RefferedBy = response.data[0].refer_party_type;
+if(response.data[0].refer_party_type == "O"){
+	$scope.CodeDisableed = true;
+	$scope.Code = "";
+
+}else{
+	$scope.CodeDisableed = false;
+	$scope.Code = response.data[0].refer_party_code;
+
+}
 $scope.dob = new Date(response.data[0].dob);
 
 if(response.data[0].dob==null){
@@ -15682,6 +15887,16 @@ $scope.dob="";
 }, function errorCallback(response) {
 // console.log(response);
 });
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'SalesChainCode', "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.SalesCode = response.data;
+	//console.log(response.data);
+	}, function errorCallback(response) {
+	 //console.log(response);
+	});
 }
 $scope.view = function (index, partyCode, partyType, creteria) {
 $http({
@@ -15747,7 +15962,32 @@ $scope.dob = response.data[0].dob;
 // console.log(response);
 });
 }
-$scope.update = function (code) {
+$scope.updateAgent = function (code) {
+
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { action: 'active', for: 'SalesChain' },
+		}).then(function successCallback(response) {
+		$scope.SalesParent = response.data;
+		// console.log(response.data);
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+			//console.log(response);
+		});
+		}
+
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 $scope.isHideOk = true;
@@ -15770,6 +16010,79 @@ gender: $scope.gender,
 dob:  $scope.dob,
 BusinessType: $scope.BusinessType,
 active: $scope.active,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
+
+action: 'updateAgent'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$("#infoBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.update = function (code) {
+
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { action: 'active', for: 'SalesChain' },
+		}).then(function successCallback(response) {
+		$scope.SalesParent = response.data;
+		// console.log(response.data);
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+			//console.log(response);
+		});
+		}
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/infoajax.php',
+data: {
+mobile: $scope.mobile_no,
+email: $scope.email,
+cpname: $scope.contact_person_name,
+cpmobile: $scope.contact_person_mobile,
+partyCode: code,
+address1: $scope.address1,
+address2: $scope.address2,
+loc_latitude: $scope.loc_latitude,
+loc_longitude: $scope.loc_longitude,
+state_id:  $scope.state_id,
+local_govt_id: $scope.local_govt_id,
+gender: $scope.gender,
+dob:  $scope.dob,
+BusinessType: $scope.BusinessType,
+active: $scope.active,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
+
 action: 'update'
 },
 }).then(function successCallback(response) {

@@ -349,7 +349,7 @@ legend {
 			</div>
 		</div>
 	 <div id='ApplicationApproveDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false">
-		<div class="modal-dialog modal-md">
+		<div class="modal-dialog modal-md" style='width:58%;'>
 			<div class="modal-content">
 					<div class="modal-header">
 						<button ng-hide='isLoader' type="button" class="close" data-dismiss="modal">&times;</button>
@@ -361,7 +361,7 @@ legend {
 					<div class='modal-body'>
 					 <form action="" method="POST" name='ApplicationApproveDialogue' id="ApplicationApproveDialogue">
 						<div id='ApproveBody' ng-hide='isLoader'>
-							<div class='row'>
+							<div class='row' style='display:contents;'>
 								<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
 							<label><?php echo APPLICATION_APPROVE_APPROVE_CATEGORY; ?><span ng-show="ApplicationApproveDialogue.partycatype.$touched ||ApplicationApproveDialogue.partycatype.$dirty && ApplicationApproveDialogue.partycatype.$invalid">
 								<span class = 'err' ng-show="ApplicationApproveDialogue.partycatype.$error.required"><?php echo REQUIRED;?>.</span></span></label>
@@ -403,6 +403,46 @@ legend {
 									<input type="checkbox" name="selectedServices" ng-model='selectedServices' class='selectedServices' value="{{service.sid}}" > {{service.sdesc}} 	</label>
 								</fieldset>
 							</div>
+							<div class='row' style='margin-left:0px;margin-right:0px'>
+								<fieldset class='scheduler-border'>
+									<legend class='scheduler-border'>Agent Type</legend>
+								<div style='display:contents;' class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+									<label><input type='radio'  ng-click='RadioChangeE()' name='ba' ng-model='ba' value='E'>&nbsp;External Agents</label>&nbsp;&nbsp;
+									<label><input type='radio' ng-click='radiochange()' name='ba' ng-model='ba' value='I'>&nbsp;Internal Agents</label>
+								</div><br /><br />
+								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label ng-if="ba=='E'" >Sales Agent Parent Type</label>
+							<label ng-if="ba=='I'" >Parent Type</label>
+
+							    <select ng-model="SalesParentType"  ng-change='SalesParentList(this.SalesParentType)'   class='form-control' name = 'SalesParentType' id='SalesParentType' >											
+								<option value=''>--Select Sales Agent Parent--</option>
+								<option ng-repeat="SP in SalesParent" value="{{SP.id}}">{{SP.name}}</option>
+							</select>
+						</div>		
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+							    <select ng-model="SalesChainCode"  ng-disabled='SalesChain' class='form-control' name = 'SalesChainCode' id='SalesChainCode' >											
+								<option value=''>--Select Agent Code--</option>
+								<option ng-repeat="SC in SalesCode" value="{{SC.code}}">{{SC.code}} -{{SC.name}}</option>
+							</select>
+						</div>		
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								
+								<label>Referred By</label>
+								<select  ng-model='RefferedBy' ng-disabled='SalesChain' id="RefferedBy"  class='form-control' name='RefferedBy' >
+									<option value=''>--Select Referred Type--</option>
+									<option value='O'>..??????</option>
+									<option value='A'>A-Agent</option>
+									<option value='C'>C-Champion</option>
+								</select>
+							</div>
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+									
+							<input type='text' ng-model='Code'  ng-disabled='SalesChain || CodeDisableed'  id="Code" name='Code' maxlength="6" class='form-control'  />		
+						</div>		
+								</fieldset>
+							</div>
 							
 							<div class='row'>
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
@@ -441,6 +481,15 @@ function AllTables(){
 	//TestTable2();
 	//TestTable3();
 }
+$(function() {
+            $("#RefferedBy").change(function() {
+                if ($(this).val() == "O") {
+                    $("#Code").prop("disabled", true);
+                }
+                else
+                    $("#Code").prop("disabled", false);
+            });
+        });
 $(document).ready(function() {
 	$("#Query").click(function() {				
 		//LoadDataTablesScripts(AllTables);

@@ -219,7 +219,7 @@ legend {
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 								
 								<label>Referred By</label>
-								<select  ng-model='RefferedBy' ng-disabled='SalesChain'  class='form-control' name='RefferedBy' >
+								<select  ng-model='RefferedBy' ng-disabled='SalesChain'   id="RefferedBy"  class='form-control' name='RefferedBy' >
 									<option value=''>--Select Referred Type--</option>
 									<option value='O'>..??????</option>
 									<option value='A'>A-Agent</option>
@@ -229,7 +229,7 @@ legend {
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 							<label>Code</label>
 									
-							<input type='text' ng-model='Code'  ng-disabled='SalesChain' name='Code' maxlength="6" class='form-control'  />		
+							<input type='text' ng-model='Code'  ng-disabled='SalesChain'  id="Code" name='Code' maxlength="6" class='form-control'  />		
 						</div>		
 								</fieldset>
 							</div>
@@ -467,6 +467,15 @@ function AllTables(){
 	//TestTable2();
 	//TestTable3();
 }
+$(function() {
+            $("#RefferedBy").change(function() {
+                if ($(this).val() == "O") {
+                    $("#Code").prop("disabled", true);
+                }
+                else
+                    $("#Code").prop("disabled", false);
+            });
+        });
 $(document).ready(function() {
 	$("#Query").click(function() {				
 		//LoadDataTablesScripts(AllTables);

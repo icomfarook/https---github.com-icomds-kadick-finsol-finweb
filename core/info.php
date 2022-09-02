@@ -169,6 +169,7 @@
 									<th><?php echo INFO_MAIN_TABLE_ASSIGNABLE; ?></th>
 									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>Edit</th>
+									<th>Edit Agent</th>
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>View</th>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
@@ -186,6 +187,10 @@
 									  <td>
 										<a id={{x.code}} class='infoViewDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
+									</td>
+									<td>
+										<a id={{x.code}} class='infoEditAgentDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditAgentDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
 									</td>
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<td>
@@ -217,6 +222,89 @@
 				</div>
 		</div>
 	</div>
+
+	<div id='infoEditAgentDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'><?php echo INFO_VIEW_HEADING1; ?>- {{outlet_name}}  <span ng-show='parenroutletname'>({{parenroutletname}})</span></h2>
+		
+				</div>				
+					<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+					<div class='modal-body'>
+						<form action="" method="POST" name='editINFOForm' id="EditINFOForm">
+						<div id='infoBody'>
+						<div class='row' style='margin-left:0px;margin-right:0px'>
+								
+								
+						<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
+									<label><input type='radio'  ng-click='RadioChangeE()' name='ba' ng-model='ba' value='E'>&nbsp;External Agents</label>&nbsp;&nbsp;
+									<label><input type='radio' ng-click='radiochange()' name='ba' ng-model='ba' value='I'>&nbsp;Internal Agents</label>
+								</div><br />
+								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label ng-if="ba=='E'" >Sales Agent Parent Type</label>
+							<label ng-if="ba=='I'" >Parent Type</label>
+
+							    <select ng-model="SalesParentType"  ng-change='SalesParentList(this.SalesParentType)'   class='form-control' name = 'SalesParentType' id='type' >											
+								<option value=''>--Select Sales Agent Parent--</option>
+								<option ng-repeat="SP in SalesParent" value="{{SP.id}}">{{SP.name}}</option>
+							</select>
+						
+						</div>		
+
+						<!-- <div  ng-if="ba=='E'"  class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+									<label>Sales Agent Parent Type</label>
+									<select ng-model="SalesParentType"  ng-change='SalesParentList(this.SalesParentType)'   class='form-control' name = 'SalesParentType' id='type' >											
+										<option value=''>--Select Sales Agent Parent--</option>
+										<option ng-repeat="SP in SalesParent" value="{{SP.id}}">{{SP.name}}</option>
+									</select>
+							</div>		
+						<div   ng-if="ba=='I'"  class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+						
+							<label>Parent Type</label>
+
+							    <select ng-model="SalesParentType2"   class='form-control' name = 'SalesParentType2' id='type' >											
+								<option value=''>--Select Sales Agent Parent--</option>
+								<option ng-repeat="SP in SalesParent" value="{{SP.id}}">{{SP.name}}</option>
+							</select>
+						</div>		 -->
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+							    <select ng-model="SalesChainCode"  ng-disabled='SalesChain' class='form-control' name = 'SalesChainCode' id='SalesChainCode' >											
+								<option value=''>--Select Agent Code--</option>
+								<option ng-repeat="SC in SalesCode" value="{{SC.code}}">{{SC.code}} -{{SC.name}}</option>
+							</select>
+						</div>		
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								
+								<label>Referred By</label>
+								<select  ng-model='RefferedBy' ng-disabled='SalesChain' id="RefferedBy"  class='form-control' name='RefferedBy' >
+									<option value=''>--Select Referred Type--</option>
+									<option value='O'>..??????</option>
+									<option value='A'>A-Agent</option>
+									<option value='C'>C-Champion</option>
+								</select>
+							</div>
+						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<label>Code</label>
+									
+							<input type='text' ng-model='Code'  ng-disabled='SalesChain || CodeDisableed' id="Code"  name='Code' maxlength="6" class='form-control'  />		
+						</div>		
+								
+							</div>
+							
+							</div>
+							</form>
+							<div class='modal-footer ' >
+						<button type='button' class='btn btn-primary' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo STATE_EDIT_BUTTON_OK; ?></button>
+						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo STATE_EDIT_BUTTON_CANCEL; ?></button>
+						<button type='button' class='btn btn-primary' ng-hide='isHide'  ng-click="editINFOForm.$invalid=true;updateAgent(code)" id="Update"><?php echo STATE_EDIT_BUTTON_UPDATE; ?></button>
+					</div>			
+							</div>
+							</div></div></div>
+
+
 	 <div id='infoViewDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -507,11 +595,20 @@
 <script type="text/javascript">
 // Run Datables plugin and create 3 variants of settings
 function AllTables(){
-	TestTable1();
+	/* TestTable1();
 	TestTable2();
-	TestTable3();
+	TestTable3(); */
 	LoadSelect2Script();
 }
+$(function() {
+            $("#RefferedBy").change(function() {
+                if ($(this).val() == "O") {
+                    $("#Code").prop("disabled", true);
+                }
+                else
+                    $("#Code").prop("disabled", false);
+            });
+        });
 $(document).ready(function() {
 
 	$("#infoViewDialogue, #infoEditDialogue").on("click","#Ok",function() {

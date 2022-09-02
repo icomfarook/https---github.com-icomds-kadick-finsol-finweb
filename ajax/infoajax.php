@@ -101,10 +101,10 @@
 		$BusinessType = $data->BusinessType;
 					
 		if($partyType == "A" ) {
-			$query = "SELECT a.address1, a.address2, a.local_govt_id, a.state_id, a.loc_latitude, a.loc_longitude, d.outlet_name, ifNull(c.parent_code,'Self') as pcode, ifNull((select outlet_name from application_info WHERE party_code = c.parent_code),'Self') as parenroutletname,ifNull(a.block_date,' - ') as block_date, if(a.block_status = 'Y','Yes','No') as block_status,  a.agent_code as code, a.agent_name as name, a.login_name as lname, if(a.parent_type='C','Champion',if(a.parent_type= 'A','Agent',if(a.parent_type='S','Sub Agent',if(a.parent_type='P','Personal','')))) as ptype, if(a.party_category_type_id='1','BRONZE',if(a.party_category_type_id='2','SILVER',if(a.party_category_type_id='3','GOLD','PLATINUM'))) as partytype, if(a.sub_agent = 'Y','Yes','No') as sub_agent,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.create_user) as create_user,a.create_time,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.update_user) as update_user,a.update_time, concat(e.country_code,' - ',e.country_description) as country,if(c.applier_type='C','C - Champion',if(c.applier_type= 'A','A - Agent',if(c.applier_type='S','S - Sub Agent',if(c.applier_type='P','P - Personal',''))))  as atype, (SELECT block_reason_code FROM block_reason WHERE block_reason_id = a.block_reason_id) as block_reason_id, g.name as gvtname, h.name as state,a.zip_code, a.work_no, a.email, a.mobile_no, a.contact_person_name, a.contact_person_mobile, a.tax_number,a.application_id,a.start_date, a.expiry_date, a.block_date,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.user_id) as user,a.dob,a.gender,a.business_type ,a.active FROM agent_info a , application_main c, application_info d , country e, local_govt_list g, state_list h WHERE h.state_id = a.state_id and g.local_govt_id = a.local_govt_id and e.country_id = a.country_id and  c.application_id = d.application_id and a.application_id = c.application_id and a.agent_code = '".$partyCode."'";
+			$query = "SELECT a.address1, a.address2, a.local_govt_id, a.state_id, a.loc_latitude, a.loc_longitude, d.outlet_name, ifNull(c.parent_code,'Self') as pcode, ifNull((select outlet_name from application_info WHERE party_code = c.parent_code),'Self') as parenroutletname,ifNull(a.block_date,' - ') as block_date, if(a.block_status = 'Y','Yes','No') as block_status,  a.agent_code as code, a.agent_name as name, a.login_name as lname, if(a.parent_type='C','Champion',if(a.parent_type= 'A','Agent',if(a.parent_type='S','Sub Agent',if(a.parent_type='P','Personal','')))) as ptype, if(a.party_category_type_id='1','BRONZE',if(a.party_category_type_id='2','SILVER',if(a.party_category_type_id='3','GOLD','PLATINUM'))) as partytype, if(a.sub_agent = 'Y','Yes','No') as sub_agent,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.create_user) as create_user,a.create_time,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.update_user) as update_user,a.update_time, concat(e.country_code,' - ',e.country_description) as country,if(c.applier_type='C','C - Champion',if(c.applier_type= 'A','A - Agent',if(c.applier_type='S','S - Sub Agent',if(c.applier_type='P','P - Personal',''))))  as atype, (SELECT block_reason_code FROM block_reason WHERE block_reason_id = a.block_reason_id) as block_reason_id, g.name as gvtname, h.name as state,a.zip_code, a.work_no, a.email, a.mobile_no, a.contact_person_name, a.contact_person_mobile, a.tax_number,a.application_id,a.start_date, a.expiry_date, a.block_date,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.user_id) as user,a.dob,a.gender,a.business_type ,a.active,a.party_sales_chain_id,a.party_sales_parent_code,a.refer_party_type,a.refer_party_code FROM agent_info a , application_main c, application_info d , country e, local_govt_list g, state_list h WHERE h.state_id = a.state_id and g.local_govt_id = a.local_govt_id and e.country_id = a.country_id and  c.application_id = d.application_id and a.application_id = c.application_id and a.agent_code = '".$partyCode."'";
 		}
 		if($partyType == "S" ) {
-			$query = "SELECT a.address1, a.address2, a.local_govt_id, a.state_id, a.loc_latitude, a.loc_longitude, d.outlet_name, ifNull(c.parent_code,'Self') as pcode, ifNull((select outlet_name from application_info WHERE party_code = c.parent_code),'Self') as parenroutletname,ifNull(a.block_date,' - ') as block_date, if(a.block_status = 'Y','Yes','No') as block_status,  a.agent_code as code, a.agent_name as name, a.login_name as lname, if(a.parent_type='C','Champion',if(a.parent_type= 'A','Agent',if(a.parent_type='S','Sub Agent',if(a.parent_type='P','Personal','')))) as ptype, if(a.party_category_type_id='1','BRONZE',if(a.party_category_type_id='2','SILVER',if(a.party_category_type_id='3','GOLD','PLATINUM'))) as partytype, if(a.sub_agent = 'Y','Yes','No') as sub_agent,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.create_user) as create_user,a.create_time,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.update_user) as update_user,a.update_time, concat(e.country_code,' - ',e.country_description) as country, (SELECT block_reason_code FROM block_reason WHERE block_reason_id = a.block_reason_id) as block_reason_id, g.name as gvtname, h.name as state,a.zip_code, a.work_no, a.email, a.mobile_no,if(c.applier_type='C','C - Champion',if(c.applier_type= 'A','A - Agent',if(c.applier_type='S','S - Sub Agent',if(c.applier_type='P','P - Personal',''))))  as atype, a.contact_person_name, a.contact_person_mobile, a.tax_number,a.application_id,a.start_date, a.expiry_date, a.block_date,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.user_id) as user,a.dob,a.gender,a.business_type,a.active FROM agent_info a , application_main c, application_info d , country e, local_govt_list g, state_list h WHERE h.state_id = a.state_id and g.local_govt_id = a.local_govt_id and e.country_id = a.country_id and  c.application_id = d.application_id and a.application_id = c.application_id and a.sub_agent = 'Y' and a.agent_code =  '".$partyCode."'";
+			$query = "SELECT a.address1, a.address2, a.local_govt_id, a.state_id, a.loc_latitude, a.loc_longitude, d.outlet_name, ifNull(c.parent_code,'Self') as pcode, ifNull((select outlet_name from application_info WHERE party_code = c.parent_code),'Self') as parenroutletname,ifNull(a.block_date,' - ') as block_date, if(a.block_status = 'Y','Yes','No') as block_status,  a.agent_code as code, a.agent_name as name, a.login_name as lname, if(a.parent_type='C','Champion',if(a.parent_type= 'A','Agent',if(a.parent_type='S','Sub Agent',if(a.parent_type='P','Personal','')))) as ptype, if(a.party_category_type_id='1','BRONZE',if(a.party_category_type_id='2','SILVER',if(a.party_category_type_id='3','GOLD','PLATINUM'))) as partytype, if(a.sub_agent = 'Y','Yes','No') as sub_agent,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.create_user) as create_user,a.create_time,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.update_user) as update_user,a.update_time, concat(e.country_code,' - ',e.country_description) as country, (SELECT block_reason_code FROM block_reason WHERE block_reason_id = a.block_reason_id) as block_reason_id, g.name as gvtname, h.name as state,a.zip_code, a.work_no, a.email, a.mobile_no,if(c.applier_type='C','C - Champion',if(c.applier_type= 'A','A - Agent',if(c.applier_type='S','S - Sub Agent',if(c.applier_type='P','P - Personal',''))))  as atype, a.contact_person_name, a.contact_person_mobile, a.tax_number,a.application_id,a.start_date, a.expiry_date, a.block_date,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.user_id) as user,a.dob,a.gender,a.business_type,a.active,a.party_sales_chain_id,a.party_sales_parent_code,a.refer_party_type,a.refer_party_code FROM agent_info a , application_main c, application_info d , country e, local_govt_list g, state_list h WHERE h.state_id = a.state_id and g.local_govt_id = a.local_govt_id and e.country_id = a.country_id and  c.application_id = d.application_id and a.application_id = c.application_id and a.sub_agent = 'Y' and a.agent_code =  '".$partyCode."'";
 		}
 		if($profile_id == 1 || $profile_id == 10 || $profile_id == 20 || $profile_id == 21 || $profile_id == 22 || $profile_id == 23 || $profile_id == 24 || $profile_id == 25 || $profile_id == 26 || $profile_id == 30) {
 			if($partyType == "C") {
@@ -139,7 +139,7 @@
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("address1"=>$row['address1'],"address2"=>$row['address2'],"local_govt_id"=>$row['local_govt_id'],"state_id"=>$row['state_id'],"loc_latitude"=>$row['loc_latitude'], "loc_longitude"=>$row['loc_longitude'], "outlet_name"=>$row['outlet_name'],"pcode"=>$row['pcode'],"atype"=>$row['atype'],"parenroutletname"=>$row['parenroutletname'],"block_date"=>$row['block_date'],"block_status"=>$row['block_status'],"active"=>$row['active'],"code"=>$row['code'],"name"=>$row['name'],"lname"=>$row['lname'],"ptype"=>$row['ptype'],"partytype"=>$row['partytype'],"sub_agent"=>$row['sub_agent'],"create_user"=>$row['create_user'],"create_time"=>$row['create_time'],"update_user"=>$row['update_user'],"update_time"=>$row['update_time'],"country"=>$row['country'],"block_reason_id"=>$row['block_reason_id'],"gvtname"=>$row['gvtname'],"state"=>$row['state'],"zip_code"=>$row['zip_code'],"work_no"=>$row['work_no'],"email"=>$row['email'],"mobile_no"=>$row['mobile_no'],"contact_person_name"=>$row['contact_person_name'],"tax_number"=>$row['tax_number'],"user"=>$row['user'],"block_date"=>$row['block_date'],"start_date"=>$row['start_date'],"expiry_date"=>$row['expiry_date'],"application_id"=>$row['application_id'],"contact_person_mobile"=>$row['contact_person_mobile'],"dob"=>$row['dob'],"gender"=>$row['gender'],"BusinessType"=>$row['business_type']);           
+			$data[] = array("address1"=>$row['address1'],"address2"=>$row['address2'],"local_govt_id"=>$row['local_govt_id'],"state_id"=>$row['state_id'],"loc_latitude"=>$row['loc_latitude'], "loc_longitude"=>$row['loc_longitude'], "outlet_name"=>$row['outlet_name'],"pcode"=>$row['pcode'],"atype"=>$row['atype'],"parenroutletname"=>$row['parenroutletname'],"block_date"=>$row['block_date'],"block_status"=>$row['block_status'],"active"=>$row['active'],"code"=>$row['code'],"name"=>$row['name'],"lname"=>$row['lname'],"ptype"=>$row['ptype'],"partytype"=>$row['partytype'],"sub_agent"=>$row['sub_agent'],"create_user"=>$row['create_user'],"create_time"=>$row['create_time'],"update_user"=>$row['update_user'],"update_time"=>$row['update_time'],"country"=>$row['country'],"block_reason_id"=>$row['block_reason_id'],"gvtname"=>$row['gvtname'],"state"=>$row['state'],"zip_code"=>$row['zip_code'],"work_no"=>$row['work_no'],"email"=>$row['email'],"mobile_no"=>$row['mobile_no'],"contact_person_name"=>$row['contact_person_name'],"tax_number"=>$row['tax_number'],"user"=>$row['user'],"block_date"=>$row['block_date'],"start_date"=>$row['start_date'],"expiry_date"=>$row['expiry_date'],"application_id"=>$row['application_id'],"contact_person_mobile"=>$row['contact_person_mobile'],"dob"=>$row['dob'],"gender"=>$row['gender'],"BusinessType"=>$row['business_type'],"party_sales_chain_id"=>$row['party_sales_chain_id'],"party_sales_parent_code"=>$row['party_sales_parent_code'],"refer_party_type"=>$row['refer_party_type'],"refer_party_code"=>$row['refer_party_code']);           
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -220,6 +220,50 @@
 		$BusinessType = $data->BusinessType;
 		$dob = date("Y-m-d", strtotime($dob));
 		$state_id = $data->state_id;
+		$SalesParentType = $data->SalesParentType;
+		$SalesParentType = $data->SalesParentType2;
+		$SalesChainCode = $data->SalesChainCode;
+		$RefferedBy = $data->RefferedBy;
+		$RadioButton = $data->RadioButton;
+		$Code = $data->Code;
+		$ReferralCode = strtoupper($Code);
+
+		
+		if($RadioButton == "E"){
+			$SalesParentType = 10;
+		}
+		else{
+			$SalesParentType = $data->SalesParentType2;
+		}
+    	error_log("RefferedBy ==".$RefferedBy);
+
+		if($RefferedBy == "A"){
+			$Code = substr_replace($ReferralCode, 'AG', 0, 2) ;
+		}
+		if($RefferedBy == "C"){
+			$Code = substr_replace($ReferralCode, 'CA', 0, 2) ;
+		}
+		
+		if(empty($SalesChainCode)){
+			$SalesChainCode = 'NULL';
+		}else{
+			$SalesChainCode = "'".$SalesChainCode."'";
+		}
+		if(empty($Code)){
+			$Code = 'NULL';
+		}else{
+			$Code = "'".$Code."'";
+		}
+		if(empty($RefferedBy)){
+			$RefferedBy = 'NULL';
+		}else{
+			$RefferedBy = "'".$RefferedBy."'";
+		}
+
+		error_log("RefferedBy ==".$Code);
+
+
+
 		$type = substr($partyCode, 0, 1);
 		
 		$query = "";
@@ -240,7 +284,103 @@
 		$address1 = mysqli_real_escape_string($con, $address1);
 		$address2 = mysqli_real_escape_string($con, $address2);
 		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
-		$query ="UPDATE $table_name SET state_id = $state_id, local_govt_id = $local_govt_id,dob = '$dob',gender = '$gender',business_type = '$BusinessType', loc_latitude = '$loc_latitude',active = '$active', loc_longitude = '$loc_longitude', address1 = '$address1', address2 = '$address2',  contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile' WHERE $col_name = '$partyCode'";
+		$query ="UPDATE $table_name SET state_id = $state_id, local_govt_id = $local_govt_id,dob = '$dob',gender = '$gender',business_type = '$BusinessType', loc_latitude = '$loc_latitude',active = '$active', loc_longitude = '$loc_longitude', address1 = '$address1', address2 = '$address2',  contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile'  WHERE $col_name = '$partyCode'";
+		
+		error_log("update query = ".$query);
+		$result = mysqli_query($con,$query);
+		if (!$result) {
+			echo "Error:$table_name". mysqli_error($con);
+			exit();
+			$ret_val = -1;
+		}
+		else {
+			 echo "Updated successfully";
+		}
+	}
+
+
+	else if($action == "updateAgent") {
+		$partyCode = $data->partyCode;
+		$mobile = $data->mobile;
+		$email = $data->email;
+		$cpname = $data->cpname;
+		$cpmobile = $data->cpmobile;
+		$address1 = $data->address1;
+		$address2 = $data->address2;
+		$loc_latitude = $data->loc_latitude;
+		$loc_longitude = $data->loc_longitude;
+		$local_govt_id = $data->local_govt_id;
+		$active = $data->active;
+		$gender = $data->gender;
+		$dob = $data->dob;
+		$BusinessType = $data->BusinessType;
+		$dob = date("Y-m-d", strtotime($dob));
+		$state_id = $data->state_id;
+		$SalesParentType = $data->SalesParentType;
+		$SalesChainCode = $data->SalesChainCode; 
+		$RefferedBy = $data->RefferedBy;
+		$RadioButton = $data->RadioButton;
+		$Code = $data->Code;
+		$ReferralCode = strtoupper($Code);
+
+		
+		if($RadioButton == "E"){
+			$SalesParentType = 10;
+		}
+		else{
+			$SalesParentType = $data->SalesParentType;
+		}
+    	error_log("RefferedBy ==".$RefferedBy);
+
+		if($RefferedBy == "A"){
+			$Code = substr_replace($ReferralCode, 'AG', 0, 2) ;
+		}
+		if($RefferedBy == "C"){
+			$Code = substr_replace($ReferralCode, 'CA', 0, 2) ;
+		}
+		
+		if(empty($SalesChainCode)){
+			$SalesChainCode = 'NULL';
+		}else{
+			$SalesChainCode = "'".$SalesChainCode."'";
+		}
+		if(empty($Code)){
+			$Code = 'NULL';
+		}else{
+			$Code = "'".$Code."'";
+		}
+		if(empty($RefferedBy)){
+			$RefferedBy = 'NULL';
+		}else{
+			$RefferedBy = "'".$RefferedBy."'";
+		}
+
+		error_log("RefferedBy ==".$Code);
+
+
+
+		$type = substr($partyCode, 0, 1);
+		
+		$query = "";
+		$table_name = "";
+		$ret_val = '';
+		if($type == 'S' || $type == 'A') {
+			$table_name = 'agent_info';	
+			$col_name = 'agent_code';	
+		}
+		else if($type == 'P') {
+			$table_name = 'personal_info';	
+			$col_name = 'personal_code';				
+		}
+		else if($type == 'C') {
+			$table_name = 'champion_info';	
+			$col_name = 'champion_code';				
+		}
+		$address1 = mysqli_real_escape_string($con, $address1);
+		$address2 = mysqli_real_escape_string($con, $address2);
+		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
+		$query ="UPDATE $table_name SET party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code  WHERE $col_name = '$partyCode'";
+		
 		error_log("update query = ".$query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {

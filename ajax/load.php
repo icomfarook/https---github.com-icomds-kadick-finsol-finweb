@@ -18,7 +18,7 @@
 		if ($action == 'active'){
 			$query = "select party_sales_chain_id, party_sales_chain_code, party_sales_chain_name from party_sales_chain where active = 'Y' and party_sales_chain_code like 'IA%';
 			";
-			////error_log("Authorization Load query - Active only ".$query);
+			//error_log("Authorization Load query - Active only ".$query);
 			$result = mysqli_query($con,$query);
 			if (!$result) {
 				printf("Error: %s\n". mysqli_error($con));
@@ -35,8 +35,14 @@
 	else if ($for == 'SalesChainCode'){
 		if ($action == 'active'){
 			$id = $_REQUEST['id'];
-			$query = "select agent_name,agent_code from agent_info where party_sales_chain_id = $id order by agent_code";
-			//error_log(json_encode($query));
+			if($id == "" || empty($id) || $id == null) {
+				$query = "select agent_name,agent_code from agent_info where active = 'Y' order by agent_code";
+							
+			}else{
+				$query = "select agent_name,agent_code from agent_info where party_sales_chain_id = $id order by agent_code";
+			
+			}
+			error_log(json_encode($query));
 			$result = mysqli_query($con,$query);
 			if (!$result) {
 				printf("Error: %s\n". mysqli_error($con));
