@@ -38,7 +38,7 @@
 				set_time_limit(90);
 				error_log("inside all inputs are set correctly");	
 				$partnerId = $data->partnerId;
-				$accountNumber= $data->accountNumber;
+				$accountNumber = $data->accountNumber;
 				$bankCode = $data->bankCode;
 				$bankId = $data->bankId;
 				$sessionId = $data->sessionId;
@@ -129,17 +129,31 @@
 						return;
 					} 
 
-					$daily_check_result = checkDailyLimit($userId, $requestedAmount, $con);
-					error_log("daily_check_result = ".$daily_check_result);
-					if ( $daily_check_result != 0 ){
-						// Exceeded Daily Limit
-						$response["statusCode"] = "998";
-						$response["result"] = "Error";
-						$response["message"] = "Failure: Exceeded Daily Limit";
-						$response["signature"] = 0;
-						error_log(json_encode($response));
-						echo json_encode($response);
-						return;
+					//Check for own_tx 
+					$own_tx_check_query = "select party_bank_account_id from party_bank_account where party_type = '$partyType' and party_code = '$partyCode' and account_no = '$accountNumber' and bank_master_id = $bankId and status = 'A' and active = 'Y'";
+					$own_tx = 'N';
+					error_log("own_tx_check_query = ".$own_tx_check_query);
+					$own_tx_check_result = mysqli_query($con, $own_tx_check_query);
+					if ( $own_tx_check_result ) {
+						$own_tx_check_count = mysqli_num_rows($own_tx_check_result);
+						if ( $own_tx_check_count > 0 ) {
+							$own_tx = 'Y';
+							error_log("inside own_tx = Y for party_code = ". $partyCode.", account_no = ".$accountNumber);
+						}
+					}
+					if ( $own_tx == 'N' ) {
+						$daily_check_result = checkDailyLimit($userId, $requestedAmount, $con);
+						error_log("daily_check_result = ".$daily_check_result);
+						if ( $daily_check_result != 0 ){
+							// Exceeded Daily Limit
+							$response["statusCode"] = "998";
+							$response["result"] = "Error";
+							$response["message"] = "Failure: Exceeded Daily Limit";
+							$response["signature"] = 0;
+							error_log(json_encode($response));
+							echo json_encode($response);
+							return;
+						}
 					}
 										
 					error_log("before calling checking_feature_value: txType = ".$txType);
@@ -242,7 +256,7 @@
 														$fin_service_order_result = mysqli_query($con, $fin_service_order_query);
 														if($fin_service_order_result ) {
 															$fin_order_rollback = "N";					
-															error_log("inside success fin_service_order table entry");																									
+															error_log("inside success fin_service_order table entry");
 															$get_acc_trans_type = getAcccTransType($acc_trans_type, $con);
 															error_log("get_acc_trans_type = ".$get_acc_trans_type);	
 															if($get_acc_trans_type != "-1"){
@@ -312,7 +326,7 @@
 
 																			if($statusCode == 0) {
 																				error_log("inside statusCode == 0");
-																				$update_query = "UPDATE fin_request SET status = 'S', comments = '$narration', order_no = $fin_service_order_no, update_time = now(), auth_code = '".$api_response['sessionId']."' WHERE fin_request_id = $fin_request_id ";
+																				$update_query = "UPDATE fin_request SET status = 'S', own_tx = '$own_tx', comments = '$narration', order_no = $fin_service_order_no, update_time = now(), auth_code = '".$api_response['sessionId']."' WHERE fin_request_id = $fin_request_id ";
 																				error_log("update_query1 = ".$update_query);
 																				$update_query_result = mysqli_query($con, $update_query);
 
