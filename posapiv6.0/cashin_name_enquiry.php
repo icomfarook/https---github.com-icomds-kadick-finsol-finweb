@@ -72,21 +72,35 @@
 						echo json_encode($response);
 						return;
 					} 
-
-					$daily_check_result = checkDailyLimit($userId, $requestAmount, $con);
-					error_log("daily_check_result = ".$daily_check_result);
-					if ( $daily_check_result != 0 ){
-						// Exceeded Daily Limit
-						$response["statusCode"] = "998";
-						$response["result"] = "Error";
-						$response["message"] = "Failure: Exceeded Daily Limit";
-						$response["signature"] = 0;
-						error_log(json_encode($response));
-						echo json_encode($response);
-						return;
-					}
 					
-		    	    		$agent_info_wallet_status = check_agent_info_wallet_status($partyType, $partyCode, $con);
+					//check for own account transfer
+					$own_tx_check_query = "select party_bank_account_id from party_bank_account where party_type = '$partyType' and party_code = '$partyCode' and account_no = '$accountNumber' and bank_master_id = $bankId and status = 'A' and active = 'Y'";
+					$own_tx = 'N';
+					error_log("own_tx_check_query = ".$own_tx_check_query);
+					$own_tx_check_result = mysqli_query($con, $own_tx_check_query);
+					if ( $own_tx_check_result ) {
+						$own_tx_check_count = mysqli_num_rows($own_tx_check_result);
+						if ( $own_tx_check_count > 0 ) {
+							$own_tx = 'Y';
+							error_log("inside own_tx = Y for party_code = ". $partyCode.", account_no = ".$accountNumber);
+						}
+					}
+					error_log("PartyCode = ".$partyCode." own_tx = ".$own_tx);
+					if ( $own_tx == 'N') {
+						$daily_check_result = checkDailyLimit($userId, $requestAmount, $con);
+						error_log("daily_check_result = ".$daily_check_result);
+						if ( $daily_check_result != 0 ){
+							// Exceeded Daily Limit
+							$response["statusCode"] = "998";
+							$response["result"] = "Error";
+							$response["message"] = "Failure: Exceeded Daily Limit";
+							$response["signature"] = 0;
+							error_log(json_encode($response));
+							echo json_encode($response);
+							return;
+						}
+					}
+					$agent_info_wallet_status = check_agent_info_wallet_status($partyType, $partyCode, $con);
 					if ($agent_info_wallet_status == 0 ) {
 						//Checking available_balance
 						$available_balance = check_agent_available_balance($userId, $con);
