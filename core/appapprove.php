@@ -221,7 +221,7 @@ legend {
 								<label>Referred By</label>
 								<select  ng-model='RefferedBy' ng-disabled='SalesChain'   id="RefferedBy"  class='form-control' name='RefferedBy' >
 									<option value=''>--Select Referred Type--</option>
-									<option value='O'>..??????</option>
+									
 									<option value='A'>A-Agent</option>
 									<option value='C'>C-Champion</option>
 								</select>
@@ -469,7 +469,7 @@ function AllTables(){
 }
 $(function() {
             $("#RefferedBy").change(function() {
-                if ($(this).val() == "O") {
+                if ($(this).val() == "") {
                     $("#Code").prop("disabled", true);
                 }
                 else

@@ -55,7 +55,7 @@
 		$minimumBalance = $data->minimumBalance;
 		$advanceAmount = $data->advanceAmount;
 		$partycatype = $data->partycatype;
-		//$SalesParentType = $data->SalesParentType;
+		$SalesParentTypeID = $data->SalesParentType;
 		$SalesChainCode = $data->SalesChainCode;
 		$RefferedBy = $data->RefferedBy;
 		//$RefferedBy = !empty($RefferedBy) ? "'$RefferedBy'" : "NULL";
@@ -119,7 +119,7 @@
 				//$loginname = "a".$loginname;
 			}
 			
-			$approve = infotableentry($partycatype,$id, $type, $con, $loginname, $createuser, $party_code, $parentType,$SalesParentType,$SalesChainCode,$RefferedBy,$Code);
+			$approve = infotableentry($partycatype,$id, $type, $con, $loginname, $createuser, $party_code, $parentType,$SalesParentType,$SalesChainCode,$RefferedBy,$Code,$RadioButton,$SalesParentTypeID);
 			if($approve == 0) {
 				if(sizeof($selectedServices) > 0) {
 					//error_log("sizeof".sizeof($selectedServices));
@@ -297,7 +297,7 @@
 		return $outlet_code ;
 	}
 	
-	function infotableentry($partycatype,$id, $type, $con, $loginname, $createuser, $party_code, $parentType,$SalesParentType,$SalesChainCode,$RefferedBy,$Code) {
+	function infotableentry($partycatype,$id, $type, $con, $loginname, $createuser, $party_code, $parentType,$SalesParentType,$SalesChainCode,$RefferedBy,$Code,$RadioButton,$SalesParentTypeID) {
 
 	
 		/* if($RefferedBy == "" || $RefferedBy == 'undefined') {
@@ -317,6 +317,11 @@
 			$RefferedBy = 'NULL';
 		}else{
 			$RefferedBy = "'".$RefferedBy."'";
+		}
+		if(empty($SalesParentTypeID)){
+			$SalesParentTypeID = 'NULL';
+		}else{
+			$SalesParentTypeID = "'".$SalesParentTypeID."'";
 		}
 
 		$query = "SELECT a.application_id, b.country_id, a.parent_code, b.country_id, a.applier_type, a.application_category, b.outlet_name, a.create_time, a.status, b.address1, b.address2, b.state_id, b.local_govt_id, b.zip_code, b.tax_number, b.email, b.mobile_no, b.work_no, b.contact_person_mobile, b.contact_person_name,a.parent_code,a.parent_type,b.loc_latitude,b.loc_longitude, b.language_id, a.login_name,b.bvn,b.dob,b.gender,b.business_type,b.outlet_name FROM application_main a, application_info b Where a.application_id = b.application_id and a.application_id = $id";
@@ -377,20 +382,38 @@
 				else {
 					$subagent = "N";
 				}
-				if($parent_code != "" || !empty($parent_code) || $parent_code != null) {
-					$name = mysqli_real_escape_string($con, $name);
-					$address1 = mysqli_real_escape_string($con, $address1);
-					$cpn = mysqli_real_escape_string($con, $cpn);	
-					$login_name = mysqli_real_escape_string($con, $login_name);					
-					$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, parent_code, parent_type, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type','$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id,'$parent_code','$parent_type', $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code)";
+				if($RadioButton == "E"){
+					if($parent_code != "" || !empty($parent_code) || $parent_code != null) {
+						$name = mysqli_real_escape_string($con, $name);
+						$address1 = mysqli_real_escape_string($con, $address1);
+						$cpn = mysqli_real_escape_string($con, $cpn);	
+						$login_name = mysqli_real_escape_string($con, $login_name);					
+						$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, parent_code, parent_type, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code,party_sales_parent_chain_id) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type','$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id,'$parent_code','$parent_type', $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code,$SalesParentTypeID)";
+					}
+					else {
+						$name = mysqli_real_escape_string($con, $name);
+						$address1 = mysqli_real_escape_string($con, $address1);
+						$cpn = mysqli_real_escape_string($con, $cpn);
+						$login_name = mysqli_real_escape_string($con, $login_name);
+						$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code,party_sales_parent_chain_id) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type', '$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id, $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code,$SalesParentTypeID)";
+					}
+				}else{
+					if($parent_code != "" || !empty($parent_code) || $parent_code != null) {
+						$name = mysqli_real_escape_string($con, $name);
+						$address1 = mysqli_real_escape_string($con, $address1);
+						$cpn = mysqli_real_escape_string($con, $cpn);	
+						$login_name = mysqli_real_escape_string($con, $login_name);					
+						$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, parent_code, parent_type, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type','$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id,'$parent_code','$parent_type', $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code)";
+					}
+					else {
+						$name = mysqli_real_escape_string($con, $name);
+						$address1 = mysqli_real_escape_string($con, $address1);
+						$cpn = mysqli_real_escape_string($con, $cpn);
+						$login_name = mysqli_real_escape_string($con, $login_name);
+						$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type', '$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id, $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code)";
+					}
 				}
-				else {
-					$name = mysqli_real_escape_string($con, $name);
-					$address1 = mysqli_real_escape_string($con, $address1);
-					$cpn = mysqli_real_escape_string($con, $cpn);
-					$login_name = mysqli_real_escape_string($con, $login_name);
-					$insert_query = "INSERT INTO agent_info(party_category_type_id,agent_code, agent_name, country_id, bvn,dob,gender,business_type, address1, address2, state_id, zip_code, mobile_no, work_no, email, contact_person_name, contact_person_mobile, loc_latitude, loc_longitude, tax_number, application_id, create_user, create_time,sub_agent, local_govt_id, language_id, login_name,outlet_name,party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code) VALUES ('$partycatype','$party_code','$name',$countryid, '$bvn','$dob','$gender','$business_type', '$address1', '$address2', '$stateid', '$zip', '$mobile', '$work', '$email', '$cpn', '$cpm', '$loc_latitude', '$loc_longitude', '$tax', $id, $createuser, now(),'$subagent', $local_govt_id, $language_id, '$login_name','$outlet_name','$SalesParentType',$SalesChainCode,$RefferedBy,$Code)";
-				}
+			
 			}
 			error_log($insert_query);			
 			$insertresult = mysqli_query($con,$insert_query);

@@ -1,6 +1,149 @@
+app.controller('MonthTransCtrl', function ($scope, $http) {
+	
+
+	detectBrowser();
+
+	function detectBrowser() {
+		if (navigator.userAgent.includes("Chrome")) {
+		$(".MonthPicker").show();
+		 $(".MonthDropDown").hide();
+		  return "chrome"
+		}
+		if (navigator.userAgent.includes("Firefox")) {
+	   $(".MonthPicker").hide();
+		 $(".MonthDropDown").show();
+	  
+		  return "firefox"
+		}
+		if (navigator.userAgent.includes("Safari")) {
+	   $(".MonthPicker").hide();
+		 $(".MonthDropDown").show();
+		  return "safari"
+		}
+	  }
+	  const d = new Date();
+		let year = d.getFullYear();
+		var years = [];
+		for (var i = year; i >= 1990; i--) {
+		years.push(i);
+		}
+		console.log(years);
+		$scope.yearList = years;
+
+
+		$scope.ThreeTables = true;
+		$scope.isHideexcel = true;
+		$scope.startDate = new Date();
+		$scope.startDate.setDate($scope.startDate.getDate() - 1);
+		$scope.endDate = new Date();
+		$scope.endDate.setDate($scope.endDate.getDate() - 1);
+		$scope.isMainLoader = true;
+		$scope.isHideOk = true;
+	
+		$scope.query = function (id) {
+			
+
+		var MonthAndYear;
+			
+		if (detectBrowser() == "chrome"){
+		var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+		MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+		}else{
+		MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+		}
+		$scope.ThreeTables = false;
+		$scope.isHideexcel = false;
+		$scope.isLoader = true;
+		
+		$http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+				action: 'list1'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+	    $scope.nontrans = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	 $http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+
+				action: 'list2'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+		/*  $scope.regions = response.data[0].regions;
+		 $scope.airtime_count = response.data[0].airtime_count;
+		 $scope.airtime_value = response.data[0].airtime_value;
+		 $scope.cashcount = response.data[0].cashcount;
+		 $scope.cash_value = response.data[0].cash_value;
+		 $scope.billpay_count = response.data[0].billpay_count;
+		 $scope.billpay_value = response.data[0].billpay_value;
+		 $scope.cashin_count = response.data[0].cashin_count;
+		 $scope.cashin_value = response.data[0].cashin_value;
+	alert(response.data[0].cashcount);
+	alert(response.data[0].cash_value);
+	alert(response.data[0].cashcount); */
+	
+		$scope.RegionTable = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+	}); 
+		$http({
+			method: 'post',
+			url: '../ajax/Monthlyreportajax.php',
+			data: {
+				Detail: $scope.Detail,
+				MonthAndYear: MonthAndYear,
+
+				action: 'list3'
+			},
+
+		}).then(function successCallback(response) {
+			//	$scope.isHide = true;
+			//	$scope.isHideOk = false;
+			$scope.isLoader = false;
+	     $scope.isMainLoader = false;
+	
+	
+		$scope.PercentageTable = response.data;
+			
+		}, function errorCallback(response) {
+			// console.log(response);
+		}); 
+		
+	}
+		
+	$scope.refresh = function (id, type) {
+		window.location.reload();
+	}
+});
+
+
+
+
+
 app.controller('DailyTransCtrl', function ($scope, $http) {
+	
 	$scope.isHideexcel = true;
-	$scope.isLoader = true;
 	$scope.startDate = new Date();
 	$scope.startDate.setDate($scope.startDate.getDate() - 1);
 	$scope.endDate = new Date();
@@ -8,7 +151,8 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 	$scope.isMainLoader = true;
 	$scope.isHideOk = true;
 	$scope.query = function (id) {
-		$scope.isHideexcel = false;
+    	$scope.isHideexcel = false;
+		$scope.isLoader = true;
 		$http({
 			method: 'post',
 			url: '../ajax/dailyreportajax.php',
@@ -22,22 +166,23 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 		}).then(function successCallback(response) {
 			//	$scope.isHide = true;
 			//	$scope.isHideOk = false;
-			$scope.isLoader = false;
-	     $scope.isMainLoader = false;
-		// alert( response.data);
-		$scope.id = response.data[0].id;
-			$scope.nontrans = response.data;
-			
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
+				$scope.isLoader = false;
+	   			$scope.isMainLoader = false;
+			// alert( response.data);
+				$scope.id = response.data[0].id;
+				$scope.nontrans = response.data;
+				
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
 	}
 		$scope.detail = function (id) {
 		$http({
 			method: 'post',
 			url: '../ajax/dailyreportajax.php',
-			data: { id: id, action: 'detail' },
+			data: { id: id, action: 'view' },
 		}).then(function successCallback(response) {
+			
 			$scope.id = response.data[0].id;
 			$scope.party_type = response.data[0].party_type;
 			$scope.party_code = response.data[0].party_code;
@@ -81,8 +226,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 			$scope.billpay_amount = response.data[0].billpay_amount;
 			$scope.billpay_time = response.data[0].billpay_time;
 			$scope.create_time = response.data[0].create_time;
-			
-			}, function errorCallback(response) {
+		   }, function errorCallback(response) {
 			// console.log(response);
 			});
 	}
@@ -90,6 +234,7 @@ app.controller('DailyTransCtrl', function ($scope, $http) {
 		window.location.reload();
 	}
 });
+
 
 
 app.controller('SendNotificationCtrl', function ($scope, $http) {
@@ -197,370 +342,372 @@ app.controller('SendNotificationCtrl', function ($scope, $http) {
 	
 	});
 
-
-	app.controller('KycUpdateCtrl', function ($scope, $http) {
-		$scope.isHideOk = true;
-		$scope.fn_load = function (partyType,partyCode) {
-			if(partyType == 'C' || partyType == 'A') {
-				$http({
-					method: 'post',
-					url: '../ajax/load.php',
-					params: { partyType:partyType,
-							partyCode:partyCode,
-							action: 'infolist'
-					},
-				}).then(function successCallback(response) {
-					$scope.infos = response.data;
-				});
-			}
-		}
-		$scope.partyload = function (partyType) {
-			var action = "";var fora="";
-			if(partyType == "MA") {
-				fora = "agent";
-				type = "N";
-			}
-			if(partyType == "SA") {
-				fora = "agent";
-				type = "Y";
-			}
-			if(partyType == "C") {
-				fora = "champion";
-				type = "";
-			}
-			if(partyType == "P") {
-				fora = "personal";
-				type = "";
-			}
+app.controller('KycUpdateCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+	$scope.fn_load = function (partyType,partyCode) {
+		if(partyType == 'C' || partyType == 'A') {
 			$http({
 				method: 'post',
 				url: '../ajax/load.php',
-				params: { for:fora,
-						type: type
-					},
-				}).then(function successCallback(response) {
-					$scope.infos = response.data;
-				});
-	
+				params: { partyType:partyType,
+						partyCode:partyCode,
+						action: 'infolist'
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
 		}
-		$scope.query = function () {
+	}
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+				    type: type
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+
+	}
+	$scope.query = function () {
+		$http({
+			method: 'post',
+			url: '../ajax/kycupdateajax.php',
+			data: {
+				action: 'findlist',
+				partyCode: $scope.partyCode,
+				partyType: $scope.partyType,
+				topartyCode:$scope.topartyCode,
+				creteria:$scope.creteria
+			},
+		}).then(function successCallback(response) {
+			   $scope.isLoader = false;
+      $scope.isMainLoader = false;
+   $scope.appviews = response.data;
+    $scope.id = response.data[0].id;
+
+		}, function errorCallback(response) {
+			console.log(response.data);
+		});
+	}
+	
+	$scope.attachmentid = function (index, id) {
+		$http({
+		 method: 'post',
+		 url: '../ajax/kycupdateajax.php',
+		 data: {
+		  id: id,
+		  action: 'attachmentid'
+		 },
+		}).then(function successCallback(response) {
+		 // $scope.isHide = true;
+		  $scope.isHideOk = false;
+		 $scope.isLoader = false;
+			$scope.isMainLoader = false;
+		// alert(response.data[0].attachment_content);
+		$scope.myImage = response.data[0].attachment_content;
+		//$scope.myImage = ;
+		$scope.outletname = response.data[0].outletname;
+		$scope.file = response.data[0].file;
+		$scope.attachment_type = response.data[0].attachment_type;
+		//$("#resmsg").html("<h3>" + response.data + "</h3>");
+		//alert(response.data);
+		}, function errorCallback(response) {
+		 // console.log(response);
+		});
+		$scope.PrintImage = function (url) {
+		  var src='data:image/;base64,'+url;
+		  //alert(src);
+			 var win = window.open('');
+		  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		  win.focus();
+		  };
+	   }
+	   
+	   $scope.attachmentcomp = function (index, id) {
+			
+		$http({
+		 method: 'post',
+		 url: '../ajax/kycupdateajax.php',
+		 data: {
+		  id: id,
+		  action: 'attachmentcomp'
+		 },
+		}).then(function successCallback(response) {
+		 // $scope.isHide = true;
+		  $scope.isHideOk = false;
+		 $scope.isLoader = false;
+			$scope.isMainLoader = false;
+		// alert(response.data[0].attachment_content);
+		//$("#resmsg").html("<h3>" + response.data + "</h3>");
+		$scope.myImage = response.data[0].attachment_content;
+		$scope.outletname = response.data[0].outletname;
+		$scope.file = response.data[0].file;
+		$scope.attachment_type = response.data[0].attachment_type;
+		//alert(response.data[0].attachment_type);
+		}, function errorCallback(response) {
+		 // console.log(response);
+		});
+	  
+			$scope.PrintImage = function (url) {
+		 var src='data:image/;base64,'+url;
+		 //alert(src);
+			var win = window.open('');
+		 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+			win.focus();
+		};
+	   }
+	  
+	   $scope.attachmentSig = function (index, id) {
+		  $http({
+		   method: 'post',
+		   url: '../ajax/kycupdateajax.php',
+		   data: {
+			id: id,
+			action: 'attachmentSig'
+		   },
+		  }).then(function successCallback(response) {
+		   // $scope.isHide = true;
+			$scope.isHideOk = false;
+		   $scope.isLoader = false;
+			  $scope.isMainLoader = false;
+		  // alert(response.data[0].attachment_content);
+		  //$("#resmsg").html("<h3>" + response.data + "</h3>");
+		  $scope.myImage = response.data[0].attachment_content;
+		  $scope.outletname = response.data[0].outletname;
+		  $scope.file = response.data[0].file;
+		  $scope.attachment_type = response.data[0].attachment_type;
+		  //alert(response.data[0].attachment_type);
+		  }, function errorCallback(response) {
+		   // console.log(response);
+		  });
+		
+			  $scope.PrintImage = function (url) {
+		   var src='data:image/;base64,'+url;
+		   //alert(src);
+			  var win = window.open('');
+		   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+			  win.focus();
+		  };
+		 }
+		 $scope.editattach1 = function (index, id) { 
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
 			$http({
 				method: 'post',
 				url: '../ajax/kycupdateajax.php',
-				data: {
-					action: 'findlist',
-					partyCode: $scope.partyCode,
-					partyType: $scope.partyType,
-					topartyCode:$scope.topartyCode,
-					creteria:$scope.creteria
-				},
+				data: { id: id, action: 'editattachment1' },
 			}).then(function successCallback(response) {
-				   $scope.isLoader = false;
-		  $scope.isMainLoader = false;
-	   $scope.appviews = response.data;
-		$scope.id = response.data[0].id;
-	
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				//$scope.BussinessDocument = response.data[0].BussinessDocument;
+				$scope.IDDocument = response.data[0].IDDocument;
+				//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
+				
 			}, function errorCallback(response) {
-				console.log(response.data);
+				// console.log(response);
 			});
 		}
-		
-		$scope.attachmentid = function (index, id) {
+		$scope.editattach2 = function (index, id) {
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
 			$http({
-			 method: 'post',
-			 url: '../ajax/kycupdateajax.php',
-			 data: {
-			  id: id,
-			  action: 'attachmentid'
-			 },
-			}).then(function successCallback(response) {
-			 // $scope.isHide = true;
-			  $scope.isHideOk = false;
-			 $scope.isLoader = false;
-				$scope.isMainLoader = false;
-			// alert(response.data[0].attachment_content);
-			$scope.myImage = response.data[0].attachment_content;
-			//$scope.myImage = ;
-			$scope.outletname = response.data[0].outletname;
-			$scope.file = response.data[0].file;
-			$scope.attachment_type = response.data[0].attachment_type;
-			//$("#resmsg").html("<h3>" + response.data + "</h3>");
-			//alert(response.data);
-			}, function errorCallback(response) {
-			 // console.log(response);
-			});
-			$scope.PrintImage = function (url) {
-			  var src='data:image/;base64,'+url;
-			  //alert(src);
-				 var win = window.open('');
-			  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-			  win.focus();
-			  };
-		   }
-		   
-		   $scope.attachmentcomp = function (index, id) {
-				
-			$http({
-			 method: 'post',
-			 url: '../ajax/kycupdateajax.php',
-			 data: {
-			  id: id,
-			  action: 'attachmentcomp'
-			 },
-			}).then(function successCallback(response) {
-			 // $scope.isHide = true;
-			  $scope.isHideOk = false;
-			 $scope.isLoader = false;
-				$scope.isMainLoader = false;
-			// alert(response.data[0].attachment_content);
-			//$("#resmsg").html("<h3>" + response.data + "</h3>");
-			$scope.myImage = response.data[0].attachment_content;
-			$scope.outletname = response.data[0].outletname;
-			$scope.file = response.data[0].file;
-			$scope.attachment_type = response.data[0].attachment_type;
-			//alert(response.data[0].attachment_type);
-			}, function errorCallback(response) {
-			 // console.log(response);
-			});
-		  
-				$scope.PrintImage = function (url) {
-			 var src='data:image/;base64,'+url;
-			 //alert(src);
-				var win = window.open('');
-			 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-				win.focus();
-			};
-		   }
-		  
-		   $scope.attachmentSig = function (index, id) {
-			  $http({
-			   method: 'post',
-			   url: '../ajax/kycupdateajax.php',
-			   data: {
-				id: id,
-				action: 'attachmentSig'
-			   },
-			  }).then(function successCallback(response) {
-			   // $scope.isHide = true;
-				$scope.isHideOk = false;
-			   $scope.isLoader = false;
-				  $scope.isMainLoader = false;
-			  // alert(response.data[0].attachment_content);
-			  //$("#resmsg").html("<h3>" + response.data + "</h3>");
-			  $scope.myImage = response.data[0].attachment_content;
-			  $scope.outletname = response.data[0].outletname;
-			  $scope.file = response.data[0].file;
-			  $scope.attachment_type = response.data[0].attachment_type;
-			  //alert(response.data[0].attachment_type);
-			  }, function errorCallback(response) {
-			   // console.log(response);
-			  });
-			
-				  $scope.PrintImage = function (url) {
-			   var src='data:image/;base64,'+url;
-			   //alert(src);
-				  var win = window.open('');
-			   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-				  win.focus();
-			  };
-			 }
-			 $scope.editattach1 = function (index, id) { 
-				
-				$scope.isHideOk = true;
-				$scope.isInputDisabled = false;
-				$scope.isInputDisabled2 = false;
-				$scope.isInputDisabled3 = false;
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id, action: 'editattachment1' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id = response.data[0].application_attachment_id;
-					$scope.id = response.data[0].id;
-					//$scope.BussinessDocument = response.data[0].BussinessDocument;
-					$scope.IDDocument = response.data[0].IDDocument;
-					//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
-					$scope.attachment_type = response.data[0].attachment_type;
-					$scope.file = response.data[0].file;
-					
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			}
-			$scope.editattach2 = function (index, id) {
-				
-				$scope.isHideOk = true;
-				$scope.isInputDisabled = false;
-				$scope.isInputDisabled2 = false;
-				$scope.isInputDisabled3 = false;
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id, action: 'editattachment2' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id = response.data[0].application_attachment_id;
-					$scope.id = response.data[0].id;
-					$scope.BussinessDocument = response.data[0].BussinessDocument;
-					//$scope.IDDocument = response.data[0].IDDocument;
-					//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
-					$scope.attachment_type = response.data[0].attachment_type;
-					$scope.file = response.data[0].file;
-				
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			}
-			$scope.editattach3 = function (index, id) {
-				
-				$scope.isHideOk = true;
-				$scope.isInputDisabled = false;
-				$scope.isInputDisabled2 = false;
-				$scope.isInputDisabled3 = false;
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id, action: 'editattachment3' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id = response.data[0].application_attachment_id;
-					$scope.id = response.data[0].id;
-					//$scope.BussinessDocument = response.data[0].BussinessDocument;
-					//$scope.IDDocument = response.data[0].IDDocument;
-					$scope.SignatureDocucment = response.data[0].SignatureDocument;
-					$scope.attachment_type = response.data[0].attachment_type;
-					$scope.file = response.data[0].file;
-				
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			}
-			$scope.Deleteattachment = function(index,id,application_attachment_id,attachment_type){ 
-				$scope.Deleteattach = true;
-				$scope.isInputDisabled = true;
-				$scope.IDDocument = "";
-			
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id1 = response.data[0].old_application_attachment_id;
-					$scope.application_id1 = response.data[0].old_application_id;
-					$scope.attachment_name = response.data[0].old_attachment_name;
-					$scope.file = response.data[0].old_file;
-					$scope.attachment_type = response.data[0].old_attachment_type;
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			
-			}
-			$scope.Deleteattachment2 = function(index,id,application_attachment_id,attachment_type){ 
-				$scope.Deletes = true;
-				$scope.isInputDisabled2s = true;
-				$scope.BussinessDocument = "";
-			
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id2 = response.data[0].old_application_attachment_id;
-					$scope.application_id2 = response.data[0].old_application_id;
-					$scope.attachment_name = response.data[0].old_attachment_name;
-					$scope.file = response.data[0].old_file;
-					$scope.attachment_type = response.data[0].old_attachment_type;
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			
-			}
-			$scope.Deleteattachment3 = function(index,id,application_attachment_id,attachment_type){ 
-				$scope.Deleted = true;
-				$scope.isInputDisabled3 = true;
-				$scope.SignatureDocucment = "";
-			
-				
-				$http({
-					method: 'post',
-					url: '../ajax/kycupdateajax.php',
-					data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
-				}).then(function successCallback(response) {
-					$scope.application_attachment_id3 = response.data[0].old_application_attachment_id;
-					$scope.application_id3 = response.data[0].old_application_id;
-					$scope.attachment_name = response.data[0].old_attachment_name;
-					$scope.file = response.data[0].old_file;
-					$scope.attachment_type = response.data[0].old_attachment_type;
-				}, function errorCallback(response) {
-					// console.log(response);
-				});
-			
-			}
-			
-			$scope.InsertNew = function(index,id,application_attachment_id,application_id,attachment_type){
-			
-				$scope.isHideOk = true;
-				$scope.isHide = false;
-			
-				$scope.isLoader = true;
-				var fd = new FormData();
-				//alert($scope.dob);
-				var event = new Date($scope.dob);
-				
-				let date = JSON.stringify(event)
-				date = date.slice(1,11);
-				//alert(date);
-				
-				   angular.forEach($scope.uploadfiles,function(file){
-					 fd.append('file[]',file);
-				   });
-				   angular.forEach($scope.uploadfiles2,function(file2){
-				fd.append('file2[]',file2);
-				   });
-				   angular.forEach($scope.uploadfiles3,function(file3){
-					fd.append('file3[]',file3);
-					   });
-				   fd.append("id",$scope.id);
-				   fd.append("application_attachment_id1",$scope.application_attachment_id1);
-				   fd.append("application_id1",$scope.application_id1);
-				   fd.append("application_attachment_id2",$scope.application_attachment_id2);
-				   fd.append("application_id2",$scope.application_id2);
-				   fd.append("application_attachment_id3",$scope.application_attachment_id3);
-				   fd.append("application_id3",$scope.application_id3);
-				   fd.append("attachment_type","attachment_type");
-				   fd.append("action","Uploadattachment");
-				   fd.append("attachment",$scope.file);
-					fd.append("attachment",$scope.attachment);
-				   fd.append("attachment2",$scope.attachment2);
-				   fd.append("attachment3",$scope.attachment3);
-				//alert($scope.id);
-					/* 	alert($scope.attachment2);
-					alert($scope.attachment3); */
-				  $http({
 				method: 'post',
-				url: '../ajax/appentryajax.php',
-				headers: {'Content-Type': undefined},
-				ContentType: 'application/json',
-				data: fd,
-				}).then(function successCallback(response) {
-				$scope.isHide = true;
-				$scope.isHideOk = false;
-				$scope.isHideReset = true;
-				$scope.isLoader = false;
-				$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id, action: 'editattachment2' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				$scope.BussinessDocument = response.data[0].BussinessDocument;
+				//$scope.IDDocument = response.data[0].IDDocument;
+				//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
 			
-				}, function errorCallback(response) {
+			}, function errorCallback(response) {
 				// console.log(response);
-				});
-				}
-			$scope.refresh = function (id, type) {
-				window.location.reload();
+			});
+		}
+		$scope.editattach3 = function (index, id) {
+			
+			$scope.isHideOk = true;
+			$scope.isInputDisabled = false;
+			$scope.isInputDisabled2 = false;
+			$scope.isInputDisabled3 = false;
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id, action: 'editattachment3' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id = response.data[0].application_attachment_id;
+				$scope.id = response.data[0].id;
+				//$scope.BussinessDocument = response.data[0].BussinessDocument;
+				//$scope.IDDocument = response.data[0].IDDocument;
+				$scope.SignatureDocucment = response.data[0].SignatureDocument;
+				$scope.attachment_type = response.data[0].attachment_type;
+				$scope.file = response.data[0].file;
+			
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+		$scope.Deleteattachment = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleteattach = true;
+			$scope.isInputDisabled = true;
+			$scope.IDDocument = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id1 = response.data[0].old_application_attachment_id;
+				$scope.application_id1 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		$scope.Deleteattachment2 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deletes = true;
+			$scope.isInputDisabled2s = true;
+			$scope.BussinessDocument = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id2 = response.data[0].old_application_attachment_id;
+				$scope.application_id2 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		$scope.Deleteattachment3 = function(index,id,application_attachment_id,attachment_type){ 
+			$scope.Deleted = true;
+			$scope.isInputDisabled3 = true;
+			$scope.SignatureDocucment = "";
+		
+			
+			$http({
+				method: 'post',
+				url: '../ajax/kycupdateajax.php',
+				data: { id: id,application_attachment_id:application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
+			}).then(function successCallback(response) {
+				$scope.application_attachment_id3 = response.data[0].old_application_attachment_id;
+				$scope.application_id3 = response.data[0].old_application_id;
+				$scope.attachment_name = response.data[0].old_attachment_name;
+				$scope.file = response.data[0].old_file;
+				$scope.attachment_type = response.data[0].old_attachment_type;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		
+		}
+		
+		$scope.InsertNew = function(index,id,application_attachment_id,application_id,attachment_type){
+		
+			$scope.isHideOk = true;
+			$scope.isHide = false;
+		
+			$scope.isLoader = true;
+			var fd = new FormData();
+			//alert($scope.dob);
+			var event = new Date($scope.dob);
+			
+			let date = JSON.stringify(event)
+			date = date.slice(1,11);
+			//alert(date);
+			
+			   angular.forEach($scope.uploadfiles,function(file){
+				 fd.append('file[]',file);
+			   });
+			   angular.forEach($scope.uploadfiles2,function(file2){
+			fd.append('file2[]',file2);
+			   });
+			   angular.forEach($scope.uploadfiles3,function(file3){
+				fd.append('file3[]',file3);
+				   });
+			   fd.append("id",$scope.id);
+			   fd.append("application_attachment_id1",$scope.application_attachment_id1);
+			   fd.append("application_id1",$scope.application_id1);
+			   fd.append("application_attachment_id2",$scope.application_attachment_id2);
+			   fd.append("application_id2",$scope.application_id2);
+			   fd.append("application_attachment_id3",$scope.application_attachment_id3);
+			   fd.append("application_id3",$scope.application_id3);
+			   fd.append("attachment_type","attachment_type");
+			   fd.append("action","Uploadattachment");
+			   fd.append("attachment",$scope.file);
+				fd.append("attachment",$scope.attachment);
+			   fd.append("attachment2",$scope.attachment2);
+			   fd.append("attachment3",$scope.attachment3);
+			//alert($scope.id);
+				/* 	alert($scope.attachment2);
+				alert($scope.attachment3); */
+			  $http({
+			method: 'post',
+			url: '../ajax/appentryajax.php',
+			headers: {'Content-Type': undefined},
+			ContentType: 'application/json',
+			data: fd,
+			}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isHideReset = true;
+			$scope.isLoader = false;
+			$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+		
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
 			}
-	});
-    
+		$scope.refresh = function (id, type) {
+			window.location.reload();
+		}
+});
+
+
+
+
 app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
 	$scope.tablerow = true;
@@ -576,6 +723,7 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	action: 'getreport',
 	Date: $scope.Date,
 	Title: $scope.Title,
+	DeviceType: $scope.DeviceType,
 	},
 	}).then(function successCallback(response) {
 	$scope.res = response.data;
@@ -609,7 +757,7 @@ app.controller('NotifyHistoryCtrl', function ($scope, $http) {
 	$scope.count = response.data[0].count;
 	$scope.response = response.data[0].response;
 	$scope.date = response.data[0].date;
-
+	$scope.device_type = response.data[0].device_type;
 	
 	}, function errorCallback(response) {
 	// console.log(response);
@@ -675,7 +823,7 @@ app.controller('TopicSubCtrl', function ($scope, $http) {
 	$scope.status = response.data[0].status;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+	$scope.device_type = response.data[0].device_type;
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
@@ -727,7 +875,7 @@ app.controller('ClientTopicCtrl', function ($scope, $http) {
 	$scope.agent = response.data[0].agent;
 	$scope.create_time = response.data[0].create_time;
 	$scope.update_time = response.data[0].update_time;
-	
+	$scope.device_type = response.data[0].device_type;
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
@@ -758,6 +906,7 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 		UserType: $scope.UserType,
 		agentCode: $scope.agentCode,
 		IMEI: $scope.IMEI,
+		DeviceType:$scope.DeviceType,
 	    action: 'query'
 	  },
 	 }).then(function successCallback(response) {
@@ -807,13 +956,14 @@ app.controller('ClientListCtrl', function ($scope, $http) {
 	  $scope.status = response.data[0].status;
 	  $scope.create_time = response.data[0].create_time;
 	  $scope.update_time = response.data[0].update_time;
+	  $scope.device_type = response.data[0].device_type;
 	 }, function errorCallback(response) {
 	  // console.log(response);
 	 });
 	}
    });
 
-app.controller('notificationCtrl', function ($scope, $http) {
+app.controller('notificationCtrl', function ($scope, $http) { 
 $scope.isHideOk = true;
 $scope.creteria = "A";
 $scope.agentCode = [];
@@ -843,6 +993,34 @@ $scope.localgvts = response.data;
 });
 }
 
+/* $scope.creterias = function() { 
+	$scope.state = "";
+	$scope.local_govt_id = "";
+$scope.userType == "--ALL--";
+$scope.agentCode == "--ALL--";
+
+}
+
+$scope.clickra = function (clickra) {
+	$scope.state = "";
+	$scope.local_govt_id = "";
+$scope.userType == "--ALL--";
+$scope.agentCode == "--ALL--";
+
+	if(clickra == "BT") {
+	$scope.isOrderNoDi = true;
+	$scope.isStartDateDi = false;
+	$scope.isEndDateDi = false;
+	$scope.orderno = "";
+	$scope.isOrderTypeDi = false;
+	$scope.startDate = new Date();
+	$scope.type = "ALL";
+	$scope.endDate = new Date();
+	$scope.ischampionCode = true;
+	$scope.isstate = true;
+	$scope.Terminal_id = true;
+	}
+} */
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -899,7 +1077,7 @@ $scope.send = function (title,body) {
 				local_govt_id: $scope.local_govt_id
 				},
 				}).then(function successCallback(response) {
-					alert(JSON.parse(response.data));
+					//alert(JSON.parse(response.data));
 					window.location.reload();
 				$scope.isHide = true;
 				$scope.isHideOk = false;
@@ -919,93 +1097,93 @@ $scope.send = function (title,body) {
 });
 
 app.controller('AgentSummCtrl', function ($scope, $http) {
-    $scope.startDate = new Date();
-    $scope.tablerow = true;
-    $scope.isHideexcel= true;
-    
-    
-    $scope.countrychange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'statelist', "id": 566, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.states = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-        $scope.statechange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'localgvtlist', "id": id, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.localgvts = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-    
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'agents' }
-    }).then(function successCallback(response) {
-    $scope.agents = response.data;
-    //window.location.reload();
-    });
-    
-    
-    $scope.reset = function () {
-    $scope.tablerow = false;
-    $scope.MonthDate = "";
-    $scope.agentCode = "--ALL--";
-    }
-    
-    $scope.query = function () {
-    $scope.tablerow = true;
-    $scope.isHideexcel= false;
-    
-    $http({
-    method: 'post',
-    url: '../ajax/agntsumajax.php',
-    data: {
-    action: 'getreport',
-    agentCode: $scope.agentCode,
-    state: $scope.state,
-    localgovernment: $scope.localgovernment,
-    },
-    }).then(function successCallback(response) {
-    $scope.res = response.data;
-    $scope.agent_name = response.data[0].agent_name;
-    
-    //alert(code);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    }
-    
-    $scope.detail = function (index, agent_name) {
-    $http({
-    method: 'post',
-    url: '../ajax/agntsumajax.php',
-    data: {
-    agent_name: agent_name,
-    action: 'view'
-    },
-    }).then(function successCallback(response) {
-    $scope.view = response.data;
-    
-    //alert(code);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    }
-    });
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "--ALL--";
+}
+
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+
+$http({
+method: 'post',
+url: '../ajax/agntsumajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+$scope.agent_name = response.data[0].agent_name;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+
+$scope.detail = function (index, agent_name) {
+$http({
+method: 'post',
+url: '../ajax/agntsumajax.php',
+data: {
+agent_name: agent_name,
+action: 'view'
+},
+}).then(function successCallback(response) {
+$scope.view = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+});
 
 app.controller('TerminalBondCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
@@ -1052,10 +1230,276 @@ $scope.Inventory_list = response.data;
 });
 
 
-app.controller('AgentDailyCtrl', function ($scope, $http) {
+app.controller('CatTargetCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partycatype' }
+}).then(function successCallback(response) {
+$scope.partycatypes = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partytargetcombo' }
+}).then(function successCallback(response) {
+$scope.partytarget = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'EditCategory', for: 'partytargetcombo' }
+}).then(function successCallback(response) {
+$scope.partytargets = response.data;
+//window.location.reload();
+});
+
+
+ $scope.refresh = function () {
+   window.location.reload();
+   };
+
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.categorylist = response.data;
+});
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.name = response.data[0].party_category_target_name;
+$scope.ComboName = response.data[0].party_target_combo_name;
+$scope.partycatype = response.data[0].party_category_type_id;
+$scope.Count = response.data[0].count_value;
+$scope.amount = response.data[0].amount_value;
+$scope.Condition = response.data[0].rule_value;
+$scope.id = response.data[0].id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+ComboName: $scope.ComboName,
+partycatype: $scope.partycatype,
+Counts: $scope.Count,
+amount: $scope.amount,
+Condition: $scope.Condition,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#TargetCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/catgtarajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+ComboName: $scope.ComboName,
+partycatype: $scope.partycatype,
+Counts: $scope.Count,
+amount: $scope.amount,
+Condition: $scope.Condition,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#countryBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+});
+
+
+app.controller('TargetComboCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
+});
+
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.combolist = response.data;
+});
+
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.active = response.data[0].Active;
+$scope.name = response.data[0].party_target_combo_name;
+$scope.serfet = response.data[0].service_feature;
+$scope.id = response.data[0].id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: {
+id: $scope.id,
+active: $scope.active,
+name: $scope.name,
+serfet: $scope.serfet,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#TargetCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/tarcomboajax.php',
+data: {
+id: $scope.id,
+name: $scope.name,
+active: $scope.active,
+serfet: $scope.serfet,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#countryBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+ $scope.refresh = function () {
+        window.location.reload();
+        };
+
+});
+
+
+
+app.controller('AgentMonthCtrl', function ($scope, $http) {
+detectBrowser();
 $scope.startDate = new Date();
 $scope.tablerow = true;
 $scope.isHideexcel= true;
+
+function detectBrowser() {
+  if (navigator.userAgent.includes("Chrome")) {
+  $(".MonthPicker").show();
+   $(".MonthDropDown").hide();
+    return "chrome"
+  }
+  if (navigator.userAgent.includes("Firefox")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+
+    return "firefox"
+  }
+  if (navigator.userAgent.includes("Safari")) {
+ $(".MonthPicker").hide();
+   $(".MonthDropDown").show();
+    return "safari"
+  }
+}
+
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+
+
+const d = new Date();
+let year = d.getFullYear();
+var years = [];
+for (var i = year; i >= 1990; i--) {
+   years.push(i);
+}
+console.log(years);
+$scope.yearList = years;
 
 $http({
 url: '../ajax/load.php',
@@ -1066,6 +1510,124 @@ params: { action: 'active', for: 'agents' }
 $scope.agents = response.data;
 //window.location.reload();
 });
+
+
+$scope.reset = function () {
+
+$scope.tablerow = false;
+$scope.MonthDate = "";
+$scope.agentCode = "";
+}
+
+$scope.query = function () {
+
+var MonthAndYear;
+
+if (detectBrowser() == "chrome"){
+var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
+MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
+}else{
+MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
+}
+
+
+
+
+$scope.tablerow = true;
+$scope.isHideexcel= false;
+$http({
+method: 'post',
+url: '../ajax/agentMonthajax.php',
+data: {
+action: 'getreport',
+agentCode: $scope.agentCode,
+MonthAndYear: MonthAndYear,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/agentMonthajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.party_type = response.data[0].party_type;
+$scope.agent_name = response.data[0].agent_name;
+$scope.run_month = response.data[0].run_month;
+$scope.date_time = response.data[0].date_time;
+$scope.target_monthly_count = response.data[0].target_monthly_count;
+$scope.target_monthly_amount = response.data[0].target_monthly_amount;
+$scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
+$scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
+$scope.assigned_rank = response.data[0].assigned_rank;
+$scope.monthly_rank = response.data[0].monthly_rank;
+$scope.State = response.data[0].state;
+$scope.LocalGovernment = response.data[0].LocalGovernment;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+
+app.controller('AgentDailyCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.isHideexcel= true;
+
+
+$scope.refresh = function () {
+	window.location.reload();
+	};
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.countrychange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": 566, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.statechange = function (id) {
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
 
 $scope.reset = function () {
 $scope.tablerow = false;
@@ -1083,6 +1645,8 @@ data: {
 action: 'getreport',
 agentCode: $scope.agentCode,
 MonthDate: $scope.MonthDate,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
 },
 }).then(function successCallback(response) {
 $scope.res = response.data;
@@ -1094,7 +1658,8 @@ $scope.res = response.data;
 
 }
 
-$scope.detail = function (index, id) {
+$scope.detail = function (index, id) { 
+
 $http({
 method: 'post',
 url: '../ajax/agentDailyajax.php',
@@ -1117,261 +1682,14 @@ $scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
 $scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
 $scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
 $scope.daily_trend = response.data[0].daily_trend;
+$scope.State = response.data[0].state;
+$scope.LocalGovernment = response.data[0].LocalGovernment;
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
 
 });
-
-
-app.controller('AgentMonthCtrl', function ($scope, $http) {
-    detectBrowser();
-    $scope.startDate = new Date();
-    $scope.tablerow = true;
-    $scope.isHideexcel= true;
-    
-    function detectBrowser() {
-      if (navigator.userAgent.includes("Chrome")) {
-      $(".MonthPicker").show();
-       $(".MonthDropDown").hide();
-        return "chrome"
-      }
-      if (navigator.userAgent.includes("Firefox")) {
-     $(".MonthPicker").hide();
-       $(".MonthDropDown").show();
-    
-        return "firefox"
-      }
-      if (navigator.userAgent.includes("Safari")) {
-     $(".MonthPicker").hide();
-       $(".MonthDropDown").show();
-        return "safari"
-      }
-    }
-    
-    $scope.countrychange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'statelist', "id": 566, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.states = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-        $scope.statechange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'localgvtlist', "id": id, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.localgvts = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-    
-    
-    const d = new Date();
-    let year = d.getFullYear();
-    var years = [];
-    for (var i = year; i >= 1990; i--) {
-       years.push(i);
-    }
-    console.log(years);
-    $scope.yearList = years;
-    
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'agents' }
-    }).then(function successCallback(response) {
-    $scope.agents = response.data;
-    //window.location.reload();
-    });
-    
-    
-    $scope.reset = function () {
-    
-    $scope.tablerow = false;
-    $scope.MonthDate = "";
-    $scope.agentCode = "";
-    }
-    
-    $scope.query = function () {
-    
-    var MonthAndYear;
-    
-    if (detectBrowser() == "chrome"){
-    var currentMonth = ($scope.MonthDate.getMonth() < 10 ? '0' : '') + ($scope.MonthDate.getMonth()+ 1);
-    MonthAndYear = $scope.MonthDate.getFullYear()+"-"+currentMonth;
-    }else{
-    MonthAndYear = $scope.YearDrop + "-" + $scope.MonthDrop;
-    }
-    
-    
-    
-    
-    $scope.tablerow = true;
-    $scope.isHideexcel= false;
-    $http({
-    method: 'post',
-    url: '../ajax/agentMonthajax.php',
-    data: {
-    action: 'getreport',
-    agentCode: $scope.agentCode,
-    MonthAndYear: MonthAndYear,
-    state: $scope.state,
-    localgovernment: $scope.localgovernment,
-    },
-    }).then(function successCallback(response) {
-    $scope.res = response.data;
-    
-    //alert(code);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    }
-    
-    $scope.detail = function (index, id) {
-    $http({
-    method: 'post',
-    url: '../ajax/agentMonthajax.php',
-    data: {
-    id: id,
-    action: 'view'
-    },
-    }).then(function successCallback(response) {
-    // $scope.isHide = true;
-    // $scope.isHideOk = false;
-    $scope.id = response.data[0].id;
-    $scope.party_type = response.data[0].party_type;
-    $scope.agent_name = response.data[0].agent_name;
-    $scope.run_month = response.data[0].run_month;
-    $scope.date_time = response.data[0].date_time;
-    $scope.target_monthly_count = response.data[0].target_monthly_count;
-    $scope.target_monthly_amount = response.data[0].target_monthly_amount;
-    $scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
-    $scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
-    $scope.assigned_rank = response.data[0].assigned_rank;
-    $scope.monthly_rank = response.data[0].monthly_rank;
-    $scope.State = response.data[0].state;
-    $scope.LocalGovernment = response.data[0].LocalGovernment;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    });
-    
-    
-    app.controller('AgentDailyCtrl', function ($scope, $http) {
-    $scope.startDate = new Date();
-    $scope.tablerow = true;
-    $scope.isHideexcel= true;
-    
-    
-    $scope.refresh = function () {
-        window.location.reload();
-        };
-    
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'agents' }
-    }).then(function successCallback(response) {
-    $scope.agents = response.data;
-    //window.location.reload();
-    });
-    
-    $scope.countrychange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'statelist', "id": 566, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.states = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-        $scope.statechange = function (id) {
-        $http({
-        method: 'post',
-        url: '../ajax/load.php',
-        params: { for: 'localgvtlist', "id": id, "action": "active" },
-        }).then(function successCallback(response) {
-        $scope.localgvts = response.data;
-        }, function errorCallback(response) {
-        // console.log(response);
-        });
-        }
-    
-    $scope.reset = function () {
-    $scope.tablerow = false;
-    $scope.MonthDate = "";
-    $scope.agentCode = "";
-    }
-    
-    $scope.query = function () {
-    $scope.tablerow = true;
-    $scope.isHideexcel= false;
-    $http({
-    method: 'post',
-    url: '../ajax/agentDailyajax.php',
-    data: {
-    action: 'getreport',
-    agentCode: $scope.agentCode,
-    MonthDate: $scope.MonthDate,
-    state: $scope.state,
-    localgovernment: $scope.localgovernment,
-    },
-    }).then(function successCallback(response) {
-    $scope.res = response.data;
-    
-    //alert(code);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    }
-    
-    $scope.detail = function (index, id) { 
-    
-    $http({
-    method: 'post',
-    url: '../ajax/agentDailyajax.php',
-    data: {
-    id: id,
-    action: 'view'
-    },
-    }).then(function successCallback(response) {
-    // $scope.isHide = true;
-    // $scope.isHideOk = false;
-    $scope.id = response.data[0].id;
-    $scope.party_type = response.data[0].party_type;
-    $scope.agent_name = response.data[0].agent_name;
-    $scope.run_date = response.data[0].run_date;
-    $scope.date_time = response.data[0].date_time;
-    $scope.target_monthly_count = response.data[0].target_monthly_count;
-    $scope.target_monthly_amount = response.data[0].target_monthly_amount;
-    $scope.actual_cum_daily_count = response.data[0].actual_cum_daily_count;
-    $scope.actual_cum_daily_amount = response.data[0].actual_cum_daily_amount;
-    $scope.actual_iso_daily_count = response.data[0].actual_iso_daily_count;
-    $scope.actual_iso_daily_amount = response.data[0].actual_iso_daily_amount;
-    $scope.daily_trend = response.data[0].daily_trend;
-    $scope.State = response.data[0].state;
-    $scope.LocalGovernment = response.data[0].LocalGovernment;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    
-    });
 
 
 app.controller('ParentTransCtrl', function ($scope, $http) {
@@ -2412,317 +2730,6 @@ $scope.alsumary = response.data;
 });
 
 
-app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
-$scope.isHideOk = true;
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'Groupagents' }
-}).then(function successCallback(response) {
-$scope.Groupagents = response.data;
-//window.location.reload();
-});
-$scope.query = function () {
-$scope.tablerow = false;
-$http({
-method: 'post',
-url: '../ajax/upgradeajax.php',
-data: {
-
-agentCode: $scope.agentCode,
-
-action: 'query'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
- $scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-$scope.upgrade = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (index, agent_code) {
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/upgradeajax.php',
-data: { agent_code: agent_code, action: 'view' },
-}).then(function successCallback(response) {
-
-// alert(id);
-
-
-$scope.active = response.data[0].active;
-$scope.application_id = response.data[0].application_id;
-$scope.block_date = response.data[0].block_date;
-$scope.block_reason_id = response.data[0].block_reason_id;
-$scope.block_status = response.data[0].block_status;
-$scope.agent_code = response.data[0].agent_code;
-$scope.contact_person_mobile = response.data[0].contact_person_mobile;
-$scope.contact_person_name = response.data[0].contact_person_name;
-$scope.country = response.data[0].country;
-$scope.create_time = response.data[0].create_time;
-$scope.create_user = response.data[0].create_user;
-$scope.email = response.data[0].email;
-$scope.gvtname = response.data[0].gvtname;
-$scope.lname = response.data[0].lname;
-$scope.atype = response.data[0].atype;
-$scope.mobile_no = response.data[0].mobile_no;
-$scope.agent_name = response.data[0].agent_name;
-$scope.code = response.data[0].code;
-$scope.outlet_name = response.data[0].outlet_name;
-$scope.parenroutletname = response.data[0].parenroutletname;
-$scope.partytype = response.data[0].partytype;
-$scope.pcode = response.data[0].pcode;
-$scope.ptype = response.data[0].ptype;
-$scope.start_date = response.data[0].start_date;
-$scope.expiry_date = response.data[0].expiry_date;
-$scope.state = response.data[0].state;
-$scope.sub_agent = response.data[0].sub_agent;
-$scope.tax_number = response.data[0].tax_number;
-$scope.update_time = response.data[0].update_time;
-$scope.update_user = response.data[0].update_user;
-$scope.user = response.data[0].user;
-$scope.work_no = response.data[0].work_no;
-$scope.zip_code = response.data[0].zip_code;
-$scope.address1 = response.data[0].address1;
-$scope.address2 = response.data[0].address2;
-$scope.local_govt_id = response.data[0].local_govt_id;
-$scope.state_id = response.data[0].state_id;
-$scope.loc_latitude = response.data[0].loc_latitude;
-$scope.loc_longitude = response.data[0].loc_longitude;
-$scope.gender = response.data[0].gender;
-$scope.BusinessType = response.data[0].BusinessType;
-$scope.dob = response.data[0].dob;
-$scope.bvn = response.data[0].bvn;
-$scope.group_id = response.data[0].group_id;
-$scope.group_type = response.data[0].group_type;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.update = function (agent_code) {
-
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/upgradeajax.php',
-data: {
-agent_code: $scope.agent_code,
-
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-$("#upgradeBody").html("<h3>" + response.data + "</h3>");
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-$scope.refresh = function(){
-window.location.reload();
-}
-$scope.reset = function () {
-$scope.tablerow = true;
-
-}
-});
-
-app.controller('CreChildCtrl', function ($scope, $http, $filter) {
-$scope.transferbtn = true;
-   $scope.isGoDisbled = true;
- $scope.isHideOk = true;
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'childagents' }
-}).then(function successCallback(response) {
-$scope.childagents = response.data;
-//window.location.reload();
-});
-$scope.query = function () {
-$scope.tablerow = false;
-$http({
-method: 'post',
-url: '../ajax/crechildajax.php',
-data: {
-
-agentCode: $scope.agentCode,
-
-action: 'query'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
- $scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-$scope.upgrade = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (index, agent_code) {
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/crechildajax.php',
-data: { agent_code: agent_code, action: 'view' },
-}).then(function successCallback(response) {
-
-// alert(id);
-
-
-$scope.active = response.data[0].active;
-$scope.application_id = response.data[0].application_id;
-$scope.block_date = response.data[0].block_date;
-$scope.block_reason_id = response.data[0].block_reason_id;
-$scope.block_status = response.data[0].block_status;
-$scope.agent_code = response.data[0].agent_code;
-$scope.contact_person_mobile = response.data[0].contact_person_mobile;
-$scope.contact_person_name = response.data[0].contact_person_name;
-$scope.country = response.data[0].country;
-$scope.create_time = response.data[0].create_time;
-$scope.create_user = response.data[0].create_user;
-$scope.email = response.data[0].email;
-$scope.gvtname = response.data[0].gvtname;
-$scope.lname = response.data[0].lname;
-$scope.atype = response.data[0].atype;
-$scope.mobile_no = response.data[0].mobile_no;
-$scope.agent_name = response.data[0].agent_name;
-$scope.code = response.data[0].code;
-$scope.outlet_name = response.data[0].outlet_name;
-$scope.parenroutletname = response.data[0].parenroutletname;
-$scope.partytype = response.data[0].partytype;
-$scope.pcode = response.data[0].pcode;
-$scope.ptype = response.data[0].ptype;
-$scope.start_date = response.data[0].start_date;
-$scope.expiry_date = response.data[0].expiry_date;
-$scope.state = response.data[0].state;
-$scope.sub_agent = response.data[0].sub_agent;
-$scope.tax_number = response.data[0].tax_number;
-$scope.update_time = response.data[0].update_time;
-$scope.update_user = response.data[0].update_user;
-$scope.user = response.data[0].user;
-$scope.work_no = response.data[0].work_no;
-$scope.zip_code = response.data[0].zip_code;
-$scope.address1 = response.data[0].address1;
-$scope.address2 = response.data[0].address2;
-$scope.local_govt_id = response.data[0].local_govt_id;
-$scope.state_id = response.data[0].state_id;
-$scope.loc_latitude = response.data[0].loc_latitude;
-$scope.loc_longitude = response.data[0].loc_longitude;
-$scope.gender = response.data[0].gender;
-$scope.BusinessType = response.data[0].BusinessType;
-$scope.dob = response.data[0].dob;
-$scope.bvn = response.data[0].bvn;
-$scope.group_id = response.data[0].group_id;
-$scope.group_type = response.data[0].group_type;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.reset = function () {
-$scope.tablerow = true;
-
-}
-$scope.checkuservalid = function () {
-   var user = $scope.userName.length();
-   if(user >= 9) {
-    $scope.isGoDisbled = false;
-   }
-   else {
-    $scope.isGoDisbled = true;
-   }
-  }
-
-   $scope.chkuser = function () {
-   $scope.userNameDisabled = false;
-   $scope.disabledContactMobile = true;
-   $scope.disabledcname = true;
-   $scope.isLoader = true;
-   $scope.isSelectDisabled = true;
-   $scope.isSelectDisabledType = true;
-   $scope.isHideGo = false;
-
-   $http({
-    method: 'post',
-    url: '../ajax/crechildajax.php',
-    data: {
-     id: $scope.id,
-     action: 'userchk',
-     userName:$scope.userName
-    },
-   }).then(function successCallback(response) {
-    if(response.data <= 0) {
-     $scope.isInputDisabled = false;
-     $scope.userNameDisabled = true;
-     $scope.isHideGo = true;
-     $scope.transferbtn = false;
-     $scope.msguser = "User Name is Available";
-    }
-    else{
-     $scope.isInputDisabled = true;
-     $scope.msguser = "User Name is Already Taken";
-     $scope.userNameDisabled = false;
-     $scope.isHideGo = false;
-     $scope.transferbtn = true;
-    }
-    $scope.isLoader = false;
-
-
-   }, function errorCallback(response) {
-    // console.log(response);
-   });
-  }
-$scope.update = function (agent_code) {
-  $scope.transferbtn = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/crechildajax.php',
-data: {
-agent_code: $scope.agent_code,
-cmobile: $scope.cmobile,
-cname: $scope.cname,
-userName :$scope.userName,
-
-action: 'create'
-},
-}).then(function successCallback(response) {
-$scope.transferbtn = false;
-$scope.ispayRequestForm = true;
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$scope.isResDiv = false;
-$scope.msg = response.data.msg;
-$scope.responseCode = response.data.responseCode;
-$scope.msg = response.data.msg;
-$scope.errorResponseDescription = response.data.errorResponseDescription;
-//alert($scope.msg);
-//alert($scope.userName);
-//$("#upgradeBody").html("<h3>" + response.data + "</h3>");
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}
-$scope.refresh = function(){
-window.location.reload();
-}
-});
-
 app.controller('AccsalesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -3265,6 +3272,7 @@ $scope.utime = "";
 
 }
 });
+
 
 
 app.controller('AcctrReportCtrl', function ($scope, $http, $filter) {
@@ -3943,7 +3951,6 @@ close();
 }
 });
 
-
 app.controller('AccstatReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -4201,7 +4208,6 @@ close();
 }
 
 });
-
 
 
    app.controller('WalletBalanceCtrl', function ($scope, $http, $filter) {
@@ -4850,6 +4856,423 @@ close();
 });
 
 
+
+app.controller('BPtrReportCtrl', function ($scope, $http, $filter) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isOrderNoDi = true;
+$scope.isStartDateDi = false;
+$scope.isEndDateDi = false;
+$scope.tablerow = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'servfeaforcode',action:'active' },
+}).then(function successCallback(response) {
+$scope.types = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+$scope.impor =function () {
+     $scope.tablerow = false;
+}
+$scope.viewcomm = function (no) {
+$http({
+method: 'post',
+url: '../ajax/bptrreportajax.php',
+data: {
+                action: 'viewcomm',
+                orderNo: no
+            },
+}).then(function successCallback(response) {
+$scope.no =no;
+$scope.rescomms = response.data;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (no,code) {
+$http({
+method: 'post',
+url: '../ajax/bptrreportajax.php',
+data: {
+                action: 'view',
+                orderNo: no,
+                code: code
+            },
+}).then(function successCallback(response) {
+$scope.no = response.data[0].no;
+$scope.code = response.data[0].code;
+$scope.transLogId1 = response.data[0].transLogId1;
+$scope.transLogId2 = response.data[0].transLogId2;
+$scope.transLogId3 = response.data[0].transLogId3;
+$scope.toamount = response.data[0].toamount;
+$scope.rmount = response.data[0].rmount;
+$scope.user = response.data[0].user;
+$scope.amscharge = response.data[0].amscharge;
+$scope.parcharge = response.data[0].parcharge;
+$scope.service_charge = response.data[0].service_charge;
+$scope.ocharge = response.data[0].ocharge;
+$scope.name = response.data[0].name;
+$scope.mobile = response.data[0].mobile;
+$scope.Biller = response.data[0].Biller;
+$scope.refNo = response.data[0].refNo;
+$scope.fincomment = response.data[0].fincomment;
+$scope.dtime = response.data[0].dtime;
+$scope.pstatus = response.data[0].pstatus;
+$scope.update_time = response.data[0].update_time;
+$scope.sts = response.data[0].sts;
+$scope.bank = response.data[0].bank;
+$scope.partner = response.data[0].partner;
+$scope.appcmt = response.data[0].appcmt;
+$scope.Product = response.data[0].Product;
+$scope.account_no = response.data[0].account_no;
+$scope.account_name = response.data[0].account_name;
+$scope.bp_account_no = response.data[0].bp_account_no;
+$scope.bp_account_name = response.data[0].bp_account_name;
+$scope.bp_bank_code = response.data[0].bp_bank_code;
+$scope.session_id = response.data[0].session_id;
+$scope.bp_transaction_id = response.data[0].bp_transaction_id;
+$scope.payment_fee = response.data[0].payment_fee;
+$scope.agent_charge = response.data[0].agent_charge;
+$scope.stamp_charge = response.data[0].stamp_charge;
+$scope.create_time = response.data[0].create_time;
+$scope.ptime = response.data[0].ptime;
+
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.query = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/bptrreportajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+status: $scope.status,
+state: $scope.state,
+championCode: $scope.championCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.type = "ALL";
+$scope.status = "ALL";
+$scope.creteria = "BT";
+$scope.championCode = "ALL";
+$scope.state = "ALL";
+$scope.isOrderTypeDi = false;
+$scope.isOrderNoDi = true;
+}
+$scope.print = function (no,code) {
+$http({
+method: 'post',
+url: '../ajax/bptrreportajax.php',
+data: {
+action: 'view',
+                orderNo: no,
+code: code
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var creteria = $scope.creteria;
+var id = $scope.id;
+var statusa = $scope.statusa;
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var m = new Date();
+var datetime =
+m.getUTCFullYear() + "-" +
+("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+("0" + m.getUTCDate()).slice(-2) + " " +
+("0" + m.getUTCHours()).slice(-2) + ":" +
+("0" + m.getUTCMinutes()).slice(-2) + ":" +
+("0" + m.getUTCSeconds()).slice(-2);
+var text = "";
+var valu = "";
+text = "By Date";
+valu = "From: " + startDate + " to " + endDate;
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Transaction Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+if(response.data[0].code =='CIN'){
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +
+"<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>" +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Bank</td><td class='result'>" + response.data[0].bank + "</td></tr>" +
+"<tr><td class='name'>Name </td><td class='result'>" + response.data[0].name + "</td></tr>" +
+"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
+"<tr><td class='name'>Session ID</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
+"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
+"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].service_charge + "</td></tr>" +
+"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+}else if(response.data[0].code =='COU'){
+if(response.data[0].sts=='TRIGGERED'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +
+statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].sender_name + "</td></tr>" +
+"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
+"<tr><td class='name'>Operation ID</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
+"<tr><td class='name'>Short Code</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
+"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].service_charge + "</td></tr>" +
+"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+}else if(response.data[0].code =='MP0'){
+var ressplit = response.data[0].fincomment.split(",");
+var TID = (ressplit[0]).replace('TID:','');
+var PAN = (ressplit[1]).replace('PAN:','');
+var ID = (ressplit[2]).replace('ID:','');
+var Time = (ressplit[3]).replace('Time :','');
+var ressplit1 = response.data[0].appcmt.split(',');
+var RC = (ressplit1[0]).replace('RC:','');
+var STAN = (ressplit1[1]).replace('STAN:','');
+var RRN = (ressplit1[2]).replace('RRN:','');
+if(response.data[0].sts=='TRIGGERED'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
+}else if(response.data[0].sts=='SUCCESS'){
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
+}else{
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
+}
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +statushead +
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
+"<tr><td class='name'>Terminal ID</td><td class='result'></td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
+"<tr><td class='name'>Response Code</td><td class='result'>" + RC + "</td></tr>" +
+"<tr><td class='name'>RRN</td><td class='result'>" +RRN+ "</td></tr>" +
+"<tr><td class='name'>STAN</td><td class='result'>" + STAN + "</td></tr>" +
+"<tr><td class='name'>PAN </td><td class='result'>" + PAN + "</td></tr>" +
+"<tr><td class='name'>Date </td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+}
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.printAll = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.dateerr ="";
+$http({
+method: 'post',
+url: '../ajax/bptrreportajax.php',
+data: {
+action: 'getreport',
+type: $scope.type,
+status: $scope.status,
+state: $scope.state,
+championCode: $scope.championCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var rerows = "";
+for(var i=0;i < response.data.length;i++) {
+
+rerows += "<td>"+ response.data[i].no +"</td>"+
+"<td>"+ response.data[i].code +"</td>"+
+"<td>"+ response.data[i].user +"</td>"+
+"<td>"+ response.data[i].reqmount +"</td>"+
+"<td>"+ response.data[i].toamount +"</td>"+
+"<td>"+ response.data[i].rrn +"</td>"+
+"<td>"+ response.data[i].status +"</td>"+
+"<td>"+ response.data[i].dtime +"</td>"+
+"</tr>"
+}
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var text = "";
+var valu = "";
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+'<h2 style="text-align:center;margin-top:30px">Transaction Report List '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+var responsetablehead ="<table width='100%'><thead>" +
+"<tr><th>Order NO</th>" +
+"<th>Order Type</th>" +
+"<th>Agent</th>" +
+"<th>Request Amount</th>" +
+"<th>Total Amount</th>" +
+"<th>Account Number</th>" +
+"<th>Status</th>" +
+"<th>Date and  Time</th>" +
+"</tr></thead>" +
+"<tbody>"+rerows+"</tbody></table>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.clear = function () {
+$scope.no = "";
+$scope.code = "";
+$scope.toamount = "";
+$scope.rmount = "";
+$scope.service_charge = "";
+$scope.parcharge = "";
+$scope.ocharge = "";
+$scope.name = "";
+$scope.mobile = "";
+$scope.auth = "";
+$scope.refNo = "";
+$scope.fincomment = "";
+$scope.dtime = "";
+$scope.sts = "";
+$scope.update_time = "";
+$scope.user = "";
+$scope.transLogId1 = "";
+$scope.transLogId2 = "";
+$scope.sconfid = "";
+$scope.bank = "";
+$scope.partner = "";
+$scope.sender_name = "";
+
+}
+});
+
 app.controller('BPsalesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -5400,426 +5823,321 @@ $scope.partner = "";
 });
 
 
-app.controller('BPtrReportCtrl', function ($scope, $http, $filter) {
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.isOrderNoDi = true;
-$scope.isStartDateDi = false;
-$scope.isEndDateDi = false;
-$scope.tablerow = true;
+app.controller('UpGradeCtrl', function ($scope, $http, $filter) {
+$scope.isHideOk = true;
 $http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
-params: { action: 'active', for: 'champion' }
+params: { action: 'active', for: 'Groupagents' }
 }).then(function successCallback(response) {
-$scope.champions = response.data;
+$scope.Groupagents = response.data;
 //window.location.reload();
 });
-$scope.countrychange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": 566, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.statechange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'servfeaforcode',action:'active' },
-}).then(function successCallback(response) {
-$scope.types = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-$scope.checkdate = function (startDate,endDate){
-var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-var currdate = new Date();
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.isQueryDi = false;
-}
-}
-$scope.impor =function () {
-     $scope.tablerow = false;
-}
-$scope.viewcomm = function (no) {
-$http({
-method: 'post',
-url: '../ajax/bptrreportajax.php',
-data: {
-                action: 'viewcomm',
-                orderNo: no
-            },
-}).then(function successCallback(response) {
-$scope.no =no;
-$scope.rescomms = response.data;
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (no,code) {
-$http({
-method: 'post',
-url: '../ajax/bptrreportajax.php',
-data: {
-                action: 'view',
-                orderNo: no,
-                code: code
-            },
-}).then(function successCallback(response) {
-$scope.no = response.data[0].no;
-$scope.code = response.data[0].code;
-$scope.transLogId1 = response.data[0].transLogId1;
-$scope.transLogId2 = response.data[0].transLogId2;
-$scope.transLogId3 = response.data[0].transLogId3;
-$scope.toamount = response.data[0].toamount;
-$scope.rmount = response.data[0].rmount;
-$scope.user = response.data[0].user;
-$scope.amscharge = response.data[0].amscharge;
-$scope.parcharge = response.data[0].parcharge;
-$scope.service_charge = response.data[0].service_charge;
-$scope.ocharge = response.data[0].ocharge;
-$scope.name = response.data[0].name;
-$scope.mobile = response.data[0].mobile;
-$scope.Biller = response.data[0].Biller;
-$scope.refNo = response.data[0].refNo;
-$scope.fincomment = response.data[0].fincomment;
-$scope.dtime = response.data[0].dtime;
-$scope.pstatus = response.data[0].pstatus;
-$scope.update_time = response.data[0].update_time;
-$scope.sts = response.data[0].sts;
-$scope.bank = response.data[0].bank;
-$scope.partner = response.data[0].partner;
-$scope.appcmt = response.data[0].appcmt;
-$scope.Product = response.data[0].Product;
-$scope.account_no = response.data[0].account_no;
-$scope.account_name = response.data[0].account_name;
-$scope.bp_account_no = response.data[0].bp_account_no;
-$scope.bp_account_name = response.data[0].bp_account_name;
-$scope.bp_bank_code = response.data[0].bp_bank_code;
-$scope.session_id = response.data[0].session_id;
-$scope.bp_transaction_id = response.data[0].bp_transaction_id;
-$scope.payment_fee = response.data[0].payment_fee;
-$scope.agent_charge = response.data[0].agent_charge;
-$scope.stamp_charge = response.data[0].stamp_charge;
-$scope.create_time = response.data[0].create_time;
-$scope.ptime = response.data[0].ptime;
-
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
 $scope.query = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.dateerr ="";
+$scope.tablerow = false;
 $http({
 method: 'post',
-url: '../ajax/bptrreportajax.php',
+url: '../ajax/upgradeajax.php',
 data: {
-action: 'getreport',
-type: $scope.type,
-status: $scope.status,
-state: $scope.state,
-championCode: $scope.championCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
+
+agentCode: $scope.agentCode,
+
+action: 'query'
 },
 }).then(function successCallback(response) {
-$scope.res = response.data;
+// $scope.isHide = true;
+ $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.upgrade = response.data;
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
+$scope.view = function (index, agent_code) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/upgradeajax.php',
+data: { agent_code: agent_code, action: 'view' },
+}).then(function successCallback(response) {
+
+// alert(id);
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.agent_code = response.data[0].agent_code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.agent_name = response.data[0].agent_name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+$scope.bvn = response.data[0].bvn;
+$scope.group_id = response.data[0].group_id;
+$scope.group_type = response.data[0].group_type;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (agent_code) {
+
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/upgradeajax.php',
+data: {
+agent_code: $scope.agent_code,
+
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$("#upgradeBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function(){
+window.location.reload();
 }
 $scope.reset = function () {
-$scope.tablerow = false;
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.type = "ALL";
-$scope.status = "ALL";
-$scope.creteria = "BT";
-$scope.championCode = "ALL";
-$scope.state = "ALL";
-$scope.isOrderTypeDi = false;
-$scope.isOrderNoDi = true;
-}
-$scope.print = function (no,code) {
-$http({
-method: 'post',
-url: '../ajax/bptrreportajax.php',
-data: {
-action: 'view',
-                orderNo: no,
-code: code
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-var creteria = $scope.creteria;
-var id = $scope.id;
-var statusa = $scope.statusa;
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var m = new Date();
-var datetime =
-m.getUTCFullYear() + "-" +
-("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
-("0" + m.getUTCDate()).slice(-2) + " " +
-("0" + m.getUTCHours()).slice(-2) + ":" +
-("0" + m.getUTCMinutes()).slice(-2) + ":" +
-("0" + m.getUTCSeconds()).slice(-2);
-var text = "";
-var valu = "";
-text = "By Date";
-valu = "From: " + startDate + " to " + endDate;
-
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Transaction Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-if(response.data[0].code =='CIN'){
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-"<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>" +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Bank</td><td class='result'>" + response.data[0].bank + "</td></tr>" +
-"<tr><td class='name'>Name </td><td class='result'>" + response.data[0].name + "</td></tr>" +
-"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
-"<tr><td class='name'>Session ID</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
-"<tr><td class='name'>Reference</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
-"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].service_charge + "</td></tr>" +
-"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}else if(response.data[0].code =='COU'){
-if(response.data[0].sts=='TRIGGERED'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-
-}
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Sender</td><td class='result'>" + response.data[0].sender_name + "</td></tr>" +
-"<tr><td class='name'>Mobile</td><td class='result'>" + response.data[0].mobile + "</td></tr>" +
-"<tr><td class='name'>Operation ID</td><td class='result'>" + response.data[0].auth + "</td></tr>" +
-"<tr><td class='name'>Short Code</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
-"<tr><td class='name'>Date</td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].rmount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].service_charge + "</td></tr>" +
-"<tr><td class='name'>Other Charge</td><td class='result'>" + response.data[0].ocharge + "</td></tr>" +
-"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].toamount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}else if(response.data[0].code =='MP0'){
-var ressplit = response.data[0].fincomment.split(",");
-var TID = (ressplit[0]).replace('TID:','');
-var PAN = (ressplit[1]).replace('PAN:','');
-var ID = (ressplit[2]).replace('ID:','');
-var Time = (ressplit[3]).replace('Time :','');
-var ressplit1 = response.data[0].appcmt.split(',');
-var RC = (ressplit1[0]).replace('RC:','');
-var STAN = (ressplit1[1]).replace('STAN:','');
-var RRN = (ressplit1[2]).replace('RRN:','');
-if(response.data[0].sts=='TRIGGERED'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:orange'>" + response.data[0].sts + "</b></td></tr>";
-}else if(response.data[0].sts=='SUCCESS'){
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + response.data[0].sts + "</b></td></tr>";
-}else{
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + response.data[0].sts + "</b></td></tr>";
-}
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +statushead +
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].no + "</td></tr>" +
-"<tr><td class='name'>Terminal ID</td><td class='result'></td></tr>" +
-"<tr><td class='name'>Transaction ID</td><td class='result'>" + response.data[0].refNo + "</td></tr>" +
-"<tr><td class='name'>Response Code</td><td class='result'>" + RC + "</td></tr>" +
-"<tr><td class='name'>RRN</td><td class='result'>" +RRN+ "</td></tr>" +
-"<tr><td class='name'>STAN</td><td class='result'>" + STAN + "</td></tr>" +
-"<tr><td class='name'>PAN </td><td class='result'>" + PAN + "</td></tr>" +
-"<tr><td class='name'>Date </td><td class='result'>" + response.data[0].dtime + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].type + "</td></tr>" +
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-}
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.printAll = function () {
 $scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
+
 }
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.dateerr ="";
+});
+
+app.controller('CreChildCtrl', function ($scope, $http, $filter) {
+$scope.transferbtn = true;
+   $scope.isGoDisbled = true;
+ $scope.isHideOk = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'childagents' }
+}).then(function successCallback(response) {
+$scope.childagents = response.data;
+//window.location.reload();
+});
+$scope.query = function () {
+$scope.tablerow = false;
 $http({
 method: 'post',
-url: '../ajax/bptrreportajax.php',
+url: '../ajax/crechildajax.php',
 data: {
-action: 'getreport',
-type: $scope.type,
-status: $scope.status,
-state: $scope.state,
-championCode: $scope.championCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
+
+agentCode: $scope.agentCode,
+
+action: 'query'
 },
 }).then(function successCallback(response) {
-$scope.res = response.data;
 // $scope.isHide = true;
-// $scope.isHideOk = false;
-var rerows = "";
-for(var i=0;i < response.data.length;i++) {
-
-rerows += "<td>"+ response.data[i].no +"</td>"+
-"<td>"+ response.data[i].code +"</td>"+
-"<td>"+ response.data[i].user +"</td>"+
-"<td>"+ response.data[i].reqmount +"</td>"+
-"<td>"+ response.data[i].toamount +"</td>"+
-"<td>"+ response.data[i].rrn +"</td>"+
-"<td>"+ response.data[i].status +"</td>"+
-"<td>"+ response.data[i].dtime +"</td>"+
-"</tr>"
-}
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
-
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px">Transaction Report List '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-var responsetablehead ="<table width='100%'><thead>" +
-"<tr><th>Order NO</th>" +
-"<th>Order Type</th>" +
-"<th>Agent</th>" +
-"<th>Request Amount</th>" +
-"<th>Total Amount</th>" +
-"<th>Account Number</th>" +
-"<th>Status</th>" +
-"<th>Date and  Time</th>" +
-"</tr></thead>" +
-"<tbody>"+rerows+"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
+ $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.upgrade = response.data;
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
-}
-$scope.clear = function () {
-$scope.no = "";
-$scope.code = "";
-$scope.toamount = "";
-$scope.rmount = "";
-$scope.service_charge = "";
-$scope.parcharge = "";
-$scope.ocharge = "";
-$scope.name = "";
-$scope.mobile = "";
-$scope.auth = "";
-$scope.refNo = "";
-$scope.fincomment = "";
-$scope.dtime = "";
-$scope.sts = "";
-$scope.update_time = "";
-$scope.user = "";
-$scope.transLogId1 = "";
-$scope.transLogId2 = "";
-$scope.sconfid = "";
-$scope.bank = "";
-$scope.partner = "";
-$scope.sender_name = "";
+$scope.view = function (index, agent_code) {
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/crechildajax.php',
+data: { agent_code: agent_code, action: 'view' },
+}).then(function successCallback(response) {
 
+// alert(id);
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.agent_code = response.data[0].agent_code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.agent_name = response.data[0].agent_name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+$scope.bvn = response.data[0].bvn;
+$scope.group_id = response.data[0].group_id;
+$scope.group_type = response.data[0].group_type;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.reset = function () {
+$scope.tablerow = true;
+
+}
+$scope.checkuservalid = function () {
+   var user = $scope.userName.length();
+   if(user >= 9) {
+    $scope.isGoDisbled = false;
+   }
+   else {
+    $scope.isGoDisbled = true;
+   }
+  }
+
+   $scope.chkuser = function () {
+   $scope.userNameDisabled = false;
+   $scope.disabledContactMobile = true;
+   $scope.disabledcname = true;
+   $scope.isLoader = true;
+   $scope.isSelectDisabled = true;
+   $scope.isSelectDisabledType = true;
+   $scope.isHideGo = false;
+
+   $http({
+    method: 'post',
+    url: '../ajax/crechildajax.php',
+    data: {
+     id: $scope.id,
+     action: 'userchk',
+     userName:$scope.userName
+    },
+   }).then(function successCallback(response) {
+    if(response.data <= 0) {
+     $scope.isInputDisabled = false;
+     $scope.userNameDisabled = true;
+     $scope.isHideGo = true;
+     $scope.transferbtn = false;
+     $scope.msguser = "User Name is Available";
+    }
+    else{
+     $scope.isInputDisabled = true;
+     $scope.msguser = "User Name is Already Taken";
+     $scope.userNameDisabled = false;
+     $scope.isHideGo = false;
+     $scope.transferbtn = true;
+    }
+    $scope.isLoader = false;
+
+
+   }, function errorCallback(response) {
+    // console.log(response);
+   });
+  }
+$scope.update = function (agent_code) {
+  $scope.transferbtn = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/crechildajax.php',
+data: {
+agent_code: $scope.agent_code,
+cmobile: $scope.cmobile,
+cname: $scope.cname,
+userName :$scope.userName,
+
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.transferbtn = false;
+$scope.ispayRequestForm = true;
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.isResDiv = false;
+$scope.msg = response.data.msg;
+$scope.responseCode = response.data.responseCode;
+$scope.msg = response.data.msg;
+$scope.errorResponseDescription = response.data.errorResponseDescription;
+//alert($scope.msg);
+//alert($scope.userName);
+//$("#upgradeBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function(){
+window.location.reload();
 }
 });
-
 
 
 app.controller('GroupListCtrl', function ($scope, $http, $filter) {
-$scope.isHideOk = true;
+
+ $scope.isHideOk = true;
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -5919,6 +6237,7 @@ $scope.refresh = function(){
 window.location.reload();
 }
 });
+
 
 
 app.controller('TransFundCtrl', function ($scope, $http) {
@@ -6072,6 +6391,7 @@ $scope.agentCode =  "";
 }
 });
 
+
 app.controller('TransStatusCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
@@ -6141,6 +6461,62 @@ $scope.update_time = response.data[0].update_time;
 });
 
 
+app.controller('AccServiceBankCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+method: 'post',
+url: '../ajax/accserviceajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.accservicelist = response.data;
+});
+
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/accserviceajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.bankID = response.data[0].bankID;
+$scope.id = response.data[0].id;
+$scope.cbn = response.data[0].cbn;
+$scope.name = response.data[0].name;
+$scope.accservice = response.data[0].accservice;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/accserviceajax.php',
+data: {
+id: $scope.id,
+accservice:   $scope.accservice,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#AccserviceBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+
+});
 
 app.controller('sanefAgentDetCtrl', ['$scope','$http', function($scope,$http ){
 $scope.isHideOk = true;
@@ -6636,7 +7012,6 @@ console.log(response.data);
 
 }]);
 
-
 app.controller('BankAccCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -6783,6 +7158,189 @@ $scope.update_time = response.data[0].update_time;
 
 });
 
+app.controller('CaOTreCtrl', function ($scope, $http, $filter) {
+	$scope.isHideOk = true;
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+	$scope.query = function () {
+		$scope.tablerow = true;
+		var orderno =  $scope.orderno;
+		var startDate =  $scope.startDate;
+		var endDate =  $scope.endDate;
+		var difference  = new Date(endDate - startDate);
+		var diffInDays  = difference/1000/60/60/24;
+		var currdate = new Date();
+		if(endDate > currdate) {
+			alert("End Date can't be more than current Date");
+			$scope.endDate = currdate;
+		//$scope.isQueryDi = true;
+		}
+		else if(startDate > endDate){
+			$scope.dateerr = "Date should be valid";
+		//$scope.isQueryDi = true;
+		}
+		else if(diffInDays>7) {
+			alert("Date Range should between 7 days");
+		//$scope.isQueryDi = true;
+		}
+		else {
+			$http({
+				method: 'post',
+				url: '../ajax/cashotreaajax.php',
+				data: {
+					action: 'query',
+					startDate:$scope.startDate,
+					endDate:$scope.endDate,
+					orderno:$scope.orderno
+				},
+			}).then(function successCallback(response) {
+				$scope.ctress = response.data;
+			}, function errorCallback(response) {
+				console.log(response.data);
+			});
+		}
+	}
+	$scope.refresh = function () {
+		window.location.reload();
+		};
+		$scope.reset = function () {
+	$("#tbody").empty();
+	$scope.tablerow = false;
+	$scope.orderno = "";
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+	}
+
+	$scope.process = function (orderno) {
+		$http({
+			method: 'post',
+			url: '../ajax/cashotreaajax.php',
+			data: {
+				action: 'process',
+				rescode:$scope.rescode,
+				stan:$scope.stan,
+				rrn:$scope.rrn,
+				authcode:$scope.authcode,
+				pan:$scope.pan,
+				orderno:orderno
+			},
+		}).then(function successCallback(response) {
+			$("#tcashOEditBody").html("<h3>"+response.data.message+"</h3>");
+			$scope.isHideOk = false;
+			$scope.isHide = true;
+		}, function errorCallback(response) {
+			console.log(response.data);
+		});
+	}
+	$scope.action = function (orderno) {
+		$scope.no = orderno;
+	}
+	$scope.view = function (orderno) {
+		$http({
+			method: 'post',
+			url: '../ajax/cashotreaajax.php',
+			data: {
+				action: 'view',
+				orderno:orderno
+			},
+		}).then(function successCallback(response) {
+			$scope.no = orderno;
+			$scope.agentcode = response.data[0].agentcode;
+			$scope.reqamt = response.data[0].reqamt;
+			$scope.ttlamt = response.data[0].totamt;
+			$scope.sercharge = response.data[0].sercharge;
+			$scope.parcharge = response.data[0].parcharge;
+			$scope.ocharge = response.data[0].othcharge;
+			$scope.fntlog1 = response.data[0].fntlog1;
+			$scope.fntlog2 = response.data[0].fntlog2;
+			$scope.locgov = response.data[0].locgov;
+			$scope.state = response.data[0].state;
+			$scope.accno = response.data[0].accno;
+			$scope.baid = response.data[0].baid;
+			$scope.aucode = response.data[0].aucode;
+			$scope.rrn = response.data[0].rrn;
+			$scope.sename = response.data[0].sename;
+			$scope.mblno = response.data[0].mblno;
+			$scope.ctime = response.data[0].ctime;
+			$scope.utime = response.data[0].utime;
+			$scope.comments = response.data[0].comments;
+			$scope.acomments = response.data[0].acomments;
+			$scope.status = response.data[0].status;
+		}, function errorCallback(response) {
+			console.log(response.data);
+		});
+	}
+});
+
+app.controller('AndroidappCtrl', function ($scope, $http, $filter) {
+$scope.isHideOk = true;
+$scope.isHideexcel = true;
+$scope.startDate = new Date();
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params:
+{ partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+$scope.query = function () {
+$scope.tablerow = true;
+$scope.isHideexcel = false;
+
+$http({
+method: 'post',
+url: '../ajax/androidappajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+topartyCode:$scope.topartyCode,
+startDate:$scope.startDate,
+},
+}).then(function successCallback(response) {
+$scope.jentrys = response.data;
+}, function errorCallback(response) {
+console.log(response.data);
+});
+
+}
+});
+
 app.controller('StampDutyCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $http({
@@ -6926,6 +7484,525 @@ window.location.reload();
 }
 });
 
+app.controller('flxRateCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.update = function (user_id) {
+//alert("Hi");
+$http({
+method: 'post',
+url: '../ajax/flxrateajax.php',
+data: { user_id: $scope.user_id,
+flexirate: $scope.flexirate,
+action: 'update' },
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#flexirateagaentbody").html("<h3>" + response.data + "</h3>");
+});
+}
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/flxrateajax.php',
+data: { partyType: $scope.partyType,
+partyCode: $scope.partyCode,
+action: 'query' },
+}).then(function successCallback(response) {
+$scope.infoss = response.data;
+});
+}
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/flxrateajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.outlet_name = response.data[0].login_name;
+$scope.flexirate = response.data[0].flexi_rate;
+$scope.user_id = response.data[0].user_id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agentwos";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agentwos";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+});
+
+
+app.controller('TransRepAuditCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+   type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/trreprauditajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+partyType: $scope.partyType,
+startDate: $scope.startDate,
+endDate: $scope.endDate,
+creteria:$scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.tranaudit = response.data;
+}, function errorCallback(response) {
+console.log(response.data);
+});
+}
+$scope.edit = function (index, partyCode, partyType,id) {
+$http({
+method: 'post',
+url: '../ajax/trreprauditajax.php',
+data: { partyCode: partyCode,partyType: partyType,id:id, action: 'edit'},
+}).then(function successCallback(response) {
+$scope.partyCode = response.data[0].partyCode;
+$scope.id = response.data[0].id;
+$scope.trans_code = response.data[0].trans_code;
+$scope.description = response.data[0].description;
+$scope.journal_amount = response.data[0].journal_amount;
+$scope.old_available_balance = response.data[0].old_available_balance;
+$scope.new_available_balance = response.data[0].new_available_balance;
+$scope.old_last_tx_no = response.data[0].old_last_tx_no;
+$scope.new_last_tx_no = response.data[0].new_last_tx_no;
+$scope.old_last_tx_amount = response.data[0].old_last_tx_amount;
+$scope.new_last_tx_amount = response.data[0].new_last_tx_amount;
+$scope.old_last_tx_date = response.data[0].old_last_tx_date;
+$scope.new_last_tx_date = response.data[0].new_last_tx_date;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+app.controller('stateFlexiRateCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servicefeature = response.data;
+//window.location.reload();
+});
+$http({
+method: 'post',
+url: '../ajax/stateflexirateajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.stateflexilist = response.data;
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'statelistall' }
+}).then(function successCallback(response) {
+$scope.statelist = response.data;
+//window.location.reload();
+});
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/stateflexirateajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.createstate = response.data[0].createstate;
+$scope.servfeature = response.data[0].service_feature_id;
+$scope.active = response.data[0].active;
+$scope.startdate = new Date(response.data[0].startdate);
+$scope.expdate = new Date(response.data[0].expdate);
+$scope.id = response.data[0].id;
+//alert($scope.id);
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/stateflexirateajax.php',
+data: {
+createstate: $scope.createstate,
+servfeature: $scope.servfeature,
+active: $scope.active,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#statechrCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/stateflexirateajax.php',
+data: {
+id:id,
+createstate: $scope.createstate,
+servfeature: $scope.servfeature,
+active: $scope.active,
+startdate: $scope.startdate,
+expdate: $scope.expdate,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#stateothrchrBody").html("<h3>" + response.data + "</h3>");
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+});
+
+app.controller('icomControlCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.resultbox = true;
+
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'icomcontrol' }
+	}).then(function successCallback(response) {
+		$scope.keys = response.data;
+		//window.location.reload();
+	});
+
+	$scope.query = function () {
+		$http({
+		method: 'post',
+		url: '../ajax/icomcontrolajax.php',
+		data: {
+		action: 'query',
+		controlKey: $scope.controlKey
+		},
+		}).then(function successCallback(response) {
+		$scope.resultbox = false;
+		$scope.id = response.data[0].control_id;
+		$scope.controltype = response.data[0].control_type;
+		$scope.control1 = response.data[0].control_value1;
+		$scope.control2 = response.data[0].control_value2;
+		$scope.active = response.data[0].active;
+		}, function errorCallback(response) {
+		console.log(response.data);
+		});
+	}
+
+	$scope.update = function (code) {
+		$scope.isLoader = true;
+		$scope.isMainLoader = true;
+		$scope.isHideOk = true;
+		$http({
+		method: 'post',
+		url: '../ajax/icomcontrolajax.php',
+		data: {
+		controlKey: $scope.controlKey,
+		controltype: $scope.controltype,
+		control1: $scope.control1,
+		control2: $scope.control2,
+		active: $scope.active,
+		action: 'update'
+		},
+		}).then(function successCallback(response) {
+		$scope.isHide = true;
+		$scope.isHideOk = false;
+		$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			alert(response.data);
+			window.location.reload();
+
+
+		}, function errorCallback(response) {
+		console.log(response);
+		});
+	}
+});
+
+app.controller('pBankCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+	$http({
+		method: 'post',
+		url: '../ajax/pbankaccajax.php',
+		data: { action: 'list' },
+	}).then(function successCallback(response) {
+		$scope.banklist = response.data;
+		$scope.pbcid = response.data.id;
+
+	});
+
+	$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:'bankmasters',action:'active'
+				},
+			}).then(function successCallback(response) {
+				$scope.bankmasterss = response.data;
+		});
+
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+				    type: type
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+
+	}
+	$scope.edit = function (index, id) {
+		$http({
+			method: 'post',
+			url: '../ajax/pbankaccajax.php',
+			data: { id: id, action: 'edit' },
+		}).then(function successCallback(response) {
+			$scope.active = response.data[0].active;
+			$scope.id = response.data[0].id;
+			$scope.partyType = response.data[0].ptype;
+			$scope.partyCode = response.data[0].pcode;
+			$scope.bankmaster = response.data[0].bankmaster;
+			$scope.accno = response.data[0].accno;
+			$scope.reaccno = response.data[0].accno;
+			$scope.accname = response.data[0].accname;
+			$scope.bankaddress = response.data[0].bankaddress;
+			$scope.bankbranch = response.data[0].bankbranch;
+			$scope.statuss = response.data[0].status;
+			$scope.statussother = response.data[0].status;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.apprejId = function (index,id, flag) {
+		$scope.flag = flag;
+		$scope.id = id;
+
+	}
+	$scope.approve = function (id,flag) {
+		$http({
+			method: 'post',
+			url: '../ajax/pbankaccajax.php',
+			data: { id: id, flag: flag, action: 'approveReject' },
+		}).then(function successCallback(response) {
+			$("#approvePBankForm").html("<h3 style='text-align:center'>" + response.data + "</h3>");
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.view = function (index, id) {
+		$http({
+		method: 'post',
+		url: '../ajax/pbankaccajax.php',
+		data: { id:id, action: 'view' },
+		}).then(function successCallback(response) {
+
+		// alert(id);
+
+		$scope.id = response.data[0].id;
+		$scope.PartyType = response.data[0].PartyType;
+		$scope.PartyCode = response.data[0].PartyCode;
+		$scope.bankmasterid = response.data[0].bankmasterid;
+		$scope.accno = response.data[0].accno;
+		$scope.accname = response.data[0].accname;
+		$scope.bankaddress = response.data[0].bankaddress;
+		$scope.bankbranch = response.data[0].bankbranch;
+		$scope.Active = response.data[0].Active;
+		$scope.Status = response.data[0].Status;
+		$scope.createuser = response.data[0].createuser;
+		$scope.createtime = response.data[0].createtime;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	}
+	$scope.create = function () {
+		$scope.isLoader = true;
+		$scope.isMainLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/pbankaccajax.php',
+			data: {
+				active: $scope.active,
+				partyType: $scope.partyType,
+				partyCode: $scope.partyCode,
+				bankmaster: $scope.bankmaster,
+				accname: $scope.accname,
+				accno: $scope.accno,
+				reaccno: $scope.reaccno,
+				bankaddress: $scope.bankaddress,
+				bankbranch: $scope.bankbranch,
+				action: 'create'
+			},
+		}).then(function successCallback(response) {
+			$scope.isLoader = false;
+		   $scope.isMainLoader = false;
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$("#PBankAccountCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.update = function (id) {
+		$scope.isHideOk = true;
+		$scope.isLoader = true;
+		$scope.isMainLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/pbankaccajax.php',
+			data: {
+				active: $scope.active,
+				bankmaster: $scope.bankmaster,
+				accname: $scope.accname,
+				accno: $scope.accno,
+				reaccno: $scope.reaccno,
+				statuss: $scope.statuss,
+				bankaddress: $scope.bankaddress,
+				bankbranch: $scope.bankbranch,
+				action: 'update',
+				id:id
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#PBankAccountEditBody").html("<h3>" + response.data + "</h3>");
+
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+	}
+	$scope.refresh = function () {
+	window.location.reload();
+	}
+});
+
 app.controller('StatOthrCharCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 
@@ -7044,182 +8121,6 @@ window.location.reload();
 }
 });
 
-
-app.controller('flxRateCtrl', function ($scope, $http) {
-$scope.isHideOk = true;
-$scope.fn_load = function (partyType,partyCode) {
-if(partyType == 'C' || partyType == 'A') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { partyType:partyType,
-partyCode:partyCode,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-}
-$scope.update = function (user_id) {
-//alert("Hi");
-$http({
-method: 'post',
-url: '../ajax/flxrateajax.php',
-data: { user_id: $scope.user_id,
-flexirate: $scope.flexirate,
-action: 'update' },
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#flexirateagaentbody").html("<h3>" + response.data + "</h3>");
-});
-}
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/flxrateajax.php',
-data: { partyType: $scope.partyType,
-partyCode: $scope.partyCode,
-action: 'query' },
-}).then(function successCallback(response) {
-$scope.infoss = response.data;
-});
-}
-$scope.edit = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/flxrateajax.php',
-data: { id: id, action: 'edit' },
-}).then(function successCallback(response) {
-$scope.outlet_name = response.data[0].login_name;
-$scope.flexirate = response.data[0].flexi_rate;
-$scope.user_id = response.data[0].user_id;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.partyload = function (partyType) {
-var action = "";var fora="";
-if(partyType == "MA") {
-fora = "agentwos";
-type = "N";
-}
-if(partyType == "SA") {
-fora = "agentwos";
-type = "Y";
-}
-if(partyType == "C") {
-fora = "champion";
-type = "";
-}
-if(partyType == "P") {
-fora = "personal";
-type = "";
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora,
-  type: type
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-
-}
-});
-
-app.controller('TransRepAuditCtrl', function ($scope, $http) {
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.fn_load = function (partyType,partyCode) {
-if(partyType == 'C' || partyType == 'A') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { partyType:partyType,
-partyCode:partyCode,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-}
-$scope.partyload = function (partyType) {
-var action = "";var fora="";
-if(partyType == "MA") {
-fora = "agent";
-type = "N";
-}
-if(partyType == "SA") {
-fora = "agent";
-type = "Y";
-}
-if(partyType == "C") {
-fora = "champion";
-type = "";
-}
-if(partyType == "P") {
-fora = "personal";
-type = "";
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora,
-   type: type
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-
-}
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/trreprauditajax.php',
-data: {
-action: 'findlist',
-partyCode: $scope.partyCode,
-partyType: $scope.partyType,
-startDate: $scope.startDate,
-endDate: $scope.endDate,
-creteria:$scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.tranaudit = response.data;
-}, function errorCallback(response) {
-console.log(response.data);
-});
-}
-$scope.edit = function (index, partyCode, partyType,id) {
-$http({
-method: 'post',
-url: '../ajax/trreprauditajax.php',
-data: { partyCode: partyCode,partyType: partyType,id:id, action: 'edit'},
-}).then(function successCallback(response) {
-$scope.partyCode = response.data[0].partyCode;
-$scope.id = response.data[0].id;
-$scope.trans_code = response.data[0].trans_code;
-$scope.description = response.data[0].description;
-$scope.journal_amount = response.data[0].journal_amount;
-$scope.old_available_balance = response.data[0].old_available_balance;
-$scope.new_available_balance = response.data[0].new_available_balance;
-$scope.old_last_tx_no = response.data[0].old_last_tx_no;
-$scope.new_last_tx_no = response.data[0].new_last_tx_no;
-$scope.old_last_tx_amount = response.data[0].old_last_tx_amount;
-$scope.new_last_tx_amount = response.data[0].new_last_tx_amount;
-$scope.old_last_tx_date = response.data[0].old_last_tx_date;
-$scope.new_last_tx_date = response.data[0].new_last_tx_date;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-});
 
 app.controller('trReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
@@ -8137,7 +9038,6 @@ window.location.reload();
 }
 });
 
-
 app.controller('CardInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $scope.sushow = true;
@@ -8334,115 +9234,6 @@ $scope.update_time = response.data[0].update_time;
 
 });
 
-app.controller('jEntryCtrl', function ($scope, $http, $filter) {
-	$scope.isHideOk = true;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.fn_load = function (partyType,partyCode) {
-	if(partyType == 'C' || partyType == 'A') {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params:
-				{ partyType:partyType,
-				partyCode:partyCode,
-				action: 'infolist'
-			},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-		}
-	}
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-			   type: type
-				},
-		}).then(function successCallback(response) {
-			$scope.infos = response.data;
-		});
-	}
-		$scope.checkdate = function (startDate,endDate){
-			var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-			var currdate = new Date();
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$scope.isQueryDi = false;
-			}
-		}
-		$scope.query = function () {
-			$scope.tablerow = true;
-			var startDate =  $scope.startDate;
-			var endDate =  $scope.endDate;
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			var currdate = new Date();
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$http({
-					method: 'post',
-					url: '../ajax/jentryajax.php',
-					data: {
-					action: 'findlist',
-					partyCode: $scope.partyCode,
-					topartyCode:$scope.topartyCode,
-					startDate:$scope.startDate,
-					endDate:$scope.endDate,
-					creteria:$scope.creteria
-					},
-				}).then(function successCallback(response) {
-					$scope.jentrys = response.data;
-				}, function errorCallback(response) {
-					console.log(response.data);
-				});
-			}
-		}
-	});
 
 app.controller('salesReportCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
@@ -9641,484 +10432,202 @@ $scope.ad =response.data[0].ad;
 
 
 
-app.controller('fundWalletCtrl', function ($scope, $http) {
+app.controller('posmenuCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+
+$http({
+method: 'post',
+url: '../ajax/userposajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.usrposmenulist = response.data;
+});
 $http({
 url: '../ajax/load.php',
 method: "POST",
 //Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
+params: { action: 'active', for: 'servfea' }
 }).then(function successCallback(response) {
-$scope.agents = response.data;
+$scope.servicefeature = response.data;
 //window.location.reload();
 });
-
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-
-$scope.reset = function () {
-$("#tbody").empty();
-$scope.tablerow = false;
-$scope.agentCode = "ALL";
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-}
-
-
-$scope.query = function () {
 $http({
-method: 'post',
-url: '../ajax/fundwalletajax.php',
-data: {
-action: 'query',
-agentCode: $scope.agentCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
-},
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'userposmenu' }
 }).then(function successCallback(response) {
-
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-// alert( response.data);
-$scope.fundwalet = response.data;
-}, function errorCallback(response) {
-// console.log(response);
+$scope.userpos = response.data;
+//window.location.reload();
 });
-}
-$scope.printwallet = function (id,party_code) {
+$scope.edit = function (index, code, id, servicefeatureid) {
+//alert(servicefeatureid);
 $http({
 method: 'post',
-url: '../ajax/fundwalletajax.php',
-data: {
-action: 'viewwallet',
-                id: id,
-code: party_code
+url: '../ajax/userposajax.php',
+data: { code: code,
+id: id,
+service_feature_id: servicefeatureid,
+action: 'edit'
 },
 }).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-var creteria = $scope.creteria;
-var id = $scope.id;
-var statusa = $scope.statusa;
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var m = new Date();
-var datetime =
-m.getUTCFullYear() + "-" +
-("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
-("0" + m.getUTCDate()).slice(-2) + " " +
-("0" + m.getUTCHours()).slice(-2) + ":" +
-("0" + m.getUTCMinutes()).slice(-2) + ":" +
-("0" + m.getUTCSeconds()).slice(-2);
-var text = "";
-var valu = "";
-text = "By Date";
-valu = "From: " + startDate + " to " + endDate;
-        var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
-'<h2 style="text-align:right;font-size:32px;">Fund Wallet Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
-function formatDate(d)
-        {
-          var date = new Date(d);
+$scope.userposmenu = response.data[0].id;
+//$scope.servfea = response.data[0].menu;
+$scope.active = response.data[0].active;
+$scope.startdate = new Date(response.data[0].startDate);
 
-         if ( isNaN( date .getTime() ) )
-         {
-            return d;
-         }
-         else
-        {
-
-          var month = new Array();
-          month[0] = "Jan";
-          month[1] = "Feb";
-          month[2] = "Mar";
-          month[3] = "Apr";
-          month[4] = "May";
-          month[5] = "Jun";
-          month[6] = "Jul";
-          month[7] = "Aug";
-          month[8] = "Sep";
-          month[9] = "Oct";
-          month[10] = "Nov";
-          month[11] = "Dec";
-
-          day = date.getDate();
-
-          if(day < 10)
-          {
-             day = "0"+day;
-          }
-
-          return    day  + "-" +month[date.getMonth()] + "-" + date.getFullYear();
-          }
-
-         }
-var receipt_info1, receipt_info2, PAN,ID,TID, Time;
-var info1Val =  response.data[0].info1;
- var info2Val =  response.data[0].info2;
-// alert(info1Val +"|"+info2Val);
-if((info1Val == "-") && (info2Val == "-")){
-
-if(response.data[0].payment_status=="A"){
-var transacStatus = "Transaction Successful";
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + "SUCCESS" + "</b></td></tr>";
+$scope.expdate = new Date(response.data[0].expDate);
+$scope.code = response.data[0].code;
+$scope.servfea = response.data[0].service_feature_id;
+$scope.servfeaold = response.data[0].service_feature_id;
+if(response.data[0].startDate==null){
+$scope.startdate="";
 }
-else{
-var transacStatus = "Transaction Failed";
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + "FAILURE" + "</b></td></tr>";
+if(response.data[0].expDate==null){
+$scope.expdate="";
 }
-receipt_info1 = "-";
-receipt_info2 = "-";
-TID = "-";
-PAN = "-";
-ID = "-";
-Time = "-";
-
-}else{
-var ressplit = response.data[0].info1.split(",");
-//alert(ressplit);
-TID = (ressplit[0]).replace('TID:','');
-//alert(TID);
-PAN = (ressplit[1]).replace('PAN:','');
-ID = (ressplit[2]).replace('ID:','');
-Time = (ressplit[3]).replace('DTime:','');
-var ressplit1 = response.data[0].info2.split(',');
-var RC = (ressplit1[0]).replace('RC:','');
-var STAN = (ressplit1[1]).replace('STAN:','');
-var RRN = (ressplit1[2]).replace('RRN:','');
-var RCresplit = RC.split("-");
-var RC_code = RCresplit[0];
-var RC_desc = RCresplit[1];
-if(RC_code==00){
-var transacStatus = "Transaction Successful";
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + RC_desc + "</b></td></tr>";
-}
-else{
-var transacStatus = "Transaction Failed";
-var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + RC_desc + "</b></td></tr>";
-}
-receipt_info1 = "Card no: " + PAN + "";
-receipt_info2 = "RC: " +  RC_code + " / " + (ressplit1[2]);
-}
-
-
-
-/* var postTime = response.data[0].ptime;
-var dayTime = formatDate(response.data[0].ptime.substring(0,10)) ;
-var hourTime = postTime.substring(11); */
-
-
-var response = "<table style='margin-top:50px' width='90%'><tbody>" +
-statushead+
-"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].id + "</td></tr>" +
-"<tr><td class='name'>Status</td><td class='result'>" + transacStatus + "</td></tr>" +
-"<tr><td class='name'>Mobile</td><td class='result'> - </td></tr>" +
-"<tr><td class='name'>Terminal ID</td><td class='result'>"+ TID + " / "+response.data[0].party_code+ " / " +response.data[0].versionName+"</td></tr>" +
-"<tr><td class='name'>Transaction ID</td><td class='result'>" + ID + "</td></tr>" +
-"<tr><td class='name'>Date</td><td class='result'>" + Time  +"</td></tr>" +
-"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].payment_approved_amount + "</td></tr>" +
-"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].ams_charge + "</td></tr>" +
-"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].other_charge + "</td></tr>" +
-"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].payment_amount + "</td></tr>" +
-"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].payment_source + "</td></tr>" +
-"<tr><td class='name'>Info1 </td><td class='result'>"+receipt_info1+"</td></tr>" +
-"<tr><td class='name'>Info2 </td><td class='result'>"+receipt_info2+"</td></tr>" +
-
-"</tbody></table><br />"+
-"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
-
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
+//$scope.menu = response.data[0].menu;
+//alert( response.data[0].menu);
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
 
-$scope.print = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
+$scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
+	
+	$http({
+		method: 'post',
+		url: '../ajax/userposajax.php',
+		data: {
+			user_pos_menu_id: user_pos_menu_id,
+			action: 'MenuMessage'
+		},
+		}).then(function successCallback(response) {
+		$scope.message = response.data[0].message;
+		$scope.user_pos_menu_id = response.data[0].user_pos_menu_id;
+		$scope.user_id = response.data[0].user_id;
+		$scope.active = response.data[0].active;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+
 }
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
+
+
+$scope.reject = function (user_pos_menu_id,user_id) {
+//alert(user_id);
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
 $http({
 method: 'post',
-url: '../ajax/fundwalletajax.php',
+url: '../ajax/userposajax.php',
 data: {
-action: 'query',
-agentCode: $scope.agentCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
+	id: user_id,
+	user_pos_menu_id: user_pos_menu_id,
+comments :$scope.comments,
+active: $scope.active,
+action: 'ChangeStatus'
 },
 }).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
 $scope.isLoader = false;
 $scope.isMainLoader = false;
-$scope.id  =response.data[0].id;
-$scope.party_code = response.data[0].party_code;
-$scope.payment_amount =response.data[0].payment_amount;
-$scope.payment_appro_amnt =response.data[0].payment_appro_amnt;
-$scope.payment_ref_no =response.data[0].payment_ref_no;
-$scope.pDate =response.data[0].pDate;
-var rerows = "";
-for(var i=0;i < response.data.length;i++) {
+$("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
 
-rerows +=  "<tr><td>"+ response.data[i].id +"</td>"+
-"<td>"+ response.data[i].party_code +"</td>"+
-"<td>"+ response.data[i].payment_amount +"</td>"+
-"<td>"+ response.data[i].payment_appro_amnt +"</td>"+
-"<td>"+ response.data[i].payment_ref_no +"</td>"+
-"<td>"+ response.data[i].pDate +"</td>"+
-"</tr>"
+}, function errorCallback(response) {
+console.log(response);
+});
 }
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
 
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px">Fund Wallet Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-var responsetablehead ="<table width='100%'><thead>" +
-"<tr><th>Receipt Id</th>" +
-"<th>Party Code</th>" +
-"<th>Payment Amount</th>" +
-"<th>Approved Amount</th>" +
-"<th>Reference No</th>" +
-"<th>Payment Date</th>" +
-"</tr></thead>" +
-"<tbody>"+rerows+"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/userposajax.php',
+data: {
+id: $scope.userposmenu,
+menu: $scope.servfea,
+active: $scope.active,
+startDate: $scope.startdate,
+expDate: $scope.expdate,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
+$scope.refresh = function (id, type) {
+window.location.reload();
 }
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/userposajax.php',
+data: {
+id: $scope.userposmenu,
+servfeaold :$scope.servfeaold,
+menu: $scope.servfea,
+active: $scope.active,
+startDate: $scope.startdate,
+expDate: $scope.expdate,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#usrposEditBody").html("<h3>" + response.data + "</h3>");
 
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function (id, type) {
+window.location.reload();
+}
 $scope.detail = function (index, id) {
 $http({
 method: 'post',
-url: '../ajax/fundwalletajax.php',
+url: '../ajax/userposajax.php',
 data: {
 id: id,
-agentCode: $scope.agentCode,
 action: 'view'
 },
 }).then(function successCallback(response) {
 // $scope.isHide = true;
 // $scope.isHideOk = false;
-$scope.id = response.data[0].id;
-$scope.country = response.data[0].country;
-$scope.pDate = response.data[0].pDate;
-$scope.party_code = response.data[0].party_code;
-$scope.partyType = response.data[0].partyType;
-$scope.payment_account_id = response.data[0].payment_account_id;
-$scope.payment_amount = response.data[0].payment_amount;
-$scope.payment_appro_amnt = response.data[0].payment_appro_amnt;
-$scope.payment_appro_date = response.data[0].payment_appro_date;
-$scope.payment_ref_no = response.data[0].payment_ref_no;
-$scope.payment_ref_date = response.data[0].payment_ref_date;
-$scope.payment_source = response.data[0].payment_source;
-$scope.payment_chequ_no = response.data[0].payment_chequ_no;
-$scope.payment_status = response.data[0].payment_status;
-$scope.comments = response.data[0].comments;
-$scope.approve_comments = response.data[0].approve_comments;
-$scope.create_user = response.data[0].create_user;
-$scope.create_time = response.data[0].create_time;
-$scope.update_user = response.data[0].update_user;
-$scope.update_time = response.data[0].update_time;
+$scope.code = response.data[0].code;
+ $scope.id = response.data[0].id;
+$scope.username = response.data[0].username;
+$scope.menu = response.data[0].menu;
+$scope.active = response.data[0].active;
+$scope.startDate = response.data[0].startDate;
+$scope.expDate = response.data[0].expDate;
+$scope.cretime = response.data[0].cretime;
+$scope.updateuser = response.data[0].updateuser;
+$scope.updatetime = response.data[0].updatetime;
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
 
-});
-
-
-app.controller('CashoutPayCtrl', function ($scope, $http) {
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'agents' }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-
-$scope.reset = function () {
-	$("#tbody").empty();
-		$scope.tablerow = false;
-		$scope.agentCode = "ALL";
-		$scope.startDate = new Date();
-		$scope.endDate = new Date();
-		}
-
-
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/cashoutpayajax.php',
-data: {
-action: 'query',
-agentCode: $scope.agentCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
-},
-}).then(function successCallback(response) {
-
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-// alert( response.data);
-$scope.cashoutpay = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.print = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$http({
-method: 'post',
-url: '../ajax/cashoutpayajax.php',
-data: {
-action: 'query',
-agentCode: $scope.agentCode,
-startDate: $scope.startDate,
-endDate: $scope.endDate
-},
-}).then(function successCallback(response) {
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$scope.id  =response.data[0].id;
-$scope.party_code = response.data[0].party_code;
-$scope.payment_amount =response.data[0].payment_amount;
-$scope.payment_appro_amnt =response.data[0].payment_appro_amnt;
-$scope.payment_ref_no =response.data[0].payment_ref_no;
-$scope.create_time =response.data[0].create_time;
-var rerows = "";
-for(var i=0;i < response.data.length;i++) {
-
-rerows +=  "<tr><td>"+ response.data[i].id +"</td>"+
-"<td>"+ response.data[i].party_code +"</td>"+
-"<td>"+ response.data[i].payment_amount +"</td>"+
-"<td>"+ response.data[i].payment_appro_amnt +"</td>"+
-"<td>"+ response.data[i].payment_ref_no +"</td>"+
-"<td>"+ response.data[i].create_time +"</td>"+
-"</tr>"
-}
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
-
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px">Cashout Payment Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-var responsetablehead ="<table width='100%'><thead>" +
-"<tr><th>Receipt Id</th>" +
-"<th>Party Code</th>" +
-"<th>Payment Amount</th>" +
-"<th>Approve Amount</th>" +
-"<th>Reference No</th>" +
-"<th>Date Time</th>" +
-"</tr></thead>" +
-"<tbody>"+rerows+"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-}
-$scope.detail = function (index, id) {
-$http({
-method: 'post',
-url: '../ajax/cashoutpayajax.php',
-data: {
-id: id,
-crestatus: $scope.crestatus,
-action: 'view'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.id = response.data[0].id;
-$scope.country = response.data[0].country;
-$scope.pDate = response.data[0].pDate;
-$scope.party_code = response.data[0].party_code;
-$scope.partyType = response.data[0].partyType;
-$scope.payment_account_id = response.data[0].payment_account_id;
-$scope.payment_amount = response.data[0].payment_amount;
-$scope.payment_appro_amnt = response.data[0].payment_appro_amnt;
-$scope.payment_appro_date = response.data[0].payment_appro_date;
-$scope.payment_ref_no = response.data[0].payment_ref_no;
-$scope.payment_ref_date = response.data[0].payment_ref_date;
-$scope.payment_source = response.data[0].payment_source;
-$scope.payment_chequ_no = response.data[0].payment_chequ_no;
-$scope.payment_status = response.data[0].payment_status;
-$scope.comments = response.data[0].comments;
-$scope.approve_comments = response.data[0].approve_comments;
-$scope.create_user = response.data[0].create_user;
-$scope.create_time = response.data[0].create_time;
-$scope.update_user = response.data[0].update_user;
-$scope.update_time = response.data[0].update_time;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
 
 });
+
 app.controller('changeLangCtrl', function ($scope, $http) {
 	$scope.englang = function (index, id,) {
 		$http({
@@ -10145,1055 +10654,218 @@ app.controller('changeLangCtrl', function ($scope, $http) {
 
 });
 
-app.controller('preappviewCtrl', function ($scope, $http) {
-	$scope.isLoader = true;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.isMainLoader = false;
-	$scope.isHideOk = true;
-	$scope.isGoDisbled = true;
-   
-   
-   
-	$scope.query = function () {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: $scope.id,
-	   crestatus: $scope.crestatus,
-	   startDate: $scope.startDate,
-	   endDate: $scope.endDate,
-	   creteria: $scope.creteria,
-	   action: 'query'
-	  },
-	 }).then(function successCallback(response) {
-	  // $scope.isHide = true;
-	  // $scope.isHideOk = false;
-	  $scope.isLoader = false;
-		 $scope.isMainLoader = false;
-	  $scope.appviews = response.data;
-	 // $scope.id = response.data[0].id;
-   $scope.name = response.data[0].name;
-   }, function errorCallback(response) {
-	  // console.log(response);
-	 });
-	}
-	$scope.print = function (index, id) {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'view'
-	  },
-	 }).then(function successCallback(response) {
-	  // $scope.isHide = true;
-	  // $scope.isHideOk = false;
-	  var creteria = $scope.creteria;
-	  var id = $scope.id;
-	  var statusa = $scope.statusa;
-	  var startDate = $scope.startDate;
-	  var endDate = $scope.endDate;
-	  var text = "";
-	  var valu = "";
-	  if (creteria == "BI") {
-	   text = "By Id";
-	   valu = id;
-	  }
-	  if (creteria == "BS") {
-	   text = "By Status";
-	   valu = statusa;
-	  }
-	  if (creteria == "BD") {
-	   text = "By Date";
-	   valu = "From: " + startDate + " to " + endDate;
-	  }
-	  var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-	   '<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-	   '<h2 style="text-align:center;margin-top:30px">Application View Report - ' + response.data[0].outletname + '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-	  var response = "<p>Search Creteria For: </p>" + text + " - " + valu +
-	   "<table class='table table-bordered'><tbody>" +
-	   "<tr><th>Application #</th><th>" + response.data[0].id + "</th></tr>" +
-	   "<tr><th>Category</th><th>" + response.data[0].category + "</th></tr>" +
-	   "<tr><th>Country</th><th>" + response.data[0].country + "</th></tr>" +
-	   "<tr><th>Outlet Name</th><th>" + response.data[0].outletname + "</th></tr>" +
-	   "<tr><th>bvn</th><th>" + response.data[0].bvn + "</th></tr>" +
-	   "<tr><th>Applier Type</th><th>" + response.data[0].type + "</th></tr>" +
-	   "<tr><th>Party Code</th><th>" + response.data[0].partyc + "</th></tr>" +
-	   "<tr><th>Parent Code</th><th>" + response.data[0].parentc + "</th></tr>" +
-	   "<tr><th>Create Time</th><th>" + response.data[0].time + "</th></tr>" +
-	   "<tr><th>Status</th><th>" + response.data[0].statusa + "</th></tr>" +
-	   "<tr><th>Address 1</th><th>" + response.data[0].address1 + "</th></tr>" +
-	   "<tr><th>Address 2</th><th>" + response.data[0].address2 + "</th></tr>" +
-	   "<tr><th>Local Govt.</th><th>" + response.data[0].localgovt + "</th></tr>" +
-	   "<tr><th>State</th><th>" + response.data[0].state + "</th></tr>" +
-	   "<tr><th>Zip Code</th><th>" + response.data[0].zip + "</th></tr>" +
-	   "<tr><th>Tax Number</th><th>" + response.data[0].tax + "</th></tr>" +
-	   "<tr><th>E-Mail</th><th>" + response.data[0].email + "</th></tr>" +
-	   "<tr><th>Mobile</th><th>" + response.data[0].mobile + "</th></tr>" +
-	   "<tr><th>Work No</th><th>" + response.data[0].work + "</th></tr>" +
-	   "<tr><th>Contact Person Name</th><th>" + response.data[0].cpn + "</th></tr>" +
-	   "<tr><th>Contact Person Mobile</th><th>" + response.data[0].cpm + "</th></tr>" +
-	   "<tr><th>Approve Comments</th><th>" + response.data[0].apcomment + "</th></tr>" +
-	   "<tr><th>Approve Time</th><th>" + response.data[0].aptime + "</th></tr>" +
-	   "<tr><th>Authorize Comments</th><th>" + response.data[0].aucomment + "</th></tr>" +
-	   "<tr><th>Authorize Time</th><th>" + response.data[0].autime + "</th></tr>" +
-	   "<tr><th>Comments</th><th>" + response.data[0].comments + "</th></tr>" +
-	   "<tr><th>Account Setup</th><th>" + response.data[0].asetup + "</th></tr>" +
-	   "<tr><th>User Setup</th><th>" + response.data[0].usetup + "</th></tr>" +
-	   "<tr><th>Login Name</th><th>" + response.data[0].login + "</th></tr>" +
-	   "<tr><th>Latitude</th><th>" + response.data[0].Latitude + "</th></tr>" +
-	   "<tr><th>Longitude</th><th>" + response.data[0].Longitude + "</th></tr>" +
-	   "</tbody></table>";
-	  var win = window.open("", "height=1000", "width=1000");
-	  with (win.document) {
-	   open();
-	   write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-	   close();
-	  }
-	 }, function errorCallback(response) {
-	  // console.log(response);
-	 });
-	}
-	$scope.resets = function () {
-   
-	   $scope.IDDocument = "";
-	   $scope.attachment = "";
-	   $scope.BussinessDocument = "";
-	   $scope.attachment2 = "";
-	   $scope.SignatureDocucment = "";
-	   $scope.attachment3 = "";
-	   }
-   
-	 $scope.attachmentid = function (index, id) {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'attachmentid'
-	  },
-	 }).then(function successCallback(response) {
-	  // $scope.isHide = true;
-	   $scope.isHideOk = false;
-	  $scope.isLoader = false;
-		 $scope.isMainLoader = false;
-	 // alert(response.data[0].attachment_content);
-	 $scope.myImage = response.data[0].attachment_content;
-	 //$scope.myImage = ;
-	 $scope.outletname = response.data[0].outletname;
-	 $scope.file = response.data[0].file;
-	 $scope.attachment_type = response.data[0].attachment_type;
-	 //$("#resmsg").html("<h3>" + response.data + "</h3>");
-	 //alert(response.data);
-	 }, function errorCallback(response) {
-	  // console.log(response);
-	 });
-	 $scope.PrintImage = function (url) {
-	   var src='data:image/;base64,'+url;
-	   //alert(src);
-		  var win = window.open('');
-	   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-	   win.focus();
-	   };
-	}
-	$scope.attachmentcomp = function (index, id) {
-		 
-	   $http({
-		method: 'post',
-		url: '../ajax/preappviewajax.php',
-		data: {
-		 id: id,
-		 action: 'attachmentcomp'
-		},
-	   }).then(function successCallback(response) {
-		// $scope.isHide = true;
-		 $scope.isHideOk = false;
-		$scope.isLoader = false;
-		   $scope.isMainLoader = false;
-	   // alert(response.data[0].attachment_content);
-	   //$("#resmsg").html("<h3>" + response.data + "</h3>");
-	   $scope.myImage = response.data[0].attachment_content;
-	   $scope.outletname = response.data[0].outletname;
-	   $scope.file = response.data[0].file;
-	   $scope.attachment_type = response.data[0].attachment_type;
-	   //alert(response.data[0].attachment_type);
-	   }, function errorCallback(response) {
-		// console.log(response);
-	   });
-	 
-		   $scope.PrintImage = function (url) {
-		var src='data:image/;base64,'+url;
-		//alert(src);
-		   var win = window.open('');
-		win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-		   win.focus();
-	   };
-	  }
-	 
-	  $scope.attachmentSig = function (index, id) {
-		 $http({
-		  method: 'post',
-		  url: '../ajax/preappviewajax.php',
-		  data: {
-		   id: id,
-		   action: 'attachmentSig'
-		  },
-		 }).then(function successCallback(response) {
-		  // $scope.isHide = true;
-		   $scope.isHideOk = false;
-		  $scope.isLoader = false;
-			 $scope.isMainLoader = false;
-		 // alert(response.data[0].attachment_content);
-		 //$("#resmsg").html("<h3>" + response.data + "</h3>");
-		 $scope.myImage = response.data[0].attachment_content;
-		 $scope.outletname = response.data[0].outletname;
-		 $scope.file = response.data[0].file;
-		 $scope.attachment_type = response.data[0].attachment_type;
-		 //alert(response.data[0].attachment_type);
-		 }, function errorCallback(response) {
-		  // console.log(response);
-		 });
-	   
-			 $scope.PrintImage = function (url) {
-		  var src='data:image/;base64,'+url;
-		  //alert(src);
-			 var win = window.open('');
-		  win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-			 win.focus();
-		 };
-		}
-   
-	$scope.editattach1 = function (index, id, name) {
-	   $scope.isHideOk = true;
-	   $scope.isInputDisabled = false;
-	   $scope.isInputDisabled2 = false;
-	   $scope.isInputDisabled3 = false;
-	   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id, name: name, action: 'editattachment1' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
-		   $scope.id = response.data[0].id;
-		   //$scope.BussinessDocument = response.data[0].BussinessDocument;
-		   $scope.IDDocument = response.data[0].IDDocument;
-		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
-		   $scope.attachment_type = response.data[0].attachment_type;
-		   $scope.file = response.data[0].file;
-	   
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   }
-   $scope.editattach2 = function (index, id, name) {
-	   $scope.isHideOk = true;
-	   $scope.isInputDisabled = false;
-	   $scope.isInputDisabled2 = false;
-	   $scope.isInputDisabled3 = false;
-   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id, name: name, action: 'editattachment2' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
-		   $scope.id = response.data[0].id;
-		   $scope.BussinessDocument = response.data[0].BussinessDocument;
-		   //$scope.IDDocument = response.data[0].IDDocument;
-		   //$scope.SignatureDocucment = response.data[0].SignatureDocucment;
-		   $scope.attachment_type = response.data[0].attachment_type;
-		   $scope.file = response.data[0].file;
-	   
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   }
-   $scope.editattach3 = function (index, id, name) {
-	   $scope.isHideOk = true;
-	   $scope.isInputDisabled = false;
-	   $scope.isInputDisabled2 = false;
-	   $scope.isInputDisabled3 = false;
-	   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id, name: name, action: 'editattachment3' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
-		   $scope.id = response.data[0].id;
-		   //$scope.BussinessDocument = response.data[0].BussinessDocument;
-		   //$scope.IDDocument = response.data[0].IDDocument;
-		   $scope.SignatureDocucment = response.data[0].SignatureDocucment;
-		   $scope.attachment_type = response.data[0].attachment_type;
-		   $scope.file = response.data[0].file;
-		   
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   }
-   
-   $scope.Deleteattachment = function(index,id,pre_application_attachment_id,attachment_type){ 
-	   $scope.Deleteattach = true;
-	   $scope.isInputDisabled = true;
-	   $scope.IDDocument = "";
-   
-	   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id1 = response.data[0].old_pre_application_attachment_id;
-		   $scope.pre_application_info_id1 = response.data[0].old_pre_application_info_id;
-		   $scope.attachment_name = response.data[0].old_attachment_name;
-		   $scope.file = response.data[0].old_file;
-		   $scope.attachment_type = response.data[0].old_attachment_type;
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   
-   }
-   $scope.Deleteattachment2 = function(index,id,pre_application_attachment_id,attachment_type){ 
-	   $scope.Deletes = true;
-	   $scope.isInputDisabled2s = true;
-	   $scope.BussinessDocument = "";
-   
-	   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id2 = response.data[0].old_pre_application_attachment_id;
-		   $scope.pre_application_info_id2 = response.data[0].old_pre_application_info_id;
-		   $scope.attachment_name = response.data[0].old_attachment_name;
-		   $scope.file = response.data[0].old_file;
-		   $scope.attachment_type = response.data[0].old_attachment_type;
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   
-   }
-   $scope.Deleteattachment3 = function(index,id,pre_application_attachment_id,attachment_type){ 
-	   $scope.Deleted = true;
-	   $scope.isInputDisabled3 = true;
-	   $scope.SignatureDocucment = "";
-   
-	   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
-	   }).then(function successCallback(response) {
-		   $scope.pre_application_attachment_id3 = response.data[0].old_pre_application_attachment_id;
-		   $scope.pre_application_info_id3 = response.data[0].old_pre_application_info_id;
-		   $scope.attachment_name = response.data[0].old_attachment_name;
-		   $scope.file = response.data[0].old_file;
-		   $scope.attachment_type = response.data[0].old_attachment_type;
-	   }, function errorCallback(response) {
-		   // console.log(response);
-	   });
-   
-   }
-   
-   $scope.InsertNew = function(index,id,pre_application_attachment_id,pre_application_info_id,attachment_type){
-   
-	   $scope.isHideOk = true;
-	   $scope.isHide = false;
-   
-	   $scope.isLoader = true;
-	   var fd = new FormData();
-	   //alert($scope.dob);
-	   var event = new Date($scope.dob);
-	   
-	   let date = JSON.stringify(event)
-	   date = date.slice(1,11);
-	   //alert(date);
-	   
-		  angular.forEach($scope.uploadfiles,function(file){
-			fd.append('file[]',file);
-		  });
-		  angular.forEach($scope.uploadfiles2,function(file2){
-	   fd.append('file2[]',file2);
-		  });
-		  angular.forEach($scope.uploadfiles3,function(file3){
-		   fd.append('file3[]',file3);
-			  });
-		  fd.append("id","id");
-		  fd.append("pre_application_attachment_id1",$scope.pre_application_attachment_id1);
-		  fd.append("pre_application_info_id1",$scope.pre_application_info_id1);
-		  fd.append("pre_application_attachment_id2",$scope.pre_application_attachment_id2);
-		  fd.append("pre_application_info_id2",$scope.pre_application_info_id2);
-		  fd.append("pre_application_attachment_id3",$scope.pre_application_attachment_id3);
-		  fd.append("pre_application_info_id3",$scope.pre_application_info_id3);
-		  fd.append("attachment_type","attachment_type");
-		  fd.append("action","Uploadattachment");
-		  fd.append("attachment",$scope.file);
-		   fd.append("attachment",$scope.attachment);
-		  fd.append("attachment2",$scope.attachment2);
-		  fd.append("attachment3",$scope.attachment3);
-		   
-	   
-		 $http({
-	   method: 'post',
-	   url: '../ajax/preappentryajax.php',
-	   headers: {'Content-Type': undefined},
-	   ContentType: 'application/json',
-	   data: fd,
-	   }).then(function successCallback(response) {
-	   $scope.isHide = true;
-	   $scope.isHideOk = false;
-	   $scope.isHideReset = true;
-	   $scope.isLoader = false;
-	   $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-   
-	   }, function errorCallback(response) {
-	   // console.log(response);
-	   });
-	   }
-   $scope.refresh = function (id, type) {
-	   window.location.reload();
-   }
-   
-   
-   
-	 
-	  
-	$scope.countrychange = function (id) {
-   $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'statelist', "id": id, "action": "active" },
-   }).then(function successCallback(response) {
-   $scope.states = response.data;
-   }, function errorCallback(response) {
-   // console.log(response);
-   });
-   }
-   
-   $scope.statechange = function (id) {
-   $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'localgvtlist', "id": id, "action": "active" },
-   }).then(function successCallback(response) {
-   $scope.localgvts = response.data;
-   }, function errorCallback(response) {
-   // console.log(response);
-   });
-   }
-	$scope.transfer = function (index, id, name) { 
-   
-	 $scope.name = name;
-	 $scope.transferbtn = true;
-	 $scope.id = id;
-	 $http({
-   method: 'post',
-   url: '../ajax/preappviewajax.php',
-   data: {
-   id: $scope.id,
-   action: 'transupdate'
-   },
-	 }).then(function successCallback(response) {
-   //alert(response.data[0].state);
-   $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'statelist', "id": 566, "action": "active" },
-   }).then(function successCallback(response) {
-   $scope.states = response.data;
-   }, function errorCallback(response) {
-   // console.log(response);
-   });
-   $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'localgvtlist', "id": response.data[0].state, "action": "active" },
-   }).then(function successCallback(response) {
-   $scope.localgvts = response.data;
-   }, function errorCallback(response) {
-   // console.log(response);
-   });
-	 $scope.state = response.data[0].state;
-	 $scope.localgovernment = response.data[0].localgvt;
-	   $scope.bvn_validated = response.data[0].bvn_validated;
-   
-	 //alert(response.data[0].bvn_validated);
-	 if($scope.bvn_validated !="Y")
-	 {
-   $scope.bvn_validated = true;
-   $scope.isSelectDisabledType = true;
-   $scope.isSelectDisabled = true;
-   $scope.BVNsuccess =false;
-   
-	 }else{
-	   $scope.bvn_validated = false;
-	   $scope.isSelectDisabledType = false;
-	   $scope.isSelectDisabled = false;
-	   $scope.BVNsuccess =true;
-	 }
-   
-   $scope.isLoader = false;
-	   $scope.isMainLoader = false;
-   $scope.TransferBody = response.data;
-   }, function errorCallback(response) {
-   // console.log(response);
-   });
-   
-   
-	 $http({
-	  url: '../ajax/load.php',
-	  method: "POST",
-	  //Content-Type: 'application/json',
-	  params: { for: 'agent', "type": "N" }
-	  }).then(function successCallback(response) {
-	   $scope.agents = response.data;
-	   //window.location.reload();
-	  });
-	 $http({
-	  url: '../ajax/load.php',
-	  method: "POST",
-	  //Content-Type: 'application/json',
-	  params: { for: 'champion' }
-	 }).then(function successCallback(response) {
-	  $scope.champions = response.data;
-	  //window.location.reload();
-	 });
-   
-   
-	 $scope.checkuservalid = function () {
-	  var user = $scope.userName.length;
-	  if(user >= 9) {
-	   $scope.isGoDisbled = false;
-	  }
-	  else {
-	   $scope.isGoDisbled = true;
-	  }
-	 }
-	 $scope.cancel = function(){ 
-	  $scope.appliertype = "";
-	  $scope.parentcode = "";
-	  $scope.userName = "";
-	  $scope.msguser = "";
-	  $scope.Success = false;
-	  $scope.Failure = false;
-	  $scope.BVNBtn = false;
-	  $scope.ApplicatioTransferDForm.$setUntouched();
-	  $scope.ApplicatioTransferDForm.$setPristine();
-	 }
-	 $scope.chkuser = function () {
-	  $scope.userNameDisabled = false;
-	  $scope.isLoader = true;
-	  $scope.isSelectDisabled = true;
-	  $scope.isSelectDisabledType = true;
-	  $scope.isHideGo = false;
-   
-	  $http({
-	   method: 'post',
-	   url: '../ajax/preappviewajax.php',
-	   data: {
-		id: $scope.id,
-		action: 'userchk',
-		userName:$scope.userName
-	   },
-	  }).then(function successCallback(response) {
-	   if(response.data <= 0) {
-		$scope.isInputDisabled = false;
-		$scope.userNameDisabled = true;
-		$scope.isHideGo = true;
-		$scope.transferbtn = false;
-		$scope.msguser = "User Name is Available";
-	   }
-	   else{
-		$scope.isInputDisabled = true;
-		$scope.msguser = "User Name is Already Taken";
-		$scope.userNameDisabled = false;
-		$scope.isHideGo = false;
-		$scope.transferbtn = true;
-	   }
-	   $scope.isLoader = false;
-   
-   
-	  }, function errorCallback(response) {
-	   // console.log(response);
-	  });
-	 }
-	$scope.transfinal = function (id) {
-   if($scope.parentcode){
-   
-   $http({
-   method: 'post',
-   url: '../ajax/preappviewajax.php',
-   
-   data: {
-   
-   id: id,
-   action: 'transfer',
-   appliertype:$scope.appliertype,
-   userName:$scope.userName,
-   parentcode:$scope.parentcode,
-   state: $scope.state,
-   localgvt: $scope.localgovernment
-   },
-   }).then(function successCallback(response) {
-   $("#TransferBody").html("<h3>"+response.data+"</h3>");
-   $scope.isHideOk = false;
-   $scope.isHide = true;
-   });
-   }else{
-   var flag = confirm("Are you sure ? There is no Champion selected.\n Do you want to proceed as SUPER AGENT ?");
-   if(flag){
-   $http({
-   method: 'post',
-   url: '../ajax/preappviewajax.php',
-   data: {
-   id: id,
-   action: 'transfer',
-   appliertype:$scope.appliertype,
-   userName:$scope.userName,
-   parentcode:$scope.parentcode
-   },
-   }).then(function successCallback(response) {
-   $("#TransferBody").html("<h3>"+response.data+"</h3>");
-   $scope.isHideOk = false;
-   $scope.isHide = true;
-   });
-   }else{
-   $scope.isSelectDisabled = false;
-   }
-   }
-   
-	 }
-	}
-	$scope.Getbvn = function(id){  
-	   $scope.BVNBtn = false;
-	   $scope.isSelectDisabledType = false;
-	   $scope.isSelectDisabled = false;
-	   alert("Please wait, while we validate the BVN");
-   
-	   $http({
-		   method: 'post',
-		   url: '../ajax/preappviewajax.php',
-		   data: {
-			   action: 'getbvn',
-			   id:id,
-		   },
-	   }).then(function successCallback(response) {
-		   $scope.resc = response.data.responseCode;
-		   //alert($scope.resc);
-		   if(parseInt($scope.resc) == 0) {
-			   $scope.BVNBtn = true;
-			   $scope.isSelectDisabledType = false;
-			  $scope.isSelectDisabled = false;
-			  $scope.Success = true;
-			  $scope.Failure = false;
-			  $scope.labelHide = true;
-			   /* $scope.tabeHide = false;
-			   $scope.tabeHide2 = true;
-			   $scope.res = response.data;
-			   $scope.requestStatus = response.data.requestStatus;
-			   $scope.bvn = response.data.bvn;
-			   $scope.validity = response.data.validity;
-			   $scope.signature = response.data.signature;
-			   $scope.responseCode = response.data.responseCode;
-			   $scope.responseDescription = response.data.responseDescription;
-			   $scope.processingStartTime = response.data.processingStartTime; */
-		   }
-		   else {
-			   $scope.BVNBtn = true;
-			   $scope.isSelectDisabledType = true;
-				$scope.isSelectDisabled = true;
-				$scope.Success = false;
-				  $scope.Failure = true;
-				  $scope.labelHide = true;
-		   /* 	$scope.res = response.data;
-			   $scope.requestStatus = response.data.requestStatus;
-			   $scope.bvn = response.data.bvn;
-			   $scope.validity = response.data.validity;
-			   $scope.signature = response.data.signature;
-			   $scope.responseCode = response.data.responseCode;
-			   $scope.responseDescription = response.data.responseDescription;
-			   $scope.processingStartTime = response.data.processingStartTime; */
-		   }
-	   });
-   
-	}
-   
-	$scope.preappviewreject = function (index, id,name) {
-	 $scope.id =id;
-	 $scope.name = name;
-	}
-	$scope.reject = function (id) {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'reject',
-	   comments:$scope.comments,
-	  },
-	  }).then(function successCallback(response) {
-	   $("#RejectBody").html("<h3>"+response.data+"</h3>");
-	   $scope.isHideOk = false;
-	   $scope.isHide = true;
-	  });
-	 }
-   
-	 $scope.Previewdelete = function (index, id,name) {
-	 $scope.id =id;
-	 $scope.name = name;
-	}
-	  $scope.Delete = function (index, id,name) {
-	//$scope.id = id;
-   $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'Delete',
-	   },
-	  }).then(function successCallback(response) {
-	 $scope.id=response.data[0].id;
-	   $("#DeleteBody").html("<h3>"+response.data+"</h3>");
-	   $scope.isHideOk = false;
-	   $scope.isHide = true;
-   });
-	 }
-   
-	$scope.view = function (index, id) {
-	 $http({
-	  method: 'post',
-	  url: '../ajax/preappviewajax.php',
-	  data: {
-	   id: id,
-	   action: 'view'
-	  },
-	 }).then(function successCallback(response) {
-	  // $scope.isHide = true;
-	  // $scope.isHideOk = false;
-	  $scope.id = response.data[0].id;
-	  $scope.category = response.data[0].category;
-	  $scope.country = response.data[0].country;
-	  $scope.dob = response.data[0].dob;
-	  $scope.gender = response.data[0].gender;
-	  $scope.BusinessType = response.data[0].BusinessType;
-	  $scope.outletname = response.data[0].outletname;
-	  $scope.type = response.data[0].type;
-	  $scope.parentc = response.data[0].parentc;
-	  $scope.partyc = response.data[0].partyc;
-	  $scope.lang = response.data[0].lang;
-	  $scope.cdate = response.data[0].time;
-	  $scope.statusa = response.data[0].statusa;
-	  $scope.address1 = response.data[0].address1;
-	  $scope.address2 = response.data[0].address2;
-	  $scope.localgovt = response.data[0].localgovt;
-	  $scope.state = response.data[0].state;
-	  $scope.zipcode = response.data[0].zip;
-	  $scope.taxnumber = response.data[0].tax;
-	  $scope.email = response.data[0].email;
-	  $scope.mobile = response.data[0].mobile;
-	  $scope.workno = response.data[0].work;
-	  $scope.cname = response.data[0].cpn;
-	  $scope.cmobile = response.data[0].cpm;
-	  $scope.latitude = response.data[0].latitude;
-	  $scope.longitude = response.data[0].longitude;
-	  $scope.aptime = response.data[0].aptime;
-	  $scope.apcomment = response.data[0].apcomment;
-	  $scope.autime = response.data[0].autime;
-	  $scope.aucomment = response.data[0].aucomment;
-	  $scope.comments = response.data[0].comments;
-	  $scope.asetup = response.data[0].asetup;
-	  $scope.usetup = response.data[0].usetup;
-	  $scope.login = response.data[0].login;
-	  $scope.bvn = response.data[0].bvn;
-	  $scope.first_name = response.data[0].first_name;
-	  $scope.last_name = response.data[0].last_name;
-	 }, function errorCallback(response) {
-	  // console.log(response);
-	 });
-	}
-   });
-
-
-
-app.controller('appApproveCtrl', function ($scope, $http) {
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.checkdate = function (startDate,endDate){
-		var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-		var currdate = new Date();
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$scope.isQueryDi = false;
-		}
-	}
-	$scope.query = function () {
-		var startDate =  $scope.startDate;
-		var endDate =  $scope.endDate;
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		var currdate = new Date();
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-		$scope.isLoaderMain = true;
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: { startDate: $scope.startDate, endDate: $scope.endDate, action: 'query' },
-		}).then(function successCallback(response) {
-			$scope.approveList = response.data;
-			$scope.isLoaderMain = false;
-			//	$scope.isHide = true;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-		}
-	}
-	$scope.resetappr = function () {
-		$scope.isHide = false;
-	}
-
-	$scope.attachmentid = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: {
-				id: id,
-				action: 'attachmentid'
-			},
-		}).then(function successCallback(response) {
-			//	$scope.isHide = true;
-				$scope.isHideOk = false;
-			$scope.isLoader = false;
-	     $scope.isMainLoader = false;
-		// alert(response.data[0].attachment_content);
-		$scope.myImage = response.data[0].attachment_content;
-		$scope.outletname = response.data[0].outletname;
-		$scope.file = response.data[0].file;
-		$scope.attachment_type = response.data[0].attachment_type;
-	//	$("#appattachment").html("<h3>" + response.data + "</h3>");
-	//	alert(response.data[0].attachment_type);
-		//alert(response.data);
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-		$scope.PrintImage = function (url) {
-				var src='data:image/;base64,'+url;
-				//alert(src);
-			    var win = window.open('');
-				win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-				win.focus();
-				};
-	}
-		$scope.attachmentcomp = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: {
-				id: id,
-				action: 'attachmentcomp'
-			},
-		}).then(function successCallback(response) {
-			//	$scope.isHide = true;
-				$scope.isHideOk = false;
-			$scope.isLoader = false;
-	     $scope.isMainLoader = false;
-		// alert(response.data[0].attachment_content);
-		$scope.myImage = response.data[0].attachment_content;
-		$scope.outletname = response.data[0].outletname;
-		$scope.file = response.data[0].file;
-		$scope.attachment_type = response.data[0].attachment_type;
-		//alert(response.data[0].attachment_type);
-		//$("#appattachment").html("<h3>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-
-	     $scope.PrintImage = function (url) {
-			var src='data:image/;base64,'+url;
-			//alert(src);
-		    var win = window.open('');
-			win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
-		    win.focus();
-		};
-	}
-
-
-	$scope.edit = function (index, id, profile) {
-		 $http({
-			url: '../ajax/load.php',
-			method: "POST",
-			//Content-Type: 'application/json',
-			params: { action: 'active', for: 'partycatype' }
-			}).then(function successCallback(response) {
-			$scope.partycatypes = response.data;
-			//window.location.reload();
-			});
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: { id: id, action: 'edit' },
-		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-			$scope.outletname = response.data[0].name;
-			$scope.palogin = response.data[0].palogin;
-			$scope.type = response.data[0].type;
-			$scope.code = response.data[0].code;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'services',profile:profile },
-		}).then(function successCallback(response) {
-			$scope.services = response.data;
-			// console.log(response.data);
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.isHide = false;
-	$scope.isHideOk = true;
-	$scope.detail = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: { id: id, action: 'detail' },
-		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-			$scope.outletname = response.data[0].name;
-			$scope.country = response.data[0].country;
-			$scope.name = response.data[0].name;
-			$scope.type = response.data[0].type;
-			$scope.category = response.data[0].category;
-			$scope.time = response.data[0].time;
-			$scope.status = response.data[0].status;
-			$scope.address1 = response.data[0].address1;
-			$scope.address2 = response.data[0].address2;
-			$scope.localgovt = response.data[0].localgovt;
-			$scope.state = response.data[0].state;
-			$scope.zip = response.data[0].zip;
-			$scope.tax = response.data[0].tax;
-			$scope.email = response.data[0].email;
-			$scope.mobile = response.data[0].mobile;
-			$scope.fax = response.data[0].fax;
-			$scope.work = response.data[0].work;
-			$scope.cpm = response.data[0].cpm;
-			$scope.cpn = response.data[0].cpn;
-			$scope.Latitude = response.data[0].Latitude;
-			$scope.Longitude = response.data[0].Longitude;
-			$scope.bvn = response.data[0].bvn;
-			$scope.palogin = response.data[0].palogin;
-			$scope.code = response.data[0].code;
-			$scope.entrycomments = response.data[0].entrycomments;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.refresh = function (id, type) {
-		window.location.reload();
-	}
-	$scope.approve = function (id, type) {
-		$scope.isLoader = true;
-			$scope.isMainLoader = true;
-		var i = 0;
-		var arr = [];
-		$('.selectedServices:checked').each(function () {
-			arr[i++] = $(this).val();
-		});
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: {
-				id: id,
-				parentType: $scope.parentType,
-				creditLimit: $scope.creditLimit,
-				dailyLimit: $scope.dailyLimit,
-				advanceAmount: $scope.advanceAmount,
-				minimumBalance: $scope.minimumBalance,
-				selectedServices: arr,
-				comments: $scope.comments,
-				action: 'approve',
-				type: type,
-				partycatype:$scope.partycatype
-			},
-		}).then(function successCallback(response) {
-			$("#ApproveBody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.openreject = function (index,id,name) {
-		$scope.id=id;
-		$scope.name=name;
-	}
-	$scope.reject = function (id) {
-		$scope.isLoader = true;
-			$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/appapproveajax.php',
-			data: {
-				id: id,
-				comments: $scope.comments,
-				name: $scope.name,
-				action: 'reject',
-				type: type,
-			},
-		}).then(function successCallback(response) {
-			$("#rejectbody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
+app.controller('dashBoardCtrl', function ($scope, $http) {
+$http({
+method: 'post',
+data:{action:'amount'},
+url: '../ajax/dashboardajax.php',
+}).then(function successCallback(response) {
+$scope.total_amount = response.data[0].total_amount;
+$scope.kadick_charge = response.data[1].kadick_charge;
+$scope.agent_charge = response.data[1].agent_charge;
+$scope.champion_charge = response.data[1].champion_charge;
+}, function errorCallback(response) {
+// console.log(response);
 });
-app.controller('userCtrl', function ($scope, $http) {
+$scope.agtdtl = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'agentdtl'},
+}).then(function successCallback(response) {
+$scope.agtdls = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.champ = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'champion'},
+}).then(function successCallback(response) {
+$scope.champs = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.cashtrans = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'cashtrans'},
+}).then(function successCallback(response) {
+$scope.server = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.pay = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'billpayment'},
+}).then(function successCallback(response) {
+$scope.billpay = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.recharge = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'Recharge'},
+}).then(function successCallback(response) {
+$scope.rechrge = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.fundwallet = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'fundwallet'},
+}).then(function successCallback(response) {
+$scope.fundwalet = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.roundCashin = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'roundCashin'},
+}).then(function successCallback(response) {
+$scope.cashin = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.roundCashout = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'roundCashout'},
+}).then(function successCallback(response) {
+$scope.cashout = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.RoundRecharge = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'RoundRecharge'},
+}).then(function successCallback(response) {
+$scope.roundrechrge = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.BillPayment = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'BillPay'},
+}).then(function successCallback(response) {
+$scope.BillPayment = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.Accservice = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'accservice'},
+}).then(function successCallback(response) {
+$scope.accountservice = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.totalAmount = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'totalAmount'},
+}).then(function successCallback(response) {
+$scope.Tamount = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.KadickChrge = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'KadickChrge'},
+}).then(function successCallback(response) {
+$scope.kCharge = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.AgentCommision = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'agentCommission'},
+}).then(function successCallback(response) {
+$scope.agntCommission = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.ChampionCommision = function () {
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'champCommission'},
+}).then(function successCallback(response) {
+$scope.ChampionCommission = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'agentlist'},
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
+method: 'post',
+url: '../ajax/dashboardajax.php',
+data:{action:'counts'},
+}).then(function successCallback(response) {
+$scope.recharge_count = response.data[1].recharge_count;
+$scope.bp_count = response.data[1].bp_count;
+$scope.account_service_count = response.data[1].account_service_count;
+$scope.cashIn = response.data[0].cashIn;
+$scope.cashOut = response.data[1].cashOut;
+$scope.start_date = response.data[1].start_date;
+$scope.date = response.data[0].date;
+}, function errorCallback(response) {
+// console.log(response);
+});
+});
+
+
+app.controller('sUserCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.usrform	 = true;
 	$scope.isGoDisbled = true;
 	$http({
 		method: 'post',
-		url: '../ajax/userajax.php',
+		url: '../ajax/suserajax.php',
 		data: { action: 'list' },
 	}).then(function successCallback(response) {
 		$scope.userList = response.data;
@@ -11202,7 +10874,7 @@ app.controller('userCtrl', function ($scope, $http) {
 		url: '../ajax/load.php',
 		method: "POST",
 		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'profile',profilefor:'user' }
+		params: { action: 'active', for: 'profile',profilefor:'aduser' }
 	}).then(function successCallback(response) {
 		$scope.profiles = response.data;
 		//window.location.reload();
@@ -11211,7 +10883,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.edituser = function (index, id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'edit' },
 		}).then(function successCallback(response) {
 			$scope.user = response.data[0].user;
@@ -11220,6 +10892,34 @@ app.controller('userCtrl', function ($scope, $http) {
 			$scope.active = response.data[0].active;
 			$scope.email = response.data[0].email;
 			$scope.id = response.data[0].id;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.idd = function (id) {
+		$scope.id = id;
+	}
+	$scope.updateaccess = function (id) {
+		$http({
+			method: 'post',
+			url: '../ajax/suserajax.php',
+			data: {
+				action: 'updateaccess',
+				weekendaccess: $scope.weekendaccess,
+				weekendcontrol: $scope.weekendcontrol,
+				stime:$scope.stime,
+				etime:$scope.etime,
+				id:id
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideCancel = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#accessBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+			//window.location.reload();
+
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
@@ -11270,43 +10970,91 @@ app.controller('userCtrl', function ($scope, $http) {
 			//console.log(response);
 		});
 	}
-	$scope.idd = function (id) {
-		$scope.id = id;
-	}
-	$scope.updateaccess = function (id) {
+	$scope.userrestrict = function (index, id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
-			data: {
-				action: 'updateaccess',
-				weekendaccess: $scope.weekendaccess,
-				weekendcontrol: $scope.weekendcontrol,
-				stime:$scope.stime,
-				etime:$scope.etime,
-				id:id
-			},
+			url: '../ajax/suserajax.php',
+			data: { id: id, action: 'accessrestrict' },
 		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideCancel = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#accessBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-			//window.location.reload();
+			$scope.user = response.data[0].user;
+			$scope.accessrestrict = response.data[0].accessrestrict;
+			$scope.id = response.data[0].id;
 
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
 	}
+	$scope.posaccess = function (index, id) {
+		$http({
+			method: 'post',
+			url: '../ajax/suserajax.php',
+			data: { id: id, action: 'posaccess' },
+		}).then(function successCallback(response) {
+			$scope.user = response.data[0].user;
+			$scope.posaccess = response.data[0].posaccess;
+			$scope.id = response.data[0].id;
+
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+
+	$scope.userrestrictupdate = function (id) {
+		$scope.isHide = true;
+		$scope.isHideCancel = true;
+		$scope.isLoader = true;
+		$scope.isMainLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/suserajax.php',
+			data: {
+				id: id,
+				action: 'userrestrictupdate',
+				accessrestrict: $scope.accessrestrict,
+
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#userrestrictBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.posaccessupdate = function (id) {
+		$scope.isHide = true;
+		$scope.isHideCancel = true;
+		$scope.isLoader = true;
+		$scope.isMainLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/suserajax.php',
+			data: {
+				id: id,
+				action: 'posaccessupdate',
+				posaccess: $scope.posaccess
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#posaccessBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
 	$scope.createuser = function () {
-		$scope.isHide = false;
+		$scope.isHide = true;
 		$scope.isHideReset = true;
 		$scope.isLoader = true;
 		$scope.isMainLoader = true;
 
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: {
 				action: 'insertsysuser',
 				userName: $scope.userName,
@@ -11335,7 +11083,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.editotpdetails = function (index, id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'otpchange' },
 		}).then(function successCallback(response) {
 			$scope.user = response.data[0].user;
@@ -11345,83 +11093,6 @@ app.controller('userCtrl', function ($scope, $http) {
 			// console.log(response);
 		});
 	}
-	$scope.userrestrict = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/userajax.php',
-			data: { id: id, action: 'accessrestrict' },
-		}).then(function successCallback(response) {
-			$scope.user = response.data[0].user;
-			$scope.accessrestrict = response.data[0].accessrestrict;
-			$scope.id = response.data[0].id;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.posaccess = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/userajax.php',
-			data: { id: id, action: 'posaccess' },
-		}).then(function successCallback(response) {
-			$scope.user = response.data[0].user;
-			$scope.posaccess = response.data[0].posaccess;
-			$scope.id = response.data[0].id;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-
-	$scope.userrestrictupdate = function (id) {
-		$scope.isHide = true;
-		$scope.isHideCancel = true;
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/userajax.php',
-			data: {
-				id: id,
-				action: 'userrestrictupdate',
-				accessrestrict: $scope.accessrestrict,
-
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#userrestrictBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.posaccessupdate = function (id) {
-		$scope.isHide = true;
-		$scope.isHideCancel = true;
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/userajax.php',
-			data: {
-				id: id,
-				action: 'posaccessupdate',
-				posaccess: $scope.posaccess
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#posaccessBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-
 	$scope.otytypeupdate = function (id) {
 		$scope.isHide = true;
 		$scope.isHideCancel = true;
@@ -11449,7 +11120,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.uppassreset = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: {
 				id: id,
 				action: 'passreset',
@@ -11457,8 +11128,8 @@ app.controller('userCtrl', function ($scope, $http) {
 				repassword: $scope.repassword
 			},
 		}).then(function successCallback(response) {
-			alert(response.data)
-
+			//alert(response.data)
+			window.location.reload();
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
@@ -11466,7 +11137,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.editsotpdetails = function (index, id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'scontrol' },
 		}).then(function successCallback(response) {
 			$scope.user = response.data[0].user;
@@ -11480,7 +11151,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.regenerate = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'regenerate' },
 		}).then(function successCallback(response) {
 			if (response.data[0].error == 0) {
@@ -11497,14 +11168,27 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.editcontrol = function (index, id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'control' },
 		}).then(function successCallback(response) {
 			$scope.user = response.data[0].user;
+			$scope.fstlogin = response.data[0].fstlogin;
 			$scope.locked = response.data[0].locked;
 			$scope.ltime = response.data[0].ltime;
 			$scope.id = response.data[0].id;
-			$scope.fstlogin = response.data[0].fstlogin;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.lock = function (id) {
+		$http({
+			method: 'post',
+			url: '../ajax/suserajax.php',
+			data: { id: id, action: 'lock' },
+		}).then(function successCallback(response) {
+			alert(response.data);
+			window.location.reload();
+
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
@@ -11535,23 +11219,10 @@ app.controller('userCtrl', function ($scope, $http) {
 			// console.log(response);
 		});
 	}
-	$scope.lock = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/userajax.php',
-			data: { id: id, action: 'lock' },
-		}).then(function successCallback(response) {
-			alert(response.data);
-			window.location.reload();
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
 	$scope.unlock = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'unlock' },
 		}).then(function successCallback(response) {
 			alert(response.data);
@@ -11564,7 +11235,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.getcurrentotp = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'getcurrentotp' },
 		}).then(function successCallback(response) {
 			$("#currmsg").html(response.data);
@@ -11576,7 +11247,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.updatesotpvalue = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: {
 				id: id,
 				otpvalue: $scope.stotp,
@@ -11584,7 +11255,7 @@ app.controller('userCtrl', function ($scope, $http) {
 			},
 		}).then(function successCallback(response) {
 			alert(response.data);
-			//window.location.reload();
+			window.location.reload();
 
 		}, function errorCallback(response) {
 			// console.log(response);
@@ -11593,7 +11264,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.updatesotppin = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: {
 				id: id,
 				pin: $scope.spin,
@@ -11601,7 +11272,7 @@ app.controller('userCtrl', function ($scope, $http) {
 			},
 		}).then(function successCallback(response) {
 			alert(response.data);
-			//window.location.reload();
+			window.location.reload();
 
 		}, function errorCallback(response) {
 			// console.log(response);
@@ -11630,7 +11301,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	$scope.sendmail = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: { id: id, action: 'sendmail' },
 		}).then(function successCallback(response) {
 			alert(response.data);
@@ -11639,13 +11310,11 @@ app.controller('userCtrl', function ($scope, $http) {
 		});
 	}
 
-
-
 	$scope.updateuser = function (id) {
 		$scope.isHideOk = true;
 		$http({
 			method: 'post',
-			url: '../ajax/userajax.php',
+			url: '../ajax/suserajax.php',
 			data: {
 				id: $scope.id,
 				fname: $scope.fname,
@@ -11664,420 +11333,140 @@ app.controller('userCtrl', function ($scope, $http) {
 		});
 	}
 });
+app.controller('authCtrl', function ($scope, $http) {
+	$scope.isHideOk = true;
+	$scope.splCharRes = "/^(?=.*[A-Za-z])(?=.*\d)(?=.~!@#$*_-/\\|-])[A-Za-z\d$@('@')$!%*#?&{}[\]<>()^+=;:'&quot;/\\|-]{8,20}$/";
+	$http({
+		method: 'post',
+		url: '../ajax/authajax.php',
+		data: { action: 'list' },
+	}).then(function successCallback(response) {
+		$scope.authlist = response.data;
+	});
+	$scope.edit = function (index, id) {
+		$http({
+			method: 'post',
+			url: '../ajax/authajax.php',
+			data: { id: id, action: 'edit' },
+		}).then(function successCallback(response) {
+			$scope.code = response.data[0].code;
+			$scope.active = response.data[0].active;
+			$scope.assignable = response.data[0].assignable;
+			$scope.id = response.data[0].id;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.create = function () {
+		$http({
+			method: 'post',
+			url: '../ajax/authajax.php',
+			data: {
+				id: $scope.id,
+				code: $scope.code,
+				active: $scope.active,
+				assignable: $scope.assignable,
+				action: 'create'
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$("#AuthCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.update = function (id) {
+		$scope.isHideOk = true;
+		$http({
+			method: 'post',
+			url: '../ajax/authajax.php',
+			data: {
+				id: $scope.id,
+				code: $scope.code,
+				active: $scope.active,
+				assignable: $scope.assignable,
+				action: 'update'
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$("#AuthBody").html("<h3>" + response.data + "</h3>");
 
-app.controller('infoCtrl', function ($scope, $http) {
-    $scope.isHideOk = true;
-    $scope.countrychange = function (id) {
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'statelist', "id": 566, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.states = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    
-    $scope.statechange = function (id) {
-    // alert(id);
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'localgvtlist', "id": id, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.localgvts = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.fn_load = function (partyType,partyCode) {
-    if(partyType == 'C' || partyType == 'A') {
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { partyType:partyType,
-    partyCode:partyCode,
-    action: 'infolist'
-    },
-    }).then(function successCallback(response) {
-    $scope.infos = response.data;
-    });
-    }
-    }
-    $scope.partyload = function (partyType) {
-    var action = "";var fora="";
-    if(partyType == "MA") {
-    fora = "agent";
-    type = "N";
-    }
-    if(partyType == "SA") {
-    fora = "agent";
-    type = "Y";
-    }
-    if(partyType == "C") {
-    fora = "champion";
-    type = "";
-    }
-    if(partyType == "P") {
-    fora = "personal";
-    type = "";
-    }
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for:fora,
-       type: type
-    },
-    }).then(function successCallback(response) {
-    $scope.infos = response.data;
-    });
-    
-    }
-    $scope.query = function () {
-    $http({
-    method: 'post',
-    url: '../ajax/infoajax.php',
-    data: {
-    action: 'findlist',
-    partyCode: $scope.partyCode,
-    partyType: $scope.partyType,
-    topartyCode:$scope.topartyCode,
-    creteria:$scope.creteria
-    },
-    }).then(function successCallback(response) {
-    $scope.infoss = response.data;
-    $scope.bvn = response.data[0].bvn;
-    
-    }, function errorCallback(response) {
-    console.log(response.data);
-    });
-    }
-    $scope.edit = function (index, partyCode, partyType, creteria) {
-    $http({
-    method: 'post',
-    url: '../ajax/infoajax.php',
-    data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
-    }).then(function successCallback(response) {
-    
-    // alert(id);
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.localgvts = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    $scope.active = response.data[0].active;
-    $scope.application_id = response.data[0].application_id;
-    $scope.block_date = response.data[0].block_date;
-    $scope.block_reason_id = response.data[0].block_reason_id;
-    $scope.block_status = response.data[0].block_status;
-    $scope.partyCode = response.data[0].code;
-    $scope.contact_person_mobile = response.data[0].contact_person_mobile;
-    $scope.contact_person_name = response.data[0].contact_person_name;
-    $scope.country = response.data[0].country;
-    $scope.create_time = response.data[0].create_time;
-    $scope.create_user = response.data[0].create_user;
-    $scope.email = response.data[0].email;
-    $scope.expiry_date = response.data[0].expiry_date;
-    $scope.gvtname = response.data[0].gvtname;
-    $scope.lname = response.data[0].lname;
-    $scope.atype = response.data[0].atype;
-    $scope.mobile_no = response.data[0].mobile_no;
-    $scope.name = response.data[0].name;
-    $scope.code = response.data[0].code;
-    $scope.outlet_name = response.data[0].outlet_name;
-    $scope.parenroutletname = response.data[0].parenroutletname;
-    $scope.partytype = response.data[0].partytype;
-    $scope.pcode = response.data[0].pcode;
-    $scope.ptype = response.data[0].ptype;
-    $scope.start_date = response.data[0].start_date;
-    $scope.state = response.data[0].state;
-    $scope.sub_agent = response.data[0].sub_agent;
-    $scope.tax_number = response.data[0].tax_number;
-    $scope.update_time = response.data[0].update_time;
-    $scope.update_user = response.data[0].update_user;
-    $scope.user = response.data[0].user;
-    $scope.work_no = response.data[0].work_no;
-    $scope.zip_code = response.data[0].zip_code;
-    $scope.address1 = response.data[0].address1;
-    $scope.address2 = response.data[0].address2;
-    $scope.local_govt_id = response.data[0].local_govt_id;
-    $scope.state_id = response.data[0].state_id;
-    $scope.loc_latitude = response.data[0].loc_latitude;
-    $scope.loc_longitude = response.data[0].loc_longitude;
-    $scope.gender = response.data[0].gender;
-    $scope.BusinessType = response.data[0].BusinessType;
-    $scope.dob = new Date(response.data[0].dob);
-    
-    if(response.data[0].dob==null){
-    $scope.dob="";
-    }
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.view = function (index, partyCode, partyType, creteria) {
-    $http({
-    method: 'post',
-    url: '../ajax/infoajax.php',
-    data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
-    }).then(function successCallback(response) {
-    
-    // alert(id);
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.localgvts = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    $scope.active = response.data[0].active;
-    $scope.application_id = response.data[0].application_id;
-    $scope.block_date = response.data[0].block_date;
-    $scope.block_reason_id = response.data[0].block_reason_id;
-    $scope.block_status = response.data[0].block_status;
-    $scope.partyCode = response.data[0].code;
-    $scope.contact_person_mobile = response.data[0].contact_person_mobile;
-    $scope.contact_person_name = response.data[0].contact_person_name;
-    $scope.country = response.data[0].country;
-    $scope.create_time = response.data[0].create_time;
-    $scope.create_user = response.data[0].create_user;
-    $scope.email = response.data[0].email;
-    $scope.expiry_date = response.data[0].expiry_date;
-    $scope.gvtname = response.data[0].gvtname;
-    $scope.lname = response.data[0].lname;
-    $scope.atype = response.data[0].atype;
-    $scope.mobile_no = response.data[0].mobile_no;
-    $scope.name = response.data[0].name;
-    $scope.code = response.data[0].code;
-    $scope.outlet_name = response.data[0].outlet_name;
-    $scope.parenroutletname = response.data[0].parenroutletname;
-    $scope.partytype = response.data[0].partytype;
-    $scope.pcode = response.data[0].pcode;
-    $scope.ptype = response.data[0].ptype;
-    $scope.start_date = response.data[0].start_date;
-    $scope.state = response.data[0].state;
-    $scope.sub_agent = response.data[0].sub_agent;
-    $scope.tax_number = response.data[0].tax_number;
-    $scope.update_time = response.data[0].update_time;
-    $scope.update_user = response.data[0].update_user;
-    $scope.user = response.data[0].user;
-    $scope.work_no = response.data[0].work_no;
-    $scope.zip_code = response.data[0].zip_code;
-    $scope.address1 = response.data[0].address1;
-    $scope.address2 = response.data[0].address2;
-    $scope.local_govt_id = response.data[0].local_govt_id;
-    $scope.state_id = response.data[0].state_id;
-    $scope.loc_latitude = response.data[0].loc_latitude;
-    $scope.loc_longitude = response.data[0].loc_longitude;
-    $scope.gender = response.data[0].gender;
-    $scope.BusinessType = response.data[0].BusinessType;
-    $scope.dob = response.data[0].dob;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.update = function (code) {
-    $scope.isLoader = true;
-    $scope.isMainLoader = true;
-    $scope.isHideOk = true;
-    $http({
-    method: 'post',
-    url: '../ajax/infoajax.php',
-    data: {
-    mobile: $scope.mobile_no,
-    email: $scope.email,
-    cpname: $scope.contact_person_name,
-    cpmobile: $scope.contact_person_mobile,
-    partyCode: code,
-    address1: $scope.address1,
-    address2: $scope.address2,
-    loc_latitude: $scope.loc_latitude,
-    loc_longitude: $scope.loc_longitude,
-    state_id:  $scope.state_id,
-    local_govt_id: $scope.local_govt_id,
-    gender: $scope.gender,
-    dob:  $scope.dob,
-    BusinessType: $scope.BusinessType,
-    active: $scope.active,
-    action: 'update'
-    },
-    }).then(function successCallback(response) {
-    $scope.isHide = true;
-    $scope.isHideOk = false;
-    $scope.isLoader = false;
-        $scope.isMainLoader = false;
-    $("#infoBody").html("<h3>" + response.data + "</h3>");
-    
-    }, function errorCallback(response) {
-    console.log(response);
-    });
-    }
-    
-    $scope.Getbvn = function(index, partyCode, partyType, creteria){  
-        
-        alert("Please wait, while we validate the BVN");
-    
-        $http({
-            method: 'post',
-            url: '../ajax/infoajax.php',
-            data: {
-                action: 'getbvn',
-                partyCode:partyCode,
-            },
-        }).then(function successCallback(response) {
-            
-            $scope.resc = response.data.responseCode;
-            $scope.resd = response.data.responseDescription;
-    
-            
-            if(parseInt($scope.resc) == 0) {
-                
-                if(!alert('BVN Validated Successfully!')){window.location.reload();}
-    
-                //$scope.resd = response.data.responseDescription;
-            
-                /* $scope.tabeHide = false;
-                $scope.tabeHide2 = true;
-                $scope.res = response.data;
-                $scope.requestStatus = response.data.requestStatus;
-                $scope.bvn = response.data.bvn;
-                $scope.validity = response.data.validity;
-                $scope.signature = response.data.signature;
-                $scope.responseCode = response.data.responseCode;
-                $scope.responseDescription = response.data.responseDescription;
-                $scope.processingStartTime = response.data.processingStartTime; */
-            }
-            else {
-    
-                if(!alert('BVN Validated Failed Due to '+ $scope.resd)){window.location.reload();}
-    
-                //alert($scope.resd);
-                
-            /* 	$scope.res = response.data;
-                $scope.requestStatus = response.data.requestStatus;
-                $scope.bvn = response.data.bvn;
-                $scope.validity = response.data.validity;
-                $scope.signature = response.data.signature;
-                $scope.responseCode = response.data.responseCode;
-                $scope.responseDescription = response.data.responseDescription;
-                $scope.processingStartTime = response.data.processingStartTime; */
-            }
-        });
-    
-     }
-     
-    });
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+	}
+});
 
-app.controller('appViewCtrl', function ($scope, $http) {
-$scope.isLoader = true;
+app.controller('appApproveCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.endDate = new Date();
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'langs' }
-}).then(function successCallback(response) {
-$scope.langs = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'country' }
-}).then(function successCallback(response) {
-$scope.countrys = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { for: 'agent', "type": "N" }
-}).then(function successCallback(response) {
-$scope.agents = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'active', for: 'state'}
-}).then(function successCallback(response) {
-$scope.statelist = response.data;
-//window.location.reload();
-});
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { for: 'champion' }
-}).then(function successCallback(response) {
-$scope.champions = response.data;
-//window.location.reload();
-});
-$scope.countrychange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
 }
-
-$scope.statechange = function (id) {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": id, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
 }
 $scope.query = function () {
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isLoaderMain = true;
 $http({
 method: 'post',
-url: '../ajax/appviewajax.php',
-data: {
-id: $scope.id,
-crestatus: $scope.crestatus,
-startDate: $scope.startDate,
-endDate: $scope.endDate,
-creteria: $scope.creteria,
-action: 'query'
-},
+url: '../ajax/appapproveajax.php',
+data: { startDate: $scope.startDate, endDate: $scope.endDate, action: 'query' },
 }).then(function successCallback(response) {
+$scope.approveList = response.data;
+$scope.isLoaderMain = false;
 // $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.isLoader = false;
-    $scope.isMainLoader = false;
-$scope.appviews = response.data;
+
 }, function errorCallback(response) {
 // console.log(response);
 });
+}
+}
+$scope.resetappr = function () {
+$scope.isHide = false;
 }
 
 $scope.attachmentid = function (index, id) {
 $http({
 method: 'post',
-url: '../ajax/appviewajax.php',
+url: '../ajax/appapproveajax.php',
 data: {
 id: id,
 action: 'attachmentid'
@@ -12092,7 +11481,8 @@ $scope.myImage = response.data[0].attachment_content;
 $scope.outletname = response.data[0].outletname;
 $scope.file = response.data[0].file;
 $scope.attachment_type = response.data[0].attachment_type;
-//$("#resmsg").html("<h3>" + response.data + "</h3>");
+// $("#appattachment").html("<h3>" + response.data + "</h3>");
+// alert(response.data[0].attachment_type);
 //alert(response.data);
 }, function errorCallback(response) {
 // console.log(response);
@@ -12108,7 +11498,7 @@ win.focus();
 $scope.attachmentcomp = function (index, id) {
 $http({
 method: 'post',
-url: '../ajax/appviewajax.php',
+url: '../ajax/appapproveajax.php',
 data: {
 id: id,
 action: 'attachmentcomp'
@@ -12119,15 +11509,46 @@ $scope.isHideOk = false;
 $scope.isLoader = false;
     $scope.isMainLoader = false;
 // alert(response.data[0].attachment_content);
-//$("#resmsg").html("<h3>" + response.data + "</h3>");
 $scope.myImage = response.data[0].attachment_content;
 $scope.outletname = response.data[0].outletname;
 $scope.file = response.data[0].file;
 $scope.attachment_type = response.data[0].attachment_type;
 //alert(response.data[0].attachment_type);
+//$("#appattachment").html("<h3>" + response.data + "</h3>");
 }, function errorCallback(response) {
 // console.log(response);
 });
+    $scope.PrintImage = function (url) {
+var src='data:image/;base64,'+url;
+//alert(src);
+   var win = window.open('');
+win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+   win.focus();
+};
+}
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appapproveajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	//$("#appattachment").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
 
     $scope.PrintImage = function (url) {
 var src='data:image/;base64,'+url;
@@ -12137,402 +11558,202 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
    win.focus();
 };
 }
-$scope.print = function (index, id) {
+
+
+$scope.edit = function (index, id, profile) {  
+
+	$scope.ba = "E";
+$scope.radiochange = function(){
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+$scope.RadioChangeE = function(){
+	$scope.SalesChain = false;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
 
 $http({
-method: 'post',
-url: '../ajax/appviewajax.php',
-data: {
-id: id,
-action: 'view'
-},
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partycatype' }
 }).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-var creteria = $scope.creteria;
-var id = $scope.id;
-var statusa = $scope.statusa;
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
-if (creteria == "BI") {
-text = "By Id";
-valu = id;
-}
-if (creteria == "BS") {
-text = "By Status";
-valu = statusa;
-}
-if (creteria == "BD") {
-text = "By Date";
-valu = "From: " + startDate + " to " + endDate;
-}
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px">Application View Report - ' + response.data[0].outletname + '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both"> ';
-var response = "<p>Search Creteria For: </p>" + text + " - " + valu +
-"<table class='table table-bordered'><tbody>" +
-"<tr><th>Application #</th><th>" + response.data[0].id + "</th></tr>" +
-"<tr><th>Category</th><th>" + response.data[0].category + "</th></tr>" +
-"<tr><th>Country</th><th>" + response.data[0].country + "</th></tr>" +
-"<tr><th>Outlet Name</th><th>" + response.data[0].outletname + "</th></tr>" +
-"<tr><th>Date Of Birth</th><th>" + response.data[0].dob + "</th></tr>" +
-"<tr><th>Gender</th><th>" + response.data[0].gender + "</th></tr>" +
-"<tr><th>Business Type</th><th>" + response.data[0].BusinessType + "</th></tr>" +
-"<tr><th>bvn</th><th>" + response.data[0].bvn + "</th></tr>" +
-"<tr><th>Applier Type</th><th>" + response.data[0].type + "</th></tr>" +
-"<tr><th>Party Code</th><th>" + response.data[0].partyc + "</th></tr>" +
-"<tr><th>Parent Code</th><th>" + response.data[0].parentc + "</th></tr>" +
-"<tr><th>Create Time</th><th>" + response.data[0].time + "</th></tr>" +
-"<tr><th>Status</th><th>" + response.data[0].statusa + "</th></tr>" +
-"<tr><th>Address 1</th><th>" + response.data[0].address1 + "</th></tr>" +
-"<tr><th>Address 2</th><th>" + response.data[0].address2 + "</th></tr>" +
-"<tr><th>Local Govt.</th><th>" + response.data[0].localgovt + "</th></tr>" +
-"<tr><th>State</th><th>" + response.data[0].state + "</th></tr>" +
-"<tr><th>Zip Code</th><th>" + response.data[0].zip + "</th></tr>" +
-"<tr><th>Tax Number</th><th>" + response.data[0].tax + "</th></tr>" +
-"<tr><th>E-Mail</th><th>" + response.data[0].email + "</th></tr>" +
-"<tr><th>Mobile</th><th>" + response.data[0].mobile + "</th></tr>" +
-"<tr><th>Work No</th><th>" + response.data[0].work + "</th></tr>" +
-"<tr><th>Contact Person Name</th><th>" + response.data[0].cpn + "</th></tr>" +
-"<tr><th>Contact Person Mobile</th><th>" + response.data[0].cpm + "</th></tr>" +
-"<tr><th>Approve Comments</th><th>" + response.data[0].apcomment + "</th></tr>" +
-"<tr><th>Approve Time</th><th>" + response.data[0].aptime + "</th></tr>" +
-"<tr><th>Authorize Comments</th><th>" + response.data[0].aucomment + "</th></tr>" +
-"<tr><th>Authorize Time</th><th>" + response.data[0].autime + "</th></tr>" +
-"<tr><th>Comments</th><th>" + response.data[0].comments + "</th></tr>" +
-"<tr><th>Account Setup</th><th>" + response.data[0].asetup + "</th></tr>" +
-"<tr><th>User Setup</th><th>" + response.data[0].usetup + "</th></tr>" +
-"<tr><th>Login Name</th><th>" + response.data[0].login + "</th></tr>" +
-"<tr><th>Latitude</th><th>" + response.data[0].Latitude + "</th></tr>" +
-"<tr><th>Longitude</th><th>" + response.data[0].Longitude + "</th></tr>" +
-"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}, function errorCallback(response) {
-// console.log(response);
+$scope.partycatypes = response.data;
+//window.location.reload();
 });
-}
-$scope.editupdate = function (id) {
-var event = new Date($scope.dob);
-let date = JSON.stringify(event)
-date = date.slice(1,11);
-var fd = new FormData();
-   angular.forEach($scope.uploadfiles,function(file){
-     fd.append('file[]',file);
-   });
-   angular.forEach($scope.uploadfiles2,function(file2){
-fd.append('file2[]',file2);
-   });
-   fd.append("id",id);
-   fd.append("action","editupdate");
-   fd.append("country",$scope.country);
-   fd.append("category",$scope.category);
-   fd.append("outletname",$scope.outletname);
-   fd.append("taxnumber",$scope.taxnumber);
-   fd.append("localgovernment",$scope.localgovernment);
-   fd.append("address1",$scope.address1);
-   fd.append("address2",$scope.address2);
-   fd.append("state",$scope.state);
-   fd.append("zipcode",$scope.zipcode);
-   fd.append("mobileno",$scope.mobile);
-   fd.append("workno",$scope.workno);
-   fd.append("email",$scope.email);
-   fd.append("cname",$scope.cname);
-   fd.append("cmobile",$scope.cmobile);
-   fd.append("Latitude",$scope.Latitude);
-   fd.append("Longitude",$scope.Longitude);
-   fd.append("comments",$scope.comments);
-   fd.append("appliertype",$scope.appliertype);
-   fd.append("parentcode",$scope.parentcode);
-   fd.append("langpref",$scope.lang);
-   fd.append("userName",$scope.userName);
-   fd.append("bvn",$scope.bvn);
-   fd.append("userName",$scope.userName);
-   fd.append("attachment",$scope.attachment);
-   fd.append("attachment2",$scope.attachment2);
-   fd.append("busDocFlag",$scope.busDocExist);
-    fd.append("gender",$scope.gender);
-   fd.append("dob",date);
-   fd.append("BusinessType",$scope.BusinessType);
-
-  $http({
-method: 'post',
-url: '../ajax/appviewajax.php',
-headers: {'Content-Type': undefined},
-ContentType: 'application/json',
-data: fd,
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isHideReset = true;
-$scope.isLoader = false;
-          $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.view = function (index, id) {
 $http({
 method: 'post',
-url: '../ajax/appviewajax.php',
-data: {
-id: id,
-crestatus: $scope.crestatus,
-action: 'view'
-},
+url: '../ajax/appapproveajax.php',
+data: { id: id, action: 'edit' },
 }).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
 $scope.id = response.data[0].id;
-$scope.category = response.data[0].category;
-$scope.country = response.data[0].country;
-$scope.outletname = response.data[0].outletname;
+$scope.outletname = response.data[0].name;
+$scope.palogin = response.data[0].palogin;
 $scope.type = response.data[0].type;
-$scope.parentc = response.data[0].parentc;
-$scope.partyc = response.data[0].partyc;
-$scope.lang = response.data[0].lang;
-$scope.cdate = response.data[0].time;
-$scope.statusa = response.data[0].statusa;
+$scope.code = response.data[0].code;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'services',profile:profile },
+}).then(function successCallback(response) {
+$scope.services = response.data;
+// console.log(response.data);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+		}
+
+}
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/appapproveajax.php',
+data: { id: id, action: 'detail' },
+}).then(function successCallback(response) {
+$scope.id = response.data[0].id;
+$scope.outletname = response.data[0].name;
+$scope.country = response.data[0].country;
+$scope.name = response.data[0].name;
+$scope.type = response.data[0].type;
+$scope.category = response.data[0].category;
+$scope.time = response.data[0].time;
+$scope.status = response.data[0].status;
 $scope.address1 = response.data[0].address1;
 $scope.address2 = response.data[0].address2;
 $scope.localgovt = response.data[0].localgovt;
 $scope.state = response.data[0].state;
-$scope.zipcode = response.data[0].zip;
-$scope.taxnumber = response.data[0].tax;
+$scope.zip = response.data[0].zip;
+$scope.tax = response.data[0].tax;
 $scope.email = response.data[0].email;
 $scope.mobile = response.data[0].mobile;
-$scope.workno = response.data[0].work;
-$scope.cname = response.data[0].cpn;
-$scope.cmobile = response.data[0].cpm;
-$scope.aptime = response.data[0].aptime;
-$scope.apcomment = response.data[0].apcomment;
-$scope.autime = response.data[0].autime;
-$scope.aucomment = response.data[0].aucomment;
-$scope.comments = response.data[0].comments;
-$scope.asetup = response.data[0].asetup;
-$scope.usetup = response.data[0].usetup;
-$scope.login = response.data[0].login;
-$scope.Latitude = response.data[0].Latitude;
-$scope.Longitude = response.data[0].Longitude;
-  $scope.bvn = response.data[0].bvn;
-  $scope.gender = response.data[0].gender;
-$scope.dob = response.data[0].dob;
-$scope.BusinessType = response.data[0].BusinessType;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.edit = function (index, id, ) {
-$http({
-method: 'post',
-url: '../ajax/appviewajax.php',
-data: {
-id: id,
-action: 'edit'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'statelist', "id": response.data[0].country, "action": "active" },
-}).then(function successCallback(response) {
-$scope.states = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for: 'localgvtlist', "id": response.data[0].state, "action": "active" },
-}).then(function successCallback(response) {
-$scope.localgvts = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-$scope.id = response.data[0].id;
-$scope.category = response.data[0].category;
-$scope.country = response.data[0].country;
-$scope.outletname = response.data[0].outletname;
-$scope.username = response.data[0].username;
-$scope.appliertype = response.data[0].type;
-$scope.lang = response.data[0].lang;
-$scope.cdate = response.data[0].time;
-$scope.statusa = response.data[0].statusa;
-$scope.address1 = response.data[0].address1;
-$scope.address2 = response.data[0].address2;
-$scope.localgovernment = response.data[0].localgovt;
-$scope.state = response.data[0].state;
-$scope.zipcode = response.data[0].zip;
-$scope.taxnumber = response.data[0].tax;
-$scope.email = response.data[0].email;
-$scope.mobile = response.data[0].mobile;
-$scope.workno = response.data[0].work;
-$scope.cname = response.data[0].cpn;
-$scope.cmobile = response.data[0].cpm;
-$scope.comments = response.data[0].comments;
-$scope.login = response.data[0].login;
-$scope.parentcode = response.data[0].pcode;
+$scope.fax = response.data[0].fax;
+$scope.work = response.data[0].work;
+$scope.cpm = response.data[0].cpm;
+$scope.cpn = response.data[0].cpn;
 $scope.Latitude = response.data[0].Latitude;
 $scope.Longitude = response.data[0].Longitude;
 $scope.bvn = response.data[0].bvn;
-$scope.idDoc = response.data[0].idDoc;
-$scope.attachment = response.data[0].idDoc;
-$scope.busDocExist = response.data[0].compDocExist;
-$scope.busDoc = response.data[0].busDoc;
-$scope.attachment2 = response.data[0].busDoc;
-$scope.gender = response.data[0].gender;
-$scope.dob = new Date(response.data[0].dob);
-if(response.data[0].dob==null){
-$scope.dob="";
-}
+$scope.palogin = response.data[0].palogin;
+$scope.code = response.data[0].code;
+$scope.entrycomments = response.data[0].entrycomments;
+$scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
-//alert(response.data[0].busDoc);
+$scope.gender = response.data[0].gender;
+$scope.first_name = response.data[0].first_name;
+$scope.last_name = response.data[0].last_name;
 
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function (id, type) {
+window.location.reload();
+}
+$scope.approve = function (id, type) { 
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+var i = 0;
+var arr = [];
+$('.selectedServices:checked').each(function () {
+arr[i++] = $(this).val();
+});
+$http({
+method: 'post',
+url: '../ajax/appapproveajax.php',
+data: {
+id: id,
+parentType: $scope.parentType,
+creditLimit: $scope.creditLimit,
+dailyLimit: $scope.dailyLimit,
+advanceAmount: $scope.advanceAmount,
+minimumBalance: $scope.minimumBalance,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+RadioButton: $scope.ba,
+Code: $scope.Code,
+selectedServices: arr,
+comments: $scope.comments,
+action: 'approve',
+type: type,
+partycatype:$scope.partycatype
+},
+}).then(function successCallback(response) {
+$("#ApproveBody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.openreject = function (index,id,name) {
+$scope.id=id;
+$scope.name=name;
+}
+$scope.reject = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/appapproveajax.php',
+data: {
+id: id,
+comments: $scope.comments,
+name: $scope.name,
+action: 'reject',
+type: type,
+},
+}).then(function successCallback(response) {
+$("#rejectbody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
 }, function errorCallback(response) {
 // console.log(response);
 });
 }
 });
 
-app.controller('ParentTransCtrl', function ($scope, $http) {
-$scope.Listbox =true;
-$scope.isResDiv = true;
-
-$scope.fn_load = function (partyType,partyCode) {
-if(partyType == 'A') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { partyType:partyType,
-partyCode:partyCode,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-}
-$scope.partyload = function (partyType) {
-var action = "";var fora="";
-if(partyType == "MA") {
-fora = "agent";
-type = "N";
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora,
-  type: type
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-
-}
-
-
-if($scope.NewpartyType == 'C') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: {
-'C':$scope.NewpartyType,
-partyCode:$scope.NewpartyType,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.champ = response.data;
-});
-}
-$scope.Newpartyload = function () {
-var action = "";var fora="";
-
-fora = "champion";
-
-
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora
-
-},
-}).then(function successCallback(response) {
-$scope.champ = response.data;
-});
-
-}
-
-    $scope.query = function () {
-$scope.Listbox = false;
-$scope.parties = true;
-$scope.partyType == 'Agent';
-        $http({
-            method: 'post',
-            url: '../ajax/partranajax.php',
-            data: {
-                action: 'query',
-                partyType: $scope.partyType,
-                partyCode: $scope.partyCode
-            },
-        }).then(function successCallback(response) {
-$scope.ParentTransfer = response.data;
-$scope.parent_code = response.data[0].parents;
-
-}, function errorCallback(response) {
-console.log(response.data);
-});
-
-    }
-$scope.Transfer = function (partyCode,partyType,parent_code) {
-
-
-var confirmCheck = confirm("Do you want to transfer this  Agent  - "+ partyCode +  " from  this Parent - "+ parent_code +"  to "+ $scope.NewpartyCode+ " ?");
-
-if(confirmCheck){
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$http({
-method: 'post',
-url: '../ajax/partranajax.php',
-data: {
-NewpartyType: $scope.NewpartyType,
-NewpartyCode: $scope.NewpartyCode,
-partyCode: $scope.partyCode,
-partyType: partyType,
-                partyCode: partyCode,
-action: 'update'
-},
-}).then(function successCallback(response) {
-$scope.ispayRequestForm = true;
-$scope.isResDiv = false;
-$scope.msg = response.data.msg;
-$scope.responseCode = response.data.responseCode;
-$scope.errorResponseDescription = response.data.errorResponseDescription;
-
-}, function errorCallback(response) {
-console.log(response);
-});
-}else{
-            return
-        }
-}
- $scope.refresh = function () {
-        window.location.reload();
-        };
-$scope.cancel = function () {
-alert( "To Cancel this transfer");
-window.location.reload();
-          };
-});
 
 app.controller('appAuthorizeCtrl', function ($scope, $http, $filter) {
 $scope.startDate = new Date();
@@ -12603,6 +11824,59 @@ $scope.endDate = new Date();
 
 }
 $scope.edit = function (index, id, code, rtype,profile) {
+	/* $http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		}); */
+
+	$scope.radiochange = function(){
+		$scope.SalesChain = true;
+		$scope.SalesParentType ="";
+		$scope.SalesChainCode ="";
+		$scope.RefferedBy ="";
+		$scope.Code="";
+	}
+	
+	$scope.RadioChangeE = function(){
+		$scope.SalesChain = false;
+		$scope.SalesParentType ="";
+		$scope.SalesChainCode ="";
+		$scope.RefferedBy ="";
+		$scope.Code="";
+	}
+
+	
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+		}
+	
+	
 $http({
 url: '../ajax/load.php',
 method: "POST",
@@ -12612,11 +11886,14 @@ params: { action: 'active', for: 'partycatype' }
 $scope.partycatypes = response.data;
 //window.location.reload();
 });
+
+
 $http({
 method: 'post',
 url: '../ajax/appauthorizeajax.php',
 data: { id: id, action: 'edit', rtype: rtype },
 }).then(function successCallback(response) {
+
 $scope.id = response.data[0].id;
 $scope.outletname = response.data[0].name;
 $scope.approverComment = response.data[0].approverComment;
@@ -12631,10 +11908,50 @@ $scope.code = response.data[0].code;
 $scope.agent_code = response.data[0].agent_code;
 $scope.group_type = response.data[0].group_type;
 $scope.loginname = response.data[0].loginname;
+$scope.ba = response.data[0].party_sales_chain_id;
+if(response.data[0].party_sales_chain_id == 10){
+	$scope.ba = "E"
+}else {
+	$scope.ba = "I"
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+if($scope.ba == "E"){
+	$scope.SalesParentType = response.data[0].party_sales_parent_chain_id; 
+
+}else{
+	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
+
+}
+$scope.SalesChainCode = response.data[0].party_sales_parent_code;
+$scope.RefferedBy = response.data[0].refer_party_type;
+
+if(response.data[0].refer_party_type != ""){
+	$scope.CodeDisableed = false;
+	$scope.Code = response.data[0].refer_party_code;
+
+}else{
+	$scope.CodeDisableed = true;
+	$scope.Code = "";
+	
+}
 }, function errorCallback(response) {
 // console.log(response);
 });
 
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
 $http({
 method: 'post',
 url: '../ajax/load.php',
@@ -12695,6 +12012,8 @@ $scope.bvn = response.data[0].bvn;
 $scope.gender = response.data[0].gender;
 $scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
+$scope.first_name = response.data[0].first_name;
+$scope.last_name = response.data[0].last_name;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -12768,8 +12087,55 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
 };
 }
 
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appauthorizeajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	//$("#appattachment").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+		$scope.PrintImage = function (url) {
+	var src='data:image/;base64,'+url;
+	//alert(src);
+	   var win = window.open('');
+	win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+	   win.focus();
+	};
+	}
+
 
 $scope.authorize = function (id, type) {
+
+
+
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 var i = 0;
@@ -12789,6 +12155,11 @@ advanceAmount: $scope.advanceAmount,
 minimumBalance: $scope.minimumBalance,
 selectedServices: arr,
 comment: $scope.authorizeComment,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
 action: 'authorize',
 partycatype: $scope.partycatype,
 type: $scope.type
@@ -12833,1588 +12204,6 @@ $scope.isMainLoader = false;
 });
 
 
-
-app.controller('posmenuCtrl', function ($scope, $http) {
-    $scope.isHideOk = true;
-    
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: { action: 'list' },
-    }).then(function successCallback(response) {
-    $scope.usrposmenulist = response.data;
-    });
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'servfea' }
-    }).then(function successCallback(response) {
-    $scope.servicefeature = response.data;
-    //window.location.reload();
-    });
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'userposmenu' }
-    }).then(function successCallback(response) {
-    $scope.userpos = response.data;
-    //window.location.reload();
-    });
-    $scope.edit = function (index, code, id, servicefeatureid) {
-    //alert(servicefeatureid);
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: { code: code,
-    id: id,
-    service_feature_id: servicefeatureid,
-    action: 'edit'
-    },
-    }).then(function successCallback(response) {
-    $scope.userposmenu = response.data[0].id;
-    //$scope.servfea = response.data[0].menu;
-    $scope.active = response.data[0].active;
-    $scope.startdate = new Date(response.data[0].startDate);
-    
-    $scope.expdate = new Date(response.data[0].expDate);
-    $scope.code = response.data[0].code;
-    $scope.servfea = response.data[0].service_feature_id;
-    $scope.servfeaold = response.data[0].service_feature_id;
-    if(response.data[0].startDate==null){
-    $scope.startdate="";
-    }
-    if(response.data[0].expDate==null){
-    $scope.expdate="";
-    }
-    //$scope.menu = response.data[0].menu;
-    //alert( response.data[0].menu);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    
-    $scope.Active = function(index, code, id, servicefeatureid,user_pos_menu_id) {
-        
-        $http({
-            method: 'post',
-            url: '../ajax/userposajax.php',
-            data: {
-                user_pos_menu_id: user_pos_menu_id,
-                action: 'MenuMessage'
-            },
-            }).then(function successCallback(response) {
-            $scope.message = response.data[0].message;
-            $scope.user_pos_menu_id = response.data[0].user_pos_menu_id;
-            $scope.user_id = response.data[0].user_id;
-            $scope.active = response.data[0].active;
-            }, function errorCallback(response) {
-            // console.log(response);
-            });
-    
-    }
-        
-    $scope.reject = function (user_pos_menu_id,user_id) {
-    //alert(user_id);
-    
-    $scope.isLoader = true;
-    $scope.isMainLoader = true;
-    $scope.isHideOk = true;
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: {
-    id: user_id,
-    user_pos_menu_id: user_pos_menu_id,
-    comments :$scope.comments,
-    active: $scope.active,
-    action: 'ChangeStatus'
-    },
-    }).then(function successCallback(response) {
-    $scope.isHide = true;
-    $scope.isHideOk = false;
-    $scope.isLoader = false;
-    $scope.isMainLoader = false;
-    $("#usrposStatusBody").html("<h3>" + response.data + "</h3>");
-    
-    }, function errorCallback(response) {
-    console.log(response);
-    });
-    }
-    
-    $scope.create = function () {
-    $scope.isLoader = true;
-    $scope.isMainLoader = true;
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: {
-    id: $scope.userposmenu,
-    menu: $scope.servfea,
-    active: $scope.active,
-    startDate: $scope.startdate,
-    expDate: $scope.expdate,
-    action: 'create'
-    },
-    }).then(function successCallback(response) {
-    $scope.isHide = true;
-    $scope.isHideOk = false;
-    $scope.isLoader = false;
-    $scope.isMainLoader = false;
-    $("#usrposCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.refresh = function (id, type) {
-    window.location.reload();
-    }
-    $scope.update = function (id) {
-    $scope.isLoader = true;
-    $scope.isMainLoader = true;
-    $scope.isHideOk = true;
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: {
-    id: $scope.userposmenu,
-    servfeaold :$scope.servfeaold,
-    menu: $scope.servfea,
-    active: $scope.active,
-    startDate: $scope.startdate,
-    expDate: $scope.expdate,
-    action: 'update'
-    },
-    }).then(function successCallback(response) {
-    $scope.isHide = true;
-    $scope.isHideOk = false;
-    $scope.isLoader = false;
-    $scope.isMainLoader = false;
-    $("#usrposEditBody").html("<h3>" + response.data + "</h3>");
-    
-    }, function errorCallback(response) {
-    console.log(response);
-    });
-    }
-    $scope.refresh = function (id, type) {
-    window.location.reload();
-    }
-    $scope.detail = function (index, id) {
-    $http({
-    method: 'post',
-    url: '../ajax/userposajax.php',
-    data: {
-    id: id,
-    action: 'view'
-    },
-    }).then(function successCallback(response) {
-  
-    $scope.code = response.data[0].code;
-     $scope.id = response.data[0].id;
-    $scope.username = response.data[0].username;
-    $scope.menu = response.data[0].menu;
-    $scope.active = response.data[0].active;
-    $scope.startDate = response.data[0].startDate;
-    $scope.expDate = response.data[0].expDate;
-    $scope.cretime = response.data[0].cretime;
-    $scope.updateuser = response.data[0].updateuser;
-    $scope.updatetime = response.data[0].updatetime;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    
-    
-    });
-
-
-app.controller('posaccactCtrl', function ($scope, $http) {
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.isHideOk = true;
-	$scope.checkdate = function (startDate,endDate){
-		var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-		var currdate = new Date();
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$scope.isQueryDi = false;
-		}
-	}
-	$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:'userpos',action:'active'
-				},
-			}).then(function successCallback(response) {
-				$scope.users = response.data;
-			});
-	$scope.query = function () {
-		var startDate =  $scope.startDate;
-		var endDate =  $scope.endDate;
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		var currdate = new Date();
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$http({
-				method: 'post',
-				url: '../ajax/posaccactajax.php',
-				data: {
-					action: 'list',
-					user: $scope.user,
-					startDate: $scope.startDate,
-					endDate: $scope.endDate
-				},
-			}).then(function successCallback(response) {
-					$scope.posacts = response.data;
-			});
-		}
-	}
-});
-
-app.controller('TermAllocCtrl', function ($scope, $http) {
- $scope.isLoader = true;
-$scope.isMainLoader = true;
-$scope.isHideOk = true;
-$scope.btnter = false;
-$scope.reiddiv = false;
-$scope.searchsl = function (slno, vendor) {
-$scope.isValidUpdate = true;
-$scope.reiddiv = false;
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-slno: $scope.slno,
-vendor: $scope.vendor,
-action: 'querysl'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-
-$scope.isLoader = false; ;
-$scope.isMainLoader = false;
-//alert(response.data[0].rescode);
-if((response.data[0].rescode) == 0) {
-$scope.isHideSea = true;
-$scope.isValidUpdate = false;
-$scope.btnter = true;
-$scope.slnotr =response.data[0].id;
-$scope.reiddiv = true;
-$scope.TerminalID =response.data[0].tid;
-$scope.tid =response.data[0].tid;
-}
-else {
-alert("Terminal Id not in Available Status For serial no : "+$scope.slno);
-}
-
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-agentCode: $scope.agentCode,
-action: 'query'
-},
-}).then(function successCallback(response) {
-// $scope.isHide = true;
-// $scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$scope.AllocationList = response.data;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.update2 = function (user_id,Status) {
-$scope.isHide = true;
-$scope.isHideCancel = true;
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-user_id: user_id,
-action: 'Update',
-TerminalID: $scope.tid,
-Status: Status,
-user: $scope.user,
-inventory_id: $scope.slnotr,
-agentCode: $scope.agentCode,
-CreaUser: $scope.CreaUser,
-vendor: $scope.vendor
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#allocaupdateBody2").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.update = function (user_id,inventory_id,Status) {
-$scope.isHide = true;
-$scope.isHideCancel = true;
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-user_id: user_id,
-action: 'Update',
-TerminalID: $scope.TerminalID,
-Status: Status,
-user: $scope.user,
-agentCode: $scope.agentCode,
-inventory_id: inventory_id,
-CreaUser: $scope.CreaUser,
-vendor: $scope.vendor
-
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#allocaupdateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.refresh = function () {
-window.location.reload();
-}
-$scope.allocationview = function (index,user_id) {
-$scope.isHide = true;
-$scope.isHideCancel = true;
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:'vendors',action:'active'
-},
-}).then(function successCallback(response) {
-$scope.vendors = response.data;
-});
-
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-user_id: user_id,
-action: 'view',
-agentCode: $scope.agentCode,
-user: $scope.user
-
-},
-}).then(function successCallback(response) {
-$scope.isHide = false;
-$scope.isHideOk = true;
-$scope.isHideCancel = false;
-$scope.isLoader = false;
-//alert(response.data[0].agentCode);
-$scope.isMainLoader = false;
-//$scope.res = response.data;
-$scope.userName = response.data[0].user;
-$scope.user_id = response.data[0].userId;
-$scope.aagentCode = response.data[0].agentCode;
-$scope.inventory_id = response.data[0].inventory_id;
-$scope.Status = response.data[0].Status;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.venchange = function (id) {
-//alert("asd");
-$http({
-url: '../ajax/load.php',
-method: "POST",
-//Content-Type: 'application/json',
-params: { action: 'A', for: 'terminalsforvenor', id: id}
-}).then(function successCallback(response) {
-$scope.terminals = response.data;
-//window.location.reload();
-});
-}
-$scope.allocationCancel = function (index,terminal_id,userid,serialno,agent) {
-$scope.isHide = true;
-$scope.isHideCancel = true;
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-action: 'cancel',
-Status: $scope.Status,
-terminal_id: terminal_id
-
-},
-}).then(function successCallback(response) {
-// alert(response);
-$scope.isHide = false;
-$scope.isHideOk = true;
-$scope.isHideCancel = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$scope.terminal_id = response.data[0].terminal_id;
-   $scope.Status = response.data[0].Status;
-$scope.inventory_id = response.data[0].inventory_id;
-$scope.user_id = response.data[0].userId;
-$scope.agent =agent;
-$scope.terminal_id =terminal_id;
-$scope.terminal_serial_no =serialno;
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.statusupdate = function (user_id,inventory_id) {
-$scope.isHide = true;
-$scope.isHideCancel = true;
-$scope.isLoader = true;
-$scope.isMainLoader = true;
-$http({
-method: 'post',
-url: '../ajax/termiallocajax.php',
-data: {
-user_id: user_id,
-action: 'Reject',
-Status: $scope.CancStatus,
-terminal_id: $scope.terminal_id,
-inventory_id: inventory_id,
-CreaUser: $scope.CreaUser,
-
-},
-}).then(function successCallback(response) {
-$scope.isHide = true;
-$scope.isHideOk = false;
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$("#allocancelBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-$scope.refresh = function () {
-window.location.reload();
-}
-});
-
-app.controller('walletCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.fn_load = function (partyType,partyCode) {
-		if(partyType == 'C' || partyType == 'A') {
-			$http({
-				method: 'post',
-				url: '../ajax/load.php',
-				params: { partyType:partyType,
-						partyCode:partyCode,
-						action: 'infolist'
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-		}
-	}
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-
-	}
-	$scope.query = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/walletajax.php',
-			data: {
-				action: 'findlist',
-				partyCode: $scope.partyCode,
-				partyType: $scope.partyType,
-				topartyCode:$scope.topartyCode,
-				creteria:$scope.creteria
-			},
-		}).then(function successCallback(response) {
-			$scope.infoss = response.data;
-		}, function errorCallback(response) {
-			console.log(response.data);
-		});
-	}
-	$scope.edit = function (index, partyCode, partyType, creteria) {
-		$http({
-			method: 'post',
-			url: '../ajax/walletajax.php',
-			data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
-		}).then(function successCallback(response) {
-			$scope.active = response.data[0].active;
-			$scope.advance_amount = response.data[0].advance_amount;
-			$scope.atype = response.data[0].atype;
-			$scope.available_balance = response.data[0].available_balance;
-			$scope.block_date = response.data[0].block_date;
-			$scope.block_reason_id = response.data[0].block_reason_id;
-			$scope.block_status = response.data[0].block_status;
-			$scope.code = response.data[0].code;
-			$scope.create_time = response.data[0].create_time;
-			$scope.create_user = response.data[0].create_user;
-			$scope.credit_limit = response.data[0].credit_limit;
-			$scope.current_balance = response.data[0].current_balance;
-			$scope.daily_limit = response.data[0].daily_limit;
-			$scope.last_tx_amount = response.data[0].last_tx_amount;
-			$scope.last_tx_date = response.data[0].last_tx_date;
-			$scope.last_tx_no = response.data[0].last_tx_no;
-			$scope.lname = response.data[0].lname;
-			$scope.minimum_balance = response.data[0].minimum_balance;
-			$scope.name = response.data[0].name;
-			$scope.pcode = response.data[0].pcode;
-			$scope.parenrtoutletname = response.data[0].parenrtoutletname;
-			$scope.previous_current_balance = response.data[0].previous_current_balance;
-			$scope.ptype = response.data[0].ptype;
-			$scope.sub_agent = response.data[0].sub_agent;
-			$scope.outlet_name = response.data[0].outlet_name;
-			$scope.uncleared_balance = response.data[0].uncleared_balance;
-			$scope.update_user = response.data[0].update_user;
-			$scope.update_time = response.data[0].update_time;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	 $scope.walletedit = function (index, partyCode, partyType, creteria) {
-	//alert(userid);
-	$http({
-	method: 'post',
-	url: '../ajax/walletajax.php',
-	data: { partyCode: partyCode,partyType: partyType, action: 'walletedit',creteria:creteria },
-	}).then(function successCallback(response) {
-	$scope.dailyLimit = response.data[0].dailyLimit;
-	$scope.creditLimit = response.data[0].creditLimit;
-	$scope.minimumBalance = response.data[0].minimumBalance;
-	$scope.advanceAmount = response.data[0].advanceAmount;
-	$scope.Active = response.data[0].Active;
-	}, function errorCallback(response) {
-	// console.log(response);
-	});
-	}
-	$scope.walletupdate = function (partyCode) {
-	$scope.isLoader = true;
-	$scope.isMainLoader = true;
-	$scope.isHideOk = true;
-	$http({
-	method: 'post',
-	url: '../ajax/walletajax.php',
-	data: {
-	dailyLimit: $scope.dailyLimit,
-	creditLimit: $scope.creditLimit,
-	minimumBalance: $scope.minimumBalance,
-	advanceAmount: $scope.advanceAmount,
-	Active: $scope.Active,
-	partyCode: partyCode,
-	action: 'walletupdate'
-	},
-	}).then(function successCallback(response) {
-	$scope.isHide = true;
-	$scope.isHideOk = false;
-	$scope.isLoader = false;
-	    $scope.isMainLoader = false;
-	$("#walletupdateCreateBody").html("<h3>" + response.data + "</h3>");
-
-	}, function errorCallback(response) {
-	console.log(response);
-	});
-	}
-	$scope.refresh = function () {
-	window.location.reload();
-	}
-});
-app.controller('dashBoardCtrl', function ($scope, $http) {
-	$http({
-		method: 'post',
-		data:{action:'amount'},
-		url: '../ajax/dashboardajax.php',
-	}).then(function successCallback(response) {
-		$scope.total_amount = response.data[0].total_amount;
-		$scope.kadick_charge = response.data[1].kadick_charge;
-		$scope.agent_charge = response.data[1].agent_charge;
-		$scope.champion_charge = response.data[1].champion_charge;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'oprs'},
-	}).then(function successCallback(response) {
-		$scope.oprs = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$scope.agtdtl = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/dashboardajax.php',
-			data:{action:'agentdtl'},
-		}).then(function successCallback(response) {
-			$scope.agtdls = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'nontrans'},
-	}).then(function successCallback(response) {
-		$scope.nontrans = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'agentlist'},
-	}).then(function successCallback(response) {
-		$scope.agents = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'counts'},
-	}).then(function successCallback(response) {
-		$scope.transfer = response.data[0].transfer;
-		$scope.cashin = response.data[0].cashin;
-		$scope.cashout = response.data[0].cashout;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-});app.controller('payEntryCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.isHideReset = false;
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-
-	}
-
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'bank' }
-	}).then(function successCallback(response) {
-		$scope.banks = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'country' }
-	}).then(function successCallback(response) {
-		$scope.countrys = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'agent', "type": "N" }
-	}).then(function successCallback(response) {
-		$scope.agents = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'agent', "type": "Y" }
-	}).then(function successCallback(response) {
-		$scope.subagents = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'champion' }
-	}).then(function successCallback(response) {
-		$scope.champions = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'personal' }
-	}).then(function successCallback(response) {
-		$scope.personals = response.data;
-		//window.location.reload();
-	});
-	$scope.paymentry = function () {
-		$scope.isLoader = true;
-		$http({
-		method: 'post',
-		url: '../ajax/payajax.php',
-		data: {
-			action: $scope.action,
-			country: $scope.country,
-			bankaccount: $scope.bankaccount,
-			partytype: $scope.partytype,
-			partycode: $scope.partycode,
-			paymenttype: $scope.paymenttype,
-			paymentdate: $scope.paymentdate,
-			paymentamount: $scope.paymentamount,
-			refdate: $scope.refdate,
-			refno: $scope.refno,
-			comment: $scope.comment,
-			chequeno: $scope.chequeno,
-			action: 'entry',
-			creteria :$scope.creteria
-		}
-
-	}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isHideReset = true;
-			$scope.isLoader = false;
-			$("#PayentryCreateBody").html("<h3>" + response.data + "</h3>");
-			//document.getElementById("paymentEntryForm").reset();
-		});
-	}
-});
-
-
-app.controller('payViewCtrl', function ($scope, $http) {
-$scope.isLoader = false;
-
-$scope.radiochange = function () {
-$scope.paymentviews = false;
-$scope.id='';
-$scope.crestatus="ALL";
-$scope.paymentstartDate='';
-$scope.paymentendDate='';
-$scope.approvedstartDate='';
-$scope.approvedendDate='';
-}
-$scope.pay = function(){
-$scope.paymentstartDate = new Date();
-$scope.paymentendDate = new Date();
-}
-$scope.appdate = function() {
-$scope.approvedstartDate = new Date();
-$scope.approvedendDate = new Date();
-}
-$scope.query = function () {
-$http({
-method: 'post',
-url: '../ajax/payajax.php',
-data: {
-action: 'view',
-creteria: $scope.creteria,
-id: $scope.id,
-status: $scope.crestatus,
-paymentstartDate: $scope.paymentstartDate,
-paymentendDate: $scope.paymentendDate,
-approvedstartDate: $scope.approvedstartDate,
-approvedendDate: $scope.approvedendDate
-},
-}).then(function successCallback(response) {
-$scope.paymentviews = response.data;
-});
-}
-$scope.view = function (id) {
-$http({
-method: 'post',
-url: '../ajax/payajax.php',
-data: {
-action: 'detailview',
-id: id
-},
-}).then(function successCallback(response) {
-$scope.isHide = false;
-$scope.isHideOk = true;
-$scope.isLoader = false;
-$scope.isMainLoader = true;
-$scope.id = response.data[0].id;
-$scope.country = response.data[0].country;
-$scope.BankAccount = response.data[0].BankAccount;
-$scope.partyType = response.data[0].partyType;
-$scope.partyCode = response.data[0].partyCode;
-$scope.PaymentAmount = response.data[0].PaymentAmount;
-$scope.PaymentApprovedDate = response.data[0].PaymentApprovedDate;
-$scope.paymentType = response.data[0].paymentType;
-$scope.PaymentStatus = response.data[0].PaymentStatus;
-$scope.PaymentApprovedAmount = response.data[0].PaymentApprovedAmount;
-$scope.PaymentRefNo = response.data[0].PaymentRefNo;
-$scope.PaymentRefDate = response.data[0].PaymentRefDate;
-$scope.ChequeNo = response.data[0].ChequeNo;
-$scope.comment = response.data[0].comments;
-$scope.acomment = response.data[0].acomment;
-$scope.PaymentDate = response.data[0].PaymentDate;
-});
-}
-});
-
-
-app.controller('payApproveCtrl', function ($scope, $http) {
-		$scope.paymentDate = new Date();
-		$scope.query = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/payajax.php',
-			data: {
-				action: 'payapprovesearch',
-				creteria: $scope.creteria,
-				type: $scope.partyType,
-				paymentDate: $scope.paymentDate
-			},
-		}).then(function successCallback(response) {
-			$scope.paymentapproves = response.data;
-		});
-	}
-	$scope.view = function (index, id) {
-			$http({
-			method: 'post',
-			url: '../ajax/payajax.php',
-			data: {
-				id: id,
-				action: 'paymentapproveview'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = false;
-			$scope.isHideOk = true;
-			$scope.id = response.data[0].id;
-			$scope.comment = response.data[0].comments;
-			$scope.fuser = response.data[1].fuser;
-			$scope.touser = response.data[1].tuser;
-			$scope.partytype = response.data[0].type;
-			$scope.partycode = response.data[0].code;
-			$scope.paymentamount = response.data[0].payamount;
-			$scope.paymentdate = response.data[0].paydate;
-			$scope.paymentmode = response.data[0].paytype;
-			$scope.status = response.data[0].status;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.approve = function (id, type, partycode) {
-		   $scope.isLoader = true;
-			$scope.isMainLoader = false;
-		$http({
-			method: 'post',
-			url: '../ajax/payajax.php',
-			data: {
-				id: id,
-				type: type,
-				appcomment: $scope.approveComment,
-				appppayamount: $scope.approvedamount,
-				partycode: $scope.partycode,
-				action: 'paymentapproveapprove'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#ApproveBody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.reject = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/payajax.php',
-			data: {
-				id: id,
-				action: 'paymentreject'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			alert(response.data);
-			window.location.reload();
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-});
-app.controller('adjEntryCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.isHideReset = false;
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'country' }
-	}).then(function successCallback(response) {
-		$scope.countrys = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'agent', "type": "N" }
-	}).then(function successCallback(response) {
-		$scope.agents = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'agent', "type": "Y" }
-	}).then(function successCallback(response) {
-		$scope.subagents = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'champion' }
-	}).then(function successCallback(response) {
-		$scope.champions = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'personal' }
-	}).then(function successCallback(response) {
-		$scope.personals = response.data;
-		//window.location.reload();
-	});
-
-	$scope.adjustmentry = function () {
-		$scope.isLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				country: $scope.country,
-				partytype: $scope.partytype,
-				partycode: $scope.partycode,
-				adjustmenttype: $scope.adjustmenttype,
-				adjustmentdate: $scope.adjustmentdate,
-				adjustmentamount: $scope.adjustmentamount,
-				refdate: $scope.refdate,
-				refno: $scope.refno,
-				comment: $scope.comment,
-				action: 'entry'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isHideReset = true;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#adjentryCreateBody").html("<h3>" + response.data + "</h3>");
-			//document.getElementById("adjustmentEntryForm").reset();
-		});
-	}
-});
-app.controller('adjViewCtrl', function ($scope, $http) {
-	$scope.query = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				action: 'view',
-				creteria: $scope.creteria,
-				id: $scope.id,
-				status: $scope.crestatus,
-				adjustmentDate: $scope.adjustmentDate,
-				approvedDate: $scope.approvedDate
-			},
-		}).then(function successCallback(response) {
-			$scope.adjustmentviews = response.data;
-		});
-	}
-	$scope.view = function (id) {
-		$scope.isLoader = true;
-	$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				action: 'detailview',
-				id: id
-			},
-		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-			$scope.country = response.data[0].country;
-			$scope.date = response.data[0].date;
-			$scope.partyCode = response.data[0].partyCode;
-			$scope.partyType = response.data[0].partyType;
-			$scope.adjustmentType = response.data[0].adjustmentType;
-			$scope.adjustmentAmount = response.data[0].adjustmentAmount;
-			$scope.adjustmentApprovedAmount = response.data[0].adjustmentApprovedAmount;
-			$scope.adjustmentApprovedDate = response.data[0].adjustmentApprovedDate;
-			$scope.adjustmentRefNo = response.data[0].adjustmentRefNo;
-			$scope.adjustmentRefDate = response.data[0].adjustmentRefDate;
-			$scope.adjustmentStatus = response.data[0].adjustmentStatus;
-			$scope.comment = response.data[0].comment;
-			$scope.acomment = response.data[0].acomment;
-			$scope.isLoader = false;
-	    $scope.isMainLoader = false;
-		});
-	}
-	$scope.commentview = function (id) {
-		$scope.isLoader = true;
-	$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				action: 'detailview',
-				id: id
-			},
-		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-				$scope.comment = response.data[0].comment;
-			$scope.acomment = response.data[0].acomment;
-			$scope.isLoader = false;
-	    $scope.isMainLoader = false;
-		});
-	}
-	$scope.print = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/24/60/60/1000;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>31) {
-alert("Date Range should between 31 days");
-//$scope.isQueryDi = true;
-}
-else {
-$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				action: 'view',
-				creteria: $scope.creteria,
-				id: $scope.id,
-				status: $scope.crestatus,
-				adjustmentDate: $scope.adjustmentDate,
-				approvedDate: $scope.approvedDate
-			},
-		}).then(function successCallback(response) {
-
-
-$scope.isLoader = false;
-$scope.isMainLoader = false;
-$scope.id  =response.data[0].id;
-$scope.code = response.data[0].code;
-$scope.type =response.data[0].type;
-$scope.adjtype =response.data[0].adjtype;
-$scope.adjamount =response.data[0].adjamount;
-$scope.adjappamount =response.data[0].adjappamount;
-$scope.status =response.data[0].status;
-$scope.comments =response.data[0].comments;
-$scope.acomment =response.data[0].acomment;
-var rerows = "";
-for(var i=0;i < response.data.length;i++) {
-
-rerows +=  "<tr><td>"+ response.data[i].id +"</td>"+
-"<td>"+ response.data[i].code +"</td>"+
-"<td>"+ response.data[i].type +"</td>"+
-"<td>"+ response.data[i].adjtype +"</td>"+
-"<td>"+ response.data[i].adjamount +"</td>"+
-"<td>"+ response.data[i].adjappamount +"</td>"+
-"<td>"+ response.data[i].comments +"</td>"+
-"<td>"+ response.data[i].acomment +"</td>"+
-"</tr>"
-}
-var startDate = $scope.startDate;
-var endDate = $scope.endDate;
-var text = "";
-var valu = "";
-
-var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
-'<h2 style="text-align:center;margin-top:30px">Adjustment Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
-var responsetablehead ="<table width='100%'><thead>" +
-"<tr><th>Adjustment Id</th>" +
-"<th>Party Code</th>" +
-"<th>Party Type</th>" +
-"<th>Adjustment Type</th>" +
-"<th>Adjustment Amount</th>" +
-"<th>Adjustment  Approve Amount</th>" +
-"<th>Comments</th>" +
-"<th>Approver Comments</th>" +
-"</tr></thead>" +
-"<tbody>"+rerows+"</tbody></table>";
-var win = window.open("", "height=1000", "width=1000");
-with (win.document) {
-open();
-write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
-close();
-}
-}, function errorCallback(response) {
-// console.log(response);
-});
-}
-}
-});
-app.controller('adjApproveCtrl', function ($scope, $http) {
-	$scope.adjustmentDate = new Date();
-	$scope.query = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				action: 'adjapprovesearch',
-				creteria: $scope.creteria,
-				type: $scope.partyType,
-				adjustmentDate: $scope.adjustmentDate
-			},
-		}).then(function successCallback(response) {
-			$scope.adjustmentapproves = response.data;
-		});
-	}
-	$scope.view = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				id: id,
-				action: 'adjustmentapproveview'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = false;
-			$scope.isHideOk = true;
-			$scope.id = response.data[0].id;
-			$scope.comment = response.data[0].comments;
-			$scope.fuser = response.data[1].fuser;
-			$scope.touser = response.data[1].tuser;
-			$scope.partytype = response.data[0].type;
-			$scope.partycode = response.data[0].code;
-			$scope.adjustmentamount = response.data[0].adjamount;
-			$scope.adjustmentdate = response.data[0].adjdate;
-			$scope.adjustmentmode = response.data[0].adjtype;
-			$scope.adjustmenttype = response.data[0].adjustmenttype;
-			$scope.rtype = response.data[0].rtype,
-				$scope.status = response.data[0].status;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.approve = function (id, type, partycode, adjustmenttype) {
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				id: id,
-				type: type,
-				appcomment: $scope.approveComment,
-				apppadjamount: $scope.approvedamount,
-				partycode: $scope.partycode,
-				action: 'adjustmentapproveapprove',
-				adjustmenttype: adjustmenttype,
-				type: $scope.rtype
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$("#ApproveBody").html("<h3 style='text-align:center'>" + response.data + "</h3>");
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.reject = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/adjajax.php',
-			data: {
-				id: id,
-				action: 'adjustmentreject'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			alert(response.data);
-			window.location.reload();
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-});
-
-app.controller('commviewCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-
-	}
-	$scope.query = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/commviewajax.php',
-			data: {
-				action: 'findlist',
-				partyCode: $scope.partyCode,
-				partyType: $scope.partyType,
-			},
-		}).then(function successCallback(response) {
-			$scope.commviews = response.data;
-
-
-		}, function errorCallback(response) {
-			console.log(response.data);
-		});
-	}
-	$scope.edit = function (index, code) {
-		$http({
-			method: 'post',
-			url: '../ajax/commviewajax.php',
-			data: { code: code,type: $scope.partyType, action: 'edit', },
-			}).then(function successCallback(response) {
-				$scope.rootclimit = response.data[0].climit;
-				$scope.rootdlimit = response.data[0].dlimit;
-				$scope.rootavlbalance = response.data[0].avlbalance;
-				$scope.rootminbalance = response.data[0].minbalance;
-				$scope.rootprecbal = response.data[0].precbal;
-				$scope.rootactive = response.data[0].active;
-				$scope.rootblkdate = response.data[0].blkdate;
-				$scope.rootbrenid = response.data[0].brenid;
-				$scope.rootblkstatus = response.data[0].blkstatus;
-				$scope.code = response.data[0].code;
-				$scope.rootctime = response.data[0].ctime;
-				$scope.rootcuser = response.data[0].cuser;
-				$scope.rootadvamt = response.data[0].advamt;
-				$scope.rootltamt = response.data[0].ltamt;
-				$scope.rootltdate = response.data[0].ltdate;
-				$scope.rootltno = response.data[0].ltno;
-				$scope.lname = response.data[0].lname;
-				$scope.pcode = response.data[0].pcode;
-				$scope.rootuuser = response.data[0].uuser;
-				$scope.rootutime = response.data[0].utime;
-				$scope.rootucbal = response.data[0].ucbal;
-				$scope.rootcurbal = response.data[0].curbal;
-			}, function errorCallback(response) {
-				// console.log(response);
-			});
-		}
-	});
-
-app.controller('pOutCtrl', function ($scope, $http, $filter) {
-	$scope.procharge =  (parseFloat(0)).toFixed(2) ;
-	$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
-	$scope.isHideOk = true;
-	$scope.isHidecancel = false;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'partybank' }
-	}).then(function successCallback(response) {
-		$scope.partybanks = response.data;
-		//window.location.reload();
-	});
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-			   type: type
-				},
-		}).then(function successCallback(response) {
-			$scope.infos = response.data;
-		});
-	}
-		$scope.checkdate = function (startDate,endDate){
-			var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-			var currdate = new Date();
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$scope.isQueryDi = false;
-			}
-		}
-		$scope.query = function () {
-			$scope.tablerow = true;
-			var startDate =  $scope.startDate;
-			var endDate =  $scope.endDate;
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			var currdate = new Date();
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$http({
-					method: 'post',
-					url: '../ajax/payoutajax.php',
-					data: {
-						action: 'paylist',
-						partyCode: $scope.partyCode,
-						startDate:$scope.startDate,
-						endDate:$scope.endDate,
-					},
-				}).then(function successCallback(response) {
-					$scope.payouts = response.data;
-				}, function errorCallback(response) {
-					console.log(response.data);
-				});
-			}
-		}
-	$scope.detail = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/payoutajax.php',
-			data: { id: id, action: 'detail' },
-		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-			$scope.partype = response.data[0].partype;
-			$scope.parcode = response.data[0].parcode;
-			$scope.name = response.data[0].name;
-			$scope.type = response.data[0].paytype;
-			$scope.cuser = response.data[0].cuser;
-			$scope.uuser = response.data[0].uuser;
-			$scope.status = response.data[0].status;
-			$scope.payamount = response.data[0].payamount;
-			$scope.proamount = response.data[0].proamount;
-			$scope.localgovt = response.data[0].localgovt;
-			$scope.totamount = response.data[0].totamount;
-			$scope.date = response.data[0].date;
-			$scope.utime = response.data[0].utime;
-			$scope.ctime = response.data[0].ctime;
-			$scope.uuser = response.data[0].uuser;
-			$scope.bank = response.data[0].bank;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.cal= function () {
-		$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
-	}
-	$scope.edit = function (index, id,payouttype,payamount,proamount,totamount,bank) {
-		$scope.curbalance = "";
-		$http({
-			method: 'post',
-			url: '../ajax/payoutajax.php',
-			data: {
-				partyType: $scope.partyType,
-				partyCode: $scope.partyCode,
-				action: 'edit'
-			},
-		}).then(function successCallback(response) {
-				$scope.isPayout = false;
-				$scope.isHideResetS = false;
-				$scope.curbalance = response.data[0].curbal;
-				$scope.payouttype = payouttype;
-				$scope.paycomamt = payamount;
-				$scope.procharge = proamount;
-				$scope.totalpaycom = totamount;
-				$scope.bankaccount = bank;
-				$scope.id = id;
-		});
-	}
-	$scope.update = function (id) {
-		if($scope.paycomamt==''){
-			alert("Enter Amount.");
-			$("input[name='paycomamt']").focus();
-		}else if($scope.paycomamt== 0 || $scope.paycomamt== 0.00){
-			alert("Enter Valid Amount.");
-			$("input[name='paycomamt']").focus();
-		}else{
-			$http({
-				method: 'post',
-				url: '../ajax/payoutajax.php',
-				data: {
-				id: id,
-				paycomamt: $scope.paycomamt,
-				procharge: $scope.procharge,
-				totalpaycom: $scope.totalpaycom,
-				bankaccount: $scope.bankaccount,
-				action: 'update'
-				},
-			}).then(function successCallback(response) {
-				$("#modbody").html("<h3 id='respdiv' style='margin:5%'>" + response.data + "</h3>");
-				$scope.isHideResetS = true;
-				$scope.isPayoutUpdate = true;
-				$scope.isHidecancel = true;
-				$scope.isHideOk = false	;
-			}, function errorCallback(response) {
-				// console.log(response);
-			});
-		}
-	}
-	$scope.close = function () {
-		window.location.reload();
-	}
-
-});
 
 app.controller('payReqCtrl', function ($scope, $http) {
 	$scope.procharge =  (parseFloat(0)).toFixed(2) ;
@@ -14518,400 +12307,7 @@ app.controller('payReqCtrl', function ($scope, $http) {
 	}
 });
 
-app.controller('adminContactCtrl', function ($scope, $http, $filter) {
-	$scope.isHideOk = true;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.fn_load = function (partyType,partyCode) {
-		if(partyType == 'C' || partyType == 'A') {
-			$http({
-				method: 'post',
-				url: '../ajax/load.php',
-				params: { partyType:partyType,
-						partyCode:partyCode,
-						action: 'infolist'
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-		}
-	}
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
 
-	}
-	$scope.searchload = function (loadtype) {
-		$http({
-				method: 'post',
-				url: '../ajax/admincontactajax.php',
-				data: { loadtype: loadtype, action: 'searchload' },
-			}).then(function successCallback(response) {
-				$scope.open = response.data[0].open;
-				$scope.close = response.data[0].close;
-				$scope.inprogress = response.data[0].inprogress;
-
-
-			}, function errorCallback(response) {
-				// console.log(response);
-		});
-	}
-	$scope.detail = function (index, id, partyType, partyCode) {
-		$http({
-			method: 'post',
-			url: '../ajax/admincontactajax.php',
-			data: { id: id, action: 'detail' },
-			}).then(function successCallback(response) {
-				$scope.id = response.data[0].id;
-				$scope.status = response.data[0].status;
-				$scope.typeUpdate = response.data[0].type;
-				$scope.category = response.data[0].category;
-				$scope.getSubCat(response.data[0].subcategory);
-				$scope.subcategory = response.data[0].subcategory;
-				$scope.date = response.data[0].date;
-				$scope.subject = response.data[0].subject;
-				$scope.description = response.data[0].description;
-				$scope.userco = response.data[0].userco;
-				$scope.partyTypee = partyType;
-				$scope.partyCodee = partyCode;
-				$scope.isHideOK = true;
-			});
-		$http({
-			method: 'post',
-			url: '../ajax/admincontactajax.php',
-			data: { id: id, action: 'detailresponse' },
-			}).then(function successCallback(response) {
-				var responsetext = "";
-				for(var i=0;i<response.data.length;i++ ) {
-					responsetext +="<p style = 'color:black;height: 0px;padding: 0px;margin-bottom: 1%;padding-bottom:5px'><span style = 'color:blue;'>Entered by "+response.data[i].user+" @ "+response.data[i].time+"</span><br /><b style='padding-left:0px'>"+response.data[i].cmsresponse+" <br /></b><p>...................</p></p>";
-					$("#ResponseUpdate").html(responsetext);
-				}
-			});
-
-	}
-	$('#updateClose').hide();
-	$scope.update = function (id, partyType, partyCode) {
-		$http({
-			method: 'post',
-			url: '../ajax/admincontactajax.php',
-			data: {
-				action: 'update',
-				status: $scope.status,
-				comment:$scope.comment,
-				user:$scope.user,
-				id:	$scope.id,
-				partyType: partyType,
-				partyCode: partyCode,
-				category:$scope.category,
-				subcategory:$scope.subcategory
-			},
-		}).then(function successCallback(response) {
-			//$scope.cmss = response.data;
-			$scope.isHide = true;
-			$('#updateClose').show();
-			$("#UpdatecontcatBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-			//window location reload();
-		}, function errorCallback(response) {
-			console.log(response.data);
-		});
-	}
-	$scope.query = function () {
-			$scope.tablerow = true;
-			var partyType = $scope.partyType;
-			var partyCode = $scope.partyCode;
-			var typeradio = $scope.comsugsetrdiogroupbytype;
-			var creteria =  $scope.creteria;
-			var id = $scope.id;
-			var statuss= $scope.statuss;
-			var startDate =  $scope.startDate;
-			var endDate =  $scope.endDate;
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			var currdate = new Date();
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$http({
-					method: 'post',
-					url: '../ajax/admincontactajax.php',
-					data: {
-						action: 'query',
-						partyType: partyType,
-						startDate:$scope.startDate,
-						endDate:$scope.endDate,
-						partyCode: partyCode,
-						typeradio: typeradio,
-						creteria: creteria,
-						id: id,
-						statuss: statuss
-					},
-				}).then(function successCallback(response) {
-					$scope.cmss = response.data;
-				}, function errorCallback(response) {
-					console.log(response.data);
-				});
-			}
-		}
-		$scope.getSubCat = function (catval){
-
-			if(catval == "CashIn"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Cancel', value: 'Cancel' },{ name: 'Confirm', value: 'Confirm' },{name: 'Dispute', value: 'Dispute' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
-			}
-			else if(catval == "CashOut"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Cancel', value: 'Cancel' },{ name: 'Confirm', value: 'Confirm' },{name: 'Dispute', value: 'Dispute' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
-			}
-			else if(catval == "Cards"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Chip Card', value: 'Chip' },{ name: 'Swipe Card', value: 'Swipe' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
-
-			}
-			else if(catval == "Report"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Report', value: 'Commission' },{ name: 'Other', value: 'Other' }];
-			}
-			else if(catval == "MyAccount"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Access Error', value: 'Access' },{ name: 'Incorrect Data', value: 'Data' },{ name: 'Other', value: 'Other' }];
-			}
-			else if(catval == "Commission"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Access Error', value: 'Access' },{ name: 'Incorrect Data', value: 'Data' },{ name: 'Other', value: 'Other' }];
-			}
-			else if(catval == "Device"){
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Connectivity Error', value: 'Bluetooth' },{ name: 'Connectivity Issue', value: 'Wifi' },{ name: 'Internet Issue', value: 'Speed' },{ name: 'Other', value: 'Other' }];
-			}
-			else{
-			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
-			$scope.subcatitems = [{ name: 'Other', value: 'Other' }];
-			}
-		};
-		$scope.refresh = function () {
-			window.location.reload();
-		}
-
-	});
-
-app.controller('jcomentryCtrl', function ($scope, $http, $filter) {
-	$scope.isHideOk = true;
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-			   type: type
-				},
-		}).then(function successCallback(response) {
-			$scope.infos = response.data;
-		});
-	}
-		$scope.checkdate = function (startDate,endDate){
-			var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-			var currdate = new Date();
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$scope.isQueryDi = false;
-			}
-		}
-		$scope.query = function () {
-			$scope.tablerow = true;
-			var startDate =  $scope.startDate;
-			var endDate =  $scope.endDate;
-			var difference  = new Date(endDate - startDate);
-			var diffInDays  = difference/1000/60/60/24;
-			var currdate = new Date();
-			if(endDate > currdate) {
-				alert("End Date can't be more than current Date");
-				$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-			}
-			else if(startDate > endDate){
-				$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-			}
-			else if(diffInDays>7) {
-				alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-			}
-			else {
-				$http({
-					method: 'post',
-					url: '../ajax/jcomentryajax.php',
-					data: {
-						action: 'findlist',
-						partyCode: $scope.partyCode,
-						startDate:$scope.startDate,
-						endDate:$scope.endDate,
-					},
-				}).then(function successCallback(response) {
-					$scope.jentrys = response.data;
-				}, function errorCallback(response) {
-					console.log(response.data);
-				});
-			}
-		}
-	});
-
-app.controller('changeLangCtrl', function ($scope, $http) {
-	$scope.englang = function (index, id,) {
-		$http({
-			method: 'post',
-			url: '../ajax/chalanajax.php',
-			data: { lang: '1' },
-		}).then(function successCallback(response) {
-			window.location.reload();
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.hauslang = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/chalanajax.php',
-			data: { lang: '2' },
-		}).then(function successCallback(response) {
-			window.location.reload();
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-
-});
-
-app.controller('dashBoardCtrl', function ($scope, $http) {
-	$http({
-		method: 'post',
-		data:{action:'amount'},
-		url: '../ajax/dashboardajax.php',
-	}).then(function successCallback(response) {
-		$scope.total_amount = response.data[0].total_amount;
-		$scope.kadick_charge = response.data[1].kadick_charge;
-		$scope.agent_charge = response.data[1].agent_charge;
-		$scope.champion_charge = response.data[1].champion_charge;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'oprs'},
-	}).then(function successCallback(response) {
-		$scope.oprs = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$scope.agtdtl = function () {
-		$http({
-			method: 'post',
-			url: '../ajax/dashboardajax.php',
-			data:{action:'agentdtl'},
-		}).then(function successCallback(response) {
-			$scope.agtdls = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'nontrans'},
-	}).then(function successCallback(response) {
-		$scope.nontrans = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'agentlist'},
-	}).then(function successCallback(response) {
-		$scope.agents = response.data;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-	$http({
-		method: 'post',
-		url: '../ajax/dashboardajax.php',
-		data:{action:'counts'},
-	}).then(function successCallback(response) {
-		$scope.transfer = response.data[0].transfer;
-		$scope.cashin = response.data[0].cashin;
-		$scope.cashout = response.data[0].cashout;
-	}, function errorCallback(response) {
-		// console.log(response);
-	});
-});
 app.controller('payEntryCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.isHideReset = false;
@@ -15032,106 +12428,75 @@ app.controller('payEntryCtrl', function ($scope, $http) {
 	}
 });
 
-app.controller('payReqCtrl', function ($scope, $http) {
-	$scope.procharge =  (parseFloat(0)).toFixed(2) ;
-	$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
-	$scope.isPayout = true;
-	$scope.isHideResetS = true;
-	$scope.isResDiv = true;
-	$scope.isUpForm = false;
-	$scope.isButtonDiv = false;
+app.controller('payViewCtrl', function ($scope, $http) {
+$scope.isLoader = false;
 
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-
-	}
-	$scope.cal= function () {
-		$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
-	}
-	$scope.payout= function () {
-		var curbalance =  parseInt($scope.curbalance) ;
-		var totalpaycom =  parseInt($scope.totalpaycom) ;
-		if(curbalance >totalpaycom) {
-			$http({
-				method: 'post',
-				url: '../ajax/payreqajax.php',
-				data: {
-					partyType: $scope.partyType,
-					partyCode: $scope.partyCode,
-					creteria: $scope.creteria,
-					curbalance: $scope.curbalance,
-					paycomamt: $scope.paycomamt,
-					procharge: $scope.procharge,
-					totalpaycom: $scope.totalpaycom,
-					action: 'payout',
-					bankaccount: $scope.bankaccount
-				},
-			}).then(function successCallback(response) {
-					$scope.ispayRequestForm = true;
-					$scope.isResDiv = false;
-					$scope.isUpForm = true;
-					$scope.isButtonDiv = true;
-					$scope.msg = response.data.msg;
-					$scope.responseCode = response.data.responseCode;
-					$scope.msg = response.data.msg;
-					$scope.errorResponseDescription = response.data.errorResponseDescription;
-			});
-		}
-		else {
-			alert("Amount Should be valid");
-		}
-	}
-	$scope.query = function () {
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: {  for: 'partybank', "partyCode": $scope.partyCode, "action": "active" },
-
-	}).then(function successCallback(response) {
-		$scope.partybanks = response.data;
-		//window.location.reload();
-	});
-		$scope.curbalance = "";
-		$http({
-			method: 'post',
-			url: '../ajax/payreqajax.php',
-			data: {
-				partyType: $scope.partyType,
-				partyCode: $scope.partyCode,
-				action: 'query'
-			},
-		}).then(function successCallback(response) {
-				$scope.isPayout = false;
-				$scope.isHideResetS = false;
-				$scope.curbalance = response.data[0].curbal;
-		});
-	}
+$scope.radiochange = function () {
+$scope.paymentviews = false;
+$scope.id='';
+$scope.crestatus="ALL";
+$scope.paymentstartDate='';
+$scope.paymentendDate='';
+$scope.approvedstartDate='';
+$scope.approvedendDate='';
+}
+$scope.pay = function(){
+$scope.paymentstartDate = new Date();
+$scope.paymentendDate = new Date();
+}
+$scope.appdate = function() {
+$scope.approvedstartDate = new Date();
+$scope.approvedendDate = new Date();
+}
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/payajax.php',
+data: {
+action: 'view',
+creteria: $scope.creteria,
+id: $scope.id,
+status: $scope.crestatus,
+paymentstartDate: $scope.paymentstartDate,
+paymentendDate: $scope.paymentendDate,
+approvedstartDate: $scope.approvedstartDate,
+approvedendDate: $scope.approvedendDate
+},
+}).then(function successCallback(response) {
+$scope.paymentviews = response.data;
+});
+}
+$scope.view = function (id) {
+$http({
+method: 'post',
+url: '../ajax/payajax.php',
+data: {
+action: 'detailview',
+id: id
+},
+}).then(function successCallback(response) {
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.isLoader = false;
+$scope.isMainLoader = true;
+$scope.id = response.data[0].id;
+$scope.country = response.data[0].country;
+$scope.BankAccount = response.data[0].BankAccount;
+$scope.partyType = response.data[0].partyType;
+$scope.partyCode = response.data[0].partyCode;
+$scope.PaymentAmount = response.data[0].PaymentAmount;
+$scope.PaymentApprovedDate = response.data[0].PaymentApprovedDate;
+$scope.paymentType = response.data[0].paymentType;
+$scope.PaymentStatus = response.data[0].PaymentStatus;
+$scope.PaymentApprovedAmount = response.data[0].PaymentApprovedAmount;
+$scope.PaymentRefNo = response.data[0].PaymentRefNo;
+$scope.PaymentRefDate = response.data[0].PaymentRefDate;
+$scope.ChequeNo = response.data[0].ChequeNo;
+$scope.comment = response.data[0].comments;
+$scope.acomment = response.data[0].acomment;
+$scope.PaymentDate = response.data[0].PaymentDate;
+});
+}
 });
 
 
@@ -15660,7 +13025,7 @@ app.controller('userCtrl', function ($scope, $http) {
 	}
   $scope.checkuservalid = function () {
    var user = $scope.userName.length;
-    if(user >= 9) {
+   if(user >= 9) {
     $scope.isGoDisbled = false;
    }
    else {
@@ -16098,6 +13463,7 @@ app.controller('userCtrl', function ($scope, $http) {
 		});
 	}
 });
+
 app.controller('countryCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$http({
@@ -16173,189 +13539,288 @@ app.controller('countryCtrl', function ($scope, $http) {
 		});
 	}
 });
-app.controller('appentryCtrl', function ($scope, $http) {
-	$scope.isInputDisabled = true;
-	$scope.userNameDisabled = false;
-	$scope.isHideOk = true;
-	$scope.isHideReset = false;
-	$scope.isHideGo = false;
-	$scope.isMsgSpan = false;
-	$scope.isGoDisbled = true;
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'langs' }
-	}).then(function successCallback(response) {
-		$scope.langs = response.data;
-		//window.location.reload();
-	});
 
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'country' }
+
+app.controller('appentryCtrl', function ($scope, $http) {
+$scope.isInputDisabled = true;
+$scope.BVNCheckForm = true;
+$scope.userNameDisabled = false;
+$scope.isHideOk = true;
+$scope.isHideReset = false;
+$scope.isHideGo = false;
+$scope.isMsgSpan = false;
+$scope.isGoDisbled = true;
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'langs' }
+}).then(function successCallback(response) {
+$scope.langs = response.data;
+//window.location.reload();
+});
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'country' }
+}).then(function successCallback(response) {
+$scope.countrys = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { for: 'agent', "type": "N" }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+$scope.checkuservalid = function () {
+var user = $scope.userName.length;
+   if(user >= 9) {
+$scope.isGoDisbled = false;
+}
+else {
+$scope.isGoDisbled = true;
+}
+}
+$scope.reset = function () {
+document.getElementById('ApplicationEntryForm').reset();
+$scope.isInputDisabled = true;
+$scope.userNameDisabled = false;
+$scope.isHideOk = true;
+$scope.isHideReset = false;
+$scope.isHideGo = false;
+$scope.isMsgSpan = true;
+$scope.userName = "";
+$scope.isMsgSpanD = true;
+$scope.isSelectDisabled = false;
+}
+
+$scope.chkuser = function () {
+$scope.userNameDisabled = true;
+$scope.isLoader = true;
+$scope.isSelectDisabled = true;
+$scope.isHideGo = false;
+$http({
+method: 'post',
+url: '../ajax/appentryajax.php',
+data: {
+id: $scope.id,
+action: 'userchk',
+userName:$scope.userName
+
+},
+}).then(function successCallback(response) {
+if(response.data <= 0) {
+$scope.isInputDisabled = false;
+$scope.userNameDisabled = true;
+$scope.isHideGo = true;
+$scope.msguser = "User Name is Available";
+}
+else{
+$scope.isInputDisabled = true;
+$scope.msguser = "User Name is Already Taken";
+$scope.userNameDisabled = false;
+$scope.isHideGo = false;
+}
+$scope.isLoader = false;
+
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function (id, type) {
+	window.location.reload();
+}
+
+$scope.Getbvn = function(id){  
+	
+	$scope.BVNBtn = false;
+	$scope.isSelectDisabledType = false;
+	$scope.isSelectDisabled = false;
+	alert("Please wait, while we validate the BVN");
+
+	var fd = new FormData();
+	//alert($scope.dob);
+	var event = new Date($scope.dob);
+	
+	let date = JSON.stringify(event)
+	date = date.slice(1,11);
+	//alert(date);
+
+	   fd.append("action","getbvn");
+	   fd.append("country",$scope.country);
+	   fd.append("firstName",$scope.firstName);
+	   fd.append("lastName",$scope.lastName);
+	   fd.append("localgovernment",$scope.localgovernment);
+	   fd.append("state",$scope.state);
+       fd.append("mobileno",$scope.mobileno);
+	   fd.append("bvn",$scope.bvn);
+    	fd.append("gender",$scope.gender);
+	   fd.append("dob",date);
+	  
+	  $http({
+	method: 'post',
+	url: '../ajax/appentryajax.php',
+	headers: {'Content-Type': undefined},
+	ContentType: 'application/json',
+	data: fd,
 	}).then(function successCallback(response) {
-		$scope.countrys = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'agent', "type": "N" }
-	}).then(function successCallback(response) {
-		$scope.agents = response.data;
-		//window.location.reload();
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { for: 'champion' }
-	}).then(function successCallback(response) {
-		$scope.champions = response.data;
-		//window.location.reload();
-	});
-	$scope.checkuservalid = function () {
-		var user = $scope.userName.length;
-	    if(user >= 9) {
-			$scope.isGoDisbled = false;
+		$scope.resc = response.data.responseCode;
+		//alert($scope.resc);
+		if(parseInt($scope.resc) == 0) {
+			$scope.BVNCheckForm = false; 
+			$scope.isInputDisabled = true; 
+			$scope.BVNBtn = true;
+			$scope.isSelectDisabledType = false;
+			$scope.isSelectDisabled = false;
+			$scope.Success = true;
+			$scope.Failure = false;
+			$scope.labelHide = true;
+			$scope.bvn_validated = 'Y';
+			/* $scope.tabeHide = false;
+			$scope.tabeHide2 = true;
+			$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
 		}
 		else {
-			$scope.isGoDisbled = true;
+			$scope.BVNCheckForm = true; 
+			$scope.isInputDisabled = false; 
+			$scope.BVNBtn = true;
+			$scope.isSelectDisabledType = true;
+	         $scope.isSelectDisabled = true;
+			 $scope.Success = false;
+		  	 $scope.Failure = true;
+		   	$scope.labelHide = true;
+			 $scope.bvn_validated = 'N';
+		/* 	$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
 		}
-	}
-	$scope.reset = function () {
-		document.getElementById('ApplicationEntryForm').reset();
-		$scope.isInputDisabled = true;
-		$scope.userNameDisabled = false;
-		$scope.isHideOk = true;
-		$scope.isHideReset = false;
-		$scope.isHideGo = false;
-		$scope.isMsgSpan = true;
-		$scope.userName = "";
-		$scope.isMsgSpanD = true;
-		$scope.isSelectDisabled = false;
-	}
+	});
 
-	$scope.chkuser = function () {
-		$scope.userNameDisabled = true;
-		$scope.isLoader = true;
-		$scope.isSelectDisabled = true;
-		$scope.isHideGo = false;
-		$http({
-			method: 'post',
-			url: '../ajax/appentryajax.php',
-			data: {
-				id: $scope.id,
-				action: 'userchk',
-				userName:$scope.userName
+ }
 
-			},
-		}).then(function successCallback(response) {
-			if(response.data <= 0) {
-				$scope.isInputDisabled = false;
-				$scope.userNameDisabled = true;
-				$scope.isHideGo = true;
-				$scope.msguser = "User Name is Available";
-			}
-			else{
-				$scope.isInputDisabled = true;
-				$scope.msguser = "User Name is Already Taken";
-				$scope.userNameDisabled = false;
-				$scope.isHideGo = false;
-			}
-			$scope.isLoader = false;
+$scope.create = function () {
+ $scope.isLoader = true;
+ var fd = new FormData();
+ var event = new Date($scope.dob);
+let date = JSON.stringify(event)
+date = date.slice(1,11);
+  angular.forEach($scope.uploadfiles,function(file){
+fd.append('file[]',file);
+// alert($scope.uploadfiles);
+  });
+  angular.forEach($scope.uploadfiles2,function(file2){
+fd.append('file2[]',file2);
 
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-		$scope.create = function () {
-		  $scope.isLoader = true;
-		  var fd = new FormData();
-		   angular.forEach($scope.uploadfiles,function(file){
-			 fd.append('file[]',file);
-
-			// alert($scope.uploadfiles);
-		   });
-		   angular.forEach($scope.uploadfiles2,function(file2){
-			 fd.append('file2[]',file2);
-
-			 //alert($scope.uploadfiles2);
-		   });
-		   fd.append("id","id");
-		   fd.append("action","create");
-		   fd.append("category",$scope.category);
-		   fd.append("id",$scope.id);
-		   fd.append("country",$scope.country);
-		   fd.append("outletname",$scope.outletname);
-		   fd.append("firstName",$scope.firstName);
-		   fd.append("lastName",$scope.lastName);
-		   fd.append("taxnumber",$scope.taxnumber);
-		   fd.append("localgovernment",$scope.localgovernment);
-		   fd.append("address1",$scope.address1);
-		   fd.append("address2",$scope.address2);
-		   fd.append("state",$scope.state);
-		   fd.append("zipcode",$scope.zipcode);
-		   fd.append("mobileno",$scope.mobileno);
-		   fd.append("workno",$scope.workno);
-		   fd.append("email",$scope.email);
-		   fd.append("cname",$scope.cname);
-		   fd.append("cmobile",$scope.cmobile);
-		   fd.append("Latitude",$scope.Latitude);
-		   fd.append("Longitude",$scope.Longitude);
-		   fd.append("comment",$scope.comment);
-		   fd.append("appliertype",$scope.appliertype);
-		   fd.append("parentcode",$scope.parentcode);
-		   fd.append("langpref",$scope.langpref);
-		   fd.append("userName",$scope.userName);
-		   fd.append("bvn",$scope.bvn);
-		   fd.append("attachment",$scope.attachment);
-		    fd.append("attachment2",$scope.attachment2);
-			  $http({
-		   method: 'post',
-		   url: '../ajax/appentryajax.php',
-		   headers: {'Content-Type': undefined},
-		   ContentType: 'application/json',
-		   data: fd,
-		  }).then(function successCallback(response) {
-		   $scope.isHide = true;
-		   $scope.isHideOk = false;
-		   $scope.isHideReset = true;
-		   $scope.isLoader = false;
-				  $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-		  }, function errorCallback(response) {
-		   // console.log(response);
-		  });
-		 }
-	$scope.countrychange = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'statelist', "id": id, "action": "active" },
-		}).then(function successCallback(response) {
-			$scope.states = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-
-	$scope.statechange = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'localgvtlist', "id": id, "action": "active" },
-		}).then(function successCallback(response) {
-			$scope.localgvts = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
+//alert($scope.uploadfiles2);
+  });
+  angular.forEach($scope.uploadfiles3,function(file3){
+	fd.append('file3[]',file3);
+	
+	//alert($scope.uploadfiles2);
+	  });
+  fd.append("id","id");
+  fd.append("action","create");
+  fd.append("category",$scope.category);
+  fd.append("id",$scope.id);
+  fd.append("country",$scope.country);
+  fd.append("outletname",$scope.outletname);
+  fd.append("firstName",$scope.firstName);
+  fd.append("lastName",$scope.lastName);
+  fd.append("taxnumber",$scope.taxnumber);
+  fd.append("localgovernment",$scope.localgovernment);
+  fd.append("address1",$scope.address1);
+  fd.append("address2",$scope.address2);
+  fd.append("state",$scope.state);
+  fd.append("zipcode",$scope.zipcode);
+  fd.append("mobileno",$scope.mobileno);
+  fd.append("workno",$scope.workno);
+  fd.append("email",$scope.email);
+  fd.append("cname",$scope.cname);
+  fd.append("cmobile",$scope.cmobile);
+  fd.append("Latitude",$scope.Latitude);
+  fd.append("Longitude",$scope.Longitude);
+  fd.append("comment",$scope.comment);
+  fd.append("appliertype",$scope.appliertype);
+  fd.append("parentcode",$scope.parentcode);
+  fd.append("langpref",$scope.langpref);
+  fd.append("userName",$scope.userName);
+  fd.append("bvn",$scope.bvn);
+  fd.append("attachment",$scope.attachment);
+  fd.append("attachment2",$scope.attachment2);
+  fd.append("attachment3",$scope.attachment3);
+  fd.append("gender",$scope.gender);
+  fd.append("dob",date);
+  fd.append("BusinessType",$scope.BusinessType);
+ $http({
+  method: 'post',
+  url: '../ajax/appentryajax.php',
+  headers: {'Content-Type': undefined},
+  ContentType: 'application/json',
+  data: fd,
+ }).then(function successCallback(response) {
+  $scope.isHide = true;
+  $scope.isHideOk = false;
+  $scope.isHideReset = true;
+  $scope.isLoader = false;
+ $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+ }, function errorCallback(response) {
+  // console.log(response);
+ });
+}
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
 });
+}
+
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+
 app.controller('preAppentryCtrl', function ($scope, $http) {
 
 	$scope.isHideOk = true;
@@ -16364,112 +13829,125 @@ app.controller('preAppentryCtrl', function ($scope, $http) {
 	$scope.isMsgSpan = false;
 	$scope.isGoDisbled = true;
 	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'langs' }
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'langs' }
 	}).then(function successCallback(response) {
-		$scope.langs = response.data;
-		//window.location.reload();
+	$scope.langs = response.data;
+	//window.location.reload();
 	});
 	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'country' }
+	url: '../ajax/load.php',
+	method: "POST",
+	//Content-Type: 'application/json',
+	params: { action: 'active', for: 'country' }
 	}).then(function successCallback(response) {
-		$scope.countrys = response.data;
-		//window.location.reload();
+	$scope.countrys = response.data;
+	//window.location.reload();
 	});
 	$scope.reset = function () {
-		document.getElementById('PreApplicationEntryForm').reset();
-		$scope.userNameDisabled = false;
-		$scope.isHideOk = true;
-		$scope.isHideReset = false;
-		$scope.isHideGo = false;
-		$scope.isMsgSpan = true;
-		$scope.userName = "";
-		$scope.isMsgSpanD = true;
-		$scope.isSelectDisabled = false;
+	document.getElementById('PreApplicationEntryForm').reset();
+	$scope.userNameDisabled = false;
+	$scope.isHideOk = true;
+	$scope.isHideReset = false;
+	$scope.isHideGo = false;
+	$scope.isMsgSpan = true;
+	$scope.userName = "";
+	$scope.isMsgSpanD = true;
+	$scope.isSelectDisabled = false;
 	}
 	$scope.create = function () {
-		$scope.isLoader = true;
-		var fd = new FormData();
-   angular.forEach($scope.uploadfiles,function(file){
-     fd.append('file[]',file);
-   });
-   angular.forEach($scope.uploadfiles2,function(file2){
-	 fd.append('file2[]',file2);
-   });
-   fd.append("id","id");
-   fd.append("action","create");
-   fd.append("country",$scope.country);
-   fd.append("outletname",$scope.outletname);
-   fd.append("firstName",$scope.firstName);
-   fd.append("lastName",$scope.lastName);
-   fd.append("taxnumber",$scope.taxnumber);
-   fd.append("localgovernment",$scope.localgovernment);
-   fd.append("address1",$scope.address1);
-   fd.append("address2",$scope.address2);
-   fd.append("state",$scope.state);
-   fd.append("zipcode",$scope.zipcode);
-   fd.append("mobileno",$scope.mobileno);
-   fd.append("workno","workno");
-   fd.append("email",$scope.email);
-   fd.append("cname",$scope.cname);
-   fd.append("cmobile",$scope.cmobile);
-   fd.append("Latitude",$scope.Latitude);
-   fd.append("Longitude",$scope.Longitude);
-   fd.append("comment",$scope.comment);
-   fd.append("appliertype",$scope.appliertype);
-   fd.append("parentcode",$scope.parentcode);
-   fd.append("langpref",$scope.langpref);
-   fd.append("userName",$scope.userName);
-   fd.append("bvn",$scope.bvn);
-   fd.append("userName",$scope.userName);
-   fd.append("attachment",$scope.attachment);
-   fd.append("attachment2",$scope.attachment2);
-
-	  	$http({
-			method: 'post',
-			url: '../ajax/preappentryajax.php',
-			headers: {'Content-Type': undefined},
-			ContentType: 'application/json',
-			data: fd,
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isHideReset = true;
-			$scope.isLoader = false;
-         	$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
+	$scope.isLoader = true;
+	var fd = new FormData();
+	//alert($scope.dob);
+	var event = new Date($scope.dob);
+	
+	let date = JSON.stringify(event)
+	date = date.slice(1,11);
+	//alert(date);
+	
+	   angular.forEach($scope.uploadfiles,function(file){
+		 fd.append('file[]',file);
+	   });
+	   angular.forEach($scope.uploadfiles2,function(file2){
+	fd.append('file2[]',file2);
+	   });
+		angular.forEach($scope.uploadfiles3,function(file3){
+	fd.append('file3[]',file3);
+	   });
+	   fd.append("id","id");
+	   fd.append("action","create");
+	   fd.append("country",$scope.country);
+	   fd.append("outletname",$scope.outletname);
+	   fd.append("firstName",$scope.firstName);
+	   fd.append("lastName",$scope.lastName);
+	   fd.append("taxnumber",$scope.taxnumber);
+	   fd.append("localgovernment",$scope.localgovernment);
+	   fd.append("address1",$scope.address1);
+	   fd.append("address2",$scope.address2);
+	   fd.append("state",$scope.state);
+	   fd.append("zipcode",$scope.zipcode);
+	   fd.append("mobileno",$scope.mobileno);
+	   fd.append("workno","workno");
+	   fd.append("email",$scope.email);
+	   fd.append("cname",$scope.cname);
+	   fd.append("cmobile",$scope.cmobile);
+	   fd.append("Latitude",$scope.Latitude);
+	   fd.append("Longitude",$scope.Longitude);
+	   fd.append("comment",$scope.comment);
+	   fd.append("appliertype",$scope.appliertype);
+	   fd.append("parentcode",$scope.parentcode);
+	   fd.append("langpref",$scope.langpref);
+	   fd.append("userName",$scope.userName);
+	   fd.append("bvn",$scope.bvn);
+	   fd.append("attachment",$scope.attachment);
+	   fd.append("attachment2",$scope.attachment2);
+		fd.append("attachment3",$scope.attachment3);
+		fd.append("gender",$scope.gender);
+	   fd.append("dob",date);
+	   fd.append("BusinessType",$scope.BusinessType);
+	
+	  $http({
+	method: 'post',
+	url: '../ajax/preappentryajax.php',
+	headers: {'Content-Type': undefined},
+	ContentType: 'application/json',
+	data: fd,
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isHideReset = true;
+	$scope.isLoader = false;
+			  $("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
 	}
 	$scope.countrychange = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'statelist', "id": id, "action": "active" },
-		}).then(function successCallback(response) {
-			$scope.states = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'statelist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.states = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
 	}
-
+	
 	$scope.statechange = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for: 'localgvtlist', "id": id, "action": "active" },
-		}).then(function successCallback(response) {
-			$scope.localgvts = response.data;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
 	}
-});
+	});
 
 
 app.controller('nonTransCtrl', function ($scope, $http) {
@@ -16686,6 +14164,38 @@ win.document.write('<img src="' + src + '" onload="window.print();window.close()
    win.focus();
 };
 }
+$scope.attachmentSig = function (index, id) {
+	$http({
+	method: 'post',
+	url: '../ajax/appviewajax.php',
+	data: {
+	id: id,
+	action: 'attachmentSig'
+	},
+	}).then(function successCallback(response) {
+	// $scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	//$("#resmsg").html("<h3>" + response.data + "</h3>");
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	
+		$scope.PrintImage = function (url) {
+	var src='data:image/;base64,'+url;
+	//alert(src);
+	   var win = window.open('');
+	win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+	   win.focus();
+	};
+	}
 $scope.print = function (index, id) {
 
 $http({
@@ -16726,6 +14236,8 @@ var response = "<p>Search Creteria For: </p>" + text + " - " + valu +
 "<tr><th>Category</th><th>" + response.data[0].category + "</th></tr>" +
 "<tr><th>Country</th><th>" + response.data[0].country + "</th></tr>" +
 "<tr><th>Outlet Name</th><th>" + response.data[0].outletname + "</th></tr>" +
+"<tr><th>First Name</th><th>" + response.data[0].first_name + "</th></tr>" +
+"<tr><th>Last Name</th><th>" + response.data[0].last_name + "</th></tr>" +
 "<tr><th>Date Of Birth</th><th>" + response.data[0].dob + "</th></tr>" +
 "<tr><th>Gender</th><th>" + response.data[0].gender + "</th></tr>" +
 "<tr><th>Business Type</th><th>" + response.data[0].BusinessType + "</th></tr>" +
@@ -16873,6 +14385,8 @@ $scope.Longitude = response.data[0].Longitude;
   $scope.gender = response.data[0].gender;
 $scope.dob = response.data[0].dob;
 $scope.BusinessType = response.data[0].BusinessType;
+  $scope.first_name = response.data[0].first_name;
+   $scope.last_name = response.data[0].last_name;
 }, function errorCallback(response) {
 // console.log(response);
 });
@@ -16950,6 +14464,779 @@ $scope.BusinessType = response.data[0].BusinessType;
 });
 }
 });
+
+app.controller('preappviewCtrl', function ($scope, $http) {
+ $scope.isLoader = true;
+ $scope.startDate = new Date();
+ $scope.endDate = new Date();
+ $scope.isMainLoader = false;
+ $scope.isHideOk = true;
+ $scope.isGoDisbled = true;
+
+
+
+ $scope.query = function () {
+  $http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: $scope.id,
+    crestatus: $scope.crestatus,
+    startDate: $scope.startDate,
+    endDate: $scope.endDate,
+    creteria: $scope.creteria,
+    action: 'query'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+   // $scope.isHideOk = false;
+   $scope.isLoader = false;
+      $scope.isMainLoader = false;
+   $scope.appviews = response.data;
+  // $scope.id = response.data[0].id;
+$scope.name = response.data[0].name;
+}, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+ $scope.print = function (index, id) {
+  $http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: id,
+    action: 'view'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+   // $scope.isHideOk = false;
+   var creteria = $scope.creteria;
+   var id = $scope.id;
+   var statusa = $scope.statusa;
+   var startDate = $scope.startDate;
+   var endDate = $scope.endDate;
+   var text = "";
+   var valu = "";
+   if (creteria == "BI") {
+    text = "By Id";
+    valu = id;
+   }
+   if (creteria == "BS") {
+    text = "By Status";
+    valu = statusa;
+   }
+   if (creteria == "BD") {
+    text = "By Date";
+    valu = "From: " + startDate + " to " + endDate;
+   }
+   var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+    '<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+    '<h2 style="text-align:center;margin-top:30px">Application View Report - ' + response.data[0].outletname + '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+   var response = "<p>Search Creteria For: </p>" + text + " - " + valu +
+    "<table class='table table-bordered'><tbody>" +
+    "<tr><th>Application #</th><th>" + response.data[0].id + "</th></tr>" +
+    "<tr><th>Category</th><th>" + response.data[0].category + "</th></tr>" +
+    "<tr><th>Country</th><th>" + response.data[0].country + "</th></tr>" +
+    "<tr><th>Outlet Name</th><th>" + response.data[0].outletname + "</th></tr>" +
+    "<tr><th>bvn</th><th>" + response.data[0].bvn + "</th></tr>" +
+    "<tr><th>Applier Type</th><th>" + response.data[0].type + "</th></tr>" +
+    "<tr><th>Party Code</th><th>" + response.data[0].partyc + "</th></tr>" +
+    "<tr><th>Parent Code</th><th>" + response.data[0].parentc + "</th></tr>" +
+    "<tr><th>Create Time</th><th>" + response.data[0].time + "</th></tr>" +
+    "<tr><th>Status</th><th>" + response.data[0].statusa + "</th></tr>" +
+    "<tr><th>Address 1</th><th>" + response.data[0].address1 + "</th></tr>" +
+    "<tr><th>Address 2</th><th>" + response.data[0].address2 + "</th></tr>" +
+    "<tr><th>Local Govt.</th><th>" + response.data[0].localgovt + "</th></tr>" +
+    "<tr><th>State</th><th>" + response.data[0].state + "</th></tr>" +
+    "<tr><th>Zip Code</th><th>" + response.data[0].zip + "</th></tr>" +
+    "<tr><th>Tax Number</th><th>" + response.data[0].tax + "</th></tr>" +
+    "<tr><th>E-Mail</th><th>" + response.data[0].email + "</th></tr>" +
+    "<tr><th>Mobile</th><th>" + response.data[0].mobile + "</th></tr>" +
+    "<tr><th>Work No</th><th>" + response.data[0].work + "</th></tr>" +
+    "<tr><th>Contact Person Name</th><th>" + response.data[0].cpn + "</th></tr>" +
+    "<tr><th>Contact Person Mobile</th><th>" + response.data[0].cpm + "</th></tr>" +
+    "<tr><th>Approve Comments</th><th>" + response.data[0].apcomment + "</th></tr>" +
+    "<tr><th>Approve Time</th><th>" + response.data[0].aptime + "</th></tr>" +
+    "<tr><th>Authorize Comments</th><th>" + response.data[0].aucomment + "</th></tr>" +
+    "<tr><th>Authorize Time</th><th>" + response.data[0].autime + "</th></tr>" +
+    "<tr><th>Comments</th><th>" + response.data[0].comments + "</th></tr>" +
+    "<tr><th>Account Setup</th><th>" + response.data[0].asetup + "</th></tr>" +
+    "<tr><th>User Setup</th><th>" + response.data[0].usetup + "</th></tr>" +
+    "<tr><th>Login Name</th><th>" + response.data[0].login + "</th></tr>" +
+    "<tr><th>Latitude</th><th>" + response.data[0].Latitude + "</th></tr>" +
+    "<tr><th>Longitude</th><th>" + response.data[0].Longitude + "</th></tr>" +
+    "</tbody></table>";
+   var win = window.open("", "height=1000", "width=1000");
+   with (win.document) {
+    open();
+    write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+    close();
+   }
+  }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+ $scope.resets = function () {
+
+	$scope.IDDocument = "";
+	$scope.attachment = "";
+	$scope.BussinessDocument = "";
+	$scope.attachment2 = "";
+	$scope.SignatureDocucment = "";
+	$scope.attachment3 = "";
+	}
+
+  $scope.attachmentid = function (index, id) {
+  $http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: id,
+    action: 'attachmentid'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+    $scope.isHideOk = false;
+   $scope.isLoader = false;
+      $scope.isMainLoader = false;
+  // alert(response.data[0].attachment_content);
+  $scope.myImage = response.data[0].attachment_content;
+  //$scope.myImage = ;
+  $scope.outletname = response.data[0].outletname;
+  $scope.file = response.data[0].file;
+  $scope.attachment_type = response.data[0].attachment_type;
+  //$("#resmsg").html("<h3>" + response.data + "</h3>");
+  //alert(response.data);
+  }, function errorCallback(response) {
+   // console.log(response);
+  });
+  $scope.PrintImage = function (url) {
+    var src='data:image/;base64,'+url;
+    //alert(src);
+       var win = window.open('');
+    win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+    win.focus();
+    };
+ }
+ $scope.attachmentcomp = function (index, id) {
+	  
+	$http({
+	 method: 'post',
+	 url: '../ajax/preappviewajax.php',
+	 data: {
+	  id: id,
+	  action: 'attachmentcomp'
+	 },
+	}).then(function successCallback(response) {
+	 // $scope.isHide = true;
+	  $scope.isHideOk = false;
+	 $scope.isLoader = false;
+		$scope.isMainLoader = false;
+	// alert(response.data[0].attachment_content);
+	//$("#resmsg").html("<h3>" + response.data + "</h3>");
+	$scope.myImage = response.data[0].attachment_content;
+	$scope.outletname = response.data[0].outletname;
+	$scope.file = response.data[0].file;
+	$scope.attachment_type = response.data[0].attachment_type;
+	//alert(response.data[0].attachment_type);
+	}, function errorCallback(response) {
+	 // console.log(response);
+	});
+  
+		$scope.PrintImage = function (url) {
+	 var src='data:image/;base64,'+url;
+	 //alert(src);
+		var win = window.open('');
+	 win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		win.focus();
+	};
+   }
+  
+   $scope.attachmentSig = function (index, id) {
+	  $http({
+	   method: 'post',
+	   url: '../ajax/preappviewajax.php',
+	   data: {
+		id: id,
+		action: 'attachmentSig'
+	   },
+	  }).then(function successCallback(response) {
+	   // $scope.isHide = true;
+		$scope.isHideOk = false;
+	   $scope.isLoader = false;
+		  $scope.isMainLoader = false;
+	  // alert(response.data[0].attachment_content);
+	  //$("#resmsg").html("<h3>" + response.data + "</h3>");
+	  $scope.myImage = response.data[0].attachment_content;
+	  $scope.outletname = response.data[0].outletname;
+	  $scope.file = response.data[0].file;
+	  $scope.attachment_type = response.data[0].attachment_type;
+	  //alert(response.data[0].attachment_type);
+	  }, function errorCallback(response) {
+	   // console.log(response);
+	  });
+	
+		  $scope.PrintImage = function (url) {
+	   var src='data:image/;base64,'+url;
+	   //alert(src);
+		  var win = window.open('');
+	   win.document.write('<img src="' + src + '" onload="window.print();window.close()" />');
+		  win.focus();
+	  };
+	 }
+
+ $scope.editattach1 = function (index, id, name) {
+	$scope.isHideOk = true;
+	$scope.isInputDisabled = false;
+	$scope.isInputDisabled2 = false;
+	$scope.isInputDisabled3 = false;
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id, name: name, action: 'editattachment1' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		$scope.id = response.data[0].id;
+		//$scope.BussinessDocument = response.data[0].BussinessDocument;
+		$scope.IDDocument = response.data[0].IDDocument;
+		//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		$scope.attachment_type = response.data[0].attachment_type;
+		$scope.file = response.data[0].file;
+	
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+$scope.editattach2 = function (index, id, name) {
+	$scope.isHideOk = true;
+	$scope.isInputDisabled = false;
+	$scope.isInputDisabled2 = false;
+	$scope.isInputDisabled3 = false;
+
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id, name: name, action: 'editattachment2' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		$scope.id = response.data[0].id;
+		$scope.BussinessDocument = response.data[0].BussinessDocument;
+		//$scope.IDDocument = response.data[0].IDDocument;
+		//$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		$scope.attachment_type = response.data[0].attachment_type;
+		$scope.file = response.data[0].file;
+	
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+$scope.editattach3 = function (index, id, name) {
+	$scope.isHideOk = true;
+	$scope.isInputDisabled = false;
+	$scope.isInputDisabled2 = false;
+	$scope.isInputDisabled3 = false;
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id, name: name, action: 'editattachment3' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id = response.data[0].pre_application_attachment_id;
+		$scope.id = response.data[0].id;
+		//$scope.BussinessDocument = response.data[0].BussinessDocument;
+		//$scope.IDDocument = response.data[0].IDDocument;
+		$scope.SignatureDocucment = response.data[0].SignatureDocucment;
+		$scope.attachment_type = response.data[0].attachment_type;
+		$scope.file = response.data[0].file;
+		
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+
+$scope.Deleteattachment = function(index,id,pre_application_attachment_id,attachment_type){ 
+	$scope.Deleteattach = true;
+	$scope.isInputDisabled = true;
+	$scope.IDDocument = "";
+
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id1 = response.data[0].old_pre_application_attachment_id;
+		$scope.pre_application_info_id1 = response.data[0].old_pre_application_info_id;
+		$scope.attachment_name = response.data[0].old_attachment_name;
+		$scope.file = response.data[0].old_file;
+		$scope.attachment_type = response.data[0].old_attachment_type;
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+
+}
+$scope.Deleteattachment2 = function(index,id,pre_application_attachment_id,attachment_type){ 
+	$scope.Deletes = true;
+	$scope.isInputDisabled2s = true;
+	$scope.BussinessDocument = "";
+
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload2' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id2 = response.data[0].old_pre_application_attachment_id;
+		$scope.pre_application_info_id2 = response.data[0].old_pre_application_info_id;
+		$scope.attachment_name = response.data[0].old_attachment_name;
+		$scope.file = response.data[0].old_file;
+		$scope.attachment_type = response.data[0].old_attachment_type;
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+
+}
+$scope.Deleteattachment3 = function(index,id,pre_application_attachment_id,attachment_type){ 
+	$scope.Deleted = true;
+	$scope.isInputDisabled3 = true;
+	$scope.SignatureDocucment = "";
+
+	
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: { id: id,pre_application_attachment_id:pre_application_attachment_id,attachment_type:attachment_type, action: 'deleteupload3' },
+	}).then(function successCallback(response) {
+		$scope.pre_application_attachment_id3 = response.data[0].old_pre_application_attachment_id;
+		$scope.pre_application_info_id3 = response.data[0].old_pre_application_info_id;
+		$scope.attachment_name = response.data[0].old_attachment_name;
+		$scope.file = response.data[0].old_file;
+		$scope.attachment_type = response.data[0].old_attachment_type;
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+
+}
+
+$scope.InsertNew = function(index,id,pre_application_attachment_id,pre_application_info_id,attachment_type){
+
+	$scope.isHideOk = true;
+	$scope.isHide = false;
+
+	$scope.isLoader = true;
+	var fd = new FormData();
+	//alert($scope.dob);
+	var event = new Date($scope.dob);
+	
+	let date = JSON.stringify(event)
+	date = date.slice(1,11);
+	//alert(date);
+	
+	   angular.forEach($scope.uploadfiles,function(file){
+		 fd.append('file[]',file);
+	   });
+	   angular.forEach($scope.uploadfiles2,function(file2){
+	fd.append('file2[]',file2);
+	   });
+	   angular.forEach($scope.uploadfiles3,function(file3){
+		fd.append('file3[]',file3);
+		   });
+	   fd.append("id","id");
+	   fd.append("pre_application_attachment_id1",$scope.pre_application_attachment_id1);
+	   fd.append("pre_application_info_id1",$scope.pre_application_info_id1);
+	   fd.append("pre_application_attachment_id2",$scope.pre_application_attachment_id2);
+	   fd.append("pre_application_info_id2",$scope.pre_application_info_id2);
+	   fd.append("pre_application_attachment_id3",$scope.pre_application_attachment_id3);
+	   fd.append("pre_application_info_id3",$scope.pre_application_info_id3);
+	   fd.append("attachment_type","attachment_type");
+	   fd.append("action","Uploadattachment");
+	   fd.append("attachment",$scope.file);
+	    fd.append("attachment",$scope.attachment);
+	   fd.append("attachment2",$scope.attachment2);
+	   fd.append("attachment3",$scope.attachment3);
+		
+	
+	  $http({
+	method: 'post',
+	url: '../ajax/preappentryajax.php',
+	headers: {'Content-Type': undefined},
+	ContentType: 'application/json',
+	data: fd,
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isHideReset = true;
+	$scope.isLoader = false;
+	$("#AppentryCreateBody").html("<h3>" + response.data + "</h3>");
+
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+$scope.refresh = function (id, type) {
+	window.location.reload();
+}
+
+
+
+  
+   
+ $scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+ $scope.transfer = function (index, id, name) { 
+
+  $scope.name = name;
+  $scope.transferbtn = true;
+  $scope.id = id;
+  $http({
+method: 'post',
+url: '../ajax/preappviewajax.php',
+data: {
+id: $scope.id,
+action: 'transupdate'
+},
+  }).then(function successCallback(response) {
+//alert(response.data[0].state);
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": response.data[0].state, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+  $scope.state = response.data[0].state;
+  $scope.localgovernment = response.data[0].localgvt;
+    $scope.bvn_validated = response.data[0].bvn_validated;
+
+  //alert(response.data[0].bvn_validated);
+  if($scope.bvn_validated !="Y")
+  {
+$scope.bvn_validated = true;
+$scope.isSelectDisabledType = true;
+$scope.isSelectDisabled = true;
+$scope.BVNsuccess =false;
+
+  }else{
+	$scope.bvn_validated = false;
+	$scope.isSelectDisabledType = false;
+	$scope.isSelectDisabled = false;
+	$scope.BVNsuccess =true;
+  }
+
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.TransferBody = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+
+  $http({
+   url: '../ajax/load.php',
+   method: "POST",
+   //Content-Type: 'application/json',
+   params: { for: 'agent', "type": "N" }
+   }).then(function successCallback(response) {
+    $scope.agents = response.data;
+    //window.location.reload();
+   });
+  $http({
+   url: '../ajax/load.php',
+   method: "POST",
+   //Content-Type: 'application/json',
+   params: { for: 'champion' }
+  }).then(function successCallback(response) {
+   $scope.champions = response.data;
+   //window.location.reload();
+  });
+
+
+  $scope.checkuservalid = function () {
+   var user = $scope.userName.length;
+   if(user >= 9) {
+    $scope.isGoDisbled = false;
+   }
+   else {
+    $scope.isGoDisbled = true;
+   }
+  }
+  $scope.cancel = function(){ 
+   $scope.appliertype = "";
+   $scope.parentcode = "";
+   $scope.userName = "";
+   $scope.msguser = "";
+   $scope.Success = false;
+   $scope.Failure = false;
+   $scope.BVNBtn = false;
+   $scope.ApplicatioTransferDForm.$setUntouched();
+   $scope.ApplicatioTransferDForm.$setPristine();
+  }
+  $scope.chkuser = function () {
+   $scope.userNameDisabled = false;
+   $scope.isLoader = true;
+   $scope.isSelectDisabled = true;
+   $scope.isSelectDisabledType = true;
+   $scope.isHideGo = false;
+
+   $http({
+    method: 'post',
+    url: '../ajax/preappviewajax.php',
+    data: {
+     id: $scope.id,
+     action: 'userchk',
+     userName:$scope.userName
+    },
+   }).then(function successCallback(response) {
+    if(response.data <= 0) {
+     $scope.isInputDisabled = false;
+     $scope.userNameDisabled = true;
+     $scope.isHideGo = true;
+     $scope.transferbtn = false;
+     $scope.msguser = "User Name is Available";
+    }
+    else{
+     $scope.isInputDisabled = true;
+     $scope.msguser = "User Name is Already Taken";
+     $scope.userNameDisabled = false;
+     $scope.isHideGo = false;
+     $scope.transferbtn = true;
+    }
+    $scope.isLoader = false;
+
+
+   }, function errorCallback(response) {
+    // console.log(response);
+   });
+  }
+ $scope.transfinal = function (id) {
+if($scope.parentcode){
+
+$http({
+method: 'post',
+url: '../ajax/preappviewajax.php',
+
+data: {
+
+id: id,
+action: 'transfer',
+appliertype:$scope.appliertype,
+userName:$scope.userName,
+parentcode:$scope.parentcode,
+state: $scope.state,
+localgvt: $scope.localgovernment
+},
+}).then(function successCallback(response) {
+$("#TransferBody").html("<h3>"+response.data+"</h3>");
+$scope.isHideOk = false;
+$scope.isHide = true;
+});
+}else{
+var flag = confirm("Are you sure ? There is no Champion selected.\n Do you want to proceed as SUPER AGENT ?");
+if(flag){
+$http({
+method: 'post',
+url: '../ajax/preappviewajax.php',
+data: {
+id: id,
+action: 'transfer',
+appliertype:$scope.appliertype,
+userName:$scope.userName,
+parentcode:$scope.parentcode
+},
+}).then(function successCallback(response) {
+$("#TransferBody").html("<h3>"+response.data+"</h3>");
+$scope.isHideOk = false;
+$scope.isHide = true;
+});
+}else{
+$scope.isSelectDisabled = false;
+}
+}
+
+  }
+ }
+ $scope.Getbvn = function(id){  
+	$scope.BVNBtn = false;
+	$scope.isSelectDisabledType = false;
+	$scope.isSelectDisabled = false;
+	alert("Please wait, while we validate the BVN");
+
+	$http({
+		method: 'post',
+		url: '../ajax/preappviewajax.php',
+		data: {
+			action: 'getbvn',
+			id:id,
+		},
+	}).then(function successCallback(response) {
+		$scope.resc = response.data.responseCode;
+		//alert($scope.resc);
+		if(parseInt($scope.resc) == 0) {
+			$scope.BVNBtn = true;
+			$scope.isSelectDisabledType = false;
+           $scope.isSelectDisabled = false;
+		   $scope.Success = true;
+		   $scope.Failure = false;
+		   $scope.labelHide = true;
+			/* $scope.tabeHide = false;
+			$scope.tabeHide2 = true;
+			$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+		else {
+			$scope.BVNBtn = true;
+			$scope.isSelectDisabledType = true;
+	         $scope.isSelectDisabled = true;
+			 $scope.Success = false;
+		  	 $scope.Failure = true;
+		   	$scope.labelHide = true;
+		/* 	$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+	});
+
+ }
+
+ $scope.preappviewreject = function (index, id,name) {
+  $scope.id =id;
+  $scope.name = name;
+ }
+ $scope.reject = function (id) {
+  $http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: id,
+    action: 'reject',
+    comments:$scope.comments,
+   },
+   }).then(function successCallback(response) {
+    $("#RejectBody").html("<h3>"+response.data+"</h3>");
+    $scope.isHideOk = false;
+    $scope.isHide = true;
+   });
+  }
+
+  $scope.Previewdelete = function (index, id,name) {
+  $scope.id =id;
+  $scope.name = name;
+ }
+   $scope.Delete = function (index, id,name) {
+ //$scope.id = id;
+$http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: id,
+    action: 'Delete',
+    },
+   }).then(function successCallback(response) {
+  $scope.id=response.data[0].id;
+    $("#DeleteBody").html("<h3>"+response.data+"</h3>");
+    $scope.isHideOk = false;
+    $scope.isHide = true;
+});
+  }
+
+ $scope.view = function (index, id) {
+  $http({
+   method: 'post',
+   url: '../ajax/preappviewajax.php',
+   data: {
+    id: id,
+    action: 'view'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+   // $scope.isHideOk = false;
+   $scope.id = response.data[0].id;
+   $scope.category = response.data[0].category;
+   $scope.country = response.data[0].country;
+   $scope.dob = response.data[0].dob;
+   $scope.gender = response.data[0].gender;
+   $scope.BusinessType = response.data[0].BusinessType;
+   $scope.outletname = response.data[0].outletname;
+   $scope.type = response.data[0].type;
+   $scope.parentc = response.data[0].parentc;
+   $scope.partyc = response.data[0].partyc;
+   $scope.lang = response.data[0].lang;
+   $scope.cdate = response.data[0].time;
+   $scope.statusa = response.data[0].statusa;
+   $scope.address1 = response.data[0].address1;
+   $scope.address2 = response.data[0].address2;
+   $scope.localgovt = response.data[0].localgovt;
+   $scope.state = response.data[0].state;
+   $scope.zipcode = response.data[0].zip;
+   $scope.taxnumber = response.data[0].tax;
+   $scope.email = response.data[0].email;
+   $scope.mobile = response.data[0].mobile;
+   $scope.workno = response.data[0].work;
+   $scope.cname = response.data[0].cpn;
+   $scope.cmobile = response.data[0].cpm;
+   $scope.latitude = response.data[0].latitude;
+   $scope.longitude = response.data[0].longitude;
+   $scope.aptime = response.data[0].aptime;
+   $scope.apcomment = response.data[0].apcomment;
+   $scope.autime = response.data[0].autime;
+   $scope.aucomment = response.data[0].aucomment;
+   $scope.comments = response.data[0].comments;
+   $scope.asetup = response.data[0].asetup;
+   $scope.usetup = response.data[0].usetup;
+   $scope.login = response.data[0].login;
+   $scope.bvn = response.data[0].bvn;
+   $scope.first_name = response.data[0].first_name;
+   $scope.last_name = response.data[0].last_name;
+  }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+});
+
 
 app.controller('stateCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
@@ -17235,15 +15522,14 @@ app.controller('passwordChgCtrl', function ($scope, $http) {
 			method: 'post',
 			url: '../ajax/passchangeajax.php',
 			data: {
+				username: $scope.username,
 				passwordtype: $scope.passwordtype,
 				curpassword: $scope.curpassword,
 				newpassword: $scope.newpassword,
 				renewpassword: $scope.renewpassword
 			},
 		}).then(function successCallback(response) {
-			$scope.isHide = true;
-		   $scope.isHideOk = false;
-		   $scope.isHideReset = true;
+			$scope.isHideOk = false;
 			$("#passChangeBody").html("<h3>" + response.data + "</h3>");
 		}, function errorCallback(response) {
 			console.log(response);
@@ -17251,7 +15537,6 @@ app.controller('passwordChgCtrl', function ($scope, $http) {
 		//console.log("ream"+$scope.reqamount);
 	}
 });
-
 app.controller('commCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.fn_load = function (partyType,partyCode) {
@@ -17359,6 +15644,476 @@ app.controller('commCtrl', function ($scope, $http) {
 });
 
 
+app.controller('infoCtrl', function ($scope, $http) {
+$scope.isHideOk = true;
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.statechange = function (id) {
+// alert(id);
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+   type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+
+}
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/infoajax.php',
+data: {
+action: 'findlist',
+partyCode: $scope.partyCode,
+partyType: $scope.partyType,
+topartyCode:$scope.topartyCode,
+creteria:$scope.creteria
+},
+}).then(function successCallback(response) {
+$scope.infoss = response.data;
+$scope.bvn = response.data[0].bvn;
+
+}, function errorCallback(response) {
+console.log(response.data);
+});
+}
+$scope.edit = function (index, partyCode, partyType, creteria) {
+
+
+	
+$scope.radiochange = function(){
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+$scope.RadioChangeE = function(){
+	$scope.SalesChain = false;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { action: 'active', for: 'SalesChain' },
+	}).then(function successCallback(response) {
+	$scope.SalesParent = response.data;
+	// console.log(response.data);
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+	}
+
+
+	$http({
+	method: 'post',
+	url: '../ajax/infoajax.php',
+	data: { partyCode: partyCode,partyType: partyType, action: 'edit',creteria:creteria },
+	}).then(function successCallback(response) {
+
+	// alert(id);
+	$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.localgvts = response.data;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.partyCode = response.data[0].code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.name = response.data[0].name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.ba = response.data[0].party_sales_chain_id;
+if(response.data[0].party_sales_chain_id == 10){
+	$scope.ba = "E"
+}else {
+	$scope.ba = "I"
+	$scope.SalesChain = true;
+	$scope.SalesParentType ="";
+	$scope.SalesChainCode ="";
+	$scope.RefferedBy ="";
+	$scope.Code="";
+}
+if($scope.ba == "E"){
+	$scope.SalesParentType = response.data[0].party_sales_parent_chain; 
+
+}else{
+	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
+}
+$scope.SalesChainCode = response.data[0].party_sales_parent_code;
+$scope.RefferedBy = response.data[0].refer_party_type;
+if(response.data[0].refer_party_type == ""){
+	$scope.CodeDisableed = true;
+	$scope.Code = "";
+
+}else{
+	$scope.CodeDisableed = false;
+	$scope.Code = response.data[0].refer_party_code;
+
+}
+$scope.dob = new Date(response.data[0].dob);
+
+if(response.data[0].dob==null){
+$scope.dob="";
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
+	method: 'post',
+	url: '../ajax/load.php',
+	params: { for: 'SalesChainCode', "action": "active" },
+	}).then(function successCallback(response) {
+	$scope.SalesCode = response.data;
+	//console.log(response.data);
+	}, function errorCallback(response) {
+	 //console.log(response);
+	});
+}
+$scope.view = function (index, partyCode, partyType, creteria) {
+$http({
+method: 'post',
+url: '../ajax/infoajax.php',
+data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
+}).then(function successCallback(response) {
+
+// alert(id);
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id":  response.data[0].state_id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+$scope.active = response.data[0].active;
+$scope.application_id = response.data[0].application_id;
+$scope.block_date = response.data[0].block_date;
+$scope.block_reason_id = response.data[0].block_reason_id;
+$scope.block_status = response.data[0].block_status;
+$scope.partyCode = response.data[0].code;
+$scope.contact_person_mobile = response.data[0].contact_person_mobile;
+$scope.contact_person_name = response.data[0].contact_person_name;
+$scope.country = response.data[0].country;
+$scope.create_time = response.data[0].create_time;
+$scope.create_user = response.data[0].create_user;
+$scope.email = response.data[0].email;
+$scope.expiry_date = response.data[0].expiry_date;
+$scope.gvtname = response.data[0].gvtname;
+$scope.lname = response.data[0].lname;
+$scope.atype = response.data[0].atype;
+$scope.mobile_no = response.data[0].mobile_no;
+$scope.name = response.data[0].name;
+$scope.code = response.data[0].code;
+$scope.outlet_name = response.data[0].outlet_name;
+$scope.parenroutletname = response.data[0].parenroutletname;
+$scope.partytype = response.data[0].partytype;
+$scope.pcode = response.data[0].pcode;
+$scope.ptype = response.data[0].ptype;
+$scope.start_date = response.data[0].start_date;
+$scope.state = response.data[0].state;
+$scope.sub_agent = response.data[0].sub_agent;
+$scope.tax_number = response.data[0].tax_number;
+$scope.update_time = response.data[0].update_time;
+$scope.update_user = response.data[0].update_user;
+$scope.user = response.data[0].user;
+$scope.work_no = response.data[0].work_no;
+$scope.zip_code = response.data[0].zip_code;
+$scope.address1 = response.data[0].address1;
+$scope.address2 = response.data[0].address2;
+$scope.local_govt_id = response.data[0].local_govt_id;
+$scope.state_id = response.data[0].state_id;
+$scope.loc_latitude = response.data[0].loc_latitude;
+$scope.loc_longitude = response.data[0].loc_longitude;
+$scope.gender = response.data[0].gender;
+$scope.BusinessType = response.data[0].BusinessType;
+$scope.dob = response.data[0].dob;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.updateAgent = function (code) {
+
+/* 	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { action: 'active', for: 'SalesChain' },
+		}).then(function successCallback(response) {
+		$scope.SalesParent = response.data;
+		// console.log(response.data);
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	$scope.SalesParentList = function (id) {
+		//alert(id);
+		$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+			//console.log(response);
+		});
+		}
+ */
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/infoajax.php',
+data: {
+mobile: $scope.mobile_no,
+email: $scope.email,
+cpname: $scope.contact_person_name,
+cpmobile: $scope.contact_person_mobile,
+partyCode: code,
+address1: $scope.address1,
+address2: $scope.address2,
+loc_latitude: $scope.loc_latitude,
+loc_longitude: $scope.loc_longitude,
+state_id:  $scope.state_id,
+local_govt_id: $scope.local_govt_id,
+gender: $scope.gender,
+dob:  $scope.dob,
+BusinessType: $scope.BusinessType,
+active: $scope.active,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
+
+action: 'updateAgent'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$("#infoBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.update = function (code) {
+
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/infoajax.php',
+data: {
+mobile: $scope.mobile_no,
+email: $scope.email,
+cpname: $scope.contact_person_name,
+cpmobile: $scope.contact_person_mobile,
+partyCode: code,
+address1: $scope.address1,
+address2: $scope.address2,
+loc_latitude: $scope.loc_latitude,
+loc_longitude: $scope.loc_longitude,
+state_id:  $scope.state_id,
+local_govt_id: $scope.local_govt_id,
+gender: $scope.gender,
+dob:  $scope.dob,
+BusinessType: $scope.BusinessType,
+active: $scope.active,
+SalesParentType: $scope.SalesParentType,
+SalesChainCode: $scope.SalesChainCode,
+RefferedBy: $scope.RefferedBy,
+Code: $scope.Code,
+RadioButton: $scope.ba,
+
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$("#infoBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+
+$scope.Getbvn = function(index, partyCode, partyType, creteria){  
+	
+	alert("Please wait, while we validate the BVN");
+
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: {
+			action: 'getbvn',
+			partyCode:partyCode,
+		},
+	}).then(function successCallback(response) {
+		
+		$scope.resc = response.data.responseCode;
+		$scope.resd = response.data.responseDescription;
+
+		
+		if(parseInt($scope.resc) == 0) {
+			
+			if(!alert('BVN Validated Successfully!')){window.location.reload();}
+
+			//$scope.resd = response.data.responseDescription;
+		
+			/* $scope.tabeHide = false;
+			$scope.tabeHide2 = true;
+			$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+		else {
+
+			if(!alert('BVN Validated Failed Due to '+ $scope.resd)){window.location.reload();}
+
+			//alert($scope.resd);
+			
+		/* 	$scope.res = response.data;
+			$scope.requestStatus = response.data.requestStatus;
+			$scope.bvn = response.data.bvn;
+			$scope.validity = response.data.validity;
+			$scope.signature = response.data.signature;
+			$scope.responseCode = response.data.responseCode;
+			$scope.responseDescription = response.data.responseDescription;
+			$scope.processingStartTime = response.data.processingStartTime; */
+		}
+	});
+
+ }
+ 
+});
+
+
 app.controller('walletCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.fn_load = function (partyType,partyCode) {
@@ -17460,51 +16215,51 @@ app.controller('walletCtrl', function ($scope, $http) {
 		});
 	}
 	 $scope.walletedit = function (index, partyCode, partyType, creteria) {
-	 		//alert(userid);
-			$http({
-				method: 'post',
-				url: '../ajax/walletajax.php',
-				data: { partyCode: partyCode,partyType: partyType, action: 'walletedit',creteria:creteria },
-			}).then(function successCallback(response) {
-				$scope.dailyLimit = response.data[0].dailyLimit;
-				$scope.creditLimit = response.data[0].creditLimit;
-				$scope.minimumBalance = response.data[0].minimumBalance;
-				$scope.advanceAmount = response.data[0].advanceAmount;
-				$scope.Active = response.data[0].Active;
-			}, function errorCallback(response) {
-				// console.log(response);
-			});
-		}
-		$scope.walletupdate = function (partyCode) {
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$scope.isHideOk = true;
-		$http({
-			method: 'post',
-			url: '../ajax/walletajax.php',
-			data: {
-				dailyLimit: $scope.dailyLimit,
-				creditLimit: $scope.creditLimit,
-				minimumBalance: $scope.minimumBalance,
-				advanceAmount: $scope.advanceAmount,
-				Active: $scope.Active,
-				partyCode: partyCode,
-				action: 'walletupdate'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-	     	$scope.isMainLoader = false;
-			$("#walletupdateCreateBody").html("<h3>" + response.data + "</h3>");
+	//alert(userid);
+	$http({
+	method: 'post',
+	url: '../ajax/walletajax.php',
+	data: { partyCode: partyCode,partyType: partyType, action: 'walletedit',creteria:creteria },
+	}).then(function successCallback(response) {
+	$scope.dailyLimit = response.data[0].dailyLimit;
+	$scope.creditLimit = response.data[0].creditLimit;
+	$scope.minimumBalance = response.data[0].minimumBalance;
+	$scope.advanceAmount = response.data[0].advanceAmount;
+	$scope.Active = response.data[0].Active;
+	}, function errorCallback(response) {
+	// console.log(response);
+	});
+	}
+	$scope.walletupdate = function (partyCode) {
+	$scope.isLoader = true;
+	$scope.isMainLoader = true;
+	$scope.isHideOk = true;
+	$http({
+	method: 'post',
+	url: '../ajax/walletajax.php',
+	data: {
+	dailyLimit: $scope.dailyLimit,
+	creditLimit: $scope.creditLimit,
+	minimumBalance: $scope.minimumBalance,
+	advanceAmount: $scope.advanceAmount,
+	Active: $scope.Active,
+	partyCode: partyCode,
+	action: 'walletupdate'
+	},
+	}).then(function successCallback(response) {
+	$scope.isHide = true;
+	$scope.isHideOk = false;
+	$scope.isLoader = false;
+	    $scope.isMainLoader = false;
+	$("#walletupdateCreateBody").html("<h3>" + response.data + "</h3>");
 
-		}, function errorCallback(response) {
-			console.log(response);
-		});
+	}, function errorCallback(response) {
+	console.log(response);
+	});
 	}
 	$scope.refresh = function () {
-			window.location.reload();
-		}
+	window.location.reload();
+	}
 });
 app.controller('blckreasonCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
@@ -17977,7 +16732,6 @@ app.controller('treWallCtrl', function ($scope, $http) {
 	}
 });
 
-
 app.controller('posaccCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $http({
@@ -18355,7 +17109,6 @@ console.log(response);
 
 });
 
-
 app.controller('NibssCtrl', function ($scope, $http, $filter) {
 $scope.isHideOk = true;
 $scope.isHideexcel = true;
@@ -18430,6 +17183,7 @@ console.log(response.data);
 });
 
 
+
 app.controller('PosvasapiCtrl', function ($scope, $http, $filter) {
 
 $scope.startDate = new Date();
@@ -18477,6 +17231,7 @@ $scope.posapilist = response.data;
 
 
 });
+
 
 app.controller('payaccCtrl', function ($scope, $http) {
 	$scope.isLoader = true;
@@ -18558,7 +17313,7 @@ $scope.print = function (index, id) {
 			var valu = "";
 
 			var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/logo/logo.jpg" width="100px" height="40px"/>' +
+				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
 				'<h2 style="text-align:center;margin-top:30px">Nibss Payable Account - ' + '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
 			var response =
 				"<table class='table table-bordered'><tbody>" +
@@ -18634,7 +17389,7 @@ app.controller('recAccCtrl', function ($scope, $http) {
 			var valu = "";
 
 			var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/logo/logo.jpg" width="100px" height="40px"/>' +
+				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
 				'<h2 style="text-align:center;margin-top:30px">Receivable Account '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
 			var response ="<table class='table table-bordered'><tbody>" +
 				"<tr><th>Nibss Audit ID #</th><th>" + response.data[0].id + "</th></tr>" +
@@ -18710,7 +17465,7 @@ app.controller('tssAccCtrl', function ($scope, $http) {
 			var valu = "";
 
 			var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/logo/logo.jpg" width="100px" height="40px"/>' +
+				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
 				'<h2 style="text-align:center;margin-top:30px">Receivable Account '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
 			var response ="<table class='table table-bordered'><tbody>" +
 				"<tr><th>Nibss Audit ID #</th><th>" + response.data[0].id + "</th></tr>" +
@@ -18789,7 +17544,7 @@ app.controller('nibsAccCtrl', function ($scope, $http) {
 				text = " TSS Account Audit";
 			}
 			var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/logo/logo.jpg" width="100px" height="40px"/>' +
+				'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
 				'<h2 style="text-align:center;margin-top:30px">NIBSS AUDIT ACCOUNT  ' +  '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
 			var response = "<p>Search Creteria For:" + text + " </p>"+
 				"<table class='table table-bordered'><tbody>" +
@@ -18813,77 +17568,145 @@ app.controller('nibsAccCtrl', function ($scope, $http) {
 	}
 });
 
-
-
 app.controller('posaccactCtrl', function ($scope, $http) {
-	$scope.startDate = new Date();
-	$scope.endDate = new Date();
-	$scope.isHideOk = true;
-	$scope.checkdate = function (startDate,endDate){
-		var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-		var currdate = new Date();
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$scope.isQueryDi = false;
-		}
-	}
-	$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:'userpos',action:'active'
-				},
-			}).then(function successCallback(response) {
-				$scope.users = response.data;
-			});
-	$scope.query = function () {
-		var startDate =  $scope.startDate;
-		var endDate =  $scope.endDate;
-		var difference  = new Date(endDate - startDate);
-		var diffInDays  = difference/1000/60/60/24;
-		var currdate = new Date();
-		if(endDate > currdate) {
-			alert("End Date can't be more than current Date");
-			$scope.endDate = currdate;
-			//$scope.isQueryDi = true;
-		}
-		else if(startDate > endDate){
-			$scope.dateerr = "Date should be valid";
-			//$scope.isQueryDi = true;
-		}
-		else if(diffInDays>7) {
-			alert("Date Range should between 7 days");
-			//$scope.isQueryDi = true;
-		}
-		else {
-			$http({
-				method: 'post',
-				url: '../ajax/posaccactajax.php',
-				data: {
-					action: 'list',
-					user: $scope.user,
-					startDate: $scope.startDate,
-					endDate: $scope.endDate
-				},
-			}).then(function successCallback(response) {
-					$scope.posacts = response.data;
-			});
-		}
-	}
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isHideOk = true;
+$scope.fn_load = function (partyType,partyCode) {
+if(partyType == 'C' || partyType == 'A') {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params:
+{ partyType:partyType,
+partyCode:partyCode,
+action: 'infolist'
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
 });
+}
+}
+$scope.partyload = function (partyType) {
+var action = "";var fora="";
+if(partyType == "MA") {
+fora = "agent";
+type = "N";
+}
+if(partyType == "SA") {
+fora = "agent";
+type = "Y";
+}
+if(partyType == "C") {
+fora = "champion";
+type = "";
+}
+if(partyType == "P") {
+fora = "personal";
+type = "";
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:fora,
+  type: type
+},
+}).then(function successCallback(response) {
+$scope.infos = response.data;
+});
+}
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/posaccactajax.php',
+data: {
+id: id,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+ $scope.id = response.data[0].id;
+$scope.name = response.data[0].name;
+$scope.action = response.data[0].action;
+$scope.imei = response.data[0].imei;
+$scope.detail = response.data[0].detail;
+$scope.date = response.data[0].date;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.checkdate = function (startDate,endDate){
+var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+var currdate = new Date();
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$scope.isQueryDi = false;
+}
+}
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:'userpos',action:'active'
+},
+}).then(function successCallback(response) {
+$scope.users = response.data;
+});
+$scope.query = function () {
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$http({
+method: 'post',
+url: '../ajax/posaccactajax.php',
+data: {
+action: 'list',
+partyType: $scope.partyType,
+partyCode:$scope.partyCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+$scope.posacts = response.data;
+});
+}
+
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+});
+
 app.controller('parCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$http({
@@ -19124,92 +17947,99 @@ app.controller('parTypeCtrl', function ($scope, $http) {
 });
 
 app.controller('servfeatCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$http({
-		method: 'post',
-		url: '../ajax/servfeatajax.php',
-		data: { action: 'list' },
-	}).then(function successCallback(response) {
-		$scope.servicefeaturelist = response.data;
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'servfeat' }
-	}).then(function successCallback(response) {
-		$scope.servfeat = response.data;
-		//window.location.reload();
-	});
-
-	$scope.edit = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/servfeatajax.php',
-			data: { id: id, action: 'edit' },
-		}).then(function successCallback(response) {
-			$scope.code = response.data[0].code;
-			$scope.description = response.data[0].desc;
-			$scope.active = response.data[0].active;
-			$scope.servicetype = response.data[0].typeid;
-			$scope.id = response.data[0].id;
-			$scope.linkname = response.data[0].linkname;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.create = function () {
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/servfeatajax.php',
-			data: {
-				code: $scope.code,
-				desc: $scope.description,
-				active: $scope.active,
-				typeid: $scope.servicetype,
-				id: $scope.id,
-				linkname:$scope.linkname,
-				action: 'create'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-		  $scope.isMainLoader = false;
-			$("#ServfeatCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.update = function (id) {
-		$scope.isHideOk = true;
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/servfeatajax.php',
-			data: {
-				id: $scope.id,
-				code: $scope.code,
-				desc: $scope.description,
-				active: $scope.active,
-				typeid: $scope.servicetype,
-				linkname:$scope.linkname,
-				action: 'update'
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isLoader = false;
-			$scope.isHideOk = false;
-			$("#ServfeatBody").html("<h3>" + response.data + "</h3>");
-
-		}, function errorCallback(response) {
-			console.log(response);
-		});
-	}
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/servfeatajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.servicefeaturelist = response.data;
 });
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfeat' }
+}).then(function successCallback(response) {
+$scope.servfeat = response.data;
+//window.location.reload();
+});
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/servfeatajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.code = response.data[0].code;
+$scope.description = response.data[0].desc;
+$scope.active = response.data[0].active;
+$scope.servicetype = response.data[0].typeid;
+$scope.id = response.data[0].id;
+$scope.priority = response.data[0].priority;
+$scope.linkname = response.data[0].linkname;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.restric = function () {
+window.location.reload();
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/servfeatajax.php',
+data: {
+code: $scope.code,
+desc: $scope.description,
+active: $scope.active,
+typeid: $scope.servicetype,
+id: $scope.id,
+priority: $scope.priority,
+linkname:$scope.linkname,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+ $scope.isMainLoader = false;
+$("#ServfeatCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isHideOk = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/servfeatajax.php',
+data: {
+id: $scope.id,
+code: $scope.code,
+desc: $scope.description,
+active: $scope.active,
+typeid: $scope.servicetype,
+priority: $scope.priority,
+linkname:$scope.linkname,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isLoader = false;
+$scope.isHideOk = false;
+$("#ServfeatBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+});
+
 app.controller('serFeMenuCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$http({
@@ -19648,176 +18478,7 @@ app.controller('serChargGrpCtrl', function ($scope, $http) {
 		});
 	}
 });
-app.controller('serCharRatCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.isHideReset = false;
-	$http({
-		method: 'post',
-		url: '../ajax/sercharateajax.php',
-		data: { action: 'list' },
-	}).then(function successCallback(response) {
-		$scope.servichratelist = response.data;
-	});
-	$http({
-		url: '../ajax/load.php',
-		method: "POST",
-		//Content-Type: 'application/json',
-		params: { action: 'active', for: 'serchargrp' }
-		}).then(function successCallback(response) {
-				$scope.serchargrps = response.data;
-		//window.location.reload();
-		});
-		$scope.save = function () {
-			var i = 0;
-			var j = 0;
-			var k = 0;
-			var l = 0;
-			var m = 0;
-			var n = 0;
-			var o = 0;
-			var arr = [];
-			var raf = [];rate
-			var catty = [];
-			var rate = [];
-			var active = [];
-			var sdate = [];
-			var edate = [];
-			$('.partName').each(function () {
-				if($(this).val() > 0 || $(this).val() != "") {
-					arr[i++] = $(this).val();
-				}
-			});
-			$('.partName').each(function () {
-				if($(this).val() > 0 || $(this).val() != "") {
-					arr[i++] = $(this).val();
-				}
-			});
-			$('.rateFactor').each(function () {
-				if($(this).val() != "") {
-					raf[j++] = $(this).val();
-				}
-			});
-			$('.cattype').each(function () {
-				if($(this).val() != "") {
-					catty[k++] = $(this).val();
-				}
-			});
-			$('.rateva').each(function () {
-				if($(this).val() != "") {
-					rate[l++] = $(this).val();
-				}
-			});
-			$('.active').each(function () {
-				if($(this).val() != "") {
-					active[m++] = $(this).val();
-				}
-			});
-			$('.sdate').each(function () {
-				if($(this).val() != "") {
-					sdate[n++] = $(this).val();
-				}
-			});
-			$('.edate').each(function () {
-				if($(this).val() != "") {
-					edate[o++] = $(this).val();
-				}
-			});
-			$http({
-				url: '../ajax/sercharateajax.php',
-				method: "POST",
-				//Content-Type: 'application/json',
-				data: {
-					action:'save',
-					partyName: arr,
-					rateFac: raf,
-					catType: catty,
-					rateVl: rate,
-					active:active,
-					sdate:sdate,
-					edate:edate,
-					grpname:$scope.grpname
-					},
-				}).then(function successCallback(response) {
-					$scope.isHideOk = false;
-					$scope.isHide = true;
-					$("#serCharRatForm").html("<h3>"+response.data+"</h3>");
-				//window.location.reload();
-			});
-		}
-	$scope.deleter = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/sercharateajax.php',
-			data: { id: id, action: 'delete' },
-		}).then(function successCallback(response) {
-			alert(response.data);
-			window.location.reload();
 
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.sergrpchange = function (id) {
-		$http({
-			method: 'post',
-			url: '../ajax/sercharateajax.php',
-			data: {
-					action: 'parctforserchrat',
-					id: id
-			},
-		}).then(function successCallback(response) {
-			var responsehtml = "<table class='table table-condensed'><thead><tr><th>Party</th><th>Rate Factor</th><th>Category Type</th><th>Rate Value</th><th>Active</th><th>Start Date</th><th>End Date</th></tr></thead><tbody>";
-			var responsegen= "";
-			var optionres= "";
-			var partycatres= "";
-			//alert(response.data[0].count);
-			$http({
-				url: '../ajax/load.php',
-				method: "POST",
-				//Content-Type: 'application/json',
-				params: { action: 'active', for: 'sercharpar' }
-				}).then(function successCallback(response2) {
-					$http({
-						url: '../ajax/load.php',
-						method: "POST",
-						//Content-Type: 'application/json',
-						params: { action: 'active', for: 'partycatype' }
-						}).then(function successCallback(response3) {
-							 for(var i=0;i < response3.data.length;i++) {
-								partycatres +=  "<option value='"+response3.data[i].id+"'>"+response3.data[i].name+"</option>";
-							}
-
-						//window.location.reload();
-						 for(var i=0;i < response2.data.length;i++) {
-								optionres +=  "<option value='"+response2.data[i].id+"'>"+response2.data[i].name+"</option>";
-							}
-							for(var i =0;i < response.data[0].count;i++) {
-								responsegen += "<tr><td><select ng-model='partyName["+i+"]' class='form-control partName' name = 'partyName["+i+"]' id='partyName' required>"+
-													"<option value=''>--Select Party--</option>"+
-														optionres+
-													"</select></td><td><select ng-model='rateFactor[]' name='rateFactopr' class='form-control rateFactor'><option value=''>--Select Rate Factor--</option><option value='A'>Amount</option><option value='P'>Percentage</option></select></td>"+
-													"<td><select ng-model='partyCats[]' class='form-control  cattype' name = 'partyCats' id='partyCats' required>"+
-													"<option value=''>--Select Party Category--</option>"+
-														partycatres+
-													"</select></td>"+
-													"<td><input type='number' name='rateval[]' ng-model='rateval[]' class='rateva form-control' /></td>"+
-													"<td><select ng-model='active[]' name='active' class='form-control active'><option value=''>--Select Active--</option><option value='Y'>Yes</option><option value='N'>No</option></select></td>"+
-													"<td><input type='date' name='satrtdate[]' ng-model='satrtdate[]' class='sdate form-control' /></td>"+
-													"<td><input type='date' name='endDate[]' ng-model='endDate[]' class='edate form-control' /></td>"+
-
-													"</tr>";
-							}
-						responseend = responsehtml +  responsegen+"</tbody></table>";
-						console.log(responseend);
-						$("#reee").html(responseend);
-				});
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-		});
-	}
-});
 
 app.controller('serFetConfCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
@@ -20010,254 +18671,528 @@ console.log(response);
 });
 
 
-app.controller('pBankCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$http({
-		method: 'post',
-		url: '../ajax/pbankaccajax.php',
-		data: { action: 'list' },
-	}).then(function successCallback(response) {
-		$scope.banklist = response.data;
-		$scope.pbcid = response.data.id;
-
-	});
-
-	$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:'bankmasters',action:'active'
-				},
-			}).then(function successCallback(response) {
-				$scope.bankmasterss = response.data;
-		});
-
-	$scope.partyload = function (partyType) {
-		var action = "";var fora="";
-		if(partyType == "MA") {
-			fora = "agent";
-			type = "N";
-		}
-		if(partyType == "SA") {
-			fora = "agent";
-			type = "Y";
-		}
-		if(partyType == "C") {
-			fora = "champion";
-			type = "";
-		}
-		if(partyType == "P") {
-			fora = "personal";
-			type = "";
-		}
-		$http({
-			method: 'post',
-			url: '../ajax/load.php',
-			params: { for:fora,
-				    type: type
-				},
-			}).then(function successCallback(response) {
-				$scope.infos = response.data;
-			});
-
-	}
-	$scope.edit = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/pbankaccajax.php',
-			data: { id: id, action: 'edit' },
-		}).then(function successCallback(response) {
-			$scope.active = response.data[0].active;
-			$scope.id = response.data[0].id;
-			$scope.partyType = response.data[0].ptype;
-			$scope.partyCode = response.data[0].pcode;
-			$scope.bankmaster = response.data[0].bankmaster;
-			$scope.accno = response.data[0].accno;
-			$scope.reaccno = response.data[0].accno;
-			$scope.accname = response.data[0].accname;
-			$scope.bankaddress = response.data[0].bankaddress;
-			$scope.bankbranch = response.data[0].bankbranch;
-			$scope.statuss = response.data[0].status;
-			$scope.statussother = response.data[0].status;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.apprejId = function (index,id, flag) {
-		$scope.flag = flag;
-		$scope.id = id;
-
-	}
-	$scope.approve = function (id,flag) {
-		$http({
-			method: 'post',
-			url: '../ajax/pbankaccajax.php',
-			data: { id: id, flag: flag, action: 'approveReject' },
-		}).then(function successCallback(response) {
-			$("#approvePBankForm").html("<h3 style='text-align:center'>" + response.data + "</h3>");
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.view = function (index, id) {
-		$http({
-		method: 'post',
-		url: '../ajax/pbankaccajax.php',
-		data: { id:id, action: 'view' },
-		}).then(function successCallback(response) {
-
-		// alert(id);
-
-		$scope.id = response.data[0].id;
-		$scope.PartyType = response.data[0].PartyType;
-		$scope.PartyCode = response.data[0].PartyCode;
-		$scope.bankmasterid = response.data[0].bankmasterid;
-		$scope.accno = response.data[0].accno;
-		$scope.accname = response.data[0].accname;
-		$scope.bankaddress = response.data[0].bankaddress;
-		$scope.bankbranch = response.data[0].bankbranch;
-		$scope.Active = response.data[0].Active;
-		$scope.Status = response.data[0].Status;
-		$scope.createuser = response.data[0].createuser;
-		$scope.createtime = response.data[0].createtime;
-		}, function errorCallback(response) {
-		// console.log(response);
-		});
-	}
-	$scope.create = function () {
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/pbankaccajax.php',
-			data: {
-				active: $scope.active,
-				partyType: $scope.partyType,
-				partyCode: $scope.partyCode,
-				bankmaster: $scope.bankmaster,
-				accname: $scope.accname,
-				accno: $scope.accno,
-				reaccno: $scope.reaccno,
-				bankaddress: $scope.bankaddress,
-				bankbranch: $scope.bankbranch,
-				action: 'create'
-			},
-		}).then(function successCallback(response) {
-			$scope.isLoader = false;
-		   $scope.isMainLoader = false;
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$("#PBankAccountCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.update = function (id) {
-		$scope.isHideOk = true;
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/pbankaccajax.php',
-			data: {
-				active: $scope.active,
-				bankmaster: $scope.bankmaster,
-				accname: $scope.accname,
-				accno: $scope.accno,
-				reaccno: $scope.reaccno,
-				statuss: $scope.statuss,
-				bankaddress: $scope.bankaddress,
-				bankbranch: $scope.bankbranch,
-				action: 'update',
-				id:id
-			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#PBankAccountEditBody").html("<h3>" + response.data + "</h3>");
-
-		}, function errorCallback(response) {
-			console.log(response);
-		});
-	}
-	$scope.refresh = function () {
-	window.location.reload();
-	}
+app.controller('rulValCtrl', function ($scope, $http) {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'servfea' }
+}).then(function successCallback(response) {
+$scope.servfeas = response.data;
+//window.location.reload();
 });
+$http({
+method: 'post',
+url: '../ajax/partajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.partnerlist = response.data;
+});
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'serchargrp' }
+}).then(function successCallback(response) {
+$scope.serchargrps = response.data;
+//window.location.reload();
+});
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { for: 'agentwiuser', "id": id }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+}
+$scope.reset =  function () {
+$scope.agentcode = "";
+$scope.state= "ALL";
+$scope.localgovernment= "ALL";
+$scope.serfea= "";
+$scope.partner= "";
+$scope.trType= "";
+$scope.grpname= "";
+$scope.reqamount= "";
+$scope.isResDiv = false;
+}
+$scope.query = function () {
+$scope.isResDiv = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+//alert($scope.agentcode);alert($scope.grpname);alert($scope.partner);
+$http({
+method: 'post',
+url: '../ajax/rulevalajax.php',
+data: {
+agent: $scope.agentcode,
+state: $scope.state,
+localgovernment: $scope.localgovernment,
+serfea: $scope.serfea,
+partner: $scope.partner,
+trType: $scope.trType,
+grpname: $scope.grpname,
+reqamount: $scope.reqamount,
+action: 'getfe'
+},
+}).then(function successCallback(response) {
+//alert(response.data);
+var split = response.data.split('#');
+var split_0 = split[0].split('|');
+var split_1 = split[1].split(',');
+var split_2 = split[2].split('|');
+var sttext = ""; var trtext = "";
+var j=0;
+//alert(split_1.length);
+if(split_0[0] == 0) {
+sttext = 'success';
+for(var i=0;i<split_1.length;i++) {
+trtext += "<tr><td>"+ split_1[i].split('~')[j]+"</td><td>"+ split_1[i].split('~')[j+1]+"</td><td>"+ split_1[i].split('~')[j+2] +"</td><td>"+ split_1[i].split('~')[j+3] +"</td><td>"+ split_1[i].split('~')[j+4] +"</td></tr>";
+
+}
+}
+else {
+sttext = 'failure';
+}
+if(split_2[1] == "A") {
+split_2[1] = "Amount";
+}
+if(split_2[1] == "P") {
+split_2[1] = "Percentage";
+}
+ var tr3text = "<td>"+split_2[0]+"</td><td>"+split_2[1]+"</td><td>"+split_2[2]+"</td>";
+
+$("#divConDiv").html("<p style='text-align: left;color: blue;font-weight: bold;text-decoration: dashed;'>Service Config</p><table class='table table-bordered'><tbody><tr><td style='width:50%'>Status</td><td style='color:red;width:50%'>"+sttext+"</td></tr><tr><td>Service Feature Config</td><td>"+split_0[1]+"</td></tr><tr><td>AMS Charge</td><td>"+split_0[2]+"</td></tr><tr><td>Partner Charge</td><td>"+split_0[3]+"</td></tr><tr><td>Other Charge</td><td>"+split_0[4]+"</td></tr></tbody></table><div style='margin-bottom:10px'></div><p style='text-align: left;color: blue;font-weight: bold;text-decoration: dashed;'>Service Rate</p><table class='table table-bordered'><thead><th>Service Charge Rate Id</th><th>Party type</th><th>User Id</th><th>User Name</th><th>Amount</th></thead><tbody>"+trtext+"</tbody></table> <div style='margin-bottom:10px'></div><p style='text-align: left;color: blue;font-weight: bold;text-decoration: dashed;'>Stamp Duty Detail</p><table class='table table-bordered'><thead><th>Stamp Duty Limit</th><th> Charge Factor</th><th>Charge Value</th></thead><tbody>"+tr3text+"</tbody></table>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+
+app.controller('serCharRatCtrl', function ($scope, $http, $window) {
+  $scope.isHideOk = true;
+$scope.isHideReset = false;
+
+$scope.reset = function () {
+$scope.servichratelist = false;
+$scope.patxtype = "";
+$scope.sergrpname = "";
+$scope.serchrid = "";
+$scope.partyname = "";
+}
+$scope.clearDetails = function () {
+$scope.parenrtoutletname = "";
+$scope.serfeat = "";
+$scope.name = "";
+$scope.pname = "";
+$scope.party = "";
+$scope.type = "";
+$scope.start_value = "";
+$scope.end_value = "";
+$scope.rate_factor = "";
+$scope.value = "";
+
+}
+
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'servfeaforcode',action:'active' },
+}).then(function successCallback(response) {
+$scope.types = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'amspartner' }
+}).then(function successCallback(response) {
+$scope.amspartname = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/sercharateajax.php',
+data: {
+serchrid: $scope.serchrid,
+partyname: $scope.partyname,
+sergrpname: $scope.sergrpname,
+patxtype: $scope.patxtype,
+action: 'list'
+},
+}).then(function successCallback(response) {
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.servichratelist = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+
+$scope.view = function (index, id) {
+  $http({
+   method: 'post',
+   url: '../ajax/sercharateajax.php',
+   data: {
+    id: id,
+    action: 'view'
+   },
+  }).then(function successCallback(response) {
+   // $scope.isHide = true;
+   // $scope.isHideOk = false;
+   $scope.id = response.data[0].id;
+   $scope.name = response.data[0].name;
+   $scope.serfeat = response.data[0].serfeat;
+   $scope.pname = response.data[0].pname;
+   $scope.start_value = response.data[0].start_value;
+   $scope.end_value = response.data[0].end_value;
+   $scope.rate_factor = response.data[0].rate_factor;
+   $scope.party = response.data[0].party;
+   $scope.type = response.data[0].type;
+   $scope.value = response.data[0].value;
+   }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+ $scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/sercharateajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.value = response.data[0].value;
+$scope.rate_factor = response.data[0].rate_factor;
+$scope.id = response.data[0].id;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$http({
+method: 'post',
+url: '../ajax/sercharateajax.php',
+data: {
+id: id,
+value: $scope.value,
+rate_factor: $scope.rate_factor,
+action: 'update'
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#RateBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'serchargrp' }
+}).then(function successCallback(response) {
+$scope.serchargrps = response.data;
+//window.location.reload();
+});
+
+$scope.save = function () {
+var i = 0;
+var j = 0;
+var k = 0;
+var l = 0;
+var m = 0;
+var n = 0;
+var o = 0;
+var p = 0;
+var arr = [];
+var raf = [];rate
+var catty = [];
+var rate = [];
+var active = [];
+var sdate = [];
+var edate = [];
+var serconfig = [];
+$('.partyName').each(function () {
+if($(this).val() > 0 || $(this).val() != "") {
+arr[i++] = $(this).val();
+}
+});
+$('.partyName').each(function () {
+if($(this).val() > 0 || $(this).val() != "") {
+arr[i++] = $(this).val();
+}
+});
+$('.rateFactor').each(function () {
+if($(this).val() != "") {
+raf[j++] = $(this).val();
+}
+});
+$('.cattype').each(function () {
+if($(this).val() != "") {
+catty[k++] = $(this).val();
+}
+});
+$('.rateva').each(function () {
+if($(this).val() != "") {
+rate[l++] = $(this).val();
+}
+});
+$('.active').each(function () {
+if($(this).val() != "") {
+active[m++] = $(this).val();
+}
+});
+$('.sdate').each(function () {
+if($(this).val() != "") {
+sdate[n++] = $(this).val();
+}
+});
+$('.edate').each(function () {
+if($(this).val() != "") {
+edate[o++] = $(this).val();
+}
+});
+$('.serfconfig').each(function () {
+if($(this).val() != "") {
+serconfig[p++] = $(this).val();
+}
+});
+$http({
+url: '../ajax/sercharateajax.php',
+method: "POST",
+//Content-Type: 'application/json',
+data: {
+action:'save',
+partyName: arr,
+rateFac: raf,
+catType: catty,
+rateVl: rate,
+active:active,
+serconfig:serconfig,
+sdate:sdate,
+edate:edate,
+grpname:$scope.grpname
+},
+}).then(function successCallback(response) {
+
+$scope.isHideOk = false;
+$scope.isHide = true;
+$("#serCharRatForm").html("<h3>"+response.data+"</h3>");
+//window.location.reload();
+});
+}
+
+
+$scope.sergrpchange = function (id) {
+
+$http({
+method: 'post',
+url: '../ajax/sercharateajax.php',
+data: {
+action: 'parctforserchrat',
+id: id
+},
+}).then(function successCallback(response) {
+var responsehtml = "<table id='resTable' class='table table-condensed'><thead><tr><th>Service Feature</th><th>Party</th><th>Serivce Feature Config</th><th>Rate Factor</th><th>Category Type</th><th>Rate Value</th><th>Active</th><th>Start Date</th><th>End Date</th></tr></thead><tbody>";
+var responsegen= "";
+var optionres= "";
+var partycatres= "";
+var serfeat= "";
+var serconfig= "";
+
+
+//alert(response.data[0].count);
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'servfeaforcode',action:'active' },
+}).then(function successCallback(response4) {
+for(var i=0;i < response4.data.length;i++) {
+serfeat +=  "<option value='"+response4.data[i].sfid+"'>"+response4.data[i].name+"</option>";
+}
+
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'sercharpar' }
+}).then(function successCallback(response2) {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'partycatype' }
+}).then(function successCallback(response3) {
+for(var i=0;i < response3.data.length;i++) {
+partycatres +=  "<option value='"+response3.data[i].id+"'>"+response3.data[i].name+"</option>";
+}
+
+//window.location.reload();
+
+for(var i=0;i < response2.data.length;i++) {
+optionres +=  "<option value='"+response2.data[i].id+"'>"+response2.data[i].name+"</option>";
+}
+for(var i =0;i < response.data[0].count;i++) {
+
+responsegen += "<tr><td><select  ng-show='serCharRatForm.servicefeature.$touched || serCharRatForm.servicefeature.$dirty &&  serCharRatForm.servicefeature.$invalid' ng-model='servicefeature["+i+"]'  class='form-control servicefeature' name = 'servicefeature["+i+"]' id='servicefeature' required>"+
+"<option value=''>--Select ServiceFeature--</option>"+
+ serfeat +
+"</select></td><td><select ng-model='partyName["+i+"]' onchange='seviceConfig(partyName["+i+"] ,servicefeature["+i+"])' class='form-control partyName' name = 'partyName["+i+"]' id='partyName' required>"+
+"<option value=''>--Select Party--</option>"+
+optionres+
+"</select></td><td><select ng-model='serfconfig["+i+"]' class='form-control serfconfig' name = 'serfconfig["+i+"]' id='serfconfig' required><span ng-show=' serCharRatForm.serfconfig.$touched || serCharRatForm.serfconfig.$dirty &&  serCharRatForm.serfconfig.$invalid'></span>"+
+"<option value=''>--Select Config--</option>"+
+$window.test+
+"</select></td><td><select ng-model='rateFactor[]' name='rateFactopr' class='form-control rateFactor'><option value=''>--Select Rate Factor--</option><option value='A'>Amount</option><option value='P'>Percentage</option></select></td>"+
+"<td><select ng-model='partyCats[]' class='form-control  cattype' name = 'partyCats' id='partyCats' required>"+
+"<option value=''>--Select Party Category--</option>"+
+partycatres+
+"</select></td>"+
+"<td><input type='number' name='rateval[]' ng-model='rateval[]' class='rateva form-control' /></td>"+
+"<td><select ng-model='active[]' name='active' class='form-control active'><option value=''>--Select Active--</option><option value='Y'>Yes</option><option value='N'>No</option></select></td>"+
+"<td><input type='date' name='satrtdate[]' ng-model='satrtdate[]' class='sdate form-control' /></td>"+
+"<td><input type='date' name='endDate[]' ng-model='endDate[]' class='edate form-control' /></td>"+
+
+"</tr>";
+
+}
+responseend = responsehtml +  responsegen+"</tbody></table>";
+console.log(responseend);
+$("#reee").html(responseend);
+});
+});
+}, function errorCallback(response) {
+// console.log(response);
+
+
+
+
+});
+});
+}
+$scope.restric = function () {
+window.location.reload();
+}
+});
+
 
 app.controller('serCharParCtrl', function ($scope, $http) {
-	$scope.isHideOk = true;
-	$scope.isHideReset = false;
-	$http({
-		method: 'post',
-		url: '../ajax/sercharpartyajax.php',
-		data: { action: 'list' },
-	}).then(function successCallback(response) {
-		$scope.sechpalist = response.data;
-	});
-
-	$scope.edit = function (index, id) {
-		$http({
-			method: 'post',
-			url: '../ajax/sercharpartyajax.php',
-			data: { id: id, action: 'edit' },
-		}).then(function successCallback(response) {
-			$scope.active = response.data[0].active;
-			$scope.name = response.data[0].name;
-			$scope.id = response.data[0].id;
-
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.create = function () {
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/sercharpartyajax.php',
-			data: {
-				active: $scope.active,
-				name: $scope.name,
-				action: 'create'
-			},
-		}).then(function successCallback(response) {
-			$scope.isLoader = false;
-		   $scope.isMainLoader = false;
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$("#serviceChargePartyCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
-		}, function errorCallback(response) {
-			// console.log(response);
-		});
-	}
-	$scope.update = function (id) {
-		$scope.isHideOk = true;
-		$scope.isLoader = true;
-		$scope.isMainLoader = true;
-		$http({
-			method: 'post',
-			url: '../ajax/sercharpartyajax.php',
-			data: {
-				id: id,
-				active: $scope.active,
-				name: $scope.name,
-				action: 'update'			},
-		}).then(function successCallback(response) {
-			$scope.isHide = true;
-			$scope.isHideOk = false;
-			$scope.isLoader = false;
-			$scope.isMainLoader = false;
-			$("#serviceChargePartyBody").html("<h3>" + response.data + "</h3>");
-
-		}, function errorCallback(response) {
-			console.log(response);
-		});
-	}
+$scope.isHideOk = true;
+$scope.isHideReset = false;
+$http({
+method: 'post',
+url: '../ajax/sercharpartyajax.php',
+data: { action: 'list' },
+}).then(function successCallback(response) {
+$scope.sechpalist = response.data;
 });
+
+$scope.edit = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/sercharpartyajax.php',
+data: { id: id, action: 'edit' },
+}).then(function successCallback(response) {
+$scope.active = response.data[0].active;
+$scope.name = response.data[0].name;
+$scope.ptype = response.data[0].ptype;
+$scope.id = response.data[0].id;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.restric = function () {
+window.location.reload();
+}
+$scope.create = function () {
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/sercharpartyajax.php',
+data: {
+active: $scope.active,
+name: $scope.name,
+ptype: $scope.ptype,
+action: 'create'
+},
+}).then(function successCallback(response) {
+$scope.isLoader = false;
+  $scope.isMainLoader = false;
+$scope.isHide = true;
+$scope.isHideOk = false;
+$("#serviceChargePartyCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (id) {
+$scope.isHideOk = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/sercharpartyajax.php',
+data: {
+id: id,
+active: $scope.active,
+name: $scope.name,
+ptype: $scope.ptype,
+action: 'update' },
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#serviceChargePartyBody").html("<h3>" + response.data + "</h3>");
+
+}, function errorCallback(response) {
+console.log(response);
+});
+}
+});
+
 app.controller('finCashInCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$scope.payDisable = true;
@@ -20828,7 +19763,7 @@ app.controller('agStatReportCtrl', function ($scope, $http, $filter) {
 		else {
 			$http({
 				method: 'post',
-				url: '../ajax/agstatereportajax.php',
+				url: '../ajax/agstatreportajax.php',
 				data: {
 					action: 'getreport',
 					type: $scope.type,
@@ -20855,116 +19790,114 @@ app.controller('agStatReportCtrl', function ($scope, $http, $filter) {
 });
 
 app.controller('jEntryCtrl', function ($scope, $http, $filter) {
-$scope.isHideOk = true;
-$scope.startDate = new Date();
-$scope.endDate = new Date();
-$scope.fn_load = function (partyType,partyCode) {
-if(partyType == 'C' || partyType == 'A') {
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params:
-{ partyType:partyType,
-partyCode:partyCode,
-action: 'infolist'
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-}
-$scope.partyload = function (partyType) {
-var action = "";var fora="";
-if(partyType == "MA") {
-fora = "agent";
-type = "N";
-}
-if(partyType == "SA") {
-fora = "agent";
-type = "Y";
-}
-if(partyType == "C") {
-fora = "champion";
-type = "";
-}
-if(partyType == "P") {
-fora = "personal";
-type = "";
-}
-$http({
-method: 'post',
-url: '../ajax/load.php',
-params: { for:fora,
-  type: type
-},
-}).then(function successCallback(response) {
-$scope.infos = response.data;
-});
-}
-$scope.checkdate = function (startDate,endDate){
-var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
-var currdate = new Date();
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$scope.isQueryDi = false;
-}
-}
-$scope.query = function () {
-$scope.tablerow = true;
-var startDate =  $scope.startDate;
-var endDate =  $scope.endDate;
-var difference  = new Date(endDate - startDate);
-var diffInDays  = difference/1000/60/60/24;
-var currdate = new Date();
-if(endDate > currdate) {
-alert("End Date can't be more than current Date");
-$scope.endDate = currdate;
-//$scope.isQueryDi = true;
-}
-else if(startDate > endDate){
-$scope.dateerr = "Date should be valid";
-//$scope.isQueryDi = true;
-}
-else if(diffInDays>7) {
-alert("Date Range should between 7 days");
-//$scope.isQueryDi = true;
-}
-else {
-$http({
-method: 'post',
-url: '../ajax/jentryajax.php',
-data: {
-action: 'findlist',
-partyCode: $scope.partyCode,
-topartyCode:$scope.topartyCode,
-startDate:$scope.startDate,
-endDate:$scope.endDate,
-creteria:$scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.jentrys = response.data;
-}, function errorCallback(response) {
-console.log(response.data);
-});
-}
-}
-});
-
-
+	$scope.isHideOk = true;
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+	$scope.fn_load = function (partyType,partyCode) {
+	if(partyType == 'C' || partyType == 'A') {
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params:
+				{ partyType:partyType,
+				partyCode:partyCode,
+				action: 'infolist'
+			},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+		}
+	}
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+			   type: type
+				},
+		}).then(function successCallback(response) {
+			$scope.infos = response.data;
+		});
+	}
+		$scope.checkdate = function (startDate,endDate){
+			var formattedDate = $filter('date')(endDate, 'yyyy-MM-dd');
+			var currdate = new Date();
+			var difference  = new Date(endDate - startDate);
+			var diffInDays  = difference/1000/60/60/24;
+			if(endDate > currdate) {
+				alert("End Date can't be more than current Date");
+				$scope.endDate = currdate;
+			//$scope.isQueryDi = true;
+			}
+			else if(startDate > endDate){
+				$scope.dateerr = "Date should be valid";
+			//$scope.isQueryDi = true;
+			}
+			else if(diffInDays>7) {
+				alert("Date Range should between 7 days");
+			//$scope.isQueryDi = true;
+			}
+			else {
+				$scope.isQueryDi = false;
+			}
+		}
+		$scope.query = function () {
+			$scope.tablerow = true;
+			var startDate =  $scope.startDate;
+			var endDate =  $scope.endDate;
+			var difference  = new Date(endDate - startDate);
+			var diffInDays  = difference/1000/60/60/24;
+			var currdate = new Date();
+			if(endDate > currdate) {
+				alert("End Date can't be more than current Date");
+				$scope.endDate = currdate;
+			//$scope.isQueryDi = true;
+			}
+			else if(startDate > endDate){
+				$scope.dateerr = "Date should be valid";
+			//$scope.isQueryDi = true;
+			}
+			else if(diffInDays>7) {
+				alert("Date Range should between 7 days");
+			//$scope.isQueryDi = true;
+			}
+			else {
+				$http({
+					method: 'post',
+					url: '../ajax/jentryajax.php',
+					data: {
+					action: 'findlist',
+					partyCode: $scope.partyCode,
+					topartyCode:$scope.topartyCode,
+					startDate:$scope.startDate,
+					endDate:$scope.endDate,
+					creteria:$scope.creteria
+					},
+				}).then(function successCallback(response) {
+					$scope.jentrys = response.data;
+				}, function errorCallback(response) {
+					console.log(response.data);
+				});
+			}
+		}
+	});
 app.controller('ajEntryCtrl', function ($scope, $http, $filter) {
 	$scope.isHideOk = true;
 	$scope.startDate = new Date();
@@ -21379,6 +20312,159 @@ app.controller('AgtfnReportCtrl', function ($scope, $http) {
 		}
      }
 });
+
+app.controller('CmpStatReportCtrl', function ($scope, $http, $filter) {
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+	$scope.orderdetail = true;
+	$scope.tablerow = true;
+	$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for: 'servfeaforcode',action:'active' },
+		}).then(function successCallback(response) {
+			$scope.types = response.data;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+		$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { for: 'cmpforagent', "type": "N" }
+	}).then(function successCallback(response) {
+		$scope.agents = response.data;
+		//window.location.reload();
+	});
+	$scope.radiochange = function () {
+		$scope.tablerow = false;
+	}
+	 $scope.impor =function () {
+     $scope.tablerow = false;
+}
+	$scope.reset = function () {
+		$scope.tablerow = false;
+		$scope.startDate = new Date();
+		$scope.endDate = new Date();
+		$scope.orderdetail = true;
+		$scope.agentdetail = false;
+		$scope.agentName = "ALL";
+		$scope.type = "ALL";
+
+	}
+	$scope.query = function () {
+		$scope.tablerow = true;
+		var startDate =  $scope.startDate;
+		var endDate =  $scope.endDate;
+		var difference  = new Date(endDate - startDate);
+		var diffInDays  = difference/1000/60/60/24;
+		var currdate = new Date();
+		if(endDate > currdate) {
+			alert("End Date can't be more than current Date");
+			$scope.endDate = currdate;
+			//$scope.isQueryDi = true;
+		}
+		else if(startDate > endDate){
+			$scope.dateerr = "Date should be valid";
+			//$scope.isQueryDi = true;
+		}
+		else if(diffInDays>7) {
+			alert("Date Range should between 7 days");
+			//$scope.isQueryDi = true;
+		}
+		else {
+			$http({
+				method: 'post',
+				url: '../ajax/cmpstatreportajax.php',
+				data: {
+					action: 'getreport',
+					type: $scope.type,
+					agentName: $scope.agentName,
+					agentDetail: $scope.agentDetail,
+					typeDetail: $scope.orderdetail,
+					startDate: $scope.startDate,
+					endDate: $scope.endDate,
+					creteria: $scope.creteria
+				},
+			}).then(function successCallback(response) {
+				$scope.res = response.data;
+				$scope.td = response.data[0].td;
+				$scope.ad =response.data[0].ad;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+	}
+
+});
+
+ app.controller('tier1Ctrl', ['$scope','$http', function($scope,$http ){
+	$scope.isHideOk = true;
+	$scope.isHideReset = false;
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'country' }
+	}).then(function successCallback(response) {
+		$scope.countrys = response.data;
+		//window.location.reload();
+	});
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'partners' }
+		}).then(function successCallback(response) {
+				$scope.partners = response.data;
+		//window.location.reload();
+	});
+$scope.countrychange = function (id) {
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'statelist', "id": id, "action": "active" },
+	}).then(function successCallback(response) {
+		$scope.states = response.data;
+	}, function errorCallback(response) {
+		// console.log(response);
+	});
+}
+$scope.create = function () {
+ var fd = new FormData();
+   angular.forEach($scope.uploadfiles,function(file){
+     fd.append('file[]',file);
+   });
+   fd.append("action","create");
+   fd.append("country",$scope.country);
+   fd.append("state",$scope.state);
+   fd.append("mobileno",$scope.mobileno);
+   fd.append("bvn",$scope.bvn);
+   fd.append("email",$scope.email);
+   fd.append("firstName",$scope.firstName);
+   fd.append("lastName",$scope.lastName);
+   fd.append("dob",$scope.dob);
+   fd.append("refmobileno",$scope.refmobileno);
+   fd.append("attachment",$scope.attachment);
+   fd.append("partner",$scope.partner);
+	$http({
+		method: 'post',
+		url: '../ajax/tieracajax.php',
+		headers: {'Content-Type': undefined},
+		ContentType: 'application/json',
+		data: fd,
+	}).then(function successCallback(response) {
+		$scope.isHide = true;
+		$scope.isHideOk = false;
+		$scope.isHideReset = true;
+		$scope.isLoader = false;
+		$("#TieracCreateBody").html("<h3>" + response.data.errorResponseDescription + "</h3>");
+	}, function errorCallback(response) {
+		console.log(response.data);
+	});
+};
+
+}]);
 
 
 app.controller('statReportCtrl', function ($scope, $http, $filter) {
@@ -22175,7 +21261,7 @@ app.controller('batchReportCtrl', function ($scope, $http) {
 					text = "By Date";
 					valu = "From: " + startDate + " to " + endDate;
 					var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
-						'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '} ' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/logo/logo.jpg" width="100px" height="40px"/>' +
+						'<style>' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '} ' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
 						'<h2 style="text-align:center;margin-top:30px">BATCH TRANSACTION REPORT' +  '</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
 					var response = "<p>Search Creteria For:" + text + " - " + valu + " </p>"+
 						"<table width='100%' border='1' class='table' style='text-align:center; border-collapse: collapse;'>" +
@@ -22311,10 +21397,21 @@ app.controller('jcomentryCtrl', function ($scope, $http, $filter) {
 	});
 
 app.controller('pOutCtrl', function ($scope, $http, $filter) {
+	$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+	$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
 	$scope.isHideOk = true;
+	$scope.isHidecancel = false;
 	$scope.startDate = new Date();
 	$scope.endDate = new Date();
-
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'partybank' }
+	}).then(function successCallback(response) {
+		$scope.partybanks = response.data;
+		//window.location.reload();
+	});
 	$scope.partyload = function (partyType) {
 		var action = "";var fora="";
 		if(partyType == "MA") {
@@ -22430,7 +21527,379 @@ app.controller('pOutCtrl', function ($scope, $http, $filter) {
 			// console.log(response);
 		});
 	}
+	$scope.cal= function () {
+		$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
+	}
+	$scope.edit = function (index, id,payouttype,payamount,proamount,totamount,bank) {
+		$scope.curbalance = "";
+		$http({
+			method: 'post',
+			url: '../ajax/payoutajax.php',
+			data: {
+				partyType: $scope.partyType,
+				partyCode: $scope.partyCode,
+				action: 'edit'
+			},
+		}).then(function successCallback(response) {
+				$scope.isPayout = false;
+				$scope.isHideResetS = false;
+				$scope.curbalance = response.data[0].curbal;
+				$scope.payouttype = payouttype;
+				$scope.paycomamt = payamount;
+				$scope.procharge = proamount;
+				$scope.totalpaycom = totamount;
+				$scope.bankaccount = bank;
+				$scope.id = id;
+		});
+	}
+	$scope.update = function (id) {
+		if($scope.paycomamt==''){
+			alert("Enter Amount.");
+			$("input[name='paycomamt']").focus();
+		}else if($scope.paycomamt== 0 || $scope.paycomamt== 0.00){
+			alert("Enter Valid Amount.");
+			$("input[name='paycomamt']").focus();
+		}else{
+			$http({
+				method: 'post',
+				url: '../ajax/payoutajax.php',
+				data: {
+				id: id,
+				paycomamt: $scope.paycomamt,
+				procharge: $scope.procharge,
+				totalpaycom: $scope.totalpaycom,
+				bankaccount: $scope.bankaccount,
+				action: 'update'
+				},
+			}).then(function successCallback(response) {
+				$("#modbody").html("<h3 id='respdiv' style='margin:5%'>" + response.data + "</h3>");
+				$scope.isHideResetS = true;
+				$scope.isPayoutUpdate = true;
+				$scope.isHidecancel = true;
+				$scope.isHideOk = false	;
+			}, function errorCallback(response) {
+				// console.log(response);
+			});
+		}
+	}
+	$scope.close = function () {
+		window.location.reload();
+	}
+
 });
+
+app.controller('payReqCtrl', function ($scope, $http) {
+	$scope.procharge =  (parseFloat(0)).toFixed(2) ;
+	$scope.totalpaycom =  (parseFloat(0)).toFixed(2) ;
+	$scope.isPayout = true;
+	$scope.isHideResetS = true;
+	$scope.isResDiv = true;
+	$scope.isUpForm = false;
+	$scope.isButtonDiv = false;
+
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+				    type: type
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+
+	}
+	$scope.cal= function () {
+		$scope.totalpaycom =  (parseFloat($scope.paycomamt) + parseFloat($scope.procharge)).toFixed(2) ;
+	}
+	$scope.payout= function () {
+		var curbalance =  parseInt($scope.curbalance) ;
+		var totalpaycom =  parseInt($scope.totalpaycom) ;
+		if(curbalance >totalpaycom) {
+			$http({
+				method: 'post',
+				url: '../ajax/payreqajax.php',
+				data: {
+					partyType: $scope.partyType,
+					partyCode: $scope.partyCode,
+					creteria: $scope.creteria,
+					curbalance: $scope.curbalance,
+					paycomamt: $scope.paycomamt,
+					procharge: $scope.procharge,
+					totalpaycom: $scope.totalpaycom,
+					action: 'payout',
+					bankaccount: $scope.bankaccount
+				},
+			}).then(function successCallback(response) {
+					$scope.ispayRequestForm = true;
+					$scope.isResDiv = false;
+					$scope.isUpForm = true;
+					$scope.isButtonDiv = true;
+					$scope.msg = response.data.msg;
+					$scope.responseCode = response.data.responseCode;
+					$scope.msg = response.data.msg;
+					$scope.errorResponseDescription = response.data.errorResponseDescription;
+			});
+		}
+		else {
+			alert("Amount Should be valid");
+		}
+	}
+	$scope.query = function () {
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: {  for: 'partybank', "partyCode": $scope.partyCode, "action": "active" },
+
+	}).then(function successCallback(response) {
+		$scope.partybanks = response.data;
+		//window.location.reload();
+	});
+		$scope.curbalance = "";
+		$http({
+			method: 'post',
+			url: '../ajax/payreqajax.php',
+			data: {
+				partyType: $scope.partyType,
+				partyCode: $scope.partyCode,
+				action: 'query'
+			},
+		}).then(function successCallback(response) {
+				$scope.isPayout = false;
+				$scope.isHideResetS = false;
+				$scope.curbalance = response.data[0].curbal;
+		});
+	}
+});
+
+app.controller('adminContactCtrl', function ($scope, $http, $filter) {
+	$scope.isHideOk = true;
+	$scope.startDate = new Date();
+	$scope.endDate = new Date();
+	$scope.fn_load = function (partyType,partyCode) {
+		if(partyType == 'C' || partyType == 'A') {
+			$http({
+				method: 'post',
+				url: '../ajax/load.php',
+				params: { partyType:partyType,
+						partyCode:partyCode,
+						action: 'infolist'
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+		}
+	}
+	$scope.partyload = function (partyType) {
+		var action = "";var fora="";
+		if(partyType == "MA") {
+			fora = "agent";
+			type = "N";
+		}
+		if(partyType == "SA") {
+			fora = "agent";
+			type = "Y";
+		}
+		if(partyType == "C") {
+			fora = "champion";
+			type = "";
+		}
+		if(partyType == "P") {
+			fora = "personal";
+			type = "";
+		}
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for:fora,
+				    type: type
+				},
+			}).then(function successCallback(response) {
+				$scope.infos = response.data;
+			});
+
+	}
+	$scope.searchload = function (loadtype) {
+		$http({
+				method: 'post',
+				url: '../ajax/admincontactajax.php',
+				data: { loadtype: loadtype, action: 'searchload' },
+			}).then(function successCallback(response) {
+				$scope.open = response.data[0].open;
+				$scope.close = response.data[0].close;
+				$scope.inprogress = response.data[0].inprogress;
+
+
+			}, function errorCallback(response) {
+				// console.log(response);
+		});
+	}
+	$scope.detail = function (index, id, partyType, partyCode) {
+		$http({
+			method: 'post',
+			url: '../ajax/admincontactajax.php',
+			data: { id: id, action: 'detail' },
+			}).then(function successCallback(response) {
+				$scope.id = response.data[0].id;
+				$scope.status = response.data[0].status;
+				$scope.typeUpdate = response.data[0].type;
+				$scope.category = response.data[0].category;
+				$scope.getSubCat(response.data[0].subcategory);
+				$scope.subcategory = response.data[0].subcategory;
+				$scope.date = response.data[0].date;
+				$scope.subject = response.data[0].subject;
+				$scope.description = response.data[0].description;
+				$scope.userco = response.data[0].userco;
+				$scope.partyTypee = partyType;
+				$scope.partyCodee = partyCode;
+				$scope.isHideOK = true;
+			});
+		$http({
+			method: 'post',
+			url: '../ajax/admincontactajax.php',
+			data: { id: id, action: 'detailresponse' },
+			}).then(function successCallback(response) {
+				var responsetext = "";
+				for(var i=0;i<response.data.length;i++ ) {
+					responsetext +="<p style = 'color:black;height: 0px;padding: 0px;margin-bottom: 1%;padding-bottom:5px'><span style = 'color:blue;'>Entered by "+response.data[i].user+" @ "+response.data[i].time+"</span><br /><b style='padding-left:0px'>"+response.data[i].cmsresponse+" <br /></b><p>...................</p></p>";
+					$("#ResponseUpdate").html(responsetext);
+				}
+			});
+
+	}
+	$('#updateClose').hide();
+	$scope.update = function (id, partyType, partyCode) {
+		$http({
+			method: 'post',
+			url: '../ajax/admincontactajax.php',
+			data: {
+				action: 'update',
+				status: $scope.status,
+				comment:$scope.comment,
+				user:$scope.user,
+				id:	$scope.id,
+				partyType: partyType,
+				partyCode: partyCode,
+				category:$scope.category,
+				subcategory:$scope.subcategory
+			},
+		}).then(function successCallback(response) {
+			//$scope.cmss = response.data;
+			$scope.isHide = true;
+			$('#updateClose').show();
+			$("#UpdatecontcatBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+			//window location reload();
+		}, function errorCallback(response) {
+			console.log(response.data);
+		});
+	}
+	$scope.query = function () {
+			$scope.tablerow = true;
+			var partyType = $scope.partyType;
+			var partyCode = $scope.partyCode;
+			var typeradio = $scope.comsugsetrdiogroupbytype;
+			var creteria =  $scope.creteria;
+			var id = $scope.id;
+			var statuss= $scope.statuss;
+			var startDate =  $scope.startDate;
+			var endDate =  $scope.endDate;
+			var difference  = new Date(endDate - startDate);
+			var diffInDays  = difference/1000/60/60/24;
+			var currdate = new Date();
+			if(endDate > currdate) {
+				alert("End Date can't be more than current Date");
+				$scope.endDate = currdate;
+			//$scope.isQueryDi = true;
+			}
+			else if(startDate > endDate){
+				$scope.dateerr = "Date should be valid";
+			//$scope.isQueryDi = true;
+			}
+			else if(diffInDays>7) {
+				alert("Date Range should between 7 days");
+			//$scope.isQueryDi = true;
+			}
+			else {
+				$http({
+					method: 'post',
+					url: '../ajax/admincontactajax.php',
+					data: {
+						action: 'query',
+						partyType: partyType,
+						startDate:$scope.startDate,
+						endDate:$scope.endDate,
+						partyCode: partyCode,
+						typeradio: typeradio,
+						creteria: creteria,
+						id: id,
+						statuss: statuss
+					},
+				}).then(function successCallback(response) {
+					$scope.cmss = response.data;
+				}, function errorCallback(response) {
+					console.log(response.data);
+				});
+			}
+		}
+		$scope.getSubCat = function (catval){
+
+			if(catval == "CashIn"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Cancel', value: 'Cancel' },{ name: 'Confirm', value: 'Confirm' },{name: 'Dispute', value: 'Dispute' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
+			}
+			else if(catval == "CashOut"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Cancel', value: 'Cancel' },{ name: 'Confirm', value: 'Confirm' },{name: 'Dispute', value: 'Dispute' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
+			}
+			else if(catval == "Cards"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Chip Card', value: 'Chip' },{ name: 'Swipe Card', value: 'Swipe' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Update', value: 'Commission' },{ name: 'Other', value: 'Other' }];
+
+			}
+			else if(catval == "Report"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Wallet Update', value: 'Wallet' },{ name: 'Commission Report', value: 'Commission' },{ name: 'Other', value: 'Other' }];
+			}
+			else if(catval == "MyAccount"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			  $scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Access Error', value: 'Access' },{ name: 'Incorrect Data', value: 'Data' },{ name: 'Other', value: 'Other' }];
+			}
+			else if(catval == "Commission"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Access Error', value: 'Access' },{ name: 'Incorrect Data', value: 'Data' },{ name: 'Other', value: 'Other' }];
+			}
+			else if(catval == "Device"){
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			$scope.subcatitems = [{name: '-- Select --', value: '' },{ name: 'Connectivity Error', value: 'Bluetooth' },{ name: 'Connectivity Issue', value: 'Wifi' },{ name: 'Internet Issue', value: 'Speed' },{ name: 'Other', value: 'Other' }];
+			}
+			else{
+			angular.element( document.querySelector( '#subcategory' ) ).find('option').remove();
+			$scope.subcatitems = [{ name: 'Other', value: 'Other' }];
+			}
+		};
+		$scope.refresh = function () {
+			window.location.reload();
+		}
+
+	});
 
 app.controller('batchCtrl', function ($scope, $http) {
 	$scope.startDate = new Date();
@@ -22649,6 +22118,7 @@ app.controller('gOtpCtrl', function ($scope, $http) {
 });
 
 
+
 app.controller('TermvendcCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
 $http({
@@ -22732,42 +22202,40 @@ console.log(response);
 
 app.controller('TermInvenCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
-$scope.sushow = true;
+/* $scope.deshow = true;
+$scope.sushow = false; */
+$scope.tablerow = true;
+$scope.isLoader = true;
+$scope.isMainLoader = false;
+
+
+
+$scope.radiochange = function () {
+	$scope.tablerow = false;
+	
+	}
+
+	$scope.refresh = function () {
+		window.location.reload();
+		}
+		
+	
+
 $http({
 method: 'post',
 url: '../ajax/load.php',
 params: { for:'vendors',action:'active'
 },
 }).then(function successCallback(response) {
+	$scope.isLoader = false;
+      $scope.isMainLoader = false;
 $scope.vendors = response.data;
 });
 $scope.query = function () {
-//alert($scope.creteria);
-if($scope.creteria == "S") {
-$scope.sushow = true;
-$scope.deshow = false;
-$http({
-method: 'post',
-url: '../ajax/terminvnetajax.php',
-data: {
-action: 'list',
-type:$scope.creteria
-},
-}).then(function successCallback(response) {
-$scope.Inventory_list = [];
-if(response.data.length > 0) {
-$scope.Inventory_list = response.data;
-}
-else {
-alert("There is no inventory list found..");
-$scope.Inventory_list = [];
-}
-});
-}
-else {
 
-$scope.deshow = true;
-$scope.sushow = false;
+$scope.tablerow = true;
+/* $scope.deshow = true;
+$scope.sushow = false; */
 $http({
 method: 'post',
 url: '../ajax/terminvnetajax.php',
@@ -22777,9 +22245,12 @@ type:$scope.creteria,
 vendor:$scope.vendor,
 status:$scope.status,
 terid:$scope.terid,
+bank:$scope.bank,
 terslno:$scope.terslno
 },
 }).then(function successCallback(response) {
+	$scope.isLoader = false;
+      $scope.isMainLoader = false;
 $scope.Inventory_list = [];
 // alert(response.data.length);
 if(response.data.length > 0) {
@@ -22790,11 +22261,9 @@ alert("There is no inventory list found..");
 $scope.Inventory_list = [];
 }
 });
+
 }
-}
-$scope.refresh = function () {
-window.location.reload();
-}
+
 
 $scope.edit = function (index, inventory_id) {
 $http({
@@ -22804,6 +22273,7 @@ data: { inventory_id: inventory_id, action: 'edit' },
 }).then(function successCallback(response) {
    $scope.inventory_id = response.data[0].inventory_id;
    $scope.id = response.data[0].id;
+   $scope.bank = response.data[0].bank;
 $scope.merchantid = response.data[0].merchantid;
 $scope.merchantname = response.data[0].merchantname;
 $scope.Status = response.data[0].Status;
@@ -22854,6 +22324,7 @@ Lga: $scope.Lga,
 MerAccName: $scope.MerAccName,
 PTSP: $scope.PTSP,
 TestTerm: $scope.TestTerm,
+bank: $scope.bank,
 action: 'create'
 },
 }).then(function successCallback(response) {
@@ -22878,6 +22349,7 @@ method: 'post',
 url: '../ajax/terminvnetajax.php',
 data: {
 inventory_id: $scope.inventory_id,
+bank: $scope.bank,
 id: $scope.id,
 merchantid: $scope.merchantid,
 merchantname: $scope.merchantname,
@@ -22923,6 +22395,7 @@ action: 'view'
 // $scope.isHideOk = false;
 $scope.inventory_id = response.data[0].inventory_id;
    $scope.id = response.data[0].id;
+   $scope.bank = response.data[0].bank;
 $scope.merchantid = response.data[0].merchantid;
 $scope.merchantname = response.data[0].merchantname;
 $scope.Status = response.data[0].Status;
@@ -22951,242 +22424,6 @@ $scope.cretime = response.data[0].cretime;
 });
 
 
-app.controller('agentlistCtrl', function ($scope, $http) {
- $scope.startDate = new Date();
- $scope.tablerow = true;
- $scope.endDate = new Date();
- $scope.radiochange = function () {
-  $scope.tablerow = false;
- }
- $scope.impor =function () {
-     $scope.tablerow = false;
-}
- $scope.reset = function () {
-  $scope.tablerow = false;
-  $scope.orderdetail = true;
-  $scope.agentdetail = false;
-  $scope.agentName = "ALL";
-  $scope.type = "ALL";
-  $scope.ba = 'ra';
- }
- $scope.query = function () {
-  $scope.tablerow = true;
-   $http({
-    method: 'post',
-    url: '../ajax/agentlistajax.php',
-    data: {
-     action: 'getreport',
-     state: $scope.state,
-     localgovernment: $scope.localgovernment,
-     status: $scope.status
-    },
-   }).then(function successCallback(response) {
-    $scope.res = response.data;
-
-   }, function errorCallback(response) {
-    // console.log(response);
-   });
-
- }
- $scope.countrychange = function (id) {
-  $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'statelist', "id": 566, "action": "active" },
-  }).then(function successCallback(response) {
-   $scope.states = response.data;
-  }, function errorCallback(response) {
-   // console.log(response);
-  });
- }
- $scope.statechange = function (id) {
-  $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'localgvtlist', "id": id, "action": "active" },
-  }).then(function successCallback(response) {
-   $scope.localgvts = response.data;
-  }, function errorCallback(response) {
-   // console.log(response);
-  });
- }
-
-
-});
-
-app.controller('listofagentsCtrl', function ($scope, $http) {
-    $scope.startDate = new Date();
-    $scope.tablerow = true;
-    $scope.endDate = new Date();
-    
-    $scope.radiochange = function () {
-    $scope.tablerow = false;
-    }
-    $scope.impor =function () {
-         $scope.tablerow = false;
-    }
-    
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'agents' }
-    }).then(function successCallback(response) {
-    $scope.agents = response.data;
-    //window.location.reload();
-    });
-    
-    $http({
-    url: '../ajax/load.php',
-    method: "POST",
-    //Content-Type: 'application/json',
-    params: { action: 'active', for: 'champion' }
-    }).then(function successCallback(response) {
-    $scope.champions = response.data;
-    //window.location.reload();
-    });
-    
-    $scope.reset = function () {
-    $scope.tablerow = false;
-    $scope.orderdetail = true;
-    $scope.agentdetail = false;
-    $scope.agentName = "ALL";
-    $scope.type = "ALL";
-    $scope.ba = 'ra';
-    }
-    $scope.query = function () {
-    $scope.tablerow = true;
-    $http({
-    method: 'post',
-    url: '../ajax/listofagentsajax.php',
-    data: {
-    action: 'getreport',
-    state: $scope.state,
-    localgovernment: $scope.localgovernment,
-    active: $scope.active,
-    agentCode: $scope.agentCode,
-    championCode: $scope.championCode,
-    rpartytype: $scope.rpartytype,
-    bvn: $scope.bvn,
-    },
-    }).then(function successCallback(response) {
-    $scope.res = response.data;
-    var rpartytype = response.data[0].rpartytype;
-    $scope.agent_code = response.data[0].agent_code;
-    $scope.champion_code =response.data[0].champion_code;
-    $scope.champion_name =response.data[0].champion_name;
-    
-    
-    //alert(code);
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    
-    }
-    
-    $scope.countrychange = function (id) {
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'statelist', "id": 566, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.states = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.statechange = function (id) {
-    $http({
-    method: 'post',
-    url: '../ajax/load.php',
-    params: { for: 'localgvtlist', "id": id, "action": "active" },
-    }).then(function successCallback(response) {
-    $scope.localgvts = response.data;
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    $scope.view = function (index, agent_code) {
-    $http({
-    method: 'post',
-    url: '../ajax/listofagentsajax.php',
-    data: {
-    agent_code: agent_code,
-    action: 'view'
-    },
-    }).then(function successCallback(response) {
-    // $scope.isHide = true;
-    // $scope.isHideOk = false;
-    $scope.resview = response.data;
-    
-    }, function errorCallback(response) {
-    // console.log(response);
-    });
-    }
-    
-    });
-
-app.controller('agentlistCtrl', function ($scope, $http) {
- $scope.startDate = new Date();
- $scope.tablerow = true;
- $scope.endDate = new Date();
- $scope.radiochange = function () {
-  $scope.tablerow = false;
- }
- $scope.impor =function () {
-     $scope.tablerow = false;
-}
- $scope.reset = function () {
-  $scope.tablerow = false;
-  $scope.orderdetail = true;
-  $scope.agentdetail = false;
-  $scope.agentName = "ALL";
-  $scope.type = "ALL";
-  $scope.ba = 'ra';
- }
- $scope.query = function () {
-  $scope.tablerow = true;
-   $http({
-    method: 'post',
-    url: '../ajax/agentlistajax.php',
-    data: {
-     action: 'getreport',
-     state: $scope.state,
-     localgovernment: $scope.localgovernment,
-     status: $scope.status
-    },
-   }).then(function successCallback(response) {
-    $scope.res = response.data;
-
-   }, function errorCallback(response) {
-    // console.log(response);
-   });
-
- }
- $scope.countrychange = function (id) {
-  $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'statelist', "id": 566, "action": "active" },
-  }).then(function successCallback(response) {
-   $scope.states = response.data;
-  }, function errorCallback(response) {
-   // console.log(response);
-  });
- }
- $scope.statechange = function (id) {
-  $http({
-   method: 'post',
-   url: '../ajax/load.php',
-   params: { for: 'localgvtlist', "id": id, "action": "active" },
-  }).then(function successCallback(response) {
-   $scope.localgvts = response.data;
-  }, function errorCallback(response) {
-   // console.log(response);
-  });
- }
-
-});
 app.controller('walaccbalCtrl', function ($scope, $http) {
 $scope.startDate = new Date();
 $scope.tablerow = true;
@@ -23487,7 +22724,6 @@ app.controller('agentlistCtrl', function ($scope, $http) {
 
 });
 
-
 app.controller('nibsAccCtrl', function ($scope, $http) {
 
 	$scope.query = function () {
@@ -23553,21 +22789,540 @@ app.controller('nibsAccCtrl', function ($scope, $http) {
 	}
 });
 
+app.controller('agentlistCtrl', function ($scope, $http) {
+ $scope.startDate = new Date();
+ $scope.tablerow = true;
+ $scope.endDate = new Date();
+ $scope.radiochange = function () {
+  $scope.tablerow = false;
+ }
+ $scope.impor =function () {
+     $scope.tablerow = false;
+}
+ $scope.reset = function () {
+  $scope.tablerow = false;
+  $scope.orderdetail = true;
+  $scope.agentdetail = false;
+  $scope.agentName = "ALL";
+  $scope.type = "ALL";
+  $scope.ba = 'ra';
+ }
+ $scope.query = function () {
+  $scope.tablerow = true;
+   $http({
+    method: 'post',
+    url: '../ajax/agentlistajax.php',
+    data: {
+     action: 'getreport',
+     state: $scope.state,
+     localgovernment: $scope.localgovernment,
+     status: $scope.status
+    },
+   }).then(function successCallback(response) {
+    $scope.res = response.data;
 
-app.controller('nonTransCtrl', function ($scope, $http) {
-	$scope.isLoader = true;
+   }, function errorCallback(response) {
+    // console.log(response);
+   });
+
+ }
+ $scope.countrychange = function (id) {
+  $http({
+   method: 'post',
+   url: '../ajax/load.php',
+   params: { for: 'statelist', "id": 566, "action": "active" },
+  }).then(function successCallback(response) {
+   $scope.states = response.data;
+  }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+ $scope.statechange = function (id) {
+  $http({
+   method: 'post',
+   url: '../ajax/load.php',
+   params: { for: 'localgvtlist', "id": id, "action": "active" },
+  }).then(function successCallback(response) {
+   $scope.localgvts = response.data;
+  }, function errorCallback(response) {
+   // console.log(response);
+  });
+ }
+
+});
+
+app.controller('listofagentsCtrl', function ($scope, $http) {
+$scope.startDate = new Date();
+$scope.tablerow = true;
+$scope.endDate = new Date();
+
+$scope.radiochange = function () {
+$scope.tablerow = false;
+}
+$scope.impor =function () {
+     $scope.tablerow = false;
+}
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'champion' }
+}).then(function successCallback(response) {
+$scope.champions = response.data;
+//window.location.reload();
+});
+
+$scope.reset = function () {
+$scope.tablerow = false;
+$scope.orderdetail = true;
+$scope.agentdetail = false;
+$scope.agentName = "ALL";
+$scope.type = "ALL";
+$scope.ba = 'ra';
+}
+$scope.query = function () {
+$scope.tablerow = true;
+$http({
+method: 'post',
+url: '../ajax/listofagentsajax.php',
+data: {
+action: 'getreport',
+state: $scope.state,
+localgovernment: $scope.localgovernment,
+active: $scope.active,
+agentCode: $scope.agentCode,
+championCode: $scope.championCode,
+rpartytype: $scope.rpartytype,
+bvn: $scope.bvn,
+},
+}).then(function successCallback(response) {
+$scope.res = response.data;
+var rpartytype = response.data[0].rpartytype;
+$scope.agent_code = response.data[0].agent_code;
+$scope.champion_code =response.data[0].champion_code;
+$scope.champion_name =response.data[0].champion_name;
+
+
+//alert(code);
+}, function errorCallback(response) {
+// console.log(response);
+});
+
+}
+
+$scope.countrychange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'statelist', "id": 566, "action": "active" },
+}).then(function successCallback(response) {
+$scope.states = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statechange = function (id) {
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for: 'localgvtlist', "id": id, "action": "active" },
+}).then(function successCallback(response) {
+$scope.localgvts = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.view = function (index, agent_code) {
+$http({
+method: 'post',
+url: '../ajax/listofagentsajax.php',
+data: {
+agent_code: agent_code,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.resview = response.data;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
+app.controller('TermAllocCtrl', function ($scope, $http) {
+ $scope.isLoader = true;
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$scope.btnter = false;
+$scope.reiddiv = false;
+$scope.searchsl = function (slno, vendor) {
+$scope.isValidUpdate = true;
+$scope.reiddiv = false;
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+slno: $scope.slno,
+vendor: $scope.vendor,
+action: 'querysl'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+
+$scope.isLoader = false; ;
+$scope.isMainLoader = false;
+//alert(response.data[0].rescode);
+if((response.data[0].rescode) == 0) {
+$scope.isHideSea = true;
+$scope.isValidUpdate = false;
+$scope.btnter = true;
+$scope.slnotr =response.data[0].id;
+$scope.reiddiv = true;
+$scope.TerminalID =response.data[0].tid;
+$scope.tid =response.data[0].tid;
+}
+else {
+alert("Terminal Id not in Available Status For serial no : "+$scope.slno);
+}
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+agentCode: $scope.agentCode,
+action: 'query'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.AllocationList = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update2 = function (user_id,Status) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+user_id: user_id,
+action: 'Update',
+TerminalID: $scope.tid,
+Status: Status,
+user: $scope.user,
+inventory_id: $scope.slnotr,
+agentCode: $scope.agentCode,
+CreaUser: $scope.CreaUser,
+vendor: $scope.vendor
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#allocaupdateBody2").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.update = function (user_id,inventory_id,Status) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+user_id: user_id,
+action: 'Update',
+TerminalID: $scope.TerminalID,
+Status: Status,
+user: $scope.user,
+agentCode: $scope.agentCode,
+inventory_id: inventory_id,
+CreaUser: $scope.CreaUser,
+vendor: $scope.vendor
+
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#allocaupdateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+$scope.allocationview = function (index,user_id) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/load.php',
+params: { for:'vendors',action:'active'
+},
+}).then(function successCallback(response) {
+$scope.vendors = response.data;
+});
+
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+user_id: user_id,
+action: 'view',
+agentCode: $scope.agentCode,
+user: $scope.user
+
+},
+}).then(function successCallback(response) {
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.isHideCancel = false;
+$scope.isLoader = false;
+//alert(response.data[0].agentCode);
+$scope.isMainLoader = false;
+//$scope.res = response.data;
+$scope.userName = response.data[0].user;
+$scope.user_id = response.data[0].userId;
+$scope.aagentCode = response.data[0].agentCode;
+$scope.inventory_id = response.data[0].inventory_id;
+$scope.Status = response.data[0].Status;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.venchange = function (id) {
+//alert("asd");
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'A', for: 'terminalsforvenor', id: id}
+}).then(function successCallback(response) {
+$scope.terminals = response.data;
+//window.location.reload();
+});
+}
+$scope.allocationCancel = function (index,terminal_id,userid,serialno,agent) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+action: 'cancel',
+Status: $scope.Status,
+terminal_id: terminal_id
+
+},
+}).then(function successCallback(response) {
+// alert(response);
+$scope.isHide = false;
+$scope.isHideOk = true;
+$scope.isHideCancel = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.terminal_id = response.data[0].terminal_id;
+   $scope.Status = response.data[0].Status;
+$scope.inventory_id = response.data[0].inventory_id;
+$scope.user_id = response.data[0].userId;
+$scope.agent =agent;
+$scope.terminal_id =terminal_id;
+$scope.terminal_serial_no =serialno;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.statusupdate = function (user_id,inventory_id) {
+$scope.isHide = true;
+$scope.isHideCancel = true;
+$scope.isLoader = true;
+$scope.isMainLoader = true;
+$http({
+method: 'post',
+url: '../ajax/termiallocajax.php',
+data: {
+user_id: user_id,
+action: 'Reject',
+Status: $scope.CancStatus,
+terminal_id: $scope.terminal_id,
+inventory_id: inventory_id,
+CreaUser: $scope.CreaUser,
+
+},
+}).then(function successCallback(response) {
+$scope.isHide = true;
+$scope.isHideOk = false;
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$("#allocancelBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.refresh = function () {
+window.location.reload();
+}
+});
+
+app.controller('finRepagentCtrl', function ($scope, $http) {
+$scope.isLoader = true;
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+$scope.isMainLoader = true;
+$scope.isHideOk = true;
+$scope.reset = function () {
+  }
+ $scope.countrychange = function (id) {
+ $http({
+  method: 'post',
+  url: '../ajax/load.php',
+  params: { for: 'statelist', "id": 566, "action": "active" },
+ }).then(function successCallback(response) {
+  $scope.states = response.data;
+ }, function errorCallback(response) {
+  // console.log(response);
+ });
+}
+ $scope.statechange = function (id) {
+ $http({
+  method: 'post',
+  url: '../ajax/load.php',
+  params: { for: 'localgvtlist', "id": id, "action": "active" },
+ }).then(function successCallback(response) {
+  $scope.localgvts = response.data;
+ }, function errorCallback(response) {
+  // console.log(response);
+ });
+}
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/fintranperagentajax.php',
+data: {
+action: 'report',
+state: $scope.state,
+localgovernment: $scope.localgovernment,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+$scope.reporttable = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+
+$scope.view = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/fintranperagentajax.php',
+data: {
+id: id,
+crestatus: $scope.crestatus,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.agent_code = response.data[0].agentCode;
+$scope.parent_code = response.data[0].ParentCode;
+$scope.transaction_type = response.data[0].TransType;
+$scope.order_no = response.data[0].Orderno;
+$scope.transaction_id = response.data[0].TransId;
+$scope.Reqamount = response.data[0].Reqamount;
+$scope.ServiceCharge = response.data[0].ServiceCharge;
+$scope.totalamount = response.data[0].totalamount;
+$scope.state = response.data[0].state;
+$scope.locgovernment = response.data[0].locgovernment;
+$scope.RuleId = response.data[0].RuleId;
+
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+});
+
+
+app.controller('traPerSerCtrl', function ($scope, $http) {
+	//alert("zx");
 	$scope.startDate = new Date();
 	$scope.endDate = new Date();
-	$scope.isMainLoader = true;
-	$scope.isHideOk = true;
-	$scope.query = function (id) {
 		$http({
 			method: 'post',
-			url: '../ajax/nontransajax.php',
+			url: '../ajax/load.php',
+			params: { for: 'statelist', "id": 566, "action": "active" },
+		}).then(function successCallback(response) {
+			$scope.states = response.data;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+
+
+	$scope.statechange = function (id) {
+		$http({
+			method: 'post',
+			url: '../ajax/load.php',
+			params: { for: 'localgvtlist', "id": id, "action": "active" },
+		}).then(function successCallback(response) {
+			$scope.localgvts = response.data;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.query = function () {
+		$http({
+			method: 'post',
+			url: '../ajax/traperserviceajax.php',
 			data: {
 				id: $scope.id,
 				startDate: $scope.startDate,
 				endDate: $scope.endDate,
+				localgovernment: $scope.localgovernment,
+				state: $scope.state,
+				ba: $scope.ba,
 				action: 'query'
 			},
 
@@ -23577,33 +23332,565 @@ app.controller('nonTransCtrl', function ($scope, $http) {
 			$scope.isLoader = false;
 	     $scope.isMainLoader = false;
 		// alert( response.data);
-			$scope.nontrans = response.data;
+			$scope.services = response.data;
 		}, function errorCallback(response) {
 			// console.log(response);
 		});
 	}
-		$scope.detail = function (id) {
-		$http({
+	$scope.print = function () {
+			$http({
 			method: 'post',
-			url: '../ajax/nontransajax.php',
-			data: { id: id, action: 'detail' },
+			url: '../ajax/traperserviceajax.php',
+			data: {
+				id: $scope.id,
+				startDate: $scope.startDate,
+				endDate: $scope.endDate,
+				localgovernment: $scope.localgovernment,
+				state: $scope.state,
+				ba: $scope.ba,
+				action: 'query'
+			},
 		}).then(function successCallback(response) {
-			$scope.id = response.data[0].id;
-			$scope.Serviceid = response.data[0].Serviceid;
-			$scope.reqmsg = response.data[0].reqmsg;
-			$scope.responsemsg = response.data[0].responsemsg;
-			$scope.msgsndtime = response.data[0].msgsndtime;
-			$scope.msgrectime = response.data[0].msgrectime;
-			$scope.responserec = response.data[0].responserec;
-			$scope.errorcode = response.data[0].errorcode;
-			$scope.desc = response.data[0].desc;
-			$scope.createuser = response.data[0].createuser;
-			$scope.createtime = response.data[0].createtime;
-			}, function errorCallback(response) {
-			// console.log(response);
-			});
+		//$scope.res = response.data;
+		$scope.ba = response.data[0].ba;
+		$scope.ad =response.data[0].ad;
+		$scope.sd =response.data[0].sd;
+		// $scope.isHide = true;
+		// $scope.isHideOk = false;
+		var rerows = "";var agentName = "";var orderType = "";var amountdet = "";var tablehead = "";
+		//alert("Agent details: "+agentdetail);alert("Order details :"+$scope.orderdetail);alert($scope.ba);
+		if(response.data[0].ba =='aw'){
+		tablehead = "<th>Date</th><th>Transaction Type</th><th>Request Amount</th><th>Total Amount</th>";
+			for(var i=0;i < response.data.length;i++) {
+			rerows +=  "<tr><td>"+ response.data[i].date +"</td>"+
+			"<td>"+ response.data[i].ttype +"</td>"+
+			"<td>"+ response.data[i].ramount +"</td>"+
+			"<td>"+ response.data[i].tamount +"</td>"+
+			"</tr>"
+			}
+		}else{
+			if(response.data[i].feature_code=='CIN'){
+				tablehead = "<th>User</th><th>Customer</th><th>Date</th><th>Transaction Type</th><th>Request Amount</th><th>Total Amount</th>";
+				rerows +=  "<tr><td>"+ response.data[i].userName +"</td>"+
+				"<td>"+ response.data[i].customerName +"</td>"+
+				"<td>"+ response.data[i].date +"</td>"+
+				"<td>"+ response.data[i].ttype +"</td>"+
+				"<td>"+ response.data[i].ramount +"</td>"+
+				"<td>"+ response.data[i].tamount +"</td>"+
+				"</tr>"
+			}else{
+				tablehead = "<th>User</th><th>Sender</th><th>Date</th><th>Transaction Type</th><th>Request Amount</th><th>Total Amount</th>";
+				rerows +=  "<tr><td>"+ response.data[i].userName +"</td>"+
+				"<td>"+ response.data[i].sender_name +"</td>"+
+				"<td>"+ response.data[i].date +"</td>"+
+				"<td>"+ response.data[i].ttype +"</td>"+
+				"<td>"+ response.data[i].ramount +"</td>"+
+				"<td>"+ response.data[i].tamount +"</td>"+
+				"</tr>"
+			}
+		}
+		//alert(tablehead);
+
+
+		var startDate = $scope.startDate;
+		var endDate = $scope.endDate;
+		var text = "";
+		var valu = "";
+		//alert(tablehead);alert(rerows);
+		var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+		'<style>table, th, td { border: 1px solid black;text-align:center;} table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+		'<h2 style="text-align:center;margin-top:30px">Transaction Per Service Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+		var responsetablehead ="<table  width='100%' style='margin-left:auto;margin-right:auto;border:1px solid black;'><tbody><thead>"+tablehead+"</thead><tbody>"+rerows+"</tbody></table>"
+		var win = window.open("", "height=1000", "width=1000");
+		with (win.document) {
+		open();
+		write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+		close();
+		}
+		}, function errorCallback(response) {
+		// console.log(response);
+
+
+		});
 	}
-	$scope.refresh = function (id, type) {
-		window.location.reload();
-	}
+});
+
+app.controller('fundWalletCtrl', function ($scope, $http) {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+$("#tbody").empty();
+$scope.tablerow = false;
+$scope.agentCode = "ALL";
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+}
+
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/fundwalletajax.php',
+data: {
+action: 'query',
+agentCode: $scope.agentCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.fundwalet = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.printwallet = function (id,party_code) {
+$http({
+method: 'post',
+url: '../ajax/fundwalletajax.php',
+data: {
+action: 'viewwallet',
+                id: id,
+code: party_code
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+var creteria = $scope.creteria;
+var id = $scope.id;
+var statusa = $scope.statusa;
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var m = new Date();
+var datetime =
+m.getUTCFullYear() + "-" +
+("0" + (m.getUTCMonth()+1)).slice(-2) + "-" +
+("0" + m.getUTCDate()).slice(-2) + " " +
+("0" + m.getUTCHours()).slice(-2) + ":" +
+("0" + m.getUTCMinutes()).slice(-2) + ":" +
+("0" + m.getUTCSeconds()).slice(-2);
+var text = "";
+var valu = "";
+text = "By Date";
+valu = "From: " + startDate + " to " + endDate;
+        var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>body{font-family:Helvetica;} tr, td, th { border: 1px solid black;text-align:center;font-size:26px;border-left: 0;border-right: 0;} table {border-collapse: collapse;margin-left:5%;margin-right:5%}'+' .name{text-align:left;}'+' .result{text-align:right;}'+' td{height:55px}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<img style="float:left;padding-left:5%" id ="myimg" src="../common/images/km_logo.png" width="160px" height="80px"/>' +
+'<h2 style="text-align:right;font-size:32px;">Fund Wallet Receipt (Web)</h2>' + '</span>' + '</head>' + '<body>' + '<br />';
+function formatDate(d)
+        {
+          var date = new Date(d);
+
+         if ( isNaN( date .getTime() ) )
+         {
+            return d;
+         }
+         else
+        {
+
+          var month = new Array();
+          month[0] = "Jan";
+          month[1] = "Feb";
+          month[2] = "Mar";
+          month[3] = "Apr";
+          month[4] = "May";
+          month[5] = "Jun";
+          month[6] = "Jul";
+          month[7] = "Aug";
+          month[8] = "Sep";
+          month[9] = "Oct";
+          month[10] = "Nov";
+          month[11] = "Dec";
+
+          day = date.getDate();
+
+          if(day < 10)
+          {
+             day = "0"+day;
+          }
+
+          return    day  + "-" +month[date.getMonth()] + "-" + date.getFullYear();
+          }
+
+         }
+var receipt_info1, receipt_info2, PAN,ID,TID, Time;
+var info1Val =  response.data[0].info1;
+ var info2Val =  response.data[0].info2;
+// alert(info1Val +"|"+info2Val);
+if((info1Val == "-") && (info2Val == "-")){
+
+if(response.data[0].payment_status=="A"){
+var transacStatus = "Transaction Successful";
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + "SUCCESS" + "</b></td></tr>";
+}
+else{
+var transacStatus = "Transaction Failed";
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + "FAILURE" + "</b></td></tr>";
+}
+receipt_info1 = "-";
+receipt_info2 = "-";
+TID = "-";
+PAN = "-";
+ID = "-";
+Time = "-";
+
+}else{
+var ressplit = response.data[0].info1.split(",");
+//alert(ressplit);
+TID = (ressplit[0]).replace('TID:','');
+//alert(TID);
+PAN = (ressplit[1]).replace('PAN:','');
+ID = (ressplit[2]).replace('ID:','');
+Time = (ressplit[3]).replace('DTime:','');
+var ressplit1 = response.data[0].info2.split(',');
+var RC = (ressplit1[0]).replace('RC:','');
+var STAN = (ressplit1[1]).replace('STAN:','');
+var RRN = (ressplit1[2]).replace('RRN:','');
+var RCresplit = RC.split("-");
+var RC_code = RCresplit[0];
+var RC_desc = RCresplit[1];
+if(RC_code==00){
+var transacStatus = "Transaction Successful";
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:#028450'>" + RC_desc + "</b></td></tr>";
+}
+else{
+var transacStatus = "Transaction Failed";
+var statushead = "<tr><td colspan='2' ><b style='font-size:27px;color:red'>" + RC_desc + "</b></td></tr>";
+}
+receipt_info1 = "Card no: " + PAN + "";
+receipt_info2 = "RC: " +  RC_code + " / " + (ressplit1[2]);
+}
+
+
+
+/* var postTime = response.data[0].ptime;
+var dayTime = formatDate(response.data[0].ptime.substring(0,10)) ;
+var hourTime = postTime.substring(11); */
+
+
+var response = "<table style='margin-top:50px' width='90%'><tbody>" +
+statushead+
+"<tr style='border-top: 1px solid black;border-bottom: 1px solid black;'><td class='name' >Order #</td><td class='result'>" + response.data[0].id + "</td></tr>" +
+"<tr><td class='name'>Status</td><td class='result'>" + transacStatus + "</td></tr>" +
+"<tr><td class='name'>Mobile</td><td class='result'> - </td></tr>" +
+"<tr><td class='name'>Terminal ID</td><td class='result'>"+ TID + " / "+response.data[0].party_code+ " / " +response.data[0].versionName+"</td></tr>" +
+"<tr><td class='name'>Transaction ID</td><td class='result'>" + ID + "</td></tr>" +
+"<tr><td class='name'>Date</td><td class='result'>" + Time  +"</td></tr>" +
+"<tr><td class='name'>Request Amount</td><td class='result'>" + response.data[0].payment_approved_amount + "</td></tr>" +
+"<tr><td class='name'>Service Charge</td><td class='result'>" + response.data[0].ams_charge + "</td></tr>" +
+"<tr><td class='name'>Other Charge(VAT)</td><td class='result'>" + response.data[0].other_charge + "</td></tr>" +
+"<tr><td class='name'>Total Amount</td><td class='result'>" + response.data[0].payment_amount + "</td></tr>" +
+"<tr><td class='name'>Transaction Type</td><td class='result'>" + response.data[0].payment_source + "</td></tr>" +
+"<tr><td class='name'>Info1 </td><td class='result'>"+receipt_info1+"</td></tr>" +
+"<tr><td class='name'>Info2 </td><td class='result'>"+receipt_info2+"</td></tr>" +
+
+"</tbody></table><br />"+
+"<p style='font-size:14px;margin-left:5%'>Printed @ "+datetime+"</p>";
+
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + response + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+$scope.print = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$http({
+method: 'post',
+url: '../ajax/fundwalletajax.php',
+data: {
+action: 'query',
+agentCode: $scope.agentCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.id  =response.data[0].id;
+$scope.party_code = response.data[0].party_code;
+$scope.payment_amount =response.data[0].payment_amount;
+$scope.payment_appro_amnt =response.data[0].payment_appro_amnt;
+$scope.payment_ref_no =response.data[0].payment_ref_no;
+$scope.pDate =response.data[0].pDate;
+var rerows = "";
+for(var i=0;i < response.data.length;i++) {
+
+rerows +=  "<tr><td>"+ response.data[i].id +"</td>"+
+"<td>"+ response.data[i].party_code +"</td>"+
+"<td>"+ response.data[i].payment_amount +"</td>"+
+"<td>"+ response.data[i].payment_appro_amnt +"</td>"+
+"<td>"+ response.data[i].payment_ref_no +"</td>"+
+"<td>"+ response.data[i].pDate +"</td>"+
+"</tr>"
+}
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var text = "";
+var valu = "";
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+'<h2 style="text-align:center;margin-top:30px">Fund Wallet Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+var responsetablehead ="<table width='100%'><thead>" +
+"<tr><th>Receipt Id</th>" +
+"<th>Party Code</th>" +
+"<th>Payment Amount</th>" +
+"<th>Approved Amount</th>" +
+"<th>Reference No</th>" +
+"<th>Payment Date</th>" +
+"</tr></thead>" +
+"<tbody>"+rerows+"</tbody></table>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/fundwalletajax.php',
+data: {
+id: id,
+agentCode: $scope.agentCode,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.country = response.data[0].country;
+$scope.pDate = response.data[0].pDate;
+$scope.party_code = response.data[0].party_code;
+$scope.partyType = response.data[0].partyType;
+$scope.payment_account_id = response.data[0].payment_account_id;
+$scope.payment_amount = response.data[0].payment_amount;
+$scope.payment_appro_amnt = response.data[0].payment_appro_amnt;
+$scope.payment_appro_date = response.data[0].payment_appro_date;
+$scope.payment_ref_no = response.data[0].payment_ref_no;
+$scope.payment_ref_date = response.data[0].payment_ref_date;
+$scope.payment_source = response.data[0].payment_source;
+$scope.payment_chequ_no = response.data[0].payment_chequ_no;
+$scope.payment_status = response.data[0].payment_status;
+$scope.comments = response.data[0].comments;
+$scope.approve_comments = response.data[0].approve_comments;
+$scope.create_user = response.data[0].create_user;
+$scope.create_time = response.data[0].create_time;
+$scope.update_user = response.data[0].update_user;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
+});
+
+
+
+app.controller('CashoutPayCtrl', function ($scope, $http) {
+$http({
+url: '../ajax/load.php',
+method: "POST",
+//Content-Type: 'application/json',
+params: { action: 'active', for: 'agents' }
+}).then(function successCallback(response) {
+$scope.agents = response.data;
+//window.location.reload();
+});
+
+$scope.startDate = new Date();
+$scope.endDate = new Date();
+
+$scope.reset = function () {
+	$("#tbody").empty();
+		$scope.tablerow = false;
+		$scope.agentCode = "ALL";
+		$scope.startDate = new Date();
+		$scope.endDate = new Date();
+		}
+
+
+$scope.query = function () {
+$http({
+method: 'post',
+url: '../ajax/cashoutpayajax.php',
+data: {
+action: 'query',
+agentCode: $scope.agentCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.isLoader = false;
+    $scope.isMainLoader = false;
+// alert( response.data);
+$scope.cashoutpay = response.data;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+$scope.print = function () {
+$scope.tablerow = true;
+var startDate =  $scope.startDate;
+var endDate =  $scope.endDate;
+var difference  = new Date(endDate - startDate);
+var diffInDays  = difference/1000/60/60/24;
+var currdate = new Date();
+if(endDate > currdate) {
+alert("End Date can't be more than current Date");
+$scope.endDate = currdate;
+//$scope.isQueryDi = true;
+}
+else if(startDate > endDate){
+$scope.dateerr = "Date should be valid";
+//$scope.isQueryDi = true;
+}
+else if(diffInDays>7) {
+alert("Date Range should between 7 days");
+//$scope.isQueryDi = true;
+}
+else {
+$http({
+method: 'post',
+url: '../ajax/cashoutpayajax.php',
+data: {
+action: 'query',
+agentCode: $scope.agentCode,
+startDate: $scope.startDate,
+endDate: $scope.endDate
+},
+}).then(function successCallback(response) {
+$scope.isLoader = false;
+$scope.isMainLoader = false;
+$scope.id  =response.data[0].id;
+$scope.party_code = response.data[0].party_code;
+$scope.payment_amount =response.data[0].payment_amount;
+$scope.payment_appro_amnt =response.data[0].payment_appro_amnt;
+$scope.payment_ref_no =response.data[0].payment_ref_no;
+$scope.create_time =response.data[0].create_time;
+var rerows = "";
+for(var i=0;i < response.data.length;i++) {
+
+rerows +=  "<tr><td>"+ response.data[i].id +"</td>"+
+"<td>"+ response.data[i].party_code +"</td>"+
+"<td>"+ response.data[i].payment_amount +"</td>"+
+"<td>"+ response.data[i].payment_appro_amnt +"</td>"+
+"<td>"+ response.data[i].payment_ref_no +"</td>"+
+"<td>"+ response.data[i].create_time +"</td>"+
+"</tr>"
+}
+var startDate = $scope.startDate;
+var endDate = $scope.endDate;
+var text = "";
+var valu = "";
+
+var img = '<html>' + '<head>' + '<title style="display:none"></title>' + '<link rel="stylesheet" href="css/style_v2.css" type="text/css" media="screen" />' + '<link href="plugins/bootstrap/bootstrap.css" rel="stylesheet">' +
+'<style>tr, td, th { border: 1px solid black;text-align:center; } table {border-collapse: collapse;}' + '#footer {' + 'position: absolute;' + 'bottom: 0;' + 'width: 100%;' + 'height: 100px;' + '}' + '</style>' + '<span class="header">' + '<p style="float:right;margin-top:0.4px"><?php echo date("Y-m-d H:i:s"); ?></p>' + '<img style="float:left" id ="myimg" src="../common/images/km_logo.png" width="100px" height="40px"/>' +
+'<h2 style="text-align:center;margin-top:30px">Cashout Payment Report '+'</h2>' + '</span>' + '</head>' + '<body>' + '<br>' + '<hr style="clear:both">';
+var responsetablehead ="<table width='100%'><thead>" +
+"<tr><th>Receipt Id</th>" +
+"<th>Party Code</th>" +
+"<th>Payment Amount</th>" +
+"<th>Approve Amount</th>" +
+"<th>Reference No</th>" +
+"<th>Date Time</th>" +
+"</tr></thead>" +
+"<tbody>"+rerows+"</tbody></table>";
+var win = window.open("", "height=1000", "width=1000");
+with (win.document) {
+open();
+write(img + responsetablehead + '<script> document.getElementById("myimg").addEventListener("load", function() { window.print();window.close();}, false);<\/script>');
+close();
+}
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+}
+$scope.detail = function (index, id) {
+$http({
+method: 'post',
+url: '../ajax/cashoutpayajax.php',
+data: {
+id: id,
+crestatus: $scope.crestatus,
+action: 'view'
+},
+}).then(function successCallback(response) {
+// $scope.isHide = true;
+// $scope.isHideOk = false;
+$scope.id = response.data[0].id;
+$scope.country = response.data[0].country;
+$scope.pDate = response.data[0].pDate;
+$scope.party_code = response.data[0].party_code;
+$scope.partyType = response.data[0].partyType;
+$scope.payment_account_id = response.data[0].payment_account_id;
+$scope.payment_amount = response.data[0].payment_amount;
+$scope.payment_appro_amnt = response.data[0].payment_appro_amnt;
+$scope.payment_appro_date = response.data[0].payment_appro_date;
+$scope.payment_ref_no = response.data[0].payment_ref_no;
+$scope.payment_ref_date = response.data[0].payment_ref_date;
+$scope.payment_source = response.data[0].payment_source;
+$scope.payment_chequ_no = response.data[0].payment_chequ_no;
+$scope.payment_status = response.data[0].payment_status;
+$scope.comments = response.data[0].comments;
+$scope.approve_comments = response.data[0].approve_comments;
+$scope.create_user = response.data[0].create_user;
+$scope.create_time = response.data[0].create_time;
+$scope.update_user = response.data[0].update_user;
+$scope.update_time = response.data[0].update_time;
+}, function errorCallback(response) {
+// console.log(response);
+});
+}
+
 });

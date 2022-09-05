@@ -34,7 +34,7 @@
 		$id = $data->id;
 		$type = $data->rtype;
 		if($type == "A" || $type == "S") {		
-			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.agent_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.group_type,d.login_name,d.party_sales_chain_id,d.party_sales_parent_code,d.refer_party_type,d.refer_party_code FROM application_main a, application_info b, agent_wallet c, agent_info d Where a.application_id = b.application_id and c.agent_code = b.party_code and c.agent_code = d.agent_code and a.application_id = $id";
+			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.agent_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.group_type,d.login_name,d.party_sales_chain_id,d.party_sales_parent_code,d.refer_party_type,d.refer_party_code,d.party_sales_parent_chain_id  FROM application_main a, application_info b, agent_wallet c, agent_info d Where a.application_id = b.application_id and c.agent_code = b.party_code and c.agent_code = d.agent_code and a.application_id = $id";
 		}
 		if($type == "P") {		
 			$query = "SELECT ifNull(a.parent_code,'Self') as parent_code,d.personal_code as code, if(a.applier_type ='A',(select login_name from champion_info WHERE champion_code = a.parent_code),if(a.applier_type ='S',(select login_name from agent_info WHERE agent_code = a.parent_code),'')) as parentloginname,a.application_id, a.applier_type, a.application_category, b.outlet_name, a.approver_comments,c.credit_limit, c.daily_limit, c.advance_amount,c.minimum_balance, d.party_category_type_id as stype,d.login_name,d.party_sales_chain_id,d.party_sales_parent_code,d.refer_party_type,d.refer_party_code FROM application_main a, application_info b, personal_wallet c, personal_info d Where a.application_id = b.application_id and c.personal_code = b.party_code and c.personal_code = d.personal_code and a.application_id = $id";
@@ -46,7 +46,7 @@
 		$result = mysqli_query($con,$query);
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("code"=>$row['code'],"parent_code"=>$row['parent_code'],"loginname"=>$row['login_name'],"agent_code"=>$row['agent_code'],"group_type"=>$row['group_type'],"palogin"=>$row['parentloginname'],"id"=>$row['application_id'],"approverComment"=>$row['approver_comments'],"name"=>$row['outlet_name'],"type"=>$row['applier_type'],"climit"=>$row['credit_limit'],"dlimit"=>$row['daily_limit'],"mlimit"=>$row['minimum_balance'],"alimit"=>$row['advance_amount'],"sstype"=>$row['stype'],"party_sales_chain_id"=>$row['party_sales_chain_id'],"party_sales_parent_code"=>$row['party_sales_parent_code'],"refer_party_type"=>$row['refer_party_type'],"refer_party_code"=>$row['refer_party_code']);           
+			$data[] = array("code"=>$row['code'],"parent_code"=>$row['parent_code'],"loginname"=>$row['login_name'],"agent_code"=>$row['agent_code'],"group_type"=>$row['group_type'],"palogin"=>$row['parentloginname'],"id"=>$row['application_id'],"approverComment"=>$row['approver_comments'],"name"=>$row['outlet_name'],"type"=>$row['applier_type'],"climit"=>$row['credit_limit'],"dlimit"=>$row['daily_limit'],"mlimit"=>$row['minimum_balance'],"alimit"=>$row['advance_amount'],"sstype"=>$row['stype'],"party_sales_chain_id"=>$row['party_sales_chain_id'],"party_sales_parent_code"=>$row['party_sales_parent_code'],"refer_party_type"=>$row['refer_party_type'],"refer_party_code"=>$row['refer_party_code'],"party_sales_parent_chain_id"=>$row['party_sales_parent_chain_id']);           
 		}
 		echo json_encode($data);
 		if (!$result) {
@@ -89,7 +89,7 @@
 		$dailyLimit = $data->dailyLimit;
 		$advanceAmount = $data->advanceAmount;
 		$minimumBalance = $data->minimumBalance;
-		$SalesParentType = $data->SalesParentType;
+		$SalesParentTypeID = $data->SalesParentType;
 		$SalesChainCode = $data->SalesChainCode;
 		$RefferedBy = $data->RefferedBy;
 		$RadioButton = $data->RadioButton;
@@ -205,7 +205,7 @@
 								$text = "otpauth://totp/".$email.":".$Hexcode."?secret=".$secretkey."&algorithm=".OTP_ALGORITHM."&digits=".OTP_USER_DIGITS."&period=".OTP_USER_PERIODS;
 								$otp_entry = user_otp_entry($userid, $createuser, $con,$secretkey, $Hexcode, $text);
 								if($otp_entry == 0) {
-									$approve = updateinfotableentry($userid, $id, $type, $con, $createuser, $party_code, $partycatype,$SalesParentType,$SalesChainCode,$RefferedBy,$Code);
+									$approve = updateinfotableentry($userid, $id, $type, $con, $createuser, $party_code, $partycatype,$SalesParentType,$SalesChainCode,$RefferedBy,$Code,$SalesParentTypeID,$RadioButton);
 									if($approve == 0) {
 										$column = 'user_setup';
 										$value = 'Y';
@@ -401,7 +401,7 @@
 		return $ret_val;	
 	}
 	
-	function updateinfotableentry($userid, $id, $type, $con, $createuser, $party_code, $partycatype,$SalesParentType,$SalesChainCode,$RefferedBy,$Code) {
+	function updateinfotableentry($userid, $id, $type, $con, $createuser, $party_code, $partycatype,$SalesParentType,$SalesChainCode,$RefferedBy,$Code,$SalesParentTypeID,$RadioButton) {
 
 		if(empty($SalesChainCode)){
 			$SalesChainCode = 'NULL';
@@ -418,14 +418,23 @@
 		}else{
 			$RefferedBy = "'".$RefferedBy."'";
 		}
-
+		if(empty($SalesParentTypeID)){
+			$SalesParentTypeID = 'NULL';
+		}else{
+			$SalesParentTypeID = "'".$SalesParentTypeID."'";
+		}
 	
 		if($type == "P") {			
 			$update_query = "UPDATE personal_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE personal_code = '$party_code'";
 		}else if($type == "C") {
 			$update_query = "UPDATE champion_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE champion_code = '$party_code'";
-		}else if($type == "A" || $type == "S") {				
-			$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
+		}else if($type == "A" || $type == "S") {		
+			if($RadioButton == "E"){
+				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id =$SalesParentTypeID, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
+			}else{
+				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
+			}		
+			
 		}
 		error_log("Scd insert_query ".$update_query);
 		$updateresult = mysqli_query($con,$update_query);

@@ -11687,8 +11687,6 @@ window.location.reload();
 }
 $scope.approve = function (id, type) { 
 
-
-
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 var i = 0;
@@ -11922,7 +11920,7 @@ if(response.data[0].party_sales_chain_id == 10){
 	$scope.Code="";
 }
 if($scope.ba == "E"){
-	$scope.SalesParentType = "";
+	$scope.SalesParentType = response.data[0].party_sales_parent_chain_id; 
 
 }else{
 	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
@@ -11931,14 +11929,14 @@ if($scope.ba == "E"){
 $scope.SalesChainCode = response.data[0].party_sales_parent_code;
 $scope.RefferedBy = response.data[0].refer_party_type;
 
-if(response.data[0].refer_party_type == "O"){
-	$scope.CodeDisableed = true;
-	$scope.Code = "";
-
-}else{
+if(response.data[0].refer_party_type != ""){
 	$scope.CodeDisableed = false;
 	$scope.Code = response.data[0].refer_party_code;
 
+}else{
+	$scope.CodeDisableed = true;
+	$scope.Code = "";
+	
 }
 }, function errorCallback(response) {
 // console.log(response);
@@ -12137,19 +12135,7 @@ $scope.authorize = function (id, type) {
 	}, function errorCallback(response) {
 	// console.log(response);
 	});
-$scope.SalesParentList = function (id) {
-	//alert(id);
-	$http({
-	method: 'post',
-	url: '../ajax/load.php',
-	params: { for: 'SalesChainCode', "id": id, "action": "active" },
-	}).then(function successCallback(response) {
-	$scope.SalesCode = response.data;
-	//console.log(response.data);
-	}, function errorCallback(response) {
-		//console.log(response);
-	});
-	}
+
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 var i = 0;
@@ -15862,15 +15848,14 @@ if(response.data[0].party_sales_chain_id == 10){
 	$scope.Code="";
 }
 if($scope.ba == "E"){
-	$scope.SalesParentType = "";
+	$scope.SalesParentType = response.data[0].party_sales_parent_chain; 
 
 }else{
 	$scope.SalesParentType = response.data[0].party_sales_chain_id; 
-
 }
 $scope.SalesChainCode = response.data[0].party_sales_parent_code;
 $scope.RefferedBy = response.data[0].refer_party_type;
-if(response.data[0].refer_party_type == "O"){
+if(response.data[0].refer_party_type == ""){
 	$scope.CodeDisableed = true;
 	$scope.Code = "";
 
@@ -15964,7 +15949,7 @@ $scope.dob = response.data[0].dob;
 }
 $scope.updateAgent = function (code) {
 
-	$http({
+/* 	$http({
 		method: 'post',
 		url: '../ajax/load.php',
 		params: { action: 'active', for: 'SalesChain' },
@@ -15987,7 +15972,7 @@ $scope.updateAgent = function (code) {
 			//console.log(response);
 		});
 		}
-
+ */
 $scope.isLoader = true;
 $scope.isMainLoader = true;
 $scope.isHideOk = true;
@@ -16030,30 +16015,6 @@ console.log(response);
 });
 }
 $scope.update = function (code) {
-
-	$http({
-		method: 'post',
-		url: '../ajax/load.php',
-		params: { action: 'active', for: 'SalesChain' },
-		}).then(function successCallback(response) {
-		$scope.SalesParent = response.data;
-		// console.log(response.data);
-		}, function errorCallback(response) {
-		// console.log(response);
-		});
-	$scope.SalesParentList = function (id) {
-		//alert(id);
-		$http({
-		method: 'post',
-		url: '../ajax/load.php',
-		params: { for: 'SalesChainCode', "id": id, "action": "active" },
-		}).then(function successCallback(response) {
-		$scope.SalesCode = response.data;
-		//console.log(response.data);
-		}, function errorCallback(response) {
-			//console.log(response);
-		});
-		}
 
 $scope.isLoader = true;
 $scope.isMainLoader = true;

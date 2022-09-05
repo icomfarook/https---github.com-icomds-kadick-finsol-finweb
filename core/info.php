@@ -116,7 +116,7 @@
 											<label><?php echo INFO_PARTY_CODE_AGENT ; ?><span class='spanre'>*</span>
 											<span ng-show="infoViewForm.id.$dirty && infoViewForm.id.$invalid">
 											<span class = 'err' ng-show="infoViewForm.id.$error.required"><?php echo REQUIRED;?></span></span></label>
-											<input  readonly = 'true'[(ngModel)] ="partyCode" value = <?php echo "'".$partyCode. "-".$agent_name.  "'" ?> type='text' id='partyCode' name='partyCode' autofocus='true' required class='form-control'/>
+											<input  readonly = 'true' [(ngModel)] ="partyCode" value = <?php echo "'".$partyCode. "-".$agent_name.  "'" ?> type='text' id='partyCode' name='partyCode' autofocus='true' required class='form-control'/>
 										</div>
 										
 								 <div  class='col-lg-6 col-xs-12 col-sm-12 col-md-12'>
@@ -169,12 +169,12 @@
 									<th><?php echo INFO_MAIN_TABLE_ASSIGNABLE; ?></th>
 									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>Edit</th>
-									<th>Edit Agent</th>
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>View</th>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<th>BVN Check</th>
 									<?php } ?>
+									<th ng-if="partyType=='MA'">Agent Type</th>
 									<?php } ?>
 								</tr>
 							</thead>
@@ -187,10 +187,6 @@
 									  <td>
 										<a id={{x.code}} class='infoViewDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
-									</td>
-									<td>
-										<a id={{x.code}} class='infoEditAgentDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditAgentDialogue'>
-										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
 									</td>
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<td>
@@ -208,6 +204,10 @@
 										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question1.png' /></button></a>
 									</td>
 									<?php } ?>
+									<td ng-show="x.partyType == 'A'">
+										<a id={{x.code}} class='infoEditAgentDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditAgentDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
+									</td>
 									<?php } ?>
 								</tr>
 								<tr ng-show="infoss.length==0">
@@ -239,8 +239,8 @@
 								
 								
 						<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
-									<label><input type='radio'  ng-click='RadioChangeE()' name='ba' ng-model='ba' value='E'>&nbsp;External Agents</label>&nbsp;&nbsp;
-									<label><input type='radio' ng-click='radiochange()' name='ba' ng-model='ba' value='I'>&nbsp;Internal Agents</label>
+									<label><input type='radio'  ng-click='RadioChangeE()' name='ba' ng-model='ba' value='E'>&nbsp;External Agent</label>&nbsp;&nbsp;
+									<label><input type='radio' ng-click='radiochange()' name='ba' ng-model='ba' value='I'>&nbsp;Internal Agent</label>
 								</div><br />
 								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
 							<label ng-if="ba=='E'" >Sales Agent Parent Type</label>
@@ -270,7 +270,7 @@
 							</select>
 						</div>		 -->
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
-							<label>Code</label>
+							<label>Sales Agent Parent Code</label>
 							    <select ng-model="SalesChainCode"  ng-disabled='SalesChain' class='form-control' name = 'SalesChainCode' id='SalesChainCode' >											
 								<option value=''>--Select Agent Code--</option>
 								<option ng-repeat="SC in SalesCode" value="{{SC.code}}">{{SC.code}} -{{SC.name}}</option>
@@ -281,13 +281,12 @@
 								<label>Referred By</label>
 								<select  ng-model='RefferedBy' ng-disabled='SalesChain' id="RefferedBy"  class='form-control' name='RefferedBy' >
 									<option value=''>--Select Referred Type--</option>
-									<option value='O'>..??????</option>
 									<option value='A'>A-Agent</option>
 									<option value='C'>C-Champion</option>
 								</select>
 							</div>
 						<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
-							<label>Code</label>
+							<label>Referred Agent Code</label>
 									
 							<input type='text' ng-model='Code'  ng-disabled='SalesChain || CodeDisableed' id="Code"  name='Code' maxlength="6" class='form-control'  />		
 						</div>		
@@ -602,7 +601,7 @@ function AllTables(){
 }
 $(function() {
             $("#RefferedBy").change(function() {
-                if ($(this).val() == "O") {
+                if ($(this).val() == "") {
                     $("#Code").prop("disabled", true);
                 }
                 else
