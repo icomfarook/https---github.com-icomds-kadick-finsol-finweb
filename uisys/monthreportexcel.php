@@ -113,10 +113,9 @@ $objPHPExcel = new PHPExcel();
             $MonthDate	= $_POST['MonthDate'];	
             $MonthDate = date("Y-m", strtotime($MonthDate,'-1 month'));
             $MonthName = date('M-Y', strtotime($MonthDate));
-           //error_log("MonthName ==".$MonthName);
-           $objPHPExcel->getActiveSheet()->setCellValue("$Header16[$j]"."$i","$row1[$j]");
-           $objPHPExcel->getActiveSheet()->getColumnDimension($Header16[$j])->setWidth(25);
-                    
+            //error_log("MonthName ==".$MonthName);
+            $objPHPExcel->getActiveSheet()->setCellValue("$Header16[$j]"."$i","$row1[$j]");
+            $objPHPExcel->getActiveSheet()->getColumnDimension($Header16[$j])->setWidth(25);
             $objPHPExcel->getActiveSheet()->setCellValue('A16', 'Region'); 
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B16:G16');
             $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($style);
@@ -137,12 +136,12 @@ $objPHPExcel = new PHPExcel();
             $objPHPExcel->getActiveSheet()->setCellValue('G18', 'Value');
             $objPHPExcel->getActiveSheet()->getStyle("A2:C2")->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->getStyle("A18:G18")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("A16")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("B16:G16")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("B17:C17")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("D17:E17")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("F17:G17")->applyFromArray($styleArray);
-           $objPHPExcel->getActiveSheet()->getStyle("$Header16[$j]"."$i")->applyFromArray($styleArray);		  
+            $objPHPExcel->getActiveSheet()->getStyle("A16")->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle("B16:G16")->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle("B17:C17")->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle("D17:E17")->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle("F17:G17")->applyFromArray($styleArray);
+            $objPHPExcel->getActiveSheet()->getStyle("$Header16[$j]"."$i")->applyFromArray($styleArray);		  
 
         }
         
@@ -173,8 +172,9 @@ $objPHPExcel = new PHPExcel();
             $objPHPExcel->getActiveSheet()->setCellValue('A34', '% of Agents that transacted');   
             $objPHPExcel->getActiveSheet()->setCellValue('A35', "(Performed at least one transaction in $MonthName)"); 
             $objPHPExcel->getActiveSheet()->getStyle("A34:A35")->applyFromArray($styleArray);
-            $objPHPExcel->getActiveSheet()->getStyle("B34:B35")->applyFromArray($styleArray);
-            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B34:B35');
+            $objPHPExcel->getActiveSheet()->getStyle("A36")->applyFromArray($styleArray);
+           /*  $objPHPExcel->getActiveSheet()->getStyle("B34:B35")->applyFromArray($styleArray);
+            $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B34:B35'); */
             $objPHPExcel->getActiveSheet()->getDefaultStyle()->applyFromArray($style);
           	  
          }
@@ -199,7 +199,7 @@ $objPHPExcel = new PHPExcel();
 		); 	
 		$Header2=array("A", "B", "C", "D", "E","F","G", "H", "I", "J", "K", "L", "M","N","O","P","Q","R","S","T","U");		
 		for($j=0; $j<$column; $j++) {			
-			$objPHPExcel->getActiveSheet()->setCellValue($Header2[$j]."1",$heading[$j]);
+			      $objPHPExcel->getActiveSheet()->setCellValue($Header2[$j]."1",$heading[$j]);
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B1:C1');
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells('A16:A17');
             $objPHPExcel->setActiveSheetIndex(0)->mergeCells('B16:C16:D13:E16:F16:G16');
@@ -216,7 +216,7 @@ $objPHPExcel = new PHPExcel();
             $objPHPExcel->getActiveSheet()->setCellValue('C2', 'Value');
             $objPHPExcel->getActiveSheet()->setCellValue('A16', 'Region');
             $objPHPExcel->getActiveSheet()->getStyle($Header2[$j]."1")->applyFromArray($styleArray);
-			$objPHPExcel->getActiveSheet()->getStyle($Header2[$j]."1")->applyFromArray($styleArray2);	
+		      	$objPHPExcel->getActiveSheet()->getStyle($Header2[$j]."1")->applyFromArray($styleArray2);	
             $objPHPExcel->getActiveSheet()->getStyle("B2")->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->getStyle("C2")->applyFromArray($styleArray);
             $objPHPExcel->getActiveSheet()->getStyle("A16")->applyFromArray($styleArray);
@@ -236,7 +236,7 @@ $objPHPExcel = new PHPExcel();
        heading($heading,$objPHPExcel,$headcount);
        $i = 3;	
        $secondTable = 19;
-       $ThirdTable = 34;	
+       $ThirdTable = 36;	
        				
        while ($row = mysqli_fetch_array($result))	{
            generateExcel ($i, $row,$objPHPExcel,$headcount);
