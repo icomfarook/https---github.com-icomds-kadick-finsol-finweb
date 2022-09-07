@@ -772,6 +772,8 @@
 							<li><a class="ajax-link" href="#!rptcashoutpay">Cash Out Payment Report</a></li>
 							<li><a class="ajax-link" href="#!nontrans"><?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>
 							<li><a class="ajax-link" href="#!rptbtr">Batch Transaction Report</a></li>
+							<li><a class="ajax-link" style="color:orange" href="#!daitrans"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Daily Transaction Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!mnthtrans"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Monthly Transaction Report</a></li>
 							<!--
 							<li><a class="ajax-link" href="#!trpagt">Fin.Transaction per Agent</a></li>
 							-->
