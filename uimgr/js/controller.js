@@ -11893,6 +11893,16 @@ method: 'post',
 url: '../ajax/appauthorizeajax.php',
 data: { id: id, action: 'edit', rtype: rtype },
 }).then(function successCallback(response) {
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode',"id":response.data[0].party_sales_parent_chain_id, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
 
 $scope.id = response.data[0].id;
 $scope.outletname = response.data[0].name;
@@ -11909,6 +11919,7 @@ $scope.agent_code = response.data[0].agent_code;
 $scope.group_type = response.data[0].group_type;
 $scope.loginname = response.data[0].loginname;
 $scope.ba = response.data[0].party_sales_chain_id;
+
 if(response.data[0].party_sales_chain_id == 10){
 	$scope.ba = "E"
 }else {
@@ -11942,16 +11953,7 @@ if(response.data[0].refer_party_type != ""){
 // console.log(response);
 });
 
-	$http({
-		method: 'post',
-		url: '../ajax/load.php',
-		params: { for: 'SalesChainCode', "action": "active" },
-		}).then(function successCallback(response) {
-		$scope.SalesCode = response.data;
-		console.log(response.data);
-		}, function errorCallback(response) {
-		 //console.log(response);
-		});
+
 $http({
 method: 'post',
 url: '../ajax/load.php',
@@ -15794,7 +15796,17 @@ $scope.RadioChangeE = function(){
 	// console.log(response);
 	});
 
-
+	$http({
+		method: 'post',
+		url: '../ajax/load.php',
+		params: { for: 'SalesChainCode',"id":response.data[0].party_sales_parent_chain, "action": "active" },
+		}).then(function successCallback(response) {
+		$scope.SalesCode = response.data;
+		//console.log(response.data);
+		}, function errorCallback(response) {
+		 //console.log(response);
+		});
+		
 $scope.active = response.data[0].active;
 $scope.application_id = response.data[0].application_id;
 $scope.block_date = response.data[0].block_date;
@@ -15872,16 +15884,7 @@ $scope.dob="";
 }, function errorCallback(response) {
 // console.log(response);
 });
-$http({
-	method: 'post',
-	url: '../ajax/load.php',
-	params: { for: 'SalesChainCode', "action": "active" },
-	}).then(function successCallback(response) {
-	$scope.SalesCode = response.data;
-	//console.log(response.data);
-	}, function errorCallback(response) {
-	 //console.log(response);
-	});
+
 }
 $scope.view = function (index, partyCode, partyType, creteria) {
 $http({
