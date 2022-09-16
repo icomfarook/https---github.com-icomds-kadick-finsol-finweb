@@ -8,6 +8,10 @@
 	if($lang == "2"){
 		include('../common/admin/haus_finsol_label_ini.php');
 	}
+	$profileid = $_SESSION['profile_id'];
+	$partytype = $_SESSION['party_type'];	
+	$partycode = $_SESSION['party_code'];
+	$agent_name	=   $_SESSION['party_name'];
 ?>
 <style>
 #selUser  .select2-selection .select2-selection--single{
@@ -76,6 +80,12 @@
 									<option ng-repeat="type in types" value="{{type.id}}">{{type.name}}</option>
 								</select>
 							</div>	
+							<?php  if($profileid == 51)  { ?>
+								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>		
+								<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input  name='agentDetail' type='checkbox' value='Y' ng-model='agentDetail'/></label>
+									<input  readonly = 'true'  [(ngModel)] ="partycode" value = <?php echo "'".$partycode. "-".$agent_name.  "'" ?> type='text' id='partycode' name='partycode' autofocus='true' required class='form-control'/>
+								</div>
+							<?php } else { ?>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo STATISTICAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input  name='agentDetail' type='checkbox' value='Y' ng-model='agentDetail'/></label>
 								<select ng-init='agentName = "ALL"'  id='selUser' ng-disabled="isAgentDi" ng-model='agentName' class='form-control' name='agentName' required>
@@ -83,7 +93,8 @@
 									<option ng-if="state=='ALL'" ng-repeat="agent in agents" value="{{agent.agent_code}}">{{agent.agent_code}} - {{agent.agent_name}}</option>
 									<option ng-if="state!='ALL'" ng-repeat="agent in agents" value="{{agent.code}}">{{agent.name}}</option>
 								</select>
-							</div>		
+							</div>	
+							<?php }  ?>	
 						</div>								
 								<div class='row appcont' style='margin-top:0%'>	
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>

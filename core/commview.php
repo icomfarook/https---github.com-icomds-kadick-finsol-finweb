@@ -82,11 +82,29 @@
 								<option ng-repeat="info in infos" value="{{info.code}}">{{info.code}} - {{info.name}}</option>
 								</select>										
 							</div>
-							<?php } else { ?>
+							<?php }  if($profileId == 51)  { ?>
+								<div class='row appcont' ng-init="partyCode='<?php echo $partyCode; ?>';creteria='SP'" >
+								<div style='margin-left:333px;' class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+									<label><input  ng-hide='true'  value='SP' type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;&nbsp;
+									<label>Agent<span class='spanre'>*</span>
+									<span ng-show="infoViewForm.id.$dirty && infoViewForm.id.$invalid">
+									<span class = 'err' ng-show="infoViewForm.id.$error.required"><?php echo REQUIRED;?></span></span></label>
+									<input  readonly = 'true'  [(ngModel)] ="partyCode" value = <?php echo "'".$partyCode. "-".$agent_name.  "'" ?> type='text' id='partyCode' name='partyCode' autofocus='true' required class='form-control'/>
+								</div>
+								<!-- <div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
+									<label><input value='TP' ng-init='topartyCode = "ALL"' type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;&nbsp;
+									<label><?php echo INFO_PARTY_CODE_AGENT; ?>	</label>
+									<select  ng-model='topartyCode' ng-disabled="creteria==='SP'" class='form-control' name='topartyCode' required >
+										<option value='ALL'><?php echo INFO_SELECT_PARTY_CODE_AGENT; ?></option>
+										<option ng-repeat="info in infos" value="{{info.code}}">{{info.name}}</option>
+									</select>										
+								</div> -->
+							<?php } ?>				
+							<?php   if($profileId == 50)  { ?> ?>
 								<div class='row appcont' ng-init="partyCode='<?php echo $partyCode; ?>';creteria='SP'" >
 								<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
 									<label><input   ng-checked='true' value='SP' type='radio' name='creteria' ng-model='creteria' /></label>&nbsp;&nbsp;
-									<label><?php echo INFO_PARTY_CODE_CHAMPION ; ?><span class='spanre'>*</span>
+									<label>Agent<span class='spanre'>*</span>
 									<span ng-show="infoViewForm.id.$dirty && infoViewForm.id.$invalid">
 									<span class = 'err' ng-show="infoViewForm.id.$error.required"><?php echo REQUIRED;?></span></span></label>
 									<input  readonly = 'true' ng-disabled="creteria==='TP'" [(ngModel)] ="partyCode" value = <?php echo "'".$partyCode. "-".$agent_name.  "'" ?> type='text' id='partyCode' name='partyCode' autofocus='true' required class='form-control'/>

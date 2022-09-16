@@ -11,6 +11,7 @@
 	$profileid = $_SESSION['profile_id'];
 	$partytype = $_SESSION['party_type'];	
 	$partycode = $_SESSION['party_code'];
+	$agent_name	=   $_SESSION['party_name'];
 ?>
 
 <div ng-controller='AccsalesReportCtrl'>
@@ -101,6 +102,7 @@
 							</div>
 							</div>
 							<div class='row appcont' style='margin-top:0%'>
+							<?php  if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26) { ?>
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><input value='C' ng-click='clickra(creteria)'  type='radio' name='creteria' ng-model='creteria' /></label>
 								<label>Champion</label>
@@ -109,6 +111,14 @@
 										<option ng-repeat="champion in champions"  value="{{champion.code}}">{{champion.code}} - {{champion.name}}</option>		
 								</select>
 							</div>
+							<?php } if($profileid == 51)  { ?>
+								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>		
+									<label>Agent<span class='spanre'>*</span>
+									<span ng-show="infoViewForm.id.$dirty && infoViewForm.id.$invalid">
+									<span class = 'err' ng-show="infoViewForm.id.$error.required"><?php echo REQUIRED;?></span></span></label>
+									<input  readonly = 'true'  [(ngModel)] ="partycode" value = <?php echo "'".$partycode. "-".$agent_name.  "'" ?> type='text' id='partycode' name='partycode' autofocus='true' required class='form-control'/>
+								</div>
+							<?php } ?>
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 							
 						    	<label><?php echo TRANSACTION_REPORT_MAIN_START_DATE; ?></label>

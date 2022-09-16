@@ -6,12 +6,13 @@
 	$data = json_decode(file_get_contents("php://input"));
 	$action = $data->action;
 	$profile_id = $_SESSION['profile_id'];	
+	$sesion_party_code = $_SESSION['party_code'];
 
 	if($action == "findlist") {		
 		$partyCode = $data->partyCode;
 		$creteria = $data->creteria;
 		$query = "";
-		if($profile_id != 1 ||  $profile_id != 10 ||  $profile_id != 20 ||  $profile_id != 22 ||  $profile_id != 26) {
+		if($profile_id == 50) {
 			$topartyCode = $data->topartyCode;
 			$partyType = $_SESSION['party_type'];
 			$sesion_party_code = $_SESSION['party_code'];
@@ -21,6 +22,8 @@
 			if($creteria == "TP") {
 				$partyCode = $topartyCode;
 			} 
+			
+		
 			if($partyType == "C") {
 				if($creteria == "SP") {		
 				$query = "SELECT a.champion_code as code, ifnull(b.current_balance,0.00) as current_balance, ifnull(b.last_tx_amount, '-') as last_tx_amount, ifnull(b.last_tx_date,'-') as last_tx_date, if(b.active = 'Y','Yes','No') as active FROM champion_info a, champion_comm_wallet b WHERE a.champion_code = b.champion_code and a.champion_code = '$sesion_party_code'";
@@ -53,6 +56,12 @@
 				$query = "SELECT a.agent_code as code, ifnull(b.current_balance,0.00) as current_balance, ifnull(b.last_tx_amount, '-') as last_tx_amount, ifnull(b.last_tx_date,'-') as last_tx_date, if(b.active = 'Y','Yes','No') as active FROM agent_info a, agent_comm_wallet b WHERE a.agent_code = b.agent_code and a.sub_agent = 'Y' and a.agent_code = '$partyCode'";
 			}			
 		}
+		if($profile_id == 51 ){
+			
+			//error_log("inside");
+			$query = "SELECT a.agent_code as code, ifnull(b.current_balance,0.00) as current_balance, ifnull(b.last_tx_amount, '-') as last_tx_amount, ifnull(b.last_tx_date,'-') as last_tx_date, if(b.active = 'Y','Yes','No') as active FROM agent_info a, agent_comm_wallet b WHERE a.agent_code = b.agent_code  and a.agent_code ='$sesion_party_code'";
+			
+	}
 		
 		error_log("queyr".$query);
 		$result =  mysqli_query($con,$query);
@@ -70,8 +79,21 @@
 	else if($action == "edit") {
 		$creteria = $data->creteria;
 		
+				
+		if($profile_id == 51) {
+		$partyCode = $data->code;
+		$partyType = $data->partyType;
+		$creteria = $data->creteria;
+		$topartyCode = $data->topartyCode;
+		$partyType = $_SESSION['party_type'];
+		$sesion_party_code = $_SESSION['party_code'];
+			
 		
-		if($profile_id != 1 ||  $profile_id != 10 ||  $profile_id != 20 ||  $profile_id != 22 ||  $profile_id != 26) {
+					$query = "SELECT ifnull(b.block_status, '-') as block_status, ifnull(b.block_date, '-') as block_date, ifnull(b.block_reason_id, '-') as block_reason_id ,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = b.create_user) as create_user, b.create_time, (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = b.update_user) as  update_user, b.update_time,  ifnull(b.uncleared_balance, '-') as uncleared_balance, ifnull(b.previous_current_balance, '-') as previous_current_balance, ifnull(b.minimum_balance, '-') as minimum_balance, ifnull(b.current_balance, '-') as current_balance, ifnull(b.available_balance, '-') as available_balance, ifnull(b.advance_amount, '-') as advance_amount,ifnull(b.daily_limit,'-') as daily_limit,ifnull(b.credit_limit,'-') as  credit_limit,a.agent_code  as party_code, ifnull(b.current_balance, '-') as current_balance, ifnull(b.last_tx_amount, '-') as last_tx_amount, ifnull(b.last_tx_date, '-') as last_tx_date,ifnull(b.last_tx_no, '-')  as last_tx_no, if(b.active = 'Y','Yes','No') as active FROM agent_info a, agent_comm_wallet b WHERE a.agent_code = b.agent_code  and a.agent_code='$sesion_party_code'";
+			
+		}
+		
+		if($profile_id ==50) {
 			$partyCode = $data->code;
 		$partyType = $data->partyType;
 		$creteria = $data->creteria;

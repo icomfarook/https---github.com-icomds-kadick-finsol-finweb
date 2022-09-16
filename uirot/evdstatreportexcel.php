@@ -36,7 +36,7 @@ $objPHPExcel = new PHPExcel();
 							if($agentDetail == false) {
 							$heading = array("Date","Count","State","Local Government");
 							$headcount = 3;
-								$query ="SELECT date(b.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  date(b.date_time) between '$startDate' and '$endDate' group by date(b.date_time),State,local order by date(b.date_time)";
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and  date(b.date_time) between '$startDate' and '$endDate' group by date(c.date_time),State,local order by date(c.date_time)";
 							}
 							else {
 							$heading = array("Date","Count","Agent","State","Local Government");
@@ -207,7 +207,7 @@ $objPHPExcel = new PHPExcel();
 							else {
 							$heading = array("Date","Count","Agent","State","Local Government");
 							$headcount = 5;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list dWHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type' group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and d.state_id=$state and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type' group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
 							}
 						}
 						else {
@@ -316,7 +316,7 @@ $objPHPExcel = new PHPExcel();
 							else {
 							$heading = array("Date","Count","Agent","State","Local Government");
 							$headcount = 5;
-								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list dWHERE b.user_id = c.user_id and b.state_id = d.state_id and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type'   group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
+								$query ="SELECT date(c.date_time) as Date, count(*) as Count, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as agent,concat(d.name) as State,(select name from local_govt_list where local_govt_id=b.local_govt_id) as local FROM  agent_info b, evd_transaction c,state_list d WHERE b.user_id = c.user_id and b.state_id = d.state_id and b.state_id = '$state' and b.local_govt_id = '$local_govt_id'and  date(c.date_time) between '$startDate' and '$endDate' and c.operator_id = '$type'   group by  State,local,b.parent_code, b.agent_name, date(c.date_time) order by  b.agent_name, date(c.date_time)";
 							}
 						}
 						else {

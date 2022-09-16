@@ -10,7 +10,34 @@
 		$partyCode = $data->partyCode;
 		$creteria = $data->creteria;
 		$query = "";
-		if($profile_id != 1 ||  $profile_id != 10 ||  $profile_id != 22 ||  $profile_id != 20) {
+
+		if($profile_id == 51) {
+			$topartyCode = $data->topartyCode;
+			$partyType = $_SESSION['party_type'];
+			$sesion_party_code = $_SESSION['party_code'];
+			if($creteria == "SP") {				
+				$partyCode = $partyCode;
+			}
+			if($creteria == "TP") {
+				$partyCode = $topartyCode;
+			} 
+				if($creteria == "SP") {		
+					$query = "SELECT agent_code as party_code, b.outlet_name as party_name, login_name FROM agent_info a, application_info b WHERE a.application_id = b.application_id and a.agent_code='$sesion_party_code'";
+				}
+				if($creteria == "TP") {		
+				
+					$query = "SELECT agent_code as party_code, concat(b.outlet_name,'(','Self',')') as party_name , login_name FROM agent_info a, application_info b WHERE a.application_id = b.application_id and a.agent_code = '$partyCode' and a.parent_code = '$sesion_party_code'";
+
+					if($partyCode == "ALL"){
+						$query = "SELECT a.agent_code as party_code, if(a.sub_agent='Y',concat(a.agent_name,'[',ifNULL((select agent_name FROM agent_info WHERE agent_code = a.parent_code),'self'),']'),concat(a.agent_name,'[',ifNULL((select champion_name FROM champion_info WHERE champion_code = a.parent_code),'self'),']')) as party_name, login_name FROM agent_info a, application_info b WHERE a.application_id = b.application_id  and a.parent_code = '$sesion_party_code'";
+					
+					}
+					$partyType = "A";
+				}
+			
+			
+			}
+		/* if($profile_id != 1 ||  $profile_id != 10 ||  $profile_id != 22 ||  $profile_id != 20) {
 			$topartyCode = $data->topartyCode;
 			$partyType = $_SESSION['party_type'];
 			$sesion_party_code = $_SESSION['party_code'];
@@ -35,7 +62,7 @@
 				}
 			
 			}
-			}
+			} */
 		if($profile_id == 1 ||  $profile_id == 10 ||  $profile_id == 22 ||  $profile_id == 20) {
 			$partyCode = $data->partyCode;
 			$partyType = $data->partyType;

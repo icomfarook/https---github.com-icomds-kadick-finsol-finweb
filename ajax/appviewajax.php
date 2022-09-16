@@ -37,7 +37,7 @@
 		}
 		else {
 			$party_code = $_SESSION['party_code'];
-			$app_view_query = "SELECT a.application_id, if(a.application_category='N','New',if(a.application_category = 'C', 'Change',if(a.application_category = 'T','Transfer','Cancel'))) as category, b.outlet_name , if(a.applier_type='A','Agent',if(a.applier_type='P','Personal',if(a.applier_type='S','Sub Agent','Champion'))) as applier_type, ifNull(a.parent_code,'-') as parent_code, a.create_time, a.status as stat, if(a.status='P','Pending',if(a.status='A','Approved',if(a.status='R','Rejected',if(a.status='C','Cancelled','Authorized')))) as status FROM application_main a, application_info b  WHERE a.application_id = b.application_id and a.parent_code = '$party_code'";
+			$app_view_query = "SELECT a.application_id, if(a.application_category='N','New',if(a.application_category = 'C', 'Change',if(a.application_category = 'T','Transfer','Cancel'))) as category, b.outlet_name, if(a.applier_type='A','Agent',if(a.applier_type='P','Personal',if(a.applier_type='S','Sub Agent','Champion'))) as applier_type, ifNull(a.parent_code,'-') as parent_code, a.create_time, a.status as stat, if(a.status='P','Pending',if(a.status='A','Approved',if(a.status='R','Rejected',if(a.status='C','Cancelled','Authorized')))) as status FROM application_main a, application_info b WHERE a.application_id = b.application_id and a.parent_code = '$party_code'";
 			if($creteria == "BI") {
 				$app_view_query .= " and a.application_id = '$id'";
 			}

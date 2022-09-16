@@ -1,11 +1,10 @@
-<?php
-ERROR_REPORTING(E_ALL);
+ <?php
+ ERROR_REPORTING(E_ALL);
+$data = json_decode(file_get_contents("php://input"));
 require('../common/admin/configmysql.php');
 require('../common/sessioncheck.php');
 include("excelfunctions.php");
 require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
-
-	$data = json_decode(file_get_contents("php://input"));
 	$type	=  $_POST['type'];
 	$orderNo	=  $_POST['orderNo'];	
 	$startDate		=  $_POST['startDate'];
@@ -22,19 +21,17 @@ if($startDate == null ){
 if($endDate == null ){
 		$endDate   =  date('Y-m-d');
 }
-//error_log($ba);
-//error_log($endDate);
-$msg = "Sales Report For Date between $startDate and $endDate";
+$msg = "EVD Sales Report For Date between $startDate and $endDate";
 $objPHPExcel = new PHPExcel();
 
-		if($profileid  == 1 || $profileid  == 10 || $profileid  == 50) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id";
+		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 || $profileid  == 50) {
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time  FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id ";
 		}
 		if($profileid  == 51) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'";
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time  FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id  and b.user_id = '".$_SESSION['user_id']."'";
 		}
 		if($profileid  == 52) {
-			$query = "SELECT a.e_transaction_id, c.operator_description, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."' and b.sub_agent = 'Y'";
+			$query = "SELECT a.e_transaction_id, c.operator_description,ifNULL(b.agent_code,'-') as agent_code, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, a.request_amount,ifNULL(a.partner_charge,'-') as partner_charge,ifNULL(a.other_charge,'-') as other_charge, a.total_amount, a.date_time   FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."' and b.sub_agent = 'Y'";
 		}
 		
 		if($creteria == "BT") {
@@ -49,6 +46,19 @@ $objPHPExcel = new PHPExcel();
 		if($creteria == "BO") {
 			$query .= " and a.e_transaction_id = $orderNo order by a.e_transaction_id";
 		}
+		if($creteria == "S"){
+				if($state == "ALL"){
+					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+					
+				}else{
+					 if($local_govt_id ==""){
+						$query .= " and b.state_id = '$state'  and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+						
+					}else{
+					$query .= " and b.state_id = '$state' and b.local_govt_id='$local_govt_id' and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time,a.e_transaction_id desc ";
+				}
+			}
+		}
 			
 		$result =  mysqli_query($con,$query);
 		if (!$result) {
@@ -57,8 +67,8 @@ $objPHPExcel = new PHPExcel();
 		}
 		
 		error_log($query);
-		$heading = array("Order No","Operator","Agent","Request Amount","Total Amount","Date Time");
-		$headcount = 6;
+		$heading = array("Order No","Operator","Agent Code","Agent","Request Amount","Partner Charge","Other Charge","Total Amount","Date Time","Update Time");
+		$headcount = 9;
 		heading($heading,$objPHPExcel,$headcount);
 		$i = 2;						
 		while ($row = mysqli_fetch_array($result))	{

@@ -15,7 +15,7 @@ require_once   '../common/PHPExcel/Classes/PHPExcel/IOFactory.php';
 	$state 	= $_POST['state'];
 	$local_govt_id 	= $_POST['local_govt_id'];
 	$profileid = $_SESSION['profile_id'];
-
+$sesion_party_code = $_SESSION['party_code'];
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));
 $title = "";

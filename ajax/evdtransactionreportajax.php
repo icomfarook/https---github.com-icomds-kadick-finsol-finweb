@@ -15,6 +15,8 @@
 	$startDate = date("Y-m-d", strtotime($startDate));
 	$endDate = date("Y-m-d", strtotime($endDate));	
 	$profileid = $_SESSION['profile_id'];
+	$sesion_party_code = $_SESSION['party_code'];
+
 	if($action == "getreport") {
 	
 		if($profileid == 1 || $profileid == 10 || $profileid == 24 || $profileid == 22 || $profileid == 20 || $profileid == 23 || $profileid == 26 ) {
@@ -99,7 +101,8 @@
 				
 		}
 		if($profileid  == 51) {
-			$query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time as date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'";
+			$query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id  and b.agent_code ='$sesion_party_code'";
+
 			if($creteria == "BT") {
 				if($type == "ALL") {
 					$query .= " and date(date_time) >= '$startDate' and  date(date_time) <= '$endDate' order by date_time desc ";
@@ -147,7 +150,7 @@
 			$query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description, a.opr_plan_desc, a.mobile_number, a.total_discount, a.reference_no,a.reference_no2,a.reference_no3, a.reference_no4,a.service_feature_config_id, ifNULL(a.device_id,'-') as device_id, ifNULL(a.ar_lock,'-') as ar_lock, a.evd_trans_log_id, c.operator_code,concat(b.agent_name,'-','[',b.agent_code,']')as Agent_code FROM evd_transaction a, agent_info b, operator c, champion_info d,user e WHERE IF(e.user_type ='C',a.user_id = d.user_id,a.user_id = b.user_id) and a.user_id=e.user_id and d.champion_code = b.parent_code and a.operator_id = c.operator_id and a.e_transaction_id = $orderNo limit 1";
 		} 
 		else if($profileid  == 51) {
-		    $query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description, a.opr_plan_desc, a.mobile_number, a.total_discount, a.reference_no, a.service_feature_config_id, a.device_id, a.ar_lock, a.evd_trans_log_id, c.operator_code FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."' and a.e_transaction_id = $orderNo";
+			$query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description, a.opr_plan_desc, a.mobile_number, a.total_discount, a.reference_no,a.reference_no2,a.reference_no3, a.reference_no4,a.service_feature_config_id, ifNULL(a.device_id,'-') as device_id, ifNULL(a.ar_lock,'-') as ar_lock, a.evd_trans_log_id, c.operator_code,concat(b.agent_name,'-','[',b.agent_code,']')as Agent_code FROM evd_transaction a, agent_info b, operator c, champion_info d,user e WHERE IF(e.user_type ='C',a.user_id = d.user_id,a.user_id = b.user_id) and a.user_id=e.user_id and d.champion_code = b.parent_code and a.operator_id = c.operator_id and b.agent_code ='$sesion_party_code' and a.e_transaction_id = $orderNo limit 1";
 		}
 		else if($profileid  == 52) {
 			$query = "SELECT a.e_transaction_id, a.request_amount, a.total_amount, a.ams_charge, a.partner_charge, a.other_charge, a.date_time, concat(b.agent_name,' [',ifNULL((select champion_name FROM champion_info WHERE champion_code = b.parent_code), 'Self'),']') as user, c.operator_description, a.opr_plan_desc, a.mobile_number, a.total_discount, a.reference_no, a.service_feature_config_id, a.device_id, a.ar_lock, a.evd_trans_log_id, c.operator_code FROM evd_transaction a, agent_info b, operator c  WHERE a.user_id = b.user_id and a.operator_id = c.operator_id and b.user_id = '".$_SESSION['user_id']."'  and b.sub_agent = 'Y' and a.e_transaction_id = $orderNo";
@@ -169,7 +172,7 @@
 			$query = "select if(a.rate_factor = 'P','Percentage','Amount') as rate_factor, b.charge_value,c.user_name,b.service_charge_party_name from  service_charge_rate a, evd_service_order_comm b,user c where a.service_charge_rate_id = b.service_charge_rate_id and c.user_id = b.user_id and b.e_transaction_id = $orderNo";
 		}
 		else if($profileid  == 51) {
-			$query = "select if(a.rate_factor = 'P','Percentage','Amount') as rate_factor, b.charge_value,c.user_name,b.service_charge_party_name from  service_charge_rate a, evd_service_order_comm b,user c where a.service_charge_rate_id = b.service_charge_rate_id and c.user_id = b.user_id  and  b.e_transaction_id = $orderNo";
+			$query = "select if(a.rate_factor = 'P','Percentage','Amount') as rate_factor, b.charge_value,c.user_name,b.service_charge_party_name from  service_charge_rate a, evd_service_order_comm b,user c,agent_info d where c.user_id = d.user_id and  a.service_charge_rate_id = b.service_charge_rate_id and c.user_id = b.user_id and d.agent_code='$sesion_party_code'  and b.e_transaction_id = $orderNo";
 		}
 		else if($profileid  == 52) {
 			$query = "select if(a.rate_factor = 'P','Percentage','Amount') as rate_factor, b.charge_value,c.user_name,b.service_charge_party_name from  service_charge_rate a, evd_service_order_comm b,user c,agent_info e where a.service_charge_rate_id = b.service_charge_rate_id and c.user_id =  and e.sub_agent = 'Y' and b.e_transaction_id = $orderNo";

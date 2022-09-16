@@ -114,7 +114,6 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 						 <span class="hidden-xs"><?php echo INDEX_APPLICATION; ?></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!appent"><?php echo INDEX_APPLICATION_ENTRY; ?></a></li>
 						<li><a class="ajax-link" href="#!appviw"><?php echo INDEX_APPLICATION_VIEW; ?></a></li>
 					</ul>
 				</li>
@@ -124,7 +123,6 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 						 <span class="hidden-xs"><?php echo INDEX_PAYEMENT; ?></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!payent"><?php echo INDEX_PAYMENT_ENTRY; ?></a></li>
 						<li><a class="ajax-link" href="#!payviw"><?php echo INDEX_PAYMENT_VIEW; ?></a></li>
 					</ul>
 				</li>
@@ -164,7 +162,6 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!ptyinf"><?php echo INDEX_PARTY_INFO; ?></a></li>
 						<li><a class="ajax-link" href="#!ptywlt"><?php echo INDEX_PARTY_WALLET; ?></a></li>
-						<li><a class="ajax-link" href="#!ptyjen"><?php echo INDEX_PARTY_JOURNAL_ENTRY; ?></a></li>
 						 <li><a class="ajax-link" href="#!ptyacc"><?php echo INDEX_PARTY_BANK_ACCOUNT; ?></a></li>
 					</ul>
 				</li>
@@ -176,38 +173,45 @@ a.show-sidebar, .breadcrumb > li > a,.breadcrumb > li + li:before {
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!comviw"><?php echo INDEX_COMMISSION_VIEW; ?></a></li>
 						<li><a class="ajax-link" href="#!comlis"><?php echo INDEX_PAYOUT_LIST; ?></a></li>
-						<li><a class="ajax-link" href="#!compay"><?php echo INDEX_PAYOUT; ?></a></li>
-						<li><a class="ajax-link" href="#!comjco"><?php echo INDEX_JOURNAL_COMMISSION; ?></a></li>
+						<li><a class="ajax-link" href="#!compay">Withdraw Commission</a></li>
 						
 					</ul>
 				</li>
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-line-chart"></i>
-						  <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
+						 <span class="hidden-xs"><?php echo INDEX_REPORT; ?></span>
 					</a>
 					<ul class="dropdown-menu">
-						<li><a class="ajax-link" href="#!rptsal">Sales Report</a></li>					
-						<li><a class="ajax-link" href="#!rptsta"><?php echo INDEX_STATISTICAL_REPORT; ?></a></li>
-						<li><a class="ajax-link" href="#!rptfin"><?php echo INDEX_FINANCIAL_REPORT; ?></a></li>
-						<li><a class="ajax-link" href="#!rptetr">EVD Sales Report</a></li>
-						<li><a class="ajax-link" href="#!rptevdsta">EVD Statistical Report</a></li>
-						<li><a class="ajax-link" href="#!evdrptfin">EVD Financial Report</a></li>						
-						<li><a class="ajax-link" href="#!rptfndwlt">Fund Wallet Report</a></li>
-						<li><a class="ajax-link" href="#!rptcashoutpay">Cash Out Payment Report</a></li>
-					<!--	<li><a class="ajax-link" href="#!trapser">Transactions Per Service</a></li>   -->
-					</ul>
-				</li>
-				<li class="dropdown">
-					<a href="#" class="dropdown-toggle">
-						<i class="fa fa-line-chart"></i>
-						 <span class="hidden-xs"><?php echo INDEX_AUDIT; ?></span>
-					</a>
-					<ul class="dropdown-menu">							
-						<li><a class="ajax-link" href="#!rpttra"><?php echo INDEX_TRANSACTION_REPORT; ?></a></li>
-					<!--	<li><a class="ajax-link" href="#!nontrans"><?php echo INDEX_NON_TRANSACTION_REPORT; ?></a></li>   -->
-					</ul>
-				</li>
+						<li class="dropdown">
+							<a href="#" class="dropdown-toggle">
+								<i class="fa fa-newspaper-o"></i>
+								 <span style="color:white" class="hidden-xs"  >Sales</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Cash Sales Report</a></li>
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptbpsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Bill Pay Sales Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptetr"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>EVD Sales Report</a></li>
+								<li ><a class="ajax-link"  style="color:orange" href="#!rptaccsal"><i class="fa fa-dot-circle-o" aria-hidden="true">&nbsp;</i>Acc. Service Sales Report</a></li>
+							</ul>	
+						</li>
+						<li class="dropdown">
+							<a href="" class="dropdown-toggle">
+								<i class="fa fa-file"></i>
+								 <span style="color:white" class="hidden-xs" >Statistical</span>
+							</a>
+							<ul class="dropdown-menu">
+								<li><a class="ajax-link" style="color:orange" href="#!rptsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Cash Stat Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptbpsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Bill Pay Stat Report</a></li>
+								<li><a class="ajax-link"  style="color:orange" href="#!rptevdsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;EVD Stat Report</a></li>
+								<li><a class="ajax-link" style="color:orange" href="#!rptaccsta"><i class="fa fa-dot-circle-o" aria-hidden="true"></i>&nbsp;Acc. Service Stat Report</a></li>
+							</ul>
+						</li>
+						</ul>
+						</li>
+					
+					
+			
 				<li class="dropdown">
 					<a href="#" class="dropdown-toggle">
 						<i class="fa fa-gear"></i>

@@ -8,9 +8,10 @@
 	if($lang == "2"){
 		include('../common/admin/haus_finsol_label_ini.php');
 	}
-	$profileId = $_SESSION['profile_id'];
-	$partyCode = $_SESSION['party_code'];
-	$party_name	=   $_SESSION['party_name'];
+	$profileid = $_SESSION['profile_id'];
+	$partytype = $_SESSION['party_type'];	
+	$partycode = $_SESSION['party_code'];
+	$agent_name	=   $_SESSION['party_name'];
 ?>
 
 <style>
@@ -78,7 +79,13 @@
 									<option ng-repeat="operator in operators" value="{{operator.operator_id}}">{{operator.operator_description}}</option>
 								</select>
 							</div>	
-							<?php if($profileId == 1 || $profileId == 10 || $profileId == 24 || $profileId == 22 || $profileId == 20 || $profileId == 23 || $profileId == 26) { ?>
+							<?php  if($profileid == 51)  { ?>
+								<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>		
+								<label><?php echo EVD_FINANCIAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input type='checkbox' name='agentdetail' value='Y' ng-model='agentdetail' /></label>
+									<input  readonly = 'true'  [(ngModel)] ="partycode" value = <?php echo "'".$partycode. "-".$agent_name.  "'" ?> type='text' id='partycode' name='partycode' autofocus='true' required class='form-control'/>
+								</div>
+						
+							<?php }  else { ?>	
 							<div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 								<label><?php echo EVD_FINANCIAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input type='checkbox' name='agentdetail' value='Y' ng-model='agentdetail' /></label>
 								<select ng-init='agentName = "ALL"' id='selUser'  ng-disabled="isAgentDi" ng-model='agentName' class='form-control' name='agentName' required>
@@ -87,34 +94,9 @@
 									<option ng-if="state!='ALL'" ng-repeat="agent in agents" value="{{agent.code}}">{{agent.name}}</option>
 								</select>
 							</div>	
-							</div>	
-							<?php }  if($profileId == 51 ) { ?>
-								<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12' ng-init="creteria='A'">
-									<label><input type='radio' value='A' name='creteria' ng-model='creteria'/>&nbsp;<?php echo EVD_FINANCIAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;&nbsp;<input ng-click="impor()" type='checkbox' name='agentdetail' value='Y' ng-model='agentdetail'/></label>
-									<input ng-init= "agentName=<?php echo "'".$partyCode."'"; ?>"  readonly='true' ng-disabled="agtAgentName" id='agentName'   ng-model='agentName' class='form-control' name='agentName' required />
-								</div>	
-								 
-							 <div class='col-lg-2 col-xs-12 col-sm-12 col-md-12'>
-								<label><input type='radio' value='S' name='creteria' ng-model='creteria'/>&nbsp;Sub Agent&nbsp;&nbsp;<input ng-click="impor()" type='checkbox' value='Y' ng-model='subagentdetail'/></label>
-								<select ng-init='subAgentName = "ALL"' ng-disabled="creteria==='A'" ng-model='subAgentName' class='form-control' name='subAgentName' required>
-									<option value='ALL'><?php echo STATISTICAL_REPORT_MAIN_AGENT_ALL; ?></option>
-									<option ng-repeat="agent in subagents"  value="{{agent.code}}">{{agent.code}} - {{agent.name}}</option>
-								</select>
-							</div>
-							<?php }  if($profileId == 52 ) { ?>
-								<div class='col-lg-2 col-xs-12 col-sm-12 col-md-12' ng-init="creteria='A'">
-									<label><input type='radio' value='A' name='creteria' ng-model='creteria'/>&nbsp;<?php echo EVD_FINANCIAL_REPORT_MAIN_AGENT_NAME; ?>&nbsp;<input ng-click="impor()" type='checkbox' name='agentdetail' value='Y' ng-model='agentdetail'/></label>
-									<input ng-init= "agentName=<?php echo "'".$partyCode. "-".$party_name.  "'" ?>"  readonly='true' ng-disabled="agtAgentName" id='agentName'   ng-model='agentName' class='form-control' name='agentName' required />
-								</div>	
-							<?php }  if($profileId == 50 ) { ?>
-							<div class='col-lg-4 col-xs-12 col-sm-12 col-md-12'>
-								<label><?php echo EVD_FINANCIAL_REPORT_MAIN_AGENT; ?>&nbsp;<input type='checkbox' value='Y' ng-model='agentdetail'/></label>
-								<select ng-init='agentName = "ALL"' ng-disabled="isAgentDi" ng-model='agentName' class='form-control' name='agentName' required>
-									<option value='ALL'><?php echo STATISTICAL_REPORT_MAIN_AGENT_ALL; ?></option>
-									<option ng-repeat="agent in agents" value="{{agent.code}}">{{agent.name}}</option>
-								</select>
-							</div>	
-							<?php } ?>					
+							
+						<?php } ?>	
+						</div>				
 								<div class='row appcont' style='margin-top:0%'>			
 							 <div class='col-lg-3 col-xs-12 col-sm-12 col-md-12'>
 						    	<label><?php echo STATISTICAL_REPORT_MAIN_START_DATE; ?></label>

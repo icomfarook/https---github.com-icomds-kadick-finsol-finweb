@@ -169,11 +169,13 @@
 									<th><?php echo INFO_MAIN_TABLE_ASSIGNABLE; ?></th>
 									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 24 || $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
 									<th>Edit</th>
-									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
+									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 || $profileId == 51 ) { ?>
 									<th>View</th>
+									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<th>BVN Check</th>
 									<?php } ?>
+									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 ) { ?>
 									<th ng-if="partyType=='MA'">Agent Type</th>
 									<?php } ?>
 								</tr>
@@ -188,11 +190,12 @@
 										<a id={{x.code}} class='infoViewDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
 									</td>
-									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30) { ?>
+									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 || $profileId == 51) { ?>
 									<td>
 										<a id={{x.code}} class='infoViewDialogue' ng-click='view($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoViewDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
+									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<td ng-show="x.bvn==='Y-Yes'"><a id={{x.id}} class='reject' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
@@ -204,6 +207,7 @@
 										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question1.png' /></button></a>
 									</td>
 									<?php } ?>
+									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 ) { ?>
 									<td ng-show="x.partyType == 'A'">
 										<a id={{x.code}} class='infoEditAgentDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoEditAgentDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/write.png' /></button></a>
