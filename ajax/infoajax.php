@@ -9,6 +9,8 @@
 	$action = $data->action;
 	$profile_id = $_SESSION['profile_id'];	
 	$agent_name	=   $_SESSION['party_name'];
+	$SessionUser = $_SESSION['user_id'];
+
 	//$profile_id = 1;
 	$dob = $data->dob;
 	$dob = date("Y-m-d", strtotime($dob));
@@ -381,15 +383,52 @@
 			$table_name = 'champion_info';	
 			$col_name = 'champion_code';				
 		}
+
+		$SelectQuery = "select party_sales_chain_id,party_sales_parent_code,refer_party_type,refer_party_code,party_sales_parent_chain_id from agent_info where agent_code='$partyCode'";
+		//error_log("ISelectQuery==".$SelectQuery);
+
+		$SelectResult = mysqli_query($con,$SelectQuery);
+		$row = mysqli_fetch_assoc($SelectResult);
+		$old_party_sales_chain_id = $row['party_sales_chain_id'];
+		$old_party_sales_parent_code = $row['party_sales_parent_code'];
+		$old_refer_party_type = $row['refer_party_type'];
+		$old_refer_party_code = $row['refer_party_code'];
+		$old_party_sales_parent_chain_id = $row['party_sales_parent_chain_id'];
+
+		if(empty($old_party_sales_chain_id)){
+			$old_party_sales_chain_id = 'NULL';
+		}else{
+			$old_party_sales_chain_id = "'".$old_party_sales_chain_id."'";
+		}
+		if(empty($old_party_sales_parent_code)){
+			$old_party_sales_parent_code = 'NULL';
+		}else{
+			$old_party_sales_parent_code = "'".$old_party_sales_parent_code."'";
+		}
+		if(empty($old_refer_party_type)){
+			$old_refer_party_type = 'NULL';
+		}else{
+			$old_refer_party_type = "'".$old_refer_party_type."'";
+		}
+		if(empty($old_refer_party_code)){
+			$old_refer_party_code = 'NULL';
+		}else{
+			$old_refer_party_code = "'".$old_refer_party_code."'";
+		}
+
 		
 		if($RadioButton == "E"){
 			$query ="UPDATE $table_name SET party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id = $SalesParentTypeID  WHERE $col_name = '$partyCode'";
+			
 		
 		}else{
 			$query ="UPDATE $table_name SET party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code  WHERE $col_name = '$partyCode'";
 		
 		}
 		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
+		$InsertQuery = "insert into sales_channel_history(party_type,party_code,old_party_sales_chain_id,new_party_sales_chain_id,old_party_sales_parent_code,new_party_sales_parent_code,old_refer_party_type,new_refer_party_type,old_refer_party_code,new_refer_party_code,create_user,create_time) values ('$type','$partyCode',$old_party_sales_chain_id,$SalesParentType,$old_party_sales_parent_code,$SalesChainCode,$old_refer_party_type,$RefferedBy,$old_refer_party_code,$Code,'$SessionUser',now())";
+		error_log("Insert Query==".$InsertQuery);
+		$InsertResult = mysqli_query($con,$InsertQuery);
 		
 		error_log("update query = ".$query);
 		$result = mysqli_query($con,$query);

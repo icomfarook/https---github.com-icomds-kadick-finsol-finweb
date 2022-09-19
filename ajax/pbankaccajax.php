@@ -64,8 +64,8 @@
 			$partyType = 'A';
 		}
 		$party_bank_account_id = generate_seq_num (1700,$con);
-		$query =  "INSERT INTO  party_bank_account (party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active, create_user, create_time)
-											VALUES ($party_bank_account_id,'$partyType', '$partyCode','$bankmaster', '$accno','$accname','$bankaddress','$bankbranch','$active', $userId,now())";
+		$query =  "INSERT INTO  party_bank_account (party_bank_account_id,party_type, party_code, bank_master_id, account_no, account_name, bank_address, bank_branch, active,status, create_user, create_time)
+											VALUES ($party_bank_account_id,'$partyType', '$partyCode','$bankmaster', '$accno','$accname','$bankaddress','$bankbranch','$active','E', $userId,now())";
 		//error_log($query);
 		$result = mysqli_query($con,$query);
 		if (!$result) {

@@ -79,7 +79,7 @@
 						 	<td>{{ x.account }}</td>
 							<td>{{ x.branch }}</td>
 							<td>{{ x.name }}</td>
-							<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30)) {?>
+							<?php   if($profileId == 1 || $profileId == 10 || ($profileId >= 20 && $profileId <= 30)) { ?>
 							<td><a id={{x.id}} class='editcountry' ng-click='view($index,x.id)' data-toggle='modal' data-target='#LinkaccountDialogue'>
 							<button  class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a></td>
 							<td><a id={{x.id}} class='editcountry' ng-click='edit($index,x.id)' data-toggle='modal' data-target='#EditBankAccountrDialogue'>
