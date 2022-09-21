@@ -1,8 +1,88 @@
+app.controller('regionCtrl', function ($scope, $http) { 
+	$scope.isHideOk = true;
+
+	$http({
+		method: 'post',
+		url: '../ajax/regionajax.php',
+		data: { action: 'list' },
+	}).then(function successCallback(response) {
+		$scope.regionlist = response.data; 
+	});
+	/* $http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'region' }
+	}).then(function successCallback(response) {
+		$scope.RegionName = response.data
+		//window.location.reload();
+	});
+ */
+	$scope.edit = function (index, id) { 
+		$http({
+			method: 'post',
+			url: '../ajax/regionajax.php',
+			data: { id: id, action: 'edit' },
+		}).then(function successCallback(response) {
+			$scope.active = response.data[0].active;
+			$scope.name = response.data[0].name;
+			$scope.id = response.data[0].id;
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.create = function () {
+		$scope.isLoader = true;
+			$scope.isMainLoader = true;
+		$http({
+			method: 'post',
+			url: '../ajax/regionajax.php',
+			data: {
+				id: $scope.id,
+				active: $scope.active,
+				name: $scope.name,
+				action: 'create'
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#regionCreateBody").html("<h3 id='respdiv'>" + response.data + "</h3>");
+		}, function errorCallback(response) {
+			// console.log(response);
+		});
+	}
+	$scope.update = function (id) {
+		$scope.isLoader = true;
+			$scope.isMainLoader = true;
+		$scope.isHideOk = true;
+		$http({
+			method: 'post',
+			url: '../ajax/regionajax.php',
+			data: {
+				id: $scope.id,
+				name: $scope.name,
+				active: $scope.active,
+				action: 'update'
+			},
+		}).then(function successCallback(response) {
+			$scope.isHide = true;
+			$scope.isHideOk = false;
+			$scope.isLoader = false;
+			$scope.isMainLoader = false;
+			$("#regionBody").html("<h3>" + response.data + "</h3>");
+
+		}, function errorCallback(response) {
+			console.log(response);
+		});
+	}
+
+});
+
+
 app.controller('MonthTransCtrl', function ($scope, $http) {
-	
-
 	detectBrowser();
-
 	function detectBrowser() {
 		if (navigator.userAgent.includes("Chrome")) {
 		$(".MonthPicker").show();
@@ -15254,12 +15334,21 @@ app.controller('stateCtrl', function ($scope, $http) {
 		url: '../ajax/load.php',
 		method: "POST",
 		//Content-Type: 'application/json',
+		params: { action: 'active', for: 'Region' }
+	}).then(function successCallback(response) {
+		$scope.Regions = response.data;
+		//window.location.reload();
+	});
+	$http({
+		url: '../ajax/load.php',
+		method: "POST",
+		//Content-Type: 'application/json',
 		params: { action: 'active', for: 'country' }
 	}).then(function successCallback(response) {
 		$scope.countrys = response.data;
 		//window.location.reload();
 	});
-
+    
 	$scope.edit = function (index, id) {
 		$http({
 			method: 'post',
@@ -15268,6 +15357,7 @@ app.controller('stateCtrl', function ($scope, $http) {
 		}).then(function successCallback(response) {
 			$scope.active = response.data[0].active;
 			$scope.name = response.data[0].name;
+			$scope.region = response.data[0].region;
 			$scope.country = response.data[0].country;
 			$scope.id = response.data[0].id;
 		}, function errorCallback(response) {
@@ -15285,6 +15375,7 @@ app.controller('stateCtrl', function ($scope, $http) {
 				active: $scope.active,
 				name: $scope.name,
 				country: $scope.country,
+				region : $scope.region,
 				action: 'create'
 			},
 		}).then(function successCallback(response) {
@@ -15309,6 +15400,7 @@ app.controller('stateCtrl', function ($scope, $http) {
 				name: $scope.name,
 				active: $scope.active,
 				country: $scope.country,
+				region: $scope.region,
 				action: 'update'
 			},
 		}).then(function successCallback(response) {
@@ -15324,6 +15416,7 @@ app.controller('stateCtrl', function ($scope, $http) {
 	}
 
 });
+
 app.controller('localCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 	$http({

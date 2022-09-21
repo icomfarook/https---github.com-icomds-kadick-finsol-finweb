@@ -568,4 +568,7 @@ app.config(function($routeProvider) {
         templateUrl : "../core/MonthlyReport.php",
         controller: "MonthTransCtrl"
     })
+	.when("/mstreg", {
+        templateUrl : "../core/region.php"
+    })
 });

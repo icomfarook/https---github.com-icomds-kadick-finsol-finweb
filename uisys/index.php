@@ -188,6 +188,7 @@ if($(this).val() != "")
 					</a>
 					<ul class="dropdown-menu">
 						<li><a class="ajax-link" href="#!mstcnt"><?php echo INDEX_COUNTRY; ?></a></li>
+						<li><a class="ajax-link" href="#!mstreg"><?php echo Region; ?></a></li>
 						<li><a class="ajax-link" href="#!mstste"><?php echo INDEX_STATE; ?></a></li>
 						<li><a class="ajax-link" href="#!mstloc"><?php echo INDEX_LOCAL_GOVERNMENT; ?></a></li>
 						<li><a class="ajax-link" href="#!mstsgp"><?php echo INDEX_SERVICE_GROUP; ?></a></li>

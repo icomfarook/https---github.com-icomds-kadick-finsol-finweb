@@ -9,16 +9,13 @@
 	$user_id = $_SESSION['user_id'];
 	$group_type = $_SESSION['group_type'];
 	$group_id = $_SESSION['group_id'];
-
-
-
-
-
-	if ($for == 'SalesChain'){
+	
+	
+	
+	if ($for == 'Region'){
 		if ($action == 'active'){
-			$query = "select party_sales_chain_id, party_sales_chain_code, party_sales_chain_name from party_sales_chain where active = 'Y' and party_sales_chain_code like 'IA%';
-			";
-			//error_log("Authorization Load query - Active only ".$query);
+			$query = "SELECT region_id, name FROM region_list WHERE active = 'Y'";
+			error_log("Authorization Load query - Active only ".$query);
 			$result = mysqli_query($con,$query);
 			if (!$result) {
 				printf("Error: %s\n". mysqli_error($con));
@@ -26,36 +23,13 @@
 			}
 			$data = array();
 			while ($row = mysqli_fetch_array($result)) {
-				$data[] = array("id"=>$row['party_sales_chain_id'],"code"=>$row['party_sales_chain_code'],"name"=>$row['party_sales_chain_name']);           
+				$data[] = array("id"=>$row['region_id'],"name"=>$row['name']);           
 			}
 			////error_log(json_encode($data));
 			echo json_encode($data);
 		}
 	}
-	else if ($for == 'SalesChainCode'){
-		if ($action == 'active'){
-			$id = $_REQUEST['id'];
-			if($id == "" || empty($id) || $id == null) {
-				$query = "select agent_name,agent_code from agent_info where active = 'Y' order by agent_code";
-							
-			}else{
-				$query = "select agent_name,agent_code from agent_info where party_sales_chain_id = $id order by agent_code";
-			
-			}
-			error_log(json_encode($query));
-			$result = mysqli_query($con,$query);
-			if (!$result) {
-				printf("Error: %s\n". mysqli_error($con));
-				exit();
-			}
-			$data = array();
-			while ($row = mysqli_fetch_array($result)) {
-				$data[] = array("code"=>$row['agent_code'],"name"=>$row['agent_name']);           
-			}
-			//////error_log(json_encode($data));
-			echo json_encode($data);
-		}
-	}
+
 	if ($for == 'auth'){
 		if ($action == 'active'){
 			$query = "SELECT auth_id, auth_code FROM authorization WHERE active = 'Y'";

@@ -59,6 +59,7 @@
       						<th><?php echo STATE_MAIN_TABLE_NAME; ?></th>
 							<th><?php echo STATE_MAIN_TABLE_ACTIVE; ?></th>
 							<th><?php echo STATE_MAIN_TABLE_COUNTRY; ?></th>
+							<th>Region</th>
 							<th><?php echo STATE_MAIN_TABLE_EDIT; ?></th>
 						</tr>
 					</thead>
@@ -68,6 +69,7 @@
 							<td>{{ x.name }}</td>
 							<td>{{ x.active }}</td>
 							<td>{{ x.country }}</td>
+							<td>{{ x.Region}}</td>
 							<td><a id={{x.id}} class='editpro' ng-click='edit($index,x.id)' data-toggle='modal' data-target='#EditstateDialogue'>
 								<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a></td>
 						</tr>
@@ -113,6 +115,14 @@
 									<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
 								</select>
 							</div>	
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+								<label>Region<span class='spanre'>*</span><span ng-show="addstateForm.region.$touched ||addstateForm.region.$dirty && addstateForm.region.$invalid">
+								<span class = 'err' ng-show="addstateForm.region.$error.required"> REQUIRED</span></span></label>
+								<select ng-model="region"   class='form-control' name = 'region' id='region' required >	 
+                                 <option value =''>-- SELECT </option>
+								 <option ng-repeat="region in Regions" value="{{region.id}}">{{region.name}}</option>
+                                </select>							
+				</div>
 				</div>
 				<div class='clearfix'></div>
 				</form>
@@ -155,12 +165,20 @@
 										</select>
 								</div>
 
-								<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element' >
+								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
 									<label><?php echo STATE_EDIT_COUNTRY; ?><span class='spanre'>*</span><span ng-show="editstateForm.country.$touched ||editstateForm.country.$dirty && editstateForm.country.$invalid">
 									<span class = 'err' ng-show="editstateForm.country.$error.required"><?php echo REQUIRED;?></span></span></label>
 									<select ng-model="country" ng-change='countrychange(this.country)'  class='form-control' name = 'country' id='country' required>											
 										<option value=''><?php echo STATE_EDIT_COUNTRY_SELECT; ?></option>
 										<option ng-repeat="country in countrys" value="{{country.id}}">{{country.description}}</option>
+									</select>
+								</div>	
+								<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element' >
+									<label>Region <span class='spanre'>*</span><span ng-show="editstateForm.region.$touched ||editstateForm.region.$dirty && editstateForm.country.$invalid">
+									<span class = 'err' ng-show="editstateForm.region.$error.required">Required</span></span></label>
+									<select ng-model="region"  class='form-control' name = 'region' id='region' required>						
+										<option value=''>-select-</option>
+										<option ng-repeat="region in Regions" value="{{region.id}}">{{region.name}}</option>
 									</select>
 								</div>	
 							</div>
