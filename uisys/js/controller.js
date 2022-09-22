@@ -1,6 +1,5 @@
 app.controller('regionCtrl', function ($scope, $http) { 
 	$scope.isHideOk = true;
-
 	$http({
 		method: 'post',
 		url: '../ajax/regionajax.php',

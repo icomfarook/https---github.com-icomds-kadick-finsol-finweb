@@ -119,7 +119,7 @@
 								<label>Region<span class='spanre'>*</span><span ng-show="addstateForm.region.$touched ||addstateForm.region.$dirty && addstateForm.region.$invalid">
 								<span class = 'err' ng-show="addstateForm.region.$error.required"> REQUIRED</span></span></label>
 								<select ng-model="region"   class='form-control' name = 'region' id='region' required >	 
-                                 <option value =''>-- SELECT </option>
+                                 <option value =''>--Select-- </option>
 								 <option ng-repeat="region in Regions" value="{{region.id}}">{{region.name}}</option>
                                 </select>							
 				</div>
