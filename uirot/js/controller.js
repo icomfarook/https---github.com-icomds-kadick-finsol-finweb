@@ -15401,6 +15401,7 @@ app.controller('stateCtrl', function ($scope, $http) {
 				name: $scope.name,
 				active: $scope.active,
 				country: $scope.country,
+				region: $scope.region,
 				action: 'update'
 			},
 		}).then(function successCallback(response) {
