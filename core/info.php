@@ -172,8 +172,12 @@
 									<?php } if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 || $profileId == 51 ) { ?>
 									<th>View</th>
 									<?php } ?>
+									<?php  if($profileId == 51) { ?> 
+									<th>Edit</th> 
+									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<th>BVN Check</th>
+									<th>History</th>
 									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 ) { ?>
 									<th ng-if="partyType=='MA'">Agent Type</th>
@@ -196,6 +200,12 @@
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/detail.png' /></button></a>
 									</td>
 									<?php } ?>
+									<?php  if($profileId == 51) { ?>  
+									<td>
+										<a id={{x.code}} class='infoAgentEditDialogue' ng-click='edit($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoAgentEditDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/edit.png' /></button></a>
+									</td>
+									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10) { ?> 
 									<td ng-show="x.bvn==='Y-Yes'"><a id={{x.id}} class='reject' data-toggle='modal' data-target='#preApplicationRejectDialogue'>
 										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/tick.png' /></button></a>
@@ -205,6 +215,10 @@
 									</td>
 									<td ng-show="x.bvn==='-'"><a id={{x.id}} class='reject' ng-click='Getbvn($index,x.partyCode)' data-toggle='modal' data-target='#RejectBody'>
 										<button class='icoimg'><img style='height:26px;width:26px' src='../common/images/question1.png' /></button></a>
+									</td>
+									<td>
+										<a id={{x.code}} class='infoAgentHistoryDialogue' ng-click='History($index,x.partyCode,x.partyType, creteria)' data-toggle='modal' data-target='#infoAgentHistoryDialogue'>
+										<button class='icoimg'><img style='height:22px;width:22px' src='../common/images/attach.png' /></button></a>
 									</td>
 									<?php } ?>
 									<?php  if($profileId == 1 || $profileId == 10 || $profileId == 20 || $profileId == 21 || $profileId == 22  || $profileId == 23 || $profileId == 24 ||  $profileId == 25 || $profileId == 26 || $profileId == 30 ) { ?>
@@ -226,6 +240,86 @@
 				</div>
 		</div>
 	</div>
+
+
+			<div id='infoAgentHistoryDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
+				<div class="modal-dialog modal-lg">
+					<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h2 style='text-align:center'><?php echo INFO_VIEW_HEADING1; ?> - {{outlet_name}} </h2>
+				
+						</div>				
+							<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>
+							<div class='modal-body' style='text-align:center'>
+								<form action="" method="POST" name='editINFOHistoryForm' id="editINFOHistoryForm">
+								<div id='AuthBody'>
+									<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 '>
+									<label> Number of Changes in Last 90 Days : <span style='color:blue'> {{Last90DaysCount}}</span></label>
+									</div><br />&nbsp;&nbsp;
+									<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 '>
+										<label> Number of Changes in Before 90 Days : <span style='color:blue'>{{Before90DaysCount}}</span></label>								
+									</div>
+									
+								</form>
+							</div>				
+							<div class='modal-footer'>
+							</div>	
+					</div>
+				</div>	
+			</div>	
+		</div>	
+
+	<div id='infoAgentEditDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" ng-init = "countrychange(<?php echo ADMIN_COUNTRY_ID; ?>)">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h2 style='text-align:center'><?php echo INFO_VIEW_HEADING1; ?>- {{outlet_name}}  <span ng-show='parenroutletname'>({{parenroutletname}})</span></h2>
+					</div>					
+					<div  style='text-align:center' class="loading-spiner-holder" data-loading1 ><div class="loading-spiner"><img style='width:20%' align="middle" src="../common/img/gif2.gif" /></div></div>					
+					<div class='modal-body'>
+					<form action="" method="POST" name='editAgentINFOForm' id="editAgentINFOForm">
+						<div id='infoBody'>
+						<div class='row'>
+							
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								<label> <?php echo INFO_VIEW_MOBILE; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.mobile_no.$dirty && editAgentINFOForm.mobile_no.$invalid">
+									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
+								<input type='text' ng-model='mobile_no' name='mobile_no' maxlength="11" class='form-control' required />								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								<label> <?php echo INFO_VIEW_EMAIL; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.email.$touched || editAgentINFOForm.email.$dirty && editAgentINFOForm.email.$invalid">
+								<span class = 'err' ng-show="editAgentINFOForm.email.$error.required"><?php echo REQUIRED;?></span></span>
+								<span  style="color:Red" ng-show="editAgentINFOForm.email.$dirty && editAgentINFOForm.email.$error.pattern"><?php echo INFO_VIEW_PLEASE_ENTER_VALID_EMAIL; ?></span></label>
+								<input type='email' ng-model='email'  ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name='email' class='form-control' required />							
+								
+							</div>
+							</div><br />
+							<div class='row'>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								<label> <?php echo INFO_VIEW_CONTACT_PERSON_NUMBER; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.contact_person_mobile.$dirty && editAgentINFOForm.contact_person_mobile.$invalid"><span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
+								<input numbers-only type='text' ng-model='contact_person_mobile'  spl-char-not ng-trim="false"  restrict-field="contact_person_mobile" name='contact_person_mobile' maxlength="20" class='form-control' required />								
+							</div>
+							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+								<label> <?php echo INFO_VIEW_CONTACT_PERSON_NAME; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.contact_person_name.$touched || editAgentINFOForm.contact_person_name.$dirty && editAgentINFOForm.contact_person_name.$invalid">
+								<span class = 'err' ng-show="editAgentINFOForm.contact_person_name.$error.required"><?php echo REQUIRED;?></span></span><span style="color:Red" ng-show="editAgentINFOForm.contact_person_name.$dirty && editAgentINFOForm.contact_person_name.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></label>
+								<input type='text' spl-char-not  ng-model='contact_person_name'  name='contact_person_name' maxlength='50' ng-minlength="4" class='form-control' required />								
+							</div>
+								</div>
+								</div>
+						</div>
+						</form>
+								
+					<div class='modal-footer ' >
+						<button type='button' class='btn btn-primary' data-dismiss='modal' id='Ok' ng-hide='isHideOk' ><?php echo STATE_EDIT_BUTTON_OK; ?></button>
+						<button type='button' class='btn btn-primary' data-dismiss='modal' ng-hide='isHide' ><?php echo STATE_EDIT_BUTTON_CANCEL; ?></button>
+						<button type='button' class='btn btn-primary' ng-hide='isHide'  ng-disabled="editAgentINFOForm.$invalid" ng-click="editAgentINFOForm.$invalid=true;update(code)" id="Update"><?php echo STATE_EDIT_BUTTON_UPDATE; ?></button>
+					</div>	
+					</div>									
+			</div>
+		</div>	
+	
 
 	<div id='infoEditAgentDialogue' class='modal' role='dialog' data-backdrop="static" data-keyboard="false" >
 		<div class="modal-dialog modal-lg">

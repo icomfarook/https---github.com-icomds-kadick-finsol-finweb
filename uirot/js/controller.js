@@ -15980,6 +15980,31 @@ $scope.dob="";
 });
 
 }
+$scope.History = function (index, partyCode, partyType, creteria) {
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
+		}).then(function successCallback(response) {
+			$scope.code = response.data[0].code;
+			$scope.outlet_name = response.data[0].outlet_name;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'counthistory',creteria:creteria },
+		}).then(function successCallback(response) {
+			$scope.Before90DaysCount = response.data[0].Before90DaysCount;
+			$scope.Last90DaysCount = response.data[0].Last90DaysCount;
+			$scope.party_code = response.data[0].party_code;
+			$scope.party_type = response.data[0].party_type;
+
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
+}
 $scope.view = function (index, partyCode, partyType, creteria) {
 $http({
 method: 'post',

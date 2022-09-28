@@ -149,6 +149,24 @@
 			exit();
 		}
 	}
+	else if($action == "counthistory"){
+		$partyCode = $data->partyCode;
+		$partyType = $data->partyType;
+
+		$query = "select party_type,party_code,count(*) as Before90DaysCount,(select count(*)  from party_detail_history where party_code='$partyCode' and date(create_time) >  date_sub(now(), interval 90 day)) as Last90DaysCount from party_detail_history where party_code='$partyCode' and date(create_time) <  date_sub(now(), interval 90 day)";
+		$result = mysqli_query($con,$query);
+		$data = array();
+		while ($row = mysqli_fetch_array($result)) {
+		$data[] = array("Before90DaysCount"=>$row['Before90DaysCount'],"Last90DaysCount"=>$row['Last90DaysCount'],"party_code"=>$row['party_code'],"party_type"=>$row['party_type']);        
+		}	
+		error_log($query);
+		echo json_encode($data);
+		if (!$result) {
+			echo "Error: %s\n", mysqli_error($con);
+			exit();
+		}	
+
+	}
 		else if($action == "view") {
 		$partyCode = $data->partyCode;
 		$partyType = $data->partyType;
@@ -157,7 +175,8 @@
 		$dob = $data->dob;
 		$dob = date("Y-m-d", strtotime($dob));
 		$BusinessType = $data->BusinessType;
-					
+
+		
 		if($partyType == "A" ) {
 			$query = "SELECT a.address1, a.address2, a.local_govt_id, a.state_id, a.loc_latitude, a.loc_longitude, d.outlet_name, ifNull(c.parent_code,'Self') as pcode, ifNull((select outlet_name from application_info WHERE party_code = c.parent_code),'Self') as parenroutletname,ifNull(a.block_date,' - ') as block_date, if(a.block_status = 'Y','Yes','No') as block_status, if(a.active = 'Y','Yes','No') as active, a.agent_code as code, a.agent_name as name, a.login_name as lname, if(a.parent_type='C','Champion',if(a.parent_type= 'A','Agent',if(a.parent_type='S','Sub Agent',if(a.parent_type='P','Personal','')))) as ptype, if(a.party_category_type_id='1','BRONZE',if(a.party_category_type_id='2','SILVER',if(a.party_category_type_id='3','GOLD','PLATINUM'))) as partytype, if(a.sub_agent = 'Y','Yes','No') as sub_agent,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.create_user) as create_user,a.create_time,(SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.update_user) as update_user,a.update_time, concat(e.country_code,' - ',e.country_description) as country,if(c.applier_type='C','C - Champion',if(c.applier_type= 'A','A - Agent',if(c.applier_type='S','S - Sub Agent',if(c.applier_type='P','P - Personal',''))))  as atype, (SELECT block_reason_code FROM block_reason WHERE block_reason_id = a.block_reason_id) as block_reason_id, g.name as gvtname, h.name as state,a.zip_code, a.work_no, a.email, a.mobile_no, a.contact_person_name, a.contact_person_mobile, a.tax_number,a.application_id,a.start_date, a.expiry_date, a.block_date,  (SELECT concat(first_name,' ',last_name,' (',user_name,')') FROM user WHERE user_id = a.user_id) as user,a.dob,a.gender,if(a.business_type='0','Pharmacy',if(a.business_type='1','Gas Station',if(a.business_type='2','Saloon',if(a.business_type='3','Groceries Stores',if(a.business_type='4','Super Market',if(a.business_type='5','Mobile Network Outlets',if(a.business_type='6','Restaurants',if(a.business_type='7','Hotels',if(a.business_type='8','Cyber Cafe',if(a.business_type='9','Post Office','Others')))))))))) as business_type  FROM agent_info a , application_main c, application_info d , country e, local_govt_list g, state_list h WHERE h.state_id = a.state_id and g.local_govt_id = a.local_govt_id and e.country_id = a.country_id and  c.application_id = d.application_id and a.application_id = c.application_id and a.agent_code = '".$partyCode."'";
 		}
@@ -283,13 +302,59 @@
 			$table_name = 'champion_info';	
 			$col_name = 'champion_code';				
 		}
-		$address1 = mysqli_real_escape_string($con, $address1);
-		$address2 = mysqli_real_escape_string($con, $address2);
+		if($profile_id == 51){
+			$SelectQuery = "select contact_person_name,contact_person_mobile,email,mobile_no from agent_info where agent_code='$partyCode'";
+			//error_log("ISelectQuery==".$SelectQuery);
+	
+			$SelectResult = mysqli_query($con,$SelectQuery);
+			$row = mysqli_fetch_assoc($SelectResult);
+			$old_Contact_person_name = $row['contact_person_name'];
+			$old_Contact_Person_mobile = $row['contact_person_mobile'];
+			$old_Email = $row['email'];
+			$old_Mobile_no = $row['mobile_no'];
+			
 		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
-		$query ="UPDATE $table_name SET state_id = $state_id, local_govt_id = $local_govt_id,dob = '$dob',gender = '$gender',business_type = '$BusinessType', loc_latitude = '$loc_latitude',active = '$active', loc_longitude = '$loc_longitude', address1 = '$address1', address2 = '$address2',  contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile'  WHERE $col_name = '$partyCode'";
+			$query ="UPDATE $table_name SET   contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile'  WHERE $col_name = '$partyCode'";
+			
+			error_log("update query = ".$query);
+			$result = mysqli_query($con,$query);
+			if($result){
+
+			if($mobile != $old_Mobile_no){
+				$InsertQuery = "insert into party_detail_history (party_detail_history_id,party_type,party_code,field_name,old_value,new_value,create_user,create_time) Values (0,'A','$partyCode','mobile_no','$old_Mobile_no','$mobile','$SessionUser',now())";
+				$InsertResult = mysqli_query($con,$InsertQuery);
+				///error_log("Mobile ==".$InsertQuery);
+			}
+			if($email != $old_Email){
+				$InsertQuery = "insert into party_detail_history (party_detail_history_id,party_type,party_code,field_name,old_value,new_value,create_user,create_time) Values (0,'A','$partyCode','email','$old_Email','$email','$SessionUser',now())";
+				$InsertResult = mysqli_query($con,$InsertQuery);
+				///error_log("email ==".$InsertQuery);
+			}
+			if($cpname != $old_Contact_person_name){
+				$InsertQuery = "insert into party_detail_history (party_detail_history_id,party_type,party_code,field_name,old_value,new_value,create_user,create_time) Values (0,'A','$partyCode','contact_person_name','$old_Contact_person_name','$cpname','$SessionUser',now())";
+				$InsertResult = mysqli_query($con,$InsertQuery);
+				///error_log("cpname ==".$InsertQuery);
+			}
+			if($cpmobile != $old_Contact_Person_mobile){
+				$InsertQuery = "insert into party_detail_history (party_detail_history_id,party_type,party_code,field_name,old_value,new_value,create_user,create_time) Values (0,'A','$partyCode','contact_person_mobile','$old_Contact_Person_mobile','$cpmobile','$SessionUser',now())";
+				$InsertResult = mysqli_query($con,$InsertQuery);
+				///error_log("cpmobile ==".$InsertQuery);
+			}
+				
+
+			}
+		}else
+		{
+			$address1 = mysqli_real_escape_string($con, $address1);
+			$address2 = mysqli_real_escape_string($con, $address2);
+			////error_log("table_name = ".$table_name.", col_name = ".$col_name);
+			$query ="UPDATE $table_name SET state_id = $state_id, local_govt_id = $local_govt_id,dob = '$dob',gender = '$gender',business_type = '$BusinessType', loc_latitude = '$loc_latitude',active = '$active', loc_longitude = '$loc_longitude', address1 = '$address1', address2 = '$address2',  contact_person_name = '$cpname', contact_person_mobile = '$cpmobile', email = '$email', mobile_no = '$mobile'  WHERE $col_name = '$partyCode'";
+			
+			error_log("update query = ".$query);
+			$result = mysqli_query($con,$query);
 		
-		error_log("update query = ".$query);
-		$result = mysqli_query($con,$query);
+		}
+		
 		if (!$result) {
 			echo "Error:$table_name". mysqli_error($con);
 			exit();
