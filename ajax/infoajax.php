@@ -167,6 +167,21 @@
 		}	
 
 	}
+	else if($action == "tablehistory"){
+		$partyCode = $data->partyCode;
+		$partyType = $data->partyType;
+
+		$query = "select party_code,field_name,old_value,new_value,create_time as Datetime from party_detail_history where party_code='$partyCode' and date(create_time) >  date_sub(now(), interval 90 day)";
+		
+		error_log("query123 ==".$query);
+		$result = mysqli_query($con,$query);
+		$data = array();
+		while ($row = mysqli_fetch_array($result)) {
+			$data[] = array("party_code"=>$row['party_code'],"field_name"=>$row['field_name'],"old_value"=>$row['old_value'],"new_value"=>$row['new_value'],"Datetime"=>$row['Datetime']);          
+		}
+		echo json_encode($data);
+	}
+
 		else if($action == "view") {
 		$partyCode = $data->partyCode;
 		$partyType = $data->partyType;

@@ -1,5 +1,6 @@
 app.controller('regionCtrl', function ($scope, $http) { 
 	$scope.isHideOk = true;
+
 	$http({
 		method: 'post',
 		url: '../ajax/regionajax.php',
@@ -79,9 +80,11 @@ app.controller('regionCtrl', function ($scope, $http) {
 
 });
 
-
 app.controller('MonthTransCtrl', function ($scope, $http) {
+	
+
 	detectBrowser();
+
 	function detectBrowser() {
 		if (navigator.userAgent.includes("Chrome")) {
 		$(".MonthPicker").show();
@@ -15318,7 +15321,6 @@ $http({
  }
 });
 
-
 app.controller('stateCtrl', function ($scope, $http) {
 	$scope.isHideOk = true;
 
@@ -15740,6 +15742,7 @@ app.controller('commCtrl', function ($scope, $http) {
 
 app.controller('infoCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
+
 $scope.countrychange = function (id) {
 $http({
 method: 'post',
@@ -15977,6 +15980,43 @@ $scope.dob="";
 // console.log(response);
 });
 
+}
+$scope.History = function (index, partyCode, partyType, creteria) {
+
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'tablehistory',creteria:creteria },
+		}).then(function successCallback(response) {
+		$scope.partytable = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'view',creteria:creteria },
+		}).then(function successCallback(response) {
+			$scope.code = response.data[0].code;
+			$scope.outlet_name = response.data[0].outlet_name;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+	
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'counthistory',creteria:creteria },
+		}).then(function successCallback(response) {
+			$scope.Before90DaysCount = response.data[0].Before90DaysCount;
+			$scope.Last90DaysCount = response.data[0].Last90DaysCount;
+			$scope.party_code = response.data[0].party_code;
+			$scope.party_type = response.data[0].party_type;
+
+			}, function errorCallback(response) {
+			// console.log(response);
+			});
 }
 $scope.view = function (index, partyCode, partyType, creteria) {
 $http({

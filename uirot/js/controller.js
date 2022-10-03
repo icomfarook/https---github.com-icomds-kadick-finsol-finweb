@@ -15742,6 +15742,7 @@ app.controller('commCtrl', function ($scope, $http) {
 
 app.controller('infoCtrl', function ($scope, $http) {
 $scope.isHideOk = true;
+
 $scope.countrychange = function (id) {
 $http({
 method: 'post',
@@ -15981,6 +15982,17 @@ $scope.dob="";
 
 }
 $scope.History = function (index, partyCode, partyType, creteria) {
+
+	$http({
+		method: 'post',
+		url: '../ajax/infoajax.php',
+		data: { partyCode: partyCode,partyType: partyType, action: 'tablehistory',creteria:creteria },
+		}).then(function successCallback(response) {
+		$scope.partytable = response.data;
+		}, function errorCallback(response) {
+		// console.log(response);
+		});
+
 	$http({
 		method: 'post',
 		url: '../ajax/infoajax.php',
@@ -15991,6 +16003,7 @@ $scope.History = function (index, partyCode, partyType, creteria) {
 		}, function errorCallback(response) {
 		// console.log(response);
 		});
+	
 	$http({
 		method: 'post',
 		url: '../ajax/infoajax.php',

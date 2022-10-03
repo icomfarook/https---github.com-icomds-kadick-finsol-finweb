@@ -254,12 +254,41 @@
 							<div class='modal-body' style='text-align:center'>
 								<form action="" method="POST" name='editINFOHistoryForm' id="editINFOHistoryForm">
 								<div id='AuthBody'>
-									<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 '>
-									<label> Number of Changes in Last 90 Days : <span style='color:blue'> {{Last90DaysCount}}</span></label>
-									</div><br />&nbsp;&nbsp;
-									<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 '>
-										<label> Number of Changes in Before 90 Days : <span style='color:blue'>{{Before90DaysCount}}</span></label>								
+									<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+									<label> Number of  Changes in Last 90 Days : <span style='color:blue'> {{Last90DaysCount}}</span></label>
 									</div>
+									<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 '>
+										<label> Number of Changes in Before 90 Days : <span style='color:blue'>{{Before90DaysCount}}</span></label>								
+									</div><br />&nbsp;								
+									
+									<div class='row appcont'>
+										<table class="table maintable table-bordered table-striped table-hover table-heading table-datatable" id="datatable-1">
+										<label style ='display:flex' > List of change in last 90 days :</label>	
+										<thead>
+												<tr> 
+													<th>Field Name</th>
+													<th>Old Value</th>
+													<th>New Value</th>
+													<th>Date Time</th>
+												</tr>
+											</thead>
+											<tbody>
+												<tr ng-repeat="x in partytable">
+												
+													<td>{{x.field_name}}</td>
+													<td>{{x.old_value}}</td>
+													<td >{{x.new_value}}</td>
+													<td>{{x.Datetime}}</td>
+												</tr>
+												<tr ng-show="partytable.length==0">
+													<td style='text-align:center' colspan='4' >
+														<?php echo NO_DATA_FOUND; ?>              
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div>
+									
 									
 								</form>
 							</div>				
@@ -283,25 +312,25 @@
 						<div id='infoBody'>
 						<div class='row'>
 							
-							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<!-- <div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
 								<label> <?php echo INFO_VIEW_MOBILE; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.mobile_no.$dirty && editAgentINFOForm.mobile_no.$invalid">
 									<span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
 								<input type='text' ng-model='mobile_no' name='mobile_no' maxlength="11" class='form-control' required />								
-							</div>
-							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							</div> -->
+							<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
 								<label> <?php echo INFO_VIEW_EMAIL; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.email.$touched || editAgentINFOForm.email.$dirty && editAgentINFOForm.email.$invalid">
 								<span class = 'err' ng-show="editAgentINFOForm.email.$error.required"><?php echo REQUIRED;?></span></span>
 								<span  style="color:Red" ng-show="editAgentINFOForm.email.$dirty && editAgentINFOForm.email.$error.pattern"><?php echo INFO_VIEW_PLEASE_ENTER_VALID_EMAIL; ?></span></label>
 								<input type='email' ng-model='email'  ng-pattern="/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/" name='email' class='form-control' required />							
 								
 							</div>
-							</div><br />
-							<div class='row'>
-							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<!-- </div><br />
+							<div class='row'> -->
+							<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
 								<label> <?php echo INFO_VIEW_CONTACT_PERSON_NUMBER; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.contact_person_mobile.$dirty && editAgentINFOForm.contact_person_mobile.$invalid"><span class = 'err' ng-message="required"><?php echo REQUIRED;?>.</span></span></label>
 								<input numbers-only type='text' ng-model='contact_person_mobile'  spl-char-not ng-trim="false"  restrict-field="contact_person_mobile" name='contact_person_mobile' maxlength="20" class='form-control' required />								
 							</div>
-							<div class='col-xs-12 col-md-12 col-lg-6 col-sm-12 form_col12_element'>
+							<div class='col-xs-12 col-md-12 col-lg-12 col-sm-12 form_col12_element'>
 								<label> <?php echo INFO_VIEW_CONTACT_PERSON_NAME; ?> :<span class='spanre'>*</span><span ng-show="editAgentINFOForm.contact_person_name.$touched || editAgentINFOForm.contact_person_name.$dirty && editAgentINFOForm.contact_person_name.$invalid">
 								<span class = 'err' ng-show="editAgentINFOForm.contact_person_name.$error.required"><?php echo REQUIRED;?></span></span><span style="color:Red" ng-show="editAgentINFOForm.contact_person_name.$dirty && editAgentINFOForm.contact_person_name.$error.minlength"> <?php echo MIN_4_CHARACTERS_REQUIRED; ?> </span></label>
 								<input type='text' spl-char-not  ng-model='contact_person_name'  name='contact_person_name' maxlength='50' ng-minlength="4" class='form-control' required />								
