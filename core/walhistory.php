@@ -208,7 +208,7 @@
 											 <div  style = 'text-align:Center' class='col-lg-12 col-xs-12 col-sm-12 col-md-12'>
 											<button type="button" class="btn btn-primary"  ng-click='infoViewForm.$invalid=true;query()' ng-hide='isHide'  id="Query"><?php echo JOUNRAL_ENTRY_MAIN_BUTTON_QUERY; ?></button>
 											<button type="button" class="btn btn-primary"   id="Refresh"><?php echo JOUNRAL_ENTRY_MAIN_BUTTON_REFRESH; ?></button>
-											<button type="submit" class="btn btn-primary"   id="excel"ng-hide='isHideexcel;'> Excel</button>
+											<button type="submit" class="btn btn-primary"   id="excel" ng-hide='isHideexcel;'> Excel</button>
 										</div>
 								  <?php } ?>
 								 
