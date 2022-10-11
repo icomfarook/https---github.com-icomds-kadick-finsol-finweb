@@ -423,16 +423,21 @@
 		}else{
 			$SalesParentTypeID = "'".$SalesParentTypeID."'";
 		}
+		if(empty($SalesParentType)){
+			$SalesParentTypeID = 'NULL';
+		}else{
+			$SalesParentType = "'".$SalesParentType."'";
+		}
 	
 		if($type == "P") {			
-			$update_query = "UPDATE personal_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE personal_code = '$party_code'";
+			$update_query = "UPDATE personal_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE personal_code = '$party_code'";
 		}else if($type == "C") {
-			$update_query = "UPDATE champion_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE champion_code = '$party_code'";
+			$update_query = "UPDATE champion_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE champion_code = '$party_code'";
 		}else if($type == "A" || $type == "S") {		
 			if($RadioButton == "E"){
-				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id =$SalesParentTypeID, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
+				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id =$SalesParentTypeID, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
 			}else{
-				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
+				$update_query = "UPDATE agent_info SET active = 'Y', user_id = $userid, party_category_type_id = '$partycatype',party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE agent_code = '$party_code'";
 			}		
 			
 		}

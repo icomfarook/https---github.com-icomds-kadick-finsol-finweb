@@ -405,7 +405,7 @@
 			echo "Error:SINFTL %s\n", mysqli_error($con);
 			error_log("Error: infotableentry = %s\n", mysqli_error($con));
 			error_log($query);
-			//exit();
+			exit();
 		}
 		else {
 			$row = mysqli_fetch_array($result);

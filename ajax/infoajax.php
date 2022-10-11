@@ -172,7 +172,7 @@
 		$partyType = $data->partyType;
 
 		$query = "select party_code,field_name,old_value,new_value,create_time as Datetime from party_detail_history where party_code='$partyCode' and date(create_time) >  date_sub(now(), interval 90 day)";
-		
+
 		error_log("query123 ==".$query);
 		$result = mysqli_query($con,$query);
 		$data = array();
@@ -441,6 +441,11 @@
 		}else{
 			$SalesParentTypeID = "'".$SalesParentTypeID."'";
 		}
+		if(empty($SalesParentType)){
+			$SalesParentType = 'NULL';
+		}else{
+			$SalesParentType = "'".$SalesParentType."'";
+		}
 
 		error_log("RefferedBy ==".$Code);
 
@@ -498,11 +503,11 @@
 
 		
 		if($RadioButton == "E"){
-			$query ="UPDATE $table_name SET party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id = $SalesParentTypeID  WHERE $col_name = '$partyCode'";
+			$query ="UPDATE $table_name SET party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code,party_sales_parent_chain_id = $SalesParentTypeID  WHERE $col_name = '$partyCode'";
 			
 		
 		}else{
-			$query ="UPDATE $table_name SET party_sales_chain_id='$SalesParentType',party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code  WHERE $col_name = '$partyCode'";
+			$query ="UPDATE $table_name SET party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code  WHERE $col_name = '$partyCode'";
 		
 		}
 		////error_log("table_name = ".$table_name.", col_name = ".$col_name);
