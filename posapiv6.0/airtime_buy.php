@@ -18,8 +18,8 @@
 		$data = json_decode(file_get_contents("php://input"));
 		error_log("airtime_buy <== ".json_encode($data));
 
-		if( isset($data->operation) && $data->operation == 'RECHARGE_AIRTIME_BUY') {
-			error_log("inside operation == RECHARGE_AIRTIME_BUY method");
+		if( isset($data->operation) && ($data->operation == 'RECHARGE_AIRTIME_BUY' || $data->operation == 'AIRTIME_BUY')) {
+			error_log("inside operation == RECHARGE_AIRTIME_BUY or AIRTIME_BUY method");
             if (  isset($data->requestAmount) && !empty($data->requestAmount) && isset($data->operatorCode) && !empty($data->operatorCode)
             	&& isset($data->operatorId) && !empty($data->operatorId) && isset($data->mobile) && !empty($data->mobile)
             	&& isset($data->operatorPlanId) && !empty($data->operatorPlanId) && isset($data->totalAmount) && !empty($data->totalAmount)
