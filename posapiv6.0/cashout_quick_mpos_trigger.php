@@ -21,12 +21,12 @@
 			error_log("inside operation == CASHOUT_QUICK_MPOS_TRIGGER method");
 
             if ( isset($data->partnerId ) && !empty($data->partnerId) && isset($data->requestAmount) && !empty($data->requestAmount) 	
-				&& isset($data->cardType) && !empty($data->cardType) && isset($data->mobileNo) && !empty($data->mobileNo)  
+				&& isset($data->cardType) && !empty($data->cardType) 
 		   		&& isset($data->countryId) && !empty($data->countryId) && isset($data->partyCode) && !empty($data->partyCode) 
 				&& isset($data->partyType) && !empty($data->partyType) && isset($data->productId) && !empty($data->productId)
 				&& isset($data->userId) && !empty($data->userId) && isset($data->signature) && !empty($data->signature)
-            	&& isset($data->key1) && !empty($data->key1) && isset($data->stateId) 
-				&& !empty($data->stateId) && isset($data->senderName) && !empty($data->senderName)
+            	&& isset($data->key1) && !empty($data->key1) && isset($data->stateId) && !empty($data->stateId) 
+				//&& isset($data->senderName) && !empty($data->senderName) && isset($data->mobileNo) && !empty($data->mobileNo)  
 	  		) {
 				error_log("inside all inputs are set correctly");	
 				$partnerId = $data->partnerId;
@@ -160,24 +160,22 @@
 					$charges_details_split = explode("|",$charges_details);	
 
 					if ( $txType == "F") {
-						$select_agent_charge_query = "select flexi_charge from party_flexi_charge where party_code = '".$partyCode."' and party_type = '".$partyType."' and active = 'Y' and ".$requestedAmount." between from_value and to_value order by create_time desc limit 1";
+						$select_agent_charge_query = "select ifnull(flexi_charge,0) as flexi_charge from party_flexi_charge where party_code = '".$partyCode."' and party_type = '".$partyType."' and active = 'Y' and ".$requestedAmount." between from_value and to_value order by create_time desc limit 1";
 						error_log("select_agent_charge_query = ".$select_agent_charge_query);
 						$select_agent_charge_result = mysqli_query($con, $select_agent_charge_query);
 						if ( $select_agent_charge_result ) {
-							$select_agent_charge_row = mysqli_fetch_assoc($select_agent_charge_result); 
-							$agent_charge = $select_agent_charge_row['flexi_charge']; 
+							$select_agent_charge_count = mysqli_num_rows($select_agent_charge_result);
+							if ( $select_agent_charge_count > 0 ) {
+								$select_agent_charge_row = mysqli_fetch_assoc($select_agent_charge_result); 
+								$agent_charge = $select_agent_charge_row['flexi_charge']; 
+							}
 						}
 					} else if ( $txType == "E" ) {
-						error_log("inside EEEEE");
 						$rateparties_details_split = explode(",",$rateparties_details);
-						error_log("11");
 						for($i = 0; $i < sizeof($rateparties_details_split); $i++) {
 							$rateparties_item = $rateparties_details_split[$i];
-							error_log("22");
 							if ( strpos($rateparties_item, "Agent") !== false ) {
-								error_log("33");
 								$agentparties_split = explode("~",$rateparties_item);
-								error_log("44");
 								$agent_charge = $agentparties_split[4];
 							}
 						}

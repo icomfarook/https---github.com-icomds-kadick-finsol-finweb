@@ -18,8 +18,8 @@
 		$data = json_decode(file_get_contents("php://input"));
 		error_log("airtime_buy <== ".json_encode($data));
 
-		if( isset($data->operation) && $data->operation == 'AIRTIME_BUY') {
-			error_log("inside operation == AIRTIME_BUY method");
+		if( isset($data->operation) && $data->operation == 'RECHARGE_AIRTIME_BUY') {
+			error_log("inside operation == RECHARGE_AIRTIME_BUY method");
             if (  isset($data->requestAmount) && !empty($data->requestAmount) && isset($data->operatorCode) && !empty($data->operatorCode)
             	&& isset($data->operatorId) && !empty($data->operatorId) && isset($data->mobile) && !empty($data->mobile)
             	&& isset($data->operatorPlanId) && !empty($data->operatorPlanId) && isset($data->totalAmount) && !empty($data->totalAmount)
@@ -33,9 +33,9 @@
 				set_time_limit(60);
 				error_log("inside all inputs are set correctly");	
 				$partner =$data->partnerId;
-		        	$requestedAmount = $data->requestAmount;
-      		    		$totalAmount = $data->totalAmount;
-      	        		$serviceCharge = 0;
+		        $requestedAmount = $data->requestAmount;
+      		    $totalAmount = $data->totalAmount;
+      	        $serviceCharge = 0;
 				$partyCode = $data->partyCode;
 				$partyType =  $data->partyType;
 				$parentCode = $data->parentCode;
@@ -44,16 +44,16 @@
 				$userId = $data->userId;
 				$signature= $data->signature;
 				$key1 = $data->key1;								
-               			$operatorId = $data->operatorId;
-                		$operatorCode = $data->operatorCode;
-                		$operatorPlanId = $data->operatorPlanId;
+               	$operatorId = $data->operatorId;
+                $operatorCode = $data->operatorCode;
+                $operatorPlanId = $data->operatorPlanId;
 				$countryId = $data->countryId;
 				$stateId = $data->stateId;								 
-                		$mobile = $data->mobile;
-                		$reMobile = $data->reMobile;
-                		$partnerId = $data->partnerId;
-                		$amsCharge = 0;
-                		$partnerCharge = 0;
+                $mobile = $data->mobile;
+                $reMobile = $data->reMobile;
+                $partnerId = $data->partnerId;
+                $amsCharge = 0;
+                $partnerCharge = 0;
 				$otherCharge = 0;
 				$session_validity = AGENT_SESSION_VALID_TIME;	
 
@@ -263,6 +263,7 @@
 																			$response["referenceNo"] = $api_response['flexiMessage']['refno'];
 																			$response["signature"] = $server_signature;
 																			$response["availableBalance"] = $availableBalance;
+																			$response["planDescription"] = $api_response['flexiMessage']['oprPlan'];
 																		}																					
 																		else {
 																			//EVD Transaction Request responseCode not equal to 0
@@ -548,7 +549,7 @@
 	}			
 		
 	// echoing JSON response
-	error_log(json_encode($response));
+	error_log("airtime_buy ==> ".json_encode($response));
 	echo json_encode($response);
 	return;			
 		
