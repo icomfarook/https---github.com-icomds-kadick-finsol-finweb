@@ -424,7 +424,7 @@
 			$SalesParentTypeID = "'".$SalesParentTypeID."'";
 		}
 		if(empty($SalesParentType)){
-			$SalesParentType = 'NULL';
+			$SalesParentTypeID = 'NULL';
 		}else{
 			$SalesParentType = "'".$SalesParentType."'";
 		}
