@@ -429,7 +429,6 @@
 			$SalesParentType = "'".$SalesParentType."'";
 		}
 	
-		
 		if($type == "P") {			
 			$update_query = "UPDATE personal_info SET active = 'Y', user_id = $userid, party_category_type_id ='$partycatype',party_sales_chain_id=$SalesParentType,party_sales_parent_code=$SalesChainCode,refer_party_type=$RefferedBy,refer_party_code=$Code, update_user = $createuser, update_time = now() WHERE personal_code = '$party_code'";
 		}else if($type == "C") {
