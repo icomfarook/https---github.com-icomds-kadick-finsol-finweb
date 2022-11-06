@@ -21,8 +21,8 @@
 
 			if ( isset($data->signature) && !empty($data->signature) && isset($data->key1) && !empty($data->key1)
 					&& isset($data->partyCode) && !empty($data->partyCode) && isset($data->partyType) && !empty($data->partyType)
-                    			&& isset($data->countryId) && !empty($data->countryId) && isset($data->stateId) && !empty($data->stateId)
-                    			&& isset($data->userId) && !empty($data->userId)
+                    && isset($data->countryId) && !empty($data->countryId) && isset($data->stateId) && !empty($data->stateId)
+                    && isset($data->userId) && !empty($data->userId)
 			){
 
 				error_log("inside all inputs are set correctly");
@@ -31,7 +31,7 @@
 				$countryId = $data->countryId;
 				$stateId = $data->stateId;
 				$signature= $data->signature;
-                		$key1 = $data->key1;
+                $key1 = $data->key1;
 				$userId = $data->userId;
 				$session_validity = AGENT_SESSION_VALID_TIME;
 

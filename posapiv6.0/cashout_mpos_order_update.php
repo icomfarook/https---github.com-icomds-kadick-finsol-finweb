@@ -246,7 +246,7 @@
 													$charges_details = $check_feature_value_result_split[0];
 													$charges_details_split = explode("|",$charges_details);
 													$ams_charge = $charges_details_split[2];
-													error_log("$ams_charge = ".$ams_charge);
+													error_log("ams_charge = ".$ams_charge);
 													$rateparties_details = $check_feature_value_result_split[1];
 													error_log("rateparties_details = ".$rateparties_details);
 													$serviceconfig = explode(",", $rateparties_details);

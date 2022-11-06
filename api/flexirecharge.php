@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 			$response["flexiMessage"]['message'] = "Your mobile $data->mobileNumber [$data->operatorCode] is recharged for NGN $data->amount, Ref: ".date('Ymdhis').$data->transLogId;
 			$response["flexiMessage"]['showMessage'] = "false";
 			$response["flexiMessage"]['operatorCode'] = $data->operatorCode;
-			$response["flexiMessage"]['oprPlan'] = $data->operatorPlanId;
+			$response["flexiMessage"]['oprPlan'] = "Plan ID: ".$data->operatorPlanId;
 			//array_push($response["flexiMessage"], $flexi_message);
 		}else {
 			// array for JSON response
