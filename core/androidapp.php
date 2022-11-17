@@ -234,7 +234,7 @@ td {
 									<td>{{ x.date}}</td>
 								</tr>
 								<tr ng-show="jentrys.length==0">
-									<td style='text-align:center' colspan='5' >
+									<td style='text-align:center'  colspan='5' >
 										<?php echo NO_DATA_FOUND; ?>             
 									</td>
 								</tr>
