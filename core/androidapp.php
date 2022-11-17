@@ -226,8 +226,9 @@ td {
 									<td>{{ x.party_code }}</td>
 									<?php if ($profileId ==1) { ?> 
 										<td>{{ x.message }}</td>	
-									<?php } else { ?> <?php } ?>
+									<?php } else { ?> 
 									   <td>{{ x.messages }}</td>
+									<?php } ?>
 									<td>{{ x.pic_point }}</td>
 									<td>{{ x.message_type }}</td>
 									<td>{{ x.date}}</td>
