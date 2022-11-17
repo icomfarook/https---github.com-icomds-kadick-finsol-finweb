@@ -224,7 +224,10 @@ td {
 							<tbody>
 								 <tr ng-repeat="x in jentrys">
 									<td>{{ x.party_code }}</td>
-									<td>{{ x.message }}</td>
+									<?php if ($profileId ==1) { ?> 
+										<td>{{ x.message }}</td>	
+									<?php } else { ?> <?php } ?>
+									   <td>{{ x.messages }}</td>
 									<td>{{ x.pic_point }}</td>
 									<td>{{ x.message_type }}</td>
 									<td>{{ x.date}}</td>

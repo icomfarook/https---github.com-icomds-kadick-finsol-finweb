@@ -16,7 +16,7 @@
 			$partyCode = $topartyCode;
 		} 
 		if($profile_id == 1){
-		$query = "SELECT mpos_debug_dump_id, user_id, party_type,party_code, message, pic_point,if(message_type = 'D','D - Debug',if(message_type = 'I','I - info',if(message_type = 'W','W - Warning',if(message_type = 'S',' S - Severe',' E - Exception')))) as status, date_time from mpos_debug_dump where party_code = '$partyCode' and date(date_time) = '$startDate' order by date_time";
+		$query = "SELECT mpos_debug_dump_id, user_id, party_type,party_code, message as msg, pic_point,if(message_type = 'D','D - Debug',if(message_type = 'I','I - info',if(message_type = 'W','W - Warning',if(message_type = 'S',' S - Severe',' E - Exception')))) as status, date_time from mpos_debug_dump where party_code = '$partyCode' and date(date_time) = '$startDate' order by date_time";
 		}else{
 			$query = "SELECT mpos_debug_dump_id, user_id, party_type,party_code, message, pic_point,if(message_type = 'D','D - Debug',if(message_type = 'I','I - info',if(message_type = 'W','W - Warning',if(message_type = 'S',' S - Severe',' E - Exception')))) as status, date_time from mpos_debug_dump where party_code = '$partyCode' and date(date_time) = '$startDate' and pic_point not in (14000, 14001, 14002, 14003, 14004, 14005) order by date_time";
 		}
@@ -28,9 +28,23 @@
 		}
 		$data = array();
 		while ($row = mysqli_fetch_array($result)) {
-			$data[] = array("id"=>$row['mpos_debug_dump_id'],"user_id"=>$row['user_id'],"party_type"=>$row['party_type'],"party_code"=>$row['party_code'],"message"=>$row['message'],"pic_point"=>$row['pic_point'],"message_type"=>$row['status'],"date"=>$row['date_time']);           
+			$msg = $row['msg'];
+			
+				if(isJson($msg) == 1){				
+				$json_arr = json_decode($msg, true);
+				$json_arr['track2'] = "-";
+				$json_arr['pinblock'] = "-";
+				//unset($json_arr['track2']);				
+				$msg = json_encode($json_arr);				
+			}
+			
+
+			$data[] = array("id"=>$row['mpos_debug_dump_id'],"user_id"=>$row['user_id'],"party_type"=>$row['party_type'],"party_code"=>$row['party_code'],"message"=> $msg,"messages"=>$row['message'],"pic_point"=>$row['pic_point'],"message_type"=>$row['status'],"date"=>$row['date_time']);           
 		}
 		echo json_encode($data);
 	}
-	
+	function isJson($string) {
+		json_decode($string);
+			return (json_last_error() == JSON_ERROR_NONE);
+		}
 ?>	
